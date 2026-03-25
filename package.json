@@ -1,0 +1,67 @@
+{
+	"name": "@roxyapi/sdk",
+	"version": "0.1.0",
+	"description": "TypeScript SDK for Roxy — the multi-domain spiritual intelligence API",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./client": {
+			"types": "./dist/client/index.d.ts",
+			"import": "./dist/client/index.js",
+			"require": "./dist/client/index.cjs"
+		}
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"src"
+	],
+	"scripts": {
+		"generate": "bun run scripts/generate.ts",
+		"build": "tsup src/index.ts src/client/index.ts --format esm,cjs && tsc -p tsconfig.build.json --emitDeclarationOnly",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"check": "biome check .",
+		"check:fix": "biome check --write ."
+	},
+	"keywords": [
+		"astrology",
+		"tarot",
+		"numerology",
+		"API",
+		"SDK",
+		"spiritual",
+		"roxy",
+		"vedic",
+		"iching",
+		"crystals",
+		"angel-numbers",
+		"dreams"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/roxyapi/sdk-typescript.git"
+	},
+	"homepage": "https://roxyapi.com/docs/sdk",
+	"bugs": {
+		"url": "https://github.com/roxyapi/sdk-typescript/issues"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.9",
+		"@hey-api/client-fetch": "0.13.1",
+		"@hey-api/openapi-ts": "0.94.5",
+		"@types/node": "^25.5.0",
+		"lefthook": "^2.1.4",
+		"tsup": "^8.5.1",
+		"typescript": "^6.0.2",
+		"vitest": "^4.1.1"
+	}
+}

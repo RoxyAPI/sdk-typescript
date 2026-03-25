@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  repository_dispatch:
+    types: [openapi-updated]
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'patch | minor | major'
+        required: false
+        default: 'patch'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - name: Fetch combined OpenAPI spec
+        run: |
+          mkdir -p specs
+          curl -sf -H "Cache-Control: no-cache" \
+            https://roxyapi.com/api/v2/openapi.json > specs/openapi.json
+
+      - name: Check if spec changed
+        id: diff
+        run: |
+          NEW_HASH=$(sha256sum specs/openapi.json | cut -d' ' -f1)
+          OLD_HASH=$(cat specs/.hash 2>/dev/null || echo "none")
+          if [ "$NEW_HASH" != "$OLD_HASH" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+          echo "$NEW_HASH" > specs/.hash
+
+      - name: Regenerate SDK
+        if: steps.diff.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: bunx openapi-ts
+
+      - name: Build
+        if: steps.diff.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: bun run build
+
+      - name: Test
+        if: steps.diff.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: bun run test
+
+      - name: Bump version, commit, tag, push
+        if: steps.diff.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npm version ${{ github.event.inputs.version_bump || 'patch' }} --no-git-tag-version
+          git add -A
+          VERSION=$(node -p "require('./package.json').version")
+          git commit -m "release: v$VERSION"
+          git tag "v$VERSION"
+          git push --follow-tags
+
+      - name: Publish to npm
+        if: steps.diff.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
