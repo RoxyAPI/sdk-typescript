@@ -1,6 +1,6 @@
 # @roxyapi/sdk
 
-TypeScript SDK for [RoxyAPI](https://roxyapi.com) -- the multi-domain spiritual intelligence API. 8 domains, 120+ endpoints, one API key.
+TypeScript SDK for [RoxyAPI](https://roxyapi.com). 8 domains, 120+ endpoints, one API key.
 
 Build astrology apps, tarot platforms, birth chart generators, and compatibility tools without writing a single calculation.
 
@@ -53,13 +53,13 @@ const { data: reading } = await roxy.tarot.castCelticCross({
 | Namespace | What it covers |
 |-----------|----------------|
 | `roxy.angelNumbers` | Angel number lookup, pattern analysis, daily guidance |
-| `roxy.astrology` | Western astrology -- natal charts, horoscopes, synastry, moon phases |
-| `roxy.vedicAstrology` | Vedic/Jyotish -- birth charts, dashas, nakshatras, panchang, KP system |
-| `roxy.tarot` | 78-card readings -- spreads, daily pulls, yes/no, Celtic Cross |
+| `roxy.astrology` | Western astrology:natal charts, horoscopes, synastry, moon phases |
+| `roxy.vedicAstrology` | Vedic/Jyotish:birth charts, dashas, nakshatras, panchang, KP system |
+| `roxy.tarot` | 78-card readings:spreads, daily pulls, yes/no, Celtic Cross |
 | `roxy.numerology` | Life path, expression, soul urge, personal year, karmic lessons |
 | `roxy.iching` | I Ching hexagrams, trigrams, daily readings |
 | `roxy.crystals` | Crystal meanings, healing properties, zodiac and chakra pairings |
-| `roxy.dreams` | Dream symbol interpretations -- 3,000+ symbols |
+| `roxy.dreams` | Dream symbol interpretations:3,000+ symbols |
 | `roxy.location` | City and country search for birth chart coordinates |
 | `roxy.usage` | API usage stats, rate limits, subscription info |
 
@@ -96,7 +96,7 @@ if (error) {
 
 ## TypeScript
 
-Every request and response is fully typed. IDE autocomplete shows available methods per domain and exact parameter shapes -- no docs tab needed.
+Every request and response is fully typed. IDE autocomplete shows available methods per domain and exact parameter shapes:no docs tab needed.
 
 ## Links
 

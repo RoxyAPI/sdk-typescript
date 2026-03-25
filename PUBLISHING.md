@@ -1,5 +1,13 @@
 # Publishing @roxyapi/sdk
 
+## Pending setup (do these before the first release)
+
+1. **Create NPM_TOKEN** — see [GitHub secrets](#github-secrets) section below
+2. **Set the secret**: `gh secret set NPM_TOKEN --repo roxyapi/sdk-typescript`
+3. **First publish**: run the commands in [Initial npm publish](#initial-npm-publish-first-time-only) below
+
+---
+
 ## Initial npm publish (first time only)
 
 ```bash
