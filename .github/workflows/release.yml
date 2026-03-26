@@ -23,6 +23,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
       - uses: oven-sh/setup-bun@v2
 
       - run: bun install --frozen-lockfile
@@ -62,5 +67,5 @@ jobs:
       - name: Publish to npm
         if: steps.diff.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         run: |
-          sudo npm install -g npm@latest
+          npm install -g npm@latest
           npm publish --access public --provenance
