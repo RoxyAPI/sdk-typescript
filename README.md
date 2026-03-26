@@ -1,5 +1,10 @@
 # @roxyapi/sdk
 
+[![npm](https://img.shields.io/npm/v/@roxyapi/sdk)](https://www.npmjs.com/package/@roxyapi/sdk)
+[![Docs](https://img.shields.io/badge/docs-roxyapi.com-blue)](https://roxyapi.com/docs/sdk)
+[![API Reference](https://img.shields.io/badge/api%20reference-roxyapi.com-blue)](https://roxyapi.com/api-reference)
+[![Pricing](https://img.shields.io/badge/pricing-roxyapi.com-blue)](https://roxyapi.com/pricing)
+
 TypeScript SDK for [RoxyAPI](https://roxyapi.com). 8 domains, 120+ endpoints, one API key.
 
 Build astrology apps, tarot platforms, birth chart generators, and compatibility tools without writing a single calculation.
