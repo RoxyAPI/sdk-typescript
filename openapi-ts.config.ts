@@ -12,6 +12,7 @@ export default defineConfig({
 	input: "./specs/openapi.json",
 	output: {
 		path: "src",
+		clean: false,
 	},
 	plugins: [
 		"@hey-api/typescript",

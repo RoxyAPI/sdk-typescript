@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetAngelNumbersDailyData, GetAngelNumbersDailyResponses, GetAngelNumbersLookupData, GetAngelNumbersLookupResponses, GetAngelNumbersNumbersByNumberData, GetAngelNumbersNumbersByNumberErrors, GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersData, GetAngelNumbersNumbersResponses, GetAstrologyHoroscopeDailyData, GetAstrologyHoroscopeDailyResponses, GetAstrologyHoroscopeSignDailyData, GetAstrologyHoroscopeSignDailyResponses, GetAstrologyHoroscopeSignMonthlyData, GetAstrologyHoroscopeSignMonthlyResponses, GetAstrologyHoroscopeSignWeeklyData, GetAstrologyHoroscopeSignWeeklyResponses, GetAstrologyMoonPhaseCalendarYearMonthData, GetAstrologyMoonPhaseCalendarYearMonthResponses, GetAstrologyMoonPhaseCurrentData, GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseUpcomingData, GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyPlanetMeaningsByIdentifierData, GetAstrologyPlanetMeaningsByIdentifierErrors, GetAstrologyPlanetMeaningsByIdentifierResponses, GetAstrologyPlanetMeaningsData, GetAstrologyPlanetMeaningsResponses, GetAstrologySignsByIdentifierData, GetAstrologySignsByIdentifierErrors, GetAstrologySignsByIdentifierResponses, GetAstrologySignsData, GetAstrologySignsResponses, GetCrystalsBirthstoneByMonthData, GetCrystalsBirthstoneByMonthResponses, GetCrystalsChakraByChakraData, GetCrystalsChakraByChakraResponses, GetCrystalsColorsData, GetCrystalsColorsResponses, GetCrystalsCrystalsBySlugData, GetCrystalsCrystalsBySlugErrors, GetCrystalsCrystalsBySlugResponses, GetCrystalsCrystalsData, GetCrystalsCrystalsResponses, GetCrystalsDailyData, GetCrystalsDailyResponses, GetCrystalsElementByElementData, GetCrystalsElementByElementResponses, GetCrystalsPairingsBySlugData, GetCrystalsPairingsBySlugErrors, GetCrystalsPairingsBySlugResponses, GetCrystalsPlanetsData, GetCrystalsPlanetsResponses, GetCrystalsRandomData, GetCrystalsRandomResponses, GetCrystalsSearchData, GetCrystalsSearchResponses, GetCrystalsZodiacBySignData, GetCrystalsZodiacBySignResponses, GetDreamsSymbolsByIdData, GetDreamsSymbolsByIdErrors, GetDreamsSymbolsByIdResponses, GetDreamsSymbolsData, GetDreamsSymbolsLettersData, GetDreamsSymbolsLettersResponses, GetDreamsSymbolsRandomData, GetDreamsSymbolsRandomResponses, GetDreamsSymbolsResponses, GetIchingCastData, GetIchingCastResponses, GetIchingHexagramsByNumberData, GetIchingHexagramsByNumberErrors, GetIchingHexagramsByNumberResponses, GetIchingHexagramsData, GetIchingHexagramsLookupData, GetIchingHexagramsLookupErrors, GetIchingHexagramsLookupResponses, GetIchingHexagramsRandomData, GetIchingHexagramsRandomErrors, GetIchingHexagramsRandomResponses, GetIchingHexagramsResponses, GetIchingTrigramsByIdentifierData, GetIchingTrigramsByIdentifierErrors, GetIchingTrigramsByIdentifierResponses, GetIchingTrigramsData, GetIchingTrigramsResponses, GetLocationCountriesByIso2Data, GetLocationCountriesByIso2Responses, GetLocationCountriesData, GetLocationCountriesResponses, GetLocationSearchData, GetLocationSearchResponses, GetNumerologyMeaningsByNumberData, GetNumerologyMeaningsByNumberErrors, GetNumerologyMeaningsByNumberResponses, GetTarotCardsByIdData, GetTarotCardsByIdErrors, GetTarotCardsByIdResponses, GetTarotCardsData, GetTarotCardsResponses, GetUsageData, GetUsageErrors, GetUsageResponses, GetVedicAstrologyKpAyanamsaData, GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyNakshatrasByIdData, GetVedicAstrologyNakshatrasByIdErrors, GetVedicAstrologyNakshatrasByIdResponses, GetVedicAstrologyNakshatrasData, GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyRashisByIdData, GetVedicAstrologyRashisByIdErrors, GetVedicAstrologyRashisByIdResponses, GetVedicAstrologyRashisData, GetVedicAstrologyRashisResponses, GetVedicAstrologyYogaData, GetVedicAstrologyYogaIdData, GetVedicAstrologyYogaIdErrors, GetVedicAstrologyYogaIdResponses, GetVedicAstrologyYogaResponses, PostAstrologyAspectsData, PostAstrologyAspectsResponses, PostAstrologyCompatibilityScoreData, PostAstrologyCompatibilityScoreResponses, PostAstrologyCompositeChartData, PostAstrologyCompositeChartResponses, PostAstrologyHousesData, PostAstrologyHousesResponses, PostAstrologyLunarReturnData, PostAstrologyLunarReturnResponses, PostAstrologyNatalChartData, PostAstrologyNatalChartResponses, PostAstrologyPlanetaryReturnsData, PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetsData, PostAstrologyPlanetsResponses, PostAstrologySolarReturnData, PostAstrologySolarReturnResponses, PostAstrologySynastryData, PostAstrologySynastryResponses, PostAstrologyTransitAspectsData, PostAstrologyTransitAspectsResponses, PostAstrologyTransitsData, PostAstrologyTransitsResponses, PostDreamsDailyData, PostDreamsDailyResponses, PostIchingDailyCastData, PostIchingDailyCastResponses, PostIchingDailyData, PostIchingDailyErrors, PostIchingDailyResponses, PostNumerologyBirthDayData, PostNumerologyBirthDayResponses, PostNumerologyChartData, PostNumerologyChartResponses, PostNumerologyCompatibilityData, PostNumerologyCompatibilityResponses, PostNumerologyDailyData, PostNumerologyDailyResponses, PostNumerologyExpressionData, PostNumerologyExpressionResponses, PostNumerologyKarmicDebtData, PostNumerologyKarmicDebtResponses, PostNumerologyKarmicLessonsData, PostNumerologyKarmicLessonsResponses, PostNumerologyLifePathData, PostNumerologyLifePathResponses, PostNumerologyMaturityData, PostNumerologyMaturityResponses, PostNumerologyPersonalityData, PostNumerologyPersonalityResponses, PostNumerologyPersonalYearData, PostNumerologyPersonalYearResponses, PostNumerologySoulUrgeData, PostNumerologySoulUrgeResponses, PostTarotDailyData, PostTarotDailyErrors, PostTarotDailyResponses, PostTarotDrawData, PostTarotDrawResponses, PostTarotSpreadsCareerData, PostTarotSpreadsCareerResponses, PostTarotSpreadsCelticCrossData, PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCustomData, PostTarotSpreadsCustomResponses, PostTarotSpreadsLoveData, PostTarotSpreadsLoveResponses, PostTarotSpreadsThreeCardData, PostTarotSpreadsThreeCardResponses, PostTarotYesNoData, PostTarotYesNoErrors, PostTarotYesNoResponses, PostVedicAstrologyAshtakavargaData, PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAspectsData, PostVedicAstrologyAspectsLunarData, PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsMonthlyData, PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsResponses, PostVedicAstrologyBirthChartData, PostVedicAstrologyBirthChartResponses, PostVedicAstrologyCompatibilityData, PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyDashaCurrentData, PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaMajorData, PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaSubByMahadashaData, PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDivisionalChartData, PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDoshaKalsarpaData, PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaManglikData, PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaSadhesatiData, PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyEclipticCrossingsData, PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyKpChartData, PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpCuspsData, PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpPlanetsData, PostVedicAstrologyKpPlanetsIntervalData, PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpRasiChangesData, PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRulingPlanetsData, PostVedicAstrologyKpRulingPlanetsIntervalData, PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpSublordChangesData, PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyNavamsaData, PostVedicAstrologyNavamsaResponses, PostVedicAstrologyPanchangBasicData, PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangChoghadiyaData, PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangDetailedData, PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangHoraData, PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyParallelsData, PostVedicAstrologyParallelsMonthlyData, PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsResponses, PostVedicAstrologyPlanetaryPositionsData, PostVedicAstrologyPlanetaryPositionsMonthlyData, PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyShadbalaData, PostVedicAstrologyShadbalaResponses, PostVedicAstrologyTransitData, PostVedicAstrologyTransitMonthlyData, PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitResponses, PostVedicAstrologyUpagrahaData, PostVedicAstrologyUpagrahaResponses } from './types.gen';
+import type { GetAngelNumbersDailyData, GetAngelNumbersDailyResponses, GetAngelNumbersLookupData, GetAngelNumbersLookupResponses, GetAngelNumbersNumbersByNumberData, GetAngelNumbersNumbersByNumberErrors, GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersData, GetAngelNumbersNumbersResponses, GetAstrologyHoroscopeBySignDailyData, GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignMonthlyData, GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignWeeklyData, GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyHoroscopeDailyData, GetAstrologyHoroscopeDailyResponses, GetAstrologyMoonPhaseCalendarByYearByMonthData, GetAstrologyMoonPhaseCalendarByYearByMonthResponses, GetAstrologyMoonPhaseCurrentData, GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseUpcomingData, GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyPlanetMeaningsByIdentifierData, GetAstrologyPlanetMeaningsByIdentifierErrors, GetAstrologyPlanetMeaningsByIdentifierResponses, GetAstrologyPlanetMeaningsData, GetAstrologyPlanetMeaningsResponses, GetAstrologySignsByIdentifierData, GetAstrologySignsByIdentifierErrors, GetAstrologySignsByIdentifierResponses, GetAstrologySignsData, GetAstrologySignsResponses, GetCrystalsBirthstoneByMonthData, GetCrystalsBirthstoneByMonthResponses, GetCrystalsBySlugData, GetCrystalsBySlugErrors, GetCrystalsBySlugResponses, GetCrystalsChakraByChakraData, GetCrystalsChakraByChakraResponses, GetCrystalsColorsData, GetCrystalsColorsResponses, GetCrystalsDailyData, GetCrystalsDailyResponses, GetCrystalsData, GetCrystalsElementByElementData, GetCrystalsElementByElementResponses, GetCrystalsPairingsBySlugData, GetCrystalsPairingsBySlugErrors, GetCrystalsPairingsBySlugResponses, GetCrystalsPlanetsData, GetCrystalsPlanetsResponses, GetCrystalsRandomData, GetCrystalsRandomResponses, GetCrystalsResponses, GetCrystalsSearchData, GetCrystalsSearchResponses, GetCrystalsZodiacBySignData, GetCrystalsZodiacBySignResponses, GetDreamsSymbolsByIdData, GetDreamsSymbolsByIdErrors, GetDreamsSymbolsByIdResponses, GetDreamsSymbolsData, GetDreamsSymbolsLettersData, GetDreamsSymbolsLettersResponses, GetDreamsSymbolsRandomData, GetDreamsSymbolsRandomResponses, GetDreamsSymbolsResponses, GetIchingCastData, GetIchingCastResponses, GetIchingHexagramsByNumberData, GetIchingHexagramsByNumberErrors, GetIchingHexagramsByNumberResponses, GetIchingHexagramsData, GetIchingHexagramsLookupData, GetIchingHexagramsLookupErrors, GetIchingHexagramsLookupResponses, GetIchingHexagramsRandomData, GetIchingHexagramsRandomErrors, GetIchingHexagramsRandomResponses, GetIchingHexagramsResponses, GetIchingTrigramsByIdentifierData, GetIchingTrigramsByIdentifierErrors, GetIchingTrigramsByIdentifierResponses, GetIchingTrigramsData, GetIchingTrigramsResponses, GetLocationCountriesByIso2Data, GetLocationCountriesByIso2Responses, GetLocationCountriesData, GetLocationCountriesResponses, GetLocationSearchData, GetLocationSearchResponses, GetNumerologyMeaningsByNumberData, GetNumerologyMeaningsByNumberErrors, GetNumerologyMeaningsByNumberResponses, GetTarotCardsByIdData, GetTarotCardsByIdErrors, GetTarotCardsByIdResponses, GetTarotCardsData, GetTarotCardsResponses, GetUsageData, GetUsageErrors, GetUsageResponses, GetVedicAstrologyKpAyanamsaData, GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyNakshatrasByIdData, GetVedicAstrologyNakshatrasByIdErrors, GetVedicAstrologyNakshatrasByIdResponses, GetVedicAstrologyNakshatrasData, GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyRashisByIdData, GetVedicAstrologyRashisByIdErrors, GetVedicAstrologyRashisByIdResponses, GetVedicAstrologyRashisData, GetVedicAstrologyRashisResponses, GetVedicAstrologyYogaByIdData, GetVedicAstrologyYogaByIdErrors, GetVedicAstrologyYogaByIdResponses, GetVedicAstrologyYogaData, GetVedicAstrologyYogaResponses, PostAstrologyAspectsData, PostAstrologyAspectsResponses, PostAstrologyCompatibilityScoreData, PostAstrologyCompatibilityScoreResponses, PostAstrologyCompositeChartData, PostAstrologyCompositeChartResponses, PostAstrologyHousesData, PostAstrologyHousesResponses, PostAstrologyLunarReturnData, PostAstrologyLunarReturnResponses, PostAstrologyNatalChartData, PostAstrologyNatalChartResponses, PostAstrologyPlanetaryReturnsData, PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetsData, PostAstrologyPlanetsResponses, PostAstrologySolarReturnData, PostAstrologySolarReturnResponses, PostAstrologySynastryData, PostAstrologySynastryResponses, PostAstrologyTransitAspectsData, PostAstrologyTransitAspectsResponses, PostAstrologyTransitsData, PostAstrologyTransitsResponses, PostDreamsDailyData, PostDreamsDailyResponses, PostIchingDailyCastData, PostIchingDailyCastResponses, PostIchingDailyData, PostIchingDailyErrors, PostIchingDailyResponses, PostNumerologyBirthDayData, PostNumerologyBirthDayResponses, PostNumerologyChartData, PostNumerologyChartResponses, PostNumerologyCompatibilityData, PostNumerologyCompatibilityResponses, PostNumerologyDailyData, PostNumerologyDailyResponses, PostNumerologyExpressionData, PostNumerologyExpressionResponses, PostNumerologyKarmicDebtData, PostNumerologyKarmicDebtResponses, PostNumerologyKarmicLessonsData, PostNumerologyKarmicLessonsResponses, PostNumerologyLifePathData, PostNumerologyLifePathResponses, PostNumerologyMaturityData, PostNumerologyMaturityResponses, PostNumerologyPersonalityData, PostNumerologyPersonalityResponses, PostNumerologyPersonalYearData, PostNumerologyPersonalYearResponses, PostNumerologySoulUrgeData, PostNumerologySoulUrgeResponses, PostTarotDailyData, PostTarotDailyErrors, PostTarotDailyResponses, PostTarotDrawData, PostTarotDrawResponses, PostTarotSpreadsCareerData, PostTarotSpreadsCareerResponses, PostTarotSpreadsCelticCrossData, PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCustomData, PostTarotSpreadsCustomResponses, PostTarotSpreadsLoveData, PostTarotSpreadsLoveResponses, PostTarotSpreadsThreeCardData, PostTarotSpreadsThreeCardResponses, PostTarotYesNoData, PostTarotYesNoErrors, PostTarotYesNoResponses, PostVedicAstrologyAshtakavargaData, PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAspectsData, PostVedicAstrologyAspectsLunarData, PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsMonthlyData, PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsResponses, PostVedicAstrologyBirthChartData, PostVedicAstrologyBirthChartResponses, PostVedicAstrologyCompatibilityData, PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyDashaCurrentData, PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaMajorData, PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaSubByMahadashaData, PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDivisionalChartData, PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDoshaKalsarpaData, PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaManglikData, PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaSadhesatiData, PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyEclipticCrossingsData, PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyKpChartData, PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpCuspsData, PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpPlanetsData, PostVedicAstrologyKpPlanetsIntervalData, PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpRasiChangesData, PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRulingPlanetsData, PostVedicAstrologyKpRulingPlanetsIntervalData, PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpSublordChangesData, PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyNavamsaData, PostVedicAstrologyNavamsaResponses, PostVedicAstrologyPanchangBasicData, PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangChoghadiyaData, PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangDetailedData, PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangHoraData, PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyParallelsData, PostVedicAstrologyParallelsMonthlyData, PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsResponses, PostVedicAstrologyPlanetaryPositionsData, PostVedicAstrologyPlanetaryPositionsMonthlyData, PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyShadbalaData, PostVedicAstrologyShadbalaResponses, PostVedicAstrologyTransitData, PostVedicAstrologyTransitMonthlyData, PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitResponses, PostVedicAstrologyUpagrahaData, PostVedicAstrologyUpagrahaResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -218,10 +218,10 @@ export class Astrology extends HeyApiClient {
      *
      * Get complete lunar calendar showing moon phase and illumination for every day of a specific month. Perfect for creating moon phase calendars, lunar planners, and astrology event schedules.
      */
-    public getMoonCalendar<ThrowOnError extends boolean = false>(options: Options<GetAstrologyMoonPhaseCalendarYearMonthData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyMoonPhaseCalendarYearMonthResponses, unknown, ThrowOnError>({
+    public getMoonCalendar<ThrowOnError extends boolean = false>(options: Options<GetAstrologyMoonPhaseCalendarByYearByMonthData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetAstrologyMoonPhaseCalendarByYearByMonthResponses, unknown, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/astrology/moon-phase/calendar/:year/:month',
+            url: '/astrology/moon-phase/calendar/{year}/{month}',
             ...options
         });
     }
@@ -384,10 +384,10 @@ export class Astrology extends HeyApiClient {
      *
      * Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits through the sign, covering love, career, health, finance, and general outlook. Returns lucky number, lucky color, and compatible signs. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.
      */
-    public getDailyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeSignDailyData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyHoroscopeSignDailyResponses, unknown, ThrowOnError>({
+    public getDailyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignDailyData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignDailyResponses, unknown, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/astrology/horoscope/:sign/daily',
+            url: '/astrology/horoscope/{sign}/daily',
             ...options
         });
     }
@@ -410,10 +410,10 @@ export class Astrology extends HeyApiClient {
      *
      * Get weekly horoscope for any zodiac sign. Forecast covers a full 7-day period based on planetary transits through the sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.
      */
-    public getWeeklyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeSignWeeklyData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyHoroscopeSignWeeklyResponses, unknown, ThrowOnError>({
+    public getWeeklyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignWeeklyData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignWeeklyResponses, unknown, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/astrology/horoscope/:sign/weekly',
+            url: '/astrology/horoscope/{sign}/weekly',
             ...options
         });
     }
@@ -423,10 +423,10 @@ export class Astrology extends HeyApiClient {
      *
      * Get monthly horoscope for any zodiac sign with week-by-week breakdown and key dates. Based on planetary transits through the sign, covering love, career, health, and finance for the entire month. Includes important astrological dates and lucky numbers. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.
      */
-    public getMonthlyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeSignMonthlyData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyHoroscopeSignMonthlyResponses, unknown, ThrowOnError>({
+    public getMonthlyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignMonthlyData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignMonthlyResponses, unknown, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/astrology/horoscope/:sign/monthly',
+            url: '/astrology/horoscope/{sign}/monthly',
             ...options
         });
     }
@@ -740,10 +740,10 @@ export class VedicAstrology extends HeyApiClient {
      *
      * Returns complete details for a specific yoga including formation conditions, results/effects, and quality (Positive/Negative/Both). Use GET /yogas first to get the list of IDs. Provides in-depth information about each planetary combination. Perfect for yoga detail pages, educational content, and astrological interpretation in horoscope apps.
      */
-    public getYoga<ThrowOnError extends boolean = false>(options: Options<GetVedicAstrologyYogaIdData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetVedicAstrologyYogaIdResponses, GetVedicAstrologyYogaIdErrors, ThrowOnError>({
+    public getYoga<ThrowOnError extends boolean = false>(options: Options<GetVedicAstrologyYogaByIdData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetVedicAstrologyYogaByIdResponses, GetVedicAstrologyYogaByIdErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/vedic-astrology/yoga/:id',
+            url: '/vedic-astrology/yoga/{id}',
             ...options
         });
     }
@@ -1720,32 +1720,6 @@ export class Iching extends HeyApiClient {
 
 export class Crystals extends HeyApiClient {
     /**
-     * List All Crystals
-     *
-     * Retrieve healing crystals and gemstones with pagination. Supports optional filtering by chakra, zodiac sign, element, color, or planet. Returns minimal summary fields per crystal. Use the detail endpoint for full healing properties. Perfect for building crystal explorer apps, healing stone guides, and personalized crystal recommendation engines.
-     */
-    public listCrystals<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsCrystalsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetCrystalsCrystalsResponses, unknown, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/crystals/crystals',
-            ...options
-        });
-    }
-    
-    /**
-     * Get Crystal Healing Properties
-     *
-     * Get complete healing properties and metaphysical data for a specific crystal or gemstone. Returns spiritual, emotional, and physical healing interpretations along with chakra associations, zodiac connections, elemental properties, and crystal pairing recommendations. Authoritative interpretations covering all major healing crystals.
-     */
-    public getCrystal<ThrowOnError extends boolean = false>(options: Options<GetCrystalsCrystalsBySlugData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetCrystalsCrystalsBySlugResponses, GetCrystalsCrystalsBySlugErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/crystals/crystals/{slug}',
-            ...options
-        });
-    }
-    
-    /**
      * Crystals by Zodiac Sign
      *
      * Get healing crystals and gemstones associated with a specific zodiac sign. Returns summary data for each crystal. Use the /crystals/:slug detail endpoint for full healing properties. Supports all 12 zodiac signs from Aries through Pisces. Perfect for personalized crystal recommendations based on astrological birth chart data.
@@ -1871,6 +1845,32 @@ export class Crystals extends HeyApiClient {
         return (options?.client ?? this.client).get<GetCrystalsPlanetsResponses, unknown, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/planets',
+            ...options
+        });
+    }
+    
+    /**
+     * List All Crystals
+     *
+     * Retrieve healing crystals and gemstones with pagination. Supports optional filtering by chakra, zodiac sign, element, color, or planet. Returns minimal summary fields per crystal. Use the detail endpoint for full healing properties. Perfect for building crystal explorer apps, healing stone guides, and personalized crystal recommendation engines.
+     */
+    public listCrystals<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsData, ThrowOnError>) {
+        return (options?.client ?? this.client).get<GetCrystalsResponses, unknown, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/crystals',
+            ...options
+        });
+    }
+    
+    /**
+     * Get Crystal Healing Properties
+     *
+     * Get complete healing properties and metaphysical data for a specific crystal or gemstone. Returns spiritual, emotional, and physical healing interpretations along with chakra associations, zodiac connections, elemental properties, and crystal pairing recommendations. Authoritative interpretations covering all major healing crystals.
+     */
+    public getCrystal<ThrowOnError extends boolean = false>(options: Options<GetCrystalsBySlugData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetCrystalsBySlugResponses, GetCrystalsBySlugErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/crystals/{slug}',
             ...options
         });
     }

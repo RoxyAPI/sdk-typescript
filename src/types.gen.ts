@@ -4283,7 +4283,7 @@ export type GetAstrologyMoonPhaseUpcomingResponses = {
 
 export type GetAstrologyMoonPhaseUpcomingResponse = GetAstrologyMoonPhaseUpcomingResponses[keyof GetAstrologyMoonPhaseUpcomingResponses];
 
-export type GetAstrologyMoonPhaseCalendarYearMonthData = {
+export type GetAstrologyMoonPhaseCalendarByYearByMonthData = {
     body?: never;
     path: {
         /**
@@ -4301,10 +4301,10 @@ export type GetAstrologyMoonPhaseCalendarYearMonthData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/astrology/moon-phase/calendar/:year/:month';
+    url: '/astrology/moon-phase/calendar/{year}/{month}';
 };
 
-export type GetAstrologyMoonPhaseCalendarYearMonthResponses = {
+export type GetAstrologyMoonPhaseCalendarByYearByMonthResponses = {
     /**
      * Lunar calendar generated successfully
      */
@@ -4337,7 +4337,7 @@ export type GetAstrologyMoonPhaseCalendarYearMonthResponses = {
     };
 };
 
-export type GetAstrologyMoonPhaseCalendarYearMonthResponse = GetAstrologyMoonPhaseCalendarYearMonthResponses[keyof GetAstrologyMoonPhaseCalendarYearMonthResponses];
+export type GetAstrologyMoonPhaseCalendarByYearByMonthResponse = GetAstrologyMoonPhaseCalendarByYearByMonthResponses[keyof GetAstrologyMoonPhaseCalendarByYearByMonthResponses];
 
 export type PostAstrologySynastryData = {
     body?: {
@@ -5846,7 +5846,7 @@ export type PostAstrologyCompatibilityScoreResponses = {
 
 export type PostAstrologyCompatibilityScoreResponse = PostAstrologyCompatibilityScoreResponses[keyof PostAstrologyCompatibilityScoreResponses];
 
-export type GetAstrologyHoroscopeSignDailyData = {
+export type GetAstrologyHoroscopeBySignDailyData = {
     body?: never;
     path: {
         /**
@@ -5860,10 +5860,10 @@ export type GetAstrologyHoroscopeSignDailyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/astrology/horoscope/:sign/daily';
+    url: '/astrology/horoscope/{sign}/daily';
 };
 
-export type GetAstrologyHoroscopeSignDailyResponses = {
+export type GetAstrologyHoroscopeBySignDailyResponses = {
     /**
      * Daily horoscope retrieved successfully
      */
@@ -5915,7 +5915,7 @@ export type GetAstrologyHoroscopeSignDailyResponses = {
     };
 };
 
-export type GetAstrologyHoroscopeSignDailyResponse = GetAstrologyHoroscopeSignDailyResponses[keyof GetAstrologyHoroscopeSignDailyResponses];
+export type GetAstrologyHoroscopeBySignDailyResponse = GetAstrologyHoroscopeBySignDailyResponses[keyof GetAstrologyHoroscopeBySignDailyResponses];
 
 export type GetAstrologyHoroscopeDailyData = {
     body?: never;
@@ -5987,7 +5987,7 @@ export type GetAstrologyHoroscopeDailyResponses = {
 
 export type GetAstrologyHoroscopeDailyResponse = GetAstrologyHoroscopeDailyResponses[keyof GetAstrologyHoroscopeDailyResponses];
 
-export type GetAstrologyHoroscopeSignWeeklyData = {
+export type GetAstrologyHoroscopeBySignWeeklyData = {
     body?: never;
     path: {
         /**
@@ -6001,10 +6001,10 @@ export type GetAstrologyHoroscopeSignWeeklyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/astrology/horoscope/:sign/weekly';
+    url: '/astrology/horoscope/{sign}/weekly';
 };
 
-export type GetAstrologyHoroscopeSignWeeklyResponses = {
+export type GetAstrologyHoroscopeBySignWeeklyResponses = {
     /**
      * Weekly horoscope retrieved successfully
      */
@@ -6056,9 +6056,9 @@ export type GetAstrologyHoroscopeSignWeeklyResponses = {
     };
 };
 
-export type GetAstrologyHoroscopeSignWeeklyResponse = GetAstrologyHoroscopeSignWeeklyResponses[keyof GetAstrologyHoroscopeSignWeeklyResponses];
+export type GetAstrologyHoroscopeBySignWeeklyResponse = GetAstrologyHoroscopeBySignWeeklyResponses[keyof GetAstrologyHoroscopeBySignWeeklyResponses];
 
-export type GetAstrologyHoroscopeSignMonthlyData = {
+export type GetAstrologyHoroscopeBySignMonthlyData = {
     body?: never;
     path: {
         /**
@@ -6072,10 +6072,10 @@ export type GetAstrologyHoroscopeSignMonthlyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/astrology/horoscope/:sign/monthly';
+    url: '/astrology/horoscope/{sign}/monthly';
 };
 
-export type GetAstrologyHoroscopeSignMonthlyResponses = {
+export type GetAstrologyHoroscopeBySignMonthlyResponses = {
     /**
      * Monthly horoscope retrieved successfully
      */
@@ -6153,7 +6153,7 @@ export type GetAstrologyHoroscopeSignMonthlyResponses = {
     };
 };
 
-export type GetAstrologyHoroscopeSignMonthlyResponse = GetAstrologyHoroscopeSignMonthlyResponses[keyof GetAstrologyHoroscopeSignMonthlyResponses];
+export type GetAstrologyHoroscopeBySignMonthlyResponse = GetAstrologyHoroscopeBySignMonthlyResponses[keyof GetAstrologyHoroscopeBySignMonthlyResponses];
 
 export type PostAstrologyPlanetaryReturnsData = {
     body?: {
@@ -7946,7 +7946,7 @@ export type GetVedicAstrologyYogaResponses = {
 
 export type GetVedicAstrologyYogaResponse = GetVedicAstrologyYogaResponses[keyof GetVedicAstrologyYogaResponses];
 
-export type GetVedicAstrologyYogaIdData = {
+export type GetVedicAstrologyYogaByIdData = {
     body?: never;
     path: {
         /**
@@ -7960,10 +7960,10 @@ export type GetVedicAstrologyYogaIdData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/vedic-astrology/yoga/:id';
+    url: '/vedic-astrology/yoga/{id}';
 };
 
-export type GetVedicAstrologyYogaIdErrors = {
+export type GetVedicAstrologyYogaByIdErrors = {
     /**
      * Yoga not found
      */
@@ -7975,9 +7975,9 @@ export type GetVedicAstrologyYogaIdErrors = {
     };
 };
 
-export type GetVedicAstrologyYogaIdError = GetVedicAstrologyYogaIdErrors[keyof GetVedicAstrologyYogaIdErrors];
+export type GetVedicAstrologyYogaByIdError = GetVedicAstrologyYogaByIdErrors[keyof GetVedicAstrologyYogaByIdErrors];
 
-export type GetVedicAstrologyYogaIdResponses = {
+export type GetVedicAstrologyYogaByIdResponses = {
     /**
      * Detailed yoga information
      */
@@ -8005,7 +8005,7 @@ export type GetVedicAstrologyYogaIdResponses = {
     };
 };
 
-export type GetVedicAstrologyYogaIdResponse = GetVedicAstrologyYogaIdResponses[keyof GetVedicAstrologyYogaIdResponses];
+export type GetVedicAstrologyYogaByIdResponse = GetVedicAstrologyYogaByIdResponses[keyof GetVedicAstrologyYogaByIdResponses];
 
 export type GetVedicAstrologyKpAyanamsaData = {
     body?: never;
@@ -12288,211 +12288,6 @@ export type GetIchingTrigramsByIdentifierResponses = {
 
 export type GetIchingTrigramsByIdentifierResponse = GetIchingTrigramsByIdentifierResponses[keyof GetIchingTrigramsByIdentifierResponses];
 
-export type GetCrystalsCrystalsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Filter by chakra association. Valid values: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
-         */
-        chakra?: 'Root' | 'Sacral' | 'Solar Plexus' | 'Heart' | 'Throat' | 'Third Eye' | 'Crown';
-        /**
-         * Filter by zodiac sign. Valid values: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.
-         */
-        zodiac?: 'Aries' | 'Taurus' | 'Gemini' | 'Cancer' | 'Leo' | 'Virgo' | 'Libra' | 'Scorpio' | 'Sagittarius' | 'Capricorn' | 'Aquarius' | 'Pisces';
-        /**
-         * Filter by elemental association. Valid values: Earth, Water, Fire, Air, Storm.
-         */
-        element?: 'Earth' | 'Water' | 'Fire' | 'Air' | 'Storm';
-        /**
-         * Filter by crystal color (partial match, case-insensitive). E.g., "pink", "green", "blue", "purple". Use GET /colors for valid values.
-         */
-        color?: string;
-        /**
-         * Filter by planetary association (partial match, case-insensitive). E.g., "Venus", "Moon", "Jupiter". Use GET /planets for valid values.
-         */
-        planet?: string;
-        /**
-         * Maximum number of crystals to return per page. Range: 1-100, default 20.
-         */
-        limit?: number;
-        /**
-         * Number of crystals to skip for pagination. Default 0.
-         */
-        offset?: number;
-    };
-    url: '/crystals/crystals';
-};
-
-export type GetCrystalsCrystalsResponses = {
-    /**
-     * Paginated list of crystals with summary information
-     */
-    200: {
-        /**
-         * Total number of crystals matching the filter criteria.
-         */
-        total: number;
-        /**
-         * Maximum crystals returned per page.
-         */
-        limit: number;
-        /**
-         * Number of crystals skipped.
-         */
-        offset: number;
-        /**
-         * Crystal summaries for the current page.
-         */
-        crystals: Array<{
-            /**
-             * Display name of the crystal or healing stone.
-             */
-            name: string;
-            /**
-             * URL-safe identifier for the crystal. Use this value in the detail endpoint path to retrieve full healing properties.
-             */
-            slug: string;
-            /**
-             * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
-             */
-            imageUrl: string;
-            /**
-             * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
-             */
-            chakras: Array<string>;
-            /**
-             * Primary colors of this crystal variety. Null when color data is unavailable. Useful for color-based crystal selection and visual display.
-             */
-            colors: Array<string>;
-        }>;
-    };
-};
-
-export type GetCrystalsCrystalsResponse = GetCrystalsCrystalsResponses[keyof GetCrystalsCrystalsResponses];
-
-export type GetCrystalsCrystalsBySlugData = {
-    body?: never;
-    path: {
-        /**
-         * URL-safe crystal identifier (e.g., "amethyst", "rose-quartz", "black-tourmaline"). Must match an entry in the database.
-         */
-        slug: string;
-    };
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/crystals/crystals/{slug}';
-};
-
-export type GetCrystalsCrystalsBySlugErrors = {
-    /**
-     * Crystal not found in database
-     */
-    404: {
-        /**
-         * Error message indicating the crystal was not found.
-         */
-        error: string;
-    };
-};
-
-export type GetCrystalsCrystalsBySlugError = GetCrystalsCrystalsBySlugErrors[keyof GetCrystalsCrystalsBySlugErrors];
-
-export type GetCrystalsCrystalsBySlugResponses = {
-    /**
-     * Complete crystal healing properties with all associations
-     */
-    200: {
-        /**
-         * Display name of the crystal or healing stone.
-         */
-        name: string;
-        /**
-         * URL-safe identifier for the crystal.
-         */
-        slug: string;
-        /**
-         * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
-         */
-        imageUrl: string;
-        /**
-         * Overview of the crystal covering its primary healing purpose, spiritual significance, and key benefits.
-         */
-        description: string;
-        /**
-         * Detailed healing interpretations across three areas: spiritual and metaphysical, emotional and psychological, and physical body associations.
-         */
-        meaning: {
-            /**
-             * Spiritual and metaphysical healing properties including energy work, meditation benefits, and higher consciousness connections. Null when spiritual interpretation is unavailable.
-             */
-            spiritual: string;
-            /**
-             * Emotional healing properties including stress relief, relationship support, and emotional balance benefits.
-             */
-            emotional: string;
-            /**
-             * Physical healing associations traditionally attributed to this crystal in crystal healing practice. Null when physical healing data is unavailable.
-             */
-            physical: string;
-        };
-        /**
-         * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
-         */
-        chakras: Array<string>;
-        /**
-         * Zodiac signs this crystal is traditionally associated with. Null when zodiac data is unavailable. Useful for personalized crystal recommendations based on birth chart.
-         */
-        zodiacSigns: Array<string>;
-        /**
-         * Ruling planet or celestial body associated with this crystal in astrological tradition. Null when planetary association is unavailable.
-         */
-        planet: string;
-        /**
-         * Elemental associations (Earth, Water, Fire, Air, Storm) connecting the crystal to natural forces and energy types. Null when elemental data is unavailable.
-         */
-        elements: Array<string>;
-        /**
-         * Primary colors of this crystal variety. Null when color data is unavailable. Useful for color-based crystal selection and filtering.
-         */
-        colors: Array<string>;
-        /**
-         * Mohs hardness scale rating (1-10). Indicates durability for jewelry use. Quartz family is 7, Diamond is 10, Selenite is 2.
-         */
-        hardness: number;
-        /**
-         * Numerological vibration number linking this crystal to numerology meanings. Connects crystal healing with numerology practice.
-         */
-        numericalVibration: number;
-        /**
-         * Five to nine keywords capturing the core healing properties and spiritual themes of this crystal. Null when keyword data is unavailable.
-         */
-        keywords: Array<string>;
-        /**
-         * Birth month (1-12) if this crystal is a traditional birthstone. Null if not a birthstone. January is 1, December is 12.
-         */
-        birthMonth: number;
-        /**
-         * Positive affirmation aligned with this crystal energy. Use for meditation, journaling, or daily affirmation features.
-         */
-        affirmation: string;
-        /**
-         * Crystal slugs that pair well with this stone for enhanced healing combinations. Use for crystal grid and pairing recommendations.
-         */
-        pairsWith: Array<string>;
-    };
-};
-
-export type GetCrystalsCrystalsBySlugResponse = GetCrystalsCrystalsBySlugResponses[keyof GetCrystalsCrystalsBySlugResponses];
-
 export type GetCrystalsZodiacBySignData = {
     body?: never;
     path: {
@@ -13080,6 +12875,211 @@ export type GetCrystalsPlanetsResponses = {
 
 export type GetCrystalsPlanetsResponse = GetCrystalsPlanetsResponses[keyof GetCrystalsPlanetsResponses];
 
+export type GetCrystalsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Filter by chakra association. Valid values: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
+         */
+        chakra?: 'Root' | 'Sacral' | 'Solar Plexus' | 'Heart' | 'Throat' | 'Third Eye' | 'Crown';
+        /**
+         * Filter by zodiac sign. Valid values: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.
+         */
+        zodiac?: 'Aries' | 'Taurus' | 'Gemini' | 'Cancer' | 'Leo' | 'Virgo' | 'Libra' | 'Scorpio' | 'Sagittarius' | 'Capricorn' | 'Aquarius' | 'Pisces';
+        /**
+         * Filter by elemental association. Valid values: Earth, Water, Fire, Air, Storm.
+         */
+        element?: 'Earth' | 'Water' | 'Fire' | 'Air' | 'Storm';
+        /**
+         * Filter by crystal color (partial match, case-insensitive). E.g., "pink", "green", "blue", "purple". Use GET /colors for valid values.
+         */
+        color?: string;
+        /**
+         * Filter by planetary association (partial match, case-insensitive). E.g., "Venus", "Moon", "Jupiter". Use GET /planets for valid values.
+         */
+        planet?: string;
+        /**
+         * Maximum number of crystals to return per page. Range: 1-100, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of crystals to skip for pagination. Default 0.
+         */
+        offset?: number;
+    };
+    url: '/crystals';
+};
+
+export type GetCrystalsResponses = {
+    /**
+     * Paginated list of crystals with summary information
+     */
+    200: {
+        /**
+         * Total number of crystals matching the filter criteria.
+         */
+        total: number;
+        /**
+         * Maximum crystals returned per page.
+         */
+        limit: number;
+        /**
+         * Number of crystals skipped.
+         */
+        offset: number;
+        /**
+         * Crystal summaries for the current page.
+         */
+        crystals: Array<{
+            /**
+             * Display name of the crystal or healing stone.
+             */
+            name: string;
+            /**
+             * URL-safe identifier for the crystal. Use this value in the detail endpoint path to retrieve full healing properties.
+             */
+            slug: string;
+            /**
+             * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
+             */
+            imageUrl: string;
+            /**
+             * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
+             */
+            chakras: Array<string>;
+            /**
+             * Primary colors of this crystal variety. Null when color data is unavailable. Useful for color-based crystal selection and visual display.
+             */
+            colors: Array<string>;
+        }>;
+    };
+};
+
+export type GetCrystalsResponse = GetCrystalsResponses[keyof GetCrystalsResponses];
+
+export type GetCrystalsBySlugData = {
+    body?: never;
+    path: {
+        /**
+         * URL-safe crystal identifier (e.g., "amethyst", "rose-quartz", "black-tourmaline"). Must match an entry in the database.
+         */
+        slug: string;
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/crystals/{slug}';
+};
+
+export type GetCrystalsBySlugErrors = {
+    /**
+     * Crystal not found in database
+     */
+    404: {
+        /**
+         * Error message indicating the crystal was not found.
+         */
+        error: string;
+    };
+};
+
+export type GetCrystalsBySlugError = GetCrystalsBySlugErrors[keyof GetCrystalsBySlugErrors];
+
+export type GetCrystalsBySlugResponses = {
+    /**
+     * Complete crystal healing properties with all associations
+     */
+    200: {
+        /**
+         * Display name of the crystal or healing stone.
+         */
+        name: string;
+        /**
+         * URL-safe identifier for the crystal.
+         */
+        slug: string;
+        /**
+         * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
+         */
+        imageUrl: string;
+        /**
+         * Overview of the crystal covering its primary healing purpose, spiritual significance, and key benefits.
+         */
+        description: string;
+        /**
+         * Detailed healing interpretations across three areas: spiritual and metaphysical, emotional and psychological, and physical body associations.
+         */
+        meaning: {
+            /**
+             * Spiritual and metaphysical healing properties including energy work, meditation benefits, and higher consciousness connections. Null when spiritual interpretation is unavailable.
+             */
+            spiritual: string;
+            /**
+             * Emotional healing properties including stress relief, relationship support, and emotional balance benefits.
+             */
+            emotional: string;
+            /**
+             * Physical healing associations traditionally attributed to this crystal in crystal healing practice. Null when physical healing data is unavailable.
+             */
+            physical: string;
+        };
+        /**
+         * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
+         */
+        chakras: Array<string>;
+        /**
+         * Zodiac signs this crystal is traditionally associated with. Null when zodiac data is unavailable. Useful for personalized crystal recommendations based on birth chart.
+         */
+        zodiacSigns: Array<string>;
+        /**
+         * Ruling planet or celestial body associated with this crystal in astrological tradition. Null when planetary association is unavailable.
+         */
+        planet: string;
+        /**
+         * Elemental associations (Earth, Water, Fire, Air, Storm) connecting the crystal to natural forces and energy types. Null when elemental data is unavailable.
+         */
+        elements: Array<string>;
+        /**
+         * Primary colors of this crystal variety. Null when color data is unavailable. Useful for color-based crystal selection and filtering.
+         */
+        colors: Array<string>;
+        /**
+         * Mohs hardness scale rating (1-10). Indicates durability for jewelry use. Quartz family is 7, Diamond is 10, Selenite is 2.
+         */
+        hardness: number;
+        /**
+         * Numerological vibration number linking this crystal to numerology meanings. Connects crystal healing with numerology practice.
+         */
+        numericalVibration: number;
+        /**
+         * Five to nine keywords capturing the core healing properties and spiritual themes of this crystal. Null when keyword data is unavailable.
+         */
+        keywords: Array<string>;
+        /**
+         * Birth month (1-12) if this crystal is a traditional birthstone. Null if not a birthstone. January is 1, December is 12.
+         */
+        birthMonth: number;
+        /**
+         * Positive affirmation aligned with this crystal energy. Use for meditation, journaling, or daily affirmation features.
+         */
+        affirmation: string;
+        /**
+         * Crystal slugs that pair well with this stone for enhanced healing combinations. Use for crystal grid and pairing recommendations.
+         */
+        pairsWith: Array<string>;
+    };
+};
+
+export type GetCrystalsBySlugResponse = GetCrystalsBySlugResponses[keyof GetCrystalsBySlugResponses];
+
 export type GetLocationSearchData = {
     body?: never;
     path?: never;
@@ -13250,11 +13250,7 @@ export type GetUsageErrors = {
      * Subscription not found
      */
     404: {
-        success: false;
-        error: {
-            code: string;
-            message: string;
-        };
+        error: string;
     };
 };
 
@@ -13265,16 +13261,13 @@ export type GetUsageResponses = {
      * Usage statistics retrieved
      */
     200: {
-        success: true;
-        data: {
-            plan: string;
-            usedThisMonth: number;
-            requestsPerMonth: number;
-            remainingThisMonth: number;
-            email: string;
-            status: string;
-            endDate: string;
-        };
+        plan: string;
+        usedThisMonth: number;
+        requestsPerMonth: number;
+        remainingThisMonth: number;
+        email: string;
+        status: string;
+        endDate: string;
     };
 };
 
