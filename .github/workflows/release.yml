@@ -29,10 +29,10 @@ jobs:
       - name: Regenerate SDK
         run: bun run generate
 
-      - name: Check if anything changed
+      - name: Check if spec changed
         id: diff
         run: |
-          if git diff --quiet src/; then
+          if git diff --quiet specs/openapi.json; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -52,7 +52,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           npm version ${{ github.event.inputs.version_bump || 'patch' }} --no-git-tag-version
-          git add -A
+          git add package.json specs/openapi.json src/
           VERSION=$(node -p "require('./package.json').version")
           git commit -m "release: v$VERSION"
           git tag "v$VERSION"

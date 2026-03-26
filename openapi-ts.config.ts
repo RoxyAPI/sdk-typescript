@@ -1,4 +1,4 @@
-import { defineConfig, OperationPath } from "@hey-api/openapi-ts";
+import { defineConfig, OperationPath } from '@hey-api/openapi-ts';
 
 /**
  * Converts a kebab-case path segment to camelCase.
@@ -9,21 +9,21 @@ function kebabToCamel(s: string): string {
 }
 
 export default defineConfig({
-	input: "./specs/openapi.json",
+	input: './specs/openapi.json',
 	output: {
-		path: "src",
+		path: 'src',
 		clean: false,
 	},
 	plugins: [
-		"@hey-api/typescript",
+		'@hey-api/typescript',
 		{
-			name: "@hey-api/sdk",
+			name: '@hey-api/sdk',
 			operations: {
-				strategy: "single",
-				containerName: "Roxy",
+				strategy: 'single',
+				containerName: 'Roxy',
 				nesting(operation) {
 					const path = operation.path as string;
-					const segment = path.split("/").filter(Boolean)[0];
+					const segment = path.split('/').filter(Boolean)[0];
 					if (!segment) {
 						return OperationPath.id()(operation);
 					}
@@ -33,6 +33,6 @@ export default defineConfig({
 				},
 			},
 		},
-		"@hey-api/client-fetch",
+		'@hey-api/client-fetch',
 	],
 });
