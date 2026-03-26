@@ -47,7 +47,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/roxyapi/sdk-typescript.git"
+		"url": "git+https://github.com/roxyapi/sdk-typescript.git"
 	},
 	"homepage": "https://roxyapi.com/docs/sdk",
 	"bugs": {
