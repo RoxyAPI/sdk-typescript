@@ -15,17 +15,9 @@ bun add @roxyapi/sdk
 ## Quick start
 
 ```typescript
-import { Roxy } from '@roxyapi/sdk';
-import { createClient, createConfig } from '@roxyapi/sdk/client';
+import { createRoxy } from '@roxyapi/sdk';
 
-const client = createClient(
-  createConfig({
-    baseUrl: 'https://roxyapi.com/api/v2',
-    auth: process.env.ROXY_API_KEY,
-  }),
-);
-
-const roxy = new Roxy({ client });
+const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
 // Daily horoscope
 const { data } = await roxy.astrology.getDailyHoroscope({
@@ -48,6 +40,8 @@ const { data: reading } = await roxy.tarot.castCelticCross({
 });
 ```
 
+`createRoxy` sets the base URL and injects SDK identification headers automatically. `auth` is required.
+
 ## Domains
 
 | Namespace | What it covers |
@@ -67,15 +61,27 @@ const { data: reading } = await roxy.tarot.castCelticCross({
 
 Get your API key at [roxyapi.com/pricing](https://roxyapi.com/pricing). Instant delivery after checkout.
 
-Pass the key via the `auth` config when creating the client. Never expose your API key client-side. Call Roxy from your server or API routes.
+Pass the key to `createRoxy`. Never expose your API key client-side. Call Roxy from your server or API routes.
 
 ```typescript
+import { createRoxy } from '@roxyapi/sdk';
+
+const roxy = createRoxy(process.env.ROXY_API_KEY!);
+```
+
+For advanced use cases (custom fetch, interceptors, per-request auth), you can build the client manually:
+
+```typescript
+import { Roxy } from '@roxyapi/sdk';
+import { createClient, createConfig } from '@roxyapi/sdk/client';
+
 const client = createClient(
   createConfig({
     baseUrl: 'https://roxyapi.com/api/v2',
     auth: process.env.ROXY_API_KEY,
   }),
 );
+const roxy = new Roxy({ client });
 ```
 
 ## Error handling
