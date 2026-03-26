@@ -3,7 +3,7 @@ pre-commit:
   commands:
     biome-check:
       glob: "*.{ts,tsx}"
-      run: bun run check
+      run: bun run check --staged
       stage_fixed: true
     typecheck:
       run: bun typecheck

@@ -28,8 +28,7 @@
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"check": "biome check .",
-		"check:fix": "biome check --write ."
+		"check": "biome check . --fix"
 	},
 	"keywords": [
 		"astrology",
