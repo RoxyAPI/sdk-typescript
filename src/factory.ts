@@ -24,7 +24,7 @@ export function createRoxy(auth: AuthToken): Roxy {
 			baseUrl: 'https://roxyapi.com/api/v2',
 			auth,
 			headers: {
-				'X-SDK-Client': `roxyapi-sdk-typescript/${VERSION}`,
+				'X-SDK-Client': `roxy-sdk-typescript/${VERSION}`,
 			},
 		}),
 	);
