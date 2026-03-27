@@ -1,6 +1,6 @@
 # @roxyapi/sdk — Complete Method Reference
 
-> TypeScript SDK for RoxyAPI. 8 spiritual/metaphysical domains, 113 typed endpoints, zero runtime dependencies. Install: `npm install @roxyapi/sdk`
+> TypeScript SDK for RoxyAPI. Multi-domain spiritual and metaphysical intelligence API. Fully typed, zero runtime dependencies. Install: `npm install @roxyapi/sdk`
 
 Every method returns `{ data, error, response }`. Parameters use `{ path }` for URL segments, `{ body }` for POST data, `{ query }` for query strings.
 
@@ -13,7 +13,7 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
 ## Astrology (Western) — `roxy.astrology`
 
-23 methods. Tropical zodiac, Placidus houses, NASA JPL DE405 validated positions.
+Tropical zodiac, Placidus houses, NASA JPL DE405 validated positions.
 
 ### Horoscopes
 
@@ -149,7 +149,7 @@ const { data } = await roxy.astrology.getMoonCalendar({ path: { year: 2026, mont
 
 ## Vedic Astrology — `roxy.vedicAstrology`
 
-42 methods. Sidereal zodiac (Lahiri ayanamsa), Placidus houses, KP system support.
+Sidereal zodiac (Lahiri ayanamsa), Placidus houses, KP system support.
 
 ### Birth Charts
 
@@ -389,7 +389,7 @@ const { data } = await roxy.vedicAstrology.calculateShadbala({
 
 ## Tarot — `roxy.tarot`
 
-10 methods. 78-card Rider-Waite-Smith deck (22 Major Arcana, 56 Minor Arcana).
+78-card Rider-Waite-Smith deck (22 Major Arcana, 56 Minor Arcana).
 
 ```typescript
 // List all 78 cards
@@ -429,7 +429,7 @@ const { data } = await roxy.tarot.castCustomSpread({
 
 ## Numerology — `roxy.numerology`
 
-13 methods. Pythagorean system.
+Pythagorean system.
 
 ```typescript
 // Life Path number
@@ -492,7 +492,7 @@ const { data } = await roxy.numerology.getDailyNumber({ body: { date: '2026-03-2
 
 ## Crystals — `roxy.crystals`
 
-12 methods. Healing properties, zodiac/chakra associations, birthstones.
+Healing properties, zodiac/chakra associations, birthstones.
 
 ```typescript
 // All crystals (paginated)
@@ -536,7 +536,7 @@ const { data } = await roxy.crystals.listCrystalPlanets();
 
 ## I Ching — `roxy.iching`
 
-9 methods. 64 hexagrams, 8 trigrams, traditional coin casting.
+64 hexagrams, 8 trigrams, traditional coin casting.
 
 ```typescript
 // Cast a reading (3-coin method)
@@ -572,7 +572,7 @@ const { data } = await roxy.iching.getTrigram({ path: { identifier: 'heaven' } }
 
 ## Angel Numbers — `roxy.angelNumbers`
 
-4 methods. 43 angel numbers with spiritual meanings.
+Angel numbers with spiritual meanings and pattern analysis.
 
 ```typescript
 // All angel numbers
@@ -592,7 +592,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber();
 
 ## Dreams — `roxy.dreams`
 
-5 methods. 2,000+ dream symbol dictionary.
+Dream symbol dictionary and interpretations.
 
 ```typescript
 // Search symbols
@@ -615,7 +615,7 @@ const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { date: '2026-03-
 
 ## Location — `roxy.location`
 
-3 methods. Geocoding helper for birth chart coordinates.
+Geocoding helper for birth chart coordinates.
 
 ```typescript
 // Search cities (autocomplete)
@@ -633,7 +633,7 @@ const { data } = await roxy.location.getCitiesByCountry({ path: { iso2: 'IN' } }
 
 ## Usage — `roxy.usage`
 
-1 method. Check your API usage and subscription.
+Check your API usage and subscription.
 
 ```typescript
 const { data } = await roxy.usage.getUsageStats();

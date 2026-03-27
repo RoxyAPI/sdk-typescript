@@ -5,7 +5,7 @@
 [![API Reference](https://img.shields.io/badge/api%20reference-roxyapi.com-blue)](https://roxyapi.com/api-reference)
 [![Pricing](https://img.shields.io/badge/pricing-roxyapi.com-blue)](https://roxyapi.com/pricing)
 
-TypeScript SDK for [RoxyAPI](https://roxyapi.com). 8 domains, 120+ endpoints, one API key.
+TypeScript SDK for [RoxyAPI](https://roxyapi.com). Multiple domains, fully typed endpoints, one API key.
 
 Build astrology apps, tarot platforms, birth chart generators, and compatibility tools without writing a single calculation.
 
@@ -107,7 +107,18 @@ if (error) {
 
 ## TypeScript
 
-Every request and response is fully typed. IDE autocomplete shows available methods per domain and exact parameter shapes:no docs tab needed.
+Every request and response is fully typed. IDE autocomplete shows available methods per domain and exact parameter shapes — no docs tab needed.
+
+## AI agents (Cursor, Claude Code, Copilot, Codex)
+
+This package ships with bundled documentation that AI coding agents can read directly from `node_modules/`:
+
+- **`AGENTS.md`** — Quick start, patterns, gotchas, and a common tasks reference table
+- **`docs/llms-full.txt`** — Complete method reference with code examples for every domain
+
+AI agents that support `AGENTS.md` (Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI) will read it automatically. For other tools, point your agent to `node_modules/@roxyapi/sdk/AGENTS.md`.
+
+Also available: [MCP server](https://roxyapi.com/docs/mcp) for AI agents that support the Model Context Protocol.
 
 ## Links
 

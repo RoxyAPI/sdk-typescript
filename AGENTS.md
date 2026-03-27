@@ -1,10 +1,14 @@
 # @roxyapi/sdk — Agent Guide
 
-TypeScript SDK for RoxyAPI. 8 spiritual/metaphysical domains, 113 endpoints, one API key. Zero runtime dependencies.
+TypeScript SDK for RoxyAPI. Multi-domain spiritual and metaphysical intelligence API. One API key, fully typed, zero runtime dependencies.
 
 > Before writing any code with this SDK, read `docs/llms-full.txt` in this package for the complete method reference with examples.
 
 ## Install and initialize
+
+```bash
+npm install @roxyapi/sdk
+```
 
 ```typescript
 import { createRoxy } from '@roxyapi/sdk';
@@ -16,27 +20,26 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
 ## Domains
 
-Type `roxy.` to see all 10 namespaces:
+Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every method in that domain.
 
-| Namespace | Methods | What it covers |
-|-----------|---------|----------------|
-| `roxy.astrology` | 23 | Western astrology: natal charts, horoscopes, synastry, moon phases, transits |
-| `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system |
-| `roxy.tarot` | 10 | 78-card Rider-Waite-Smith: spreads, daily pulls, yes/no, Celtic Cross |
-| `roxy.numerology` | 13 | Life path, expression, soul urge, personal year, karmic analysis |
-| `roxy.crystals` | 12 | Crystal healing properties, zodiac/chakra pairings, birthstones |
-| `roxy.iching` | 9 | I Ching: 64 hexagrams, trigrams, coin casting, daily readings |
-| `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
-| `roxy.dreams` | 5 | Dream symbol dictionary (2,000+ symbols) |
-| `roxy.location` | 3 | City geocoding for birth chart coordinates |
-| `roxy.usage` | 1 | API usage stats and subscription info |
+| Namespace | What it covers |
+|-----------|----------------|
+| `roxy.astrology` | Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility |
+| `roxy.vedicAstrology` | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas |
+| `roxy.tarot` | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
+| `roxy.numerology` | Life path, expression, soul urge, personal year, karmic analysis, compatibility |
+| `roxy.crystals` | Crystal healing properties, zodiac/chakra pairings, birthstones, search |
+| `roxy.iching` | I Ching: hexagrams, trigrams, coin casting, daily readings |
+| `roxy.angelNumbers` | Angel number meanings, pattern analysis, daily guidance |
+| `roxy.dreams` | Dream symbol dictionary and interpretations |
+| `roxy.location` | City geocoding for birth chart coordinates |
+| `roxy.usage` | API usage stats and subscription info |
 
 ## Critical patterns
 
 ### GET endpoints — use `path` for URL parameters
 
 ```typescript
-// Path params go in { path: { ... } }
 const { data } = await roxy.astrology.getDailyHoroscope({
   path: { sign: 'aries' },
 });
@@ -72,6 +75,14 @@ const { data } = await roxy.numerology.calculateLifePath({
 });
 ```
 
+### Query parameters
+
+```typescript
+const { data } = await roxy.crystals.searchCrystals({
+  query: { q: 'amethyst' },
+});
+```
+
 ### Error handling
 
 ```typescript
@@ -81,24 +92,14 @@ const { data, error, response } = await roxy.astrology.getDailyHoroscope({
 
 if (error) {
   // error is { error: string } on 4xx/5xx
-  console.error(error);
+  console.error('Status:', response?.status, 'Error:', error);
   return;
 }
-// data is fully typed here
+// data is fully typed after error check
 console.log(data.sign, data.overview);
 ```
 
-### Query parameters
-
-```typescript
-const { data } = await roxy.crystals.searchCrystals({
-  query: { q: 'amethyst' },
-});
-
-const { data } = await roxy.dreams.searchDreamSymbols({
-  query: { q: 'flying' },
-});
-```
+Common error codes: `401` invalid/missing API key, `403` subscription expired or limit reached, `429` rate limited, `404` resource not found.
 
 ## Common tasks
 
@@ -131,17 +132,20 @@ const city = cities[0];
 // Use city.latitude and city.longitude in chart requests
 ```
 
-## What NOT to do
+## Gotchas
 
-- Do not call endpoints with raw `fetch` — use the typed SDK methods
-- Do not hardcode the base URL — `createRoxy` sets it
-- Do not expose the API key client-side — call from server/API routes only
-- Do not guess method names — type `roxy.domain.` and use autocomplete
-- Parameters are `{ path }`, `{ body }`, or `{ query }` — not positional arguments
+- **Parameters are objects, not positional.** Always `{ path: {...} }`, `{ body: {...} }`, or `{ query: {...} }` — never positional arguments.
+- **Do not guess method names.** Type `roxy.domain.` and let autocomplete show available methods. Method names come from `operationId` in the OpenAPI spec, not URL paths.
+- **Do not use raw `fetch`.** The SDK handles auth headers, base URL, and typed responses.
+- **Do not expose API keys client-side.** Call Roxy from server code, API routes, or server components only.
+- **Chart endpoints need coordinates.** Use `roxy.location.searchCities()` to get latitude/longitude before calling any birth chart or panchang method.
+- **Date format is `YYYY-MM-DD`, time is `HH:MM:SS`.** Both are strings. Timezone is optional (IANA format like `America/New_York`).
+- **All list endpoints may return paginated objects** (e.g. `{ items: [...], total: N }`) rather than raw arrays. Check the type.
+- **`data` and `error` are mutually exclusive.** If `error` is set, `data` is `undefined` and vice versa.
 
 ## Links
 
 - Full method reference: `docs/llms-full.txt` (bundled in this package)
 - Interactive API docs: https://roxyapi.com/api-reference
 - Pricing and API keys: https://roxyapi.com/pricing
-- MCP setup for AI agents: https://roxyapi.com/docs/mcp
+- MCP for AI agents: https://roxyapi.com/docs/mcp
