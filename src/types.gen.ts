@@ -3337,6 +3337,63 @@ export type GetAngelNumbersNumbersData = {
     url: '/angel-numbers/numbers';
 };
 
+export type GetAngelNumbersNumbersErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersNumbersError = GetAngelNumbersNumbersErrors[keyof GetAngelNumbersNumbersErrors];
+
 export type GetAngelNumbersNumbersResponses = {
     /**
      * List of angel numbers with summary information
@@ -3394,13 +3451,69 @@ export type GetAngelNumbersNumbersByNumberData = {
 
 export type GetAngelNumbersNumbersByNumberErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Angel number not found in database
      */
     404: {
         /**
-         * Error message indicating the requested angel number is not in the database. Suggests using the /lookup endpoint which can analyze any number sequence.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -3485,6 +3598,63 @@ export type GetAngelNumbersLookupData = {
     };
     url: '/angel-numbers/lookup';
 };
+
+export type GetAngelNumbersLookupErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersLookupError = GetAngelNumbersLookupErrors[keyof GetAngelNumbersLookupErrors];
 
 export type GetAngelNumbersLookupResponses = {
     /**
@@ -3607,6 +3777,63 @@ export type GetAngelNumbersDailyData = {
     url: '/angel-numbers/daily';
 };
 
+export type GetAngelNumbersDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersDailyError = GetAngelNumbersDailyErrors[keyof GetAngelNumbersDailyErrors];
+
 export type GetAngelNumbersDailyResponses = {
     /**
      * Daily angel number with complete interpretation
@@ -3690,6 +3917,63 @@ export type GetAstrologySignsData = {
     url: '/astrology/signs';
 };
 
+export type GetAstrologySignsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologySignsError = GetAstrologySignsErrors[keyof GetAstrologySignsErrors];
+
 export type GetAstrologySignsResponses = {
     /**
      * All 12 tropical zodiac signs with names, symbols, elements, date ranges, and descriptions.
@@ -3752,10 +4036,69 @@ export type GetAstrologySignsByIdentifierData = {
 
 export type GetAstrologySignsByIdentifierErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Zodiac sign not found
      */
     404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -3865,6 +4208,63 @@ export type GetAstrologyPlanetMeaningsData = {
     url: '/astrology/planet-meanings';
 };
 
+export type GetAstrologyPlanetMeaningsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyPlanetMeaningsError = GetAstrologyPlanetMeaningsErrors[keyof GetAstrologyPlanetMeaningsErrors];
+
 export type GetAstrologyPlanetMeaningsResponses = {
     /**
      * All 10 astrological planets with names, symbols, taglines, categories, and brief descriptions.
@@ -3922,10 +4322,69 @@ export type GetAstrologyPlanetMeaningsByIdentifierData = {
 
 export type GetAstrologyPlanetMeaningsByIdentifierErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Planet not found
      */
     404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -4027,6 +4486,63 @@ export type PostAstrologyNatalChartData = {
     url: '/astrology/natal-chart';
 };
 
+export type PostAstrologyNatalChartErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyNatalChartError = PostAstrologyNatalChartErrors[keyof PostAstrologyNatalChartErrors];
+
 export type PostAstrologyNatalChartResponses = {
     /**
      * Successful natal chart calculation with complete astrological data
@@ -4068,6 +4584,63 @@ export type PostAstrologyPlanetsData = {
     };
     url: '/astrology/planets';
 };
+
+export type PostAstrologyPlanetsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyPlanetsError = PostAstrologyPlanetsErrors[keyof PostAstrologyPlanetsErrors];
 
 export type PostAstrologyPlanetsResponses = {
     /**
@@ -4173,6 +4746,63 @@ export type GetAstrologyMoonPhaseCurrentData = {
     url: '/astrology/moon-phase/current';
 };
 
+export type GetAstrologyMoonPhaseCurrentErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyMoonPhaseCurrentError = GetAstrologyMoonPhaseCurrentErrors[keyof GetAstrologyMoonPhaseCurrentErrors];
+
 export type GetAstrologyMoonPhaseCurrentResponses = {
     /**
      * Moon phase calculated successfully
@@ -4260,6 +4890,63 @@ export type GetAstrologyMoonPhaseUpcomingData = {
     url: '/astrology/moon-phase/upcoming';
 };
 
+export type GetAstrologyMoonPhaseUpcomingErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyMoonPhaseUpcomingError = GetAstrologyMoonPhaseUpcomingErrors[keyof GetAstrologyMoonPhaseUpcomingErrors];
+
 export type GetAstrologyMoonPhaseUpcomingResponses = {
     /**
      * Upcoming moon phases retrieved successfully
@@ -4303,6 +4990,63 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthData = {
     };
     url: '/astrology/moon-phase/calendar/{year}/{month}';
 };
+
+export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyMoonPhaseCalendarByYearByMonthError = GetAstrologyMoonPhaseCalendarByYearByMonthErrors[keyof GetAstrologyMoonPhaseCalendarByYearByMonthErrors];
 
 export type GetAstrologyMoonPhaseCalendarByYearByMonthResponses = {
     /**
@@ -4407,6 +5151,63 @@ export type PostAstrologySynastryData = {
     };
     url: '/astrology/synastry';
 };
+
+export type PostAstrologySynastryErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologySynastryError = PostAstrologySynastryErrors[keyof PostAstrologySynastryErrors];
 
 export type PostAstrologySynastryResponses = {
     /**
@@ -4630,6 +5431,63 @@ export type PostAstrologyHousesData = {
     url: '/astrology/houses';
 };
 
+export type PostAstrologyHousesErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyHousesError = PostAstrologyHousesErrors[keyof PostAstrologyHousesErrors];
+
 export type PostAstrologyHousesResponses = {
     /**
      * House cusps calculated successfully
@@ -4651,6 +5509,63 @@ export type PostAstrologyAspectsData = {
     url: '/astrology/aspects';
 };
 
+export type PostAstrologyAspectsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyAspectsError = PostAstrologyAspectsErrors[keyof PostAstrologyAspectsErrors];
+
 export type PostAstrologyAspectsResponses = {
     /**
      * Aspects calculated successfully
@@ -4666,6 +5581,63 @@ export type PostAstrologyTransitsData = {
     query?: never;
     url: '/astrology/transits';
 };
+
+export type PostAstrologyTransitsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyTransitsError = PostAstrologyTransitsErrors[keyof PostAstrologyTransitsErrors];
 
 export type PostAstrologyTransitsResponses = {
     /**
@@ -4733,6 +5705,63 @@ export type PostAstrologyTransitAspectsData = {
     };
     url: '/astrology/transit-aspects';
 };
+
+export type PostAstrologyTransitAspectsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyTransitAspectsError = PostAstrologyTransitAspectsErrors[keyof PostAstrologyTransitAspectsErrors];
 
 export type PostAstrologyTransitAspectsResponses = {
     /**
@@ -4981,6 +6010,63 @@ export type PostAstrologySolarReturnData = {
     url: '/astrology/solar-return';
 };
 
+export type PostAstrologySolarReturnErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologySolarReturnError = PostAstrologySolarReturnErrors[keyof PostAstrologySolarReturnErrors];
+
 export type PostAstrologySolarReturnResponses = {
     /**
      * Solar return chart calculated successfully
@@ -5218,6 +6304,63 @@ export type PostAstrologyLunarReturnData = {
     query?: never;
     url: '/astrology/lunar-return';
 };
+
+export type PostAstrologyLunarReturnErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyLunarReturnError = PostAstrologyLunarReturnErrors[keyof PostAstrologyLunarReturnErrors];
 
 export type PostAstrologyLunarReturnResponses = {
     /**
@@ -5483,6 +6626,63 @@ export type PostAstrologyCompositeChartData = {
     };
     url: '/astrology/composite-chart';
 };
+
+export type PostAstrologyCompositeChartErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyCompositeChartError = PostAstrologyCompositeChartErrors[keyof PostAstrologyCompositeChartErrors];
 
 export type PostAstrologyCompositeChartResponses = {
     /**
@@ -5770,6 +6970,63 @@ export type PostAstrologyCompatibilityScoreData = {
     url: '/astrology/compatibility-score';
 };
 
+export type PostAstrologyCompatibilityScoreErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyCompatibilityScoreError = PostAstrologyCompatibilityScoreErrors[keyof PostAstrologyCompatibilityScoreErrors];
+
 export type PostAstrologyCompatibilityScoreResponses = {
     /**
      * Compatibility score calculated successfully
@@ -5850,7 +7107,7 @@ export type GetAstrologyHoroscopeBySignDailyData = {
     body?: never;
     path: {
         /**
-         * Zodiac sign in lowercase (e.g., aries, taurus, gemini).
+         * Zodiac sign, case-insensitive (e.g., aries, Aries, ARIES all work).
          */
         sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
     };
@@ -5862,6 +7119,63 @@ export type GetAstrologyHoroscopeBySignDailyData = {
     };
     url: '/astrology/horoscope/{sign}/daily';
 };
+
+export type GetAstrologyHoroscopeBySignDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyHoroscopeBySignDailyError = GetAstrologyHoroscopeBySignDailyErrors[keyof GetAstrologyHoroscopeBySignDailyErrors];
 
 export type GetAstrologyHoroscopeBySignDailyResponses = {
     /**
@@ -5923,6 +7237,63 @@ export type GetAstrologyHoroscopeDailyData = {
     query?: never;
     url: '/astrology/horoscope/daily';
 };
+
+export type GetAstrologyHoroscopeDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyHoroscopeDailyError = GetAstrologyHoroscopeDailyErrors[keyof GetAstrologyHoroscopeDailyErrors];
 
 export type GetAstrologyHoroscopeDailyResponses = {
     /**
@@ -5991,7 +7362,7 @@ export type GetAstrologyHoroscopeBySignWeeklyData = {
     body?: never;
     path: {
         /**
-         * Zodiac sign in lowercase (e.g., aries, taurus, gemini).
+         * Zodiac sign, case-insensitive (e.g., aries, Aries, ARIES all work).
          */
         sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
     };
@@ -6003,6 +7374,63 @@ export type GetAstrologyHoroscopeBySignWeeklyData = {
     };
     url: '/astrology/horoscope/{sign}/weekly';
 };
+
+export type GetAstrologyHoroscopeBySignWeeklyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyHoroscopeBySignWeeklyError = GetAstrologyHoroscopeBySignWeeklyErrors[keyof GetAstrologyHoroscopeBySignWeeklyErrors];
 
 export type GetAstrologyHoroscopeBySignWeeklyResponses = {
     /**
@@ -6062,7 +7490,7 @@ export type GetAstrologyHoroscopeBySignMonthlyData = {
     body?: never;
     path: {
         /**
-         * Zodiac sign in lowercase (e.g., aries, taurus, gemini).
+         * Zodiac sign, case-insensitive (e.g., aries, Aries, ARIES all work).
          */
         sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
     };
@@ -6074,6 +7502,63 @@ export type GetAstrologyHoroscopeBySignMonthlyData = {
     };
     url: '/astrology/horoscope/{sign}/monthly';
 };
+
+export type GetAstrologyHoroscopeBySignMonthlyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyHoroscopeBySignMonthlyError = GetAstrologyHoroscopeBySignMonthlyErrors[keyof GetAstrologyHoroscopeBySignMonthlyErrors];
 
 export type GetAstrologyHoroscopeBySignMonthlyResponses = {
     /**
@@ -6194,6 +7679,63 @@ export type PostAstrologyPlanetaryReturnsData = {
     query?: never;
     url: '/astrology/planetary-returns';
 };
+
+export type PostAstrologyPlanetaryReturnsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyPlanetaryReturnsError = PostAstrologyPlanetaryReturnsErrors[keyof PostAstrologyPlanetaryReturnsErrors];
 
 export type PostAstrologyPlanetaryReturnsResponses = {
     /**
@@ -6409,6 +7951,63 @@ export type PostVedicAstrologyBirthChartData = {
     url: '/vedic-astrology/birth-chart';
 };
 
+export type PostVedicAstrologyBirthChartErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyBirthChartError = PostVedicAstrologyBirthChartErrors[keyof PostVedicAstrologyBirthChartErrors];
+
 export type PostVedicAstrologyBirthChartResponses = {
     /**
      * D1 Rashi birth chart with all 12 houses, 9 grahas plus Lagna, combustion analysis (Surya Siddhanta orbs), planetary war detection, bhava interpretations, and a meta lookup keyed by planet name.
@@ -6425,6 +8024,63 @@ export type PostVedicAstrologyNavamsaData = {
     url: '/vedic-astrology/navamsa';
 };
 
+export type PostVedicAstrologyNavamsaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyNavamsaError = PostVedicAstrologyNavamsaErrors[keyof PostVedicAstrologyNavamsaErrors];
+
 export type PostVedicAstrologyNavamsaResponses = {
     /**
      * D9 Navamsa chart with all 12 houses, 9 grahas plus Lagna, Vargottama planet detection, and Vargottama significance explanation. Same structure as birth chart response.
@@ -6440,6 +8096,63 @@ export type PostVedicAstrologyDivisionalChartData = {
     query?: never;
     url: '/vedic-astrology/divisional-chart';
 };
+
+export type PostVedicAstrologyDivisionalChartErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDivisionalChartError = PostVedicAstrologyDivisionalChartErrors[keyof PostVedicAstrologyDivisionalChartErrors];
 
 export type PostVedicAstrologyDivisionalChartResponses = {
     /**
@@ -6462,6 +8175,63 @@ export type PostVedicAstrologyCompatibilityData = {
     url: '/vedic-astrology/compatibility';
 };
 
+export type PostVedicAstrologyCompatibilityErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyCompatibilityError = PostVedicAstrologyCompatibilityErrors[keyof PostVedicAstrologyCompatibilityErrors];
+
 export type PostVedicAstrologyCompatibilityResponses = {
     /**
      * Ashtakoot Gun Milan result with total score out of 36, percentage, compatibility verdict, detected doshas (Nadi/Bhakoot) with cancellation analysis, dosha cancellation reasons when applicable, recommendation, and detailed breakdown of all 8 kootas.
@@ -6482,6 +8252,63 @@ export type PostVedicAstrologyPlanetaryPositionsData = {
     };
     url: '/vedic-astrology/planetary-positions';
 };
+
+export type PostVedicAstrologyPlanetaryPositionsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyPlanetaryPositionsError = PostVedicAstrologyPlanetaryPositionsErrors[keyof PostVedicAstrologyPlanetaryPositionsErrors];
 
 export type PostVedicAstrologyPlanetaryPositionsResponses = {
     /**
@@ -6511,6 +8338,63 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyData = {
     query?: never;
     url: '/vedic-astrology/planetary-positions/monthly';
 };
+
+export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyPlanetaryPositionsMonthlyError = PostVedicAstrologyPlanetaryPositionsMonthlyErrors[keyof PostVedicAstrologyPlanetaryPositionsMonthlyErrors];
 
 export type PostVedicAstrologyPlanetaryPositionsMonthlyResponses = {
     /**
@@ -6596,6 +8480,63 @@ export type PostVedicAstrologyDashaCurrentData = {
     };
     url: '/vedic-astrology/dasha/current';
 };
+
+export type PostVedicAstrologyDashaCurrentErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDashaCurrentError = PostVedicAstrologyDashaCurrentErrors[keyof PostVedicAstrologyDashaCurrentErrors];
 
 export type PostVedicAstrologyDashaCurrentResponses = {
     /**
@@ -6797,6 +8738,63 @@ export type PostVedicAstrologyDashaMajorData = {
     url: '/vedic-astrology/dasha/major';
 };
 
+export type PostVedicAstrologyDashaMajorErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDashaMajorError = PostVedicAstrologyDashaMajorErrors[keyof PostVedicAstrologyDashaMajorErrors];
+
 export type PostVedicAstrologyDashaMajorResponses = {
     /**
      * Complete 120-year Vimshottari Dasha timeline with all 9 Mahadasha periods, birth dasha balance, Moon nakshatra, and start/end dates for each planetary period.
@@ -6893,11 +8891,71 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
         timezone?: number;
     };
     path: {
+        /**
+         * Mahadasha planet name, case-insensitive (e.g., jupiter, Jupiter, JUPITER all work). Valid: Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury.
+         */
         mahadasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
     };
     query?: never;
     url: '/vedic-astrology/dasha/sub/{mahadasha}';
 };
+
+export type PostVedicAstrologyDashaSubByMahadashaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaError = PostVedicAstrologyDashaSubByMahadashaErrors[keyof PostVedicAstrologyDashaSubByMahadashaErrors];
 
 export type PostVedicAstrologyDashaSubByMahadashaResponses = {
     /**
@@ -6999,6 +9057,63 @@ export type PostVedicAstrologyPanchangBasicData = {
     };
     url: '/vedic-astrology/panchang/basic';
 };
+
+export type PostVedicAstrologyPanchangBasicErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyPanchangBasicError = PostVedicAstrologyPanchangBasicErrors[keyof PostVedicAstrologyPanchangBasicErrors];
 
 export type PostVedicAstrologyPanchangBasicResponses = {
     /**
@@ -7125,7 +9240,7 @@ export type PostVedicAstrologyPanchangBasicResponse = PostVedicAstrologyPanchang
 export type PostVedicAstrologyPanchangDetailedData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format
+         * Date in YYYY-MM-DD format.
          */
         date: string;
         /**
@@ -7150,6 +9265,63 @@ export type PostVedicAstrologyPanchangDetailedData = {
     };
     url: '/vedic-astrology/panchang/detailed';
 };
+
+export type PostVedicAstrologyPanchangDetailedErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyPanchangDetailedError = PostVedicAstrologyPanchangDetailedErrors[keyof PostVedicAstrologyPanchangDetailedErrors];
 
 export type PostVedicAstrologyPanchangDetailedResponses = {
     /**
@@ -7697,7 +9869,7 @@ export type PostVedicAstrologyPanchangDetailedResponse = PostVedicAstrologyPanch
 export type PostVedicAstrologyPanchangChoghadiyaData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format
+         * Date in YYYY-MM-DD format.
          */
         date: string;
         /**
@@ -7717,6 +9889,63 @@ export type PostVedicAstrologyPanchangChoghadiyaData = {
     query?: never;
     url: '/vedic-astrology/panchang/choghadiya';
 };
+
+export type PostVedicAstrologyPanchangChoghadiyaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyPanchangChoghadiyaError = PostVedicAstrologyPanchangChoghadiyaErrors[keyof PostVedicAstrologyPanchangChoghadiyaErrors];
 
 export type PostVedicAstrologyPanchangChoghadiyaResponses = {
     /**
@@ -7782,7 +10011,7 @@ export type PostVedicAstrologyPanchangChoghadiyaResponse = PostVedicAstrologyPan
 export type PostVedicAstrologyPanchangHoraData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format
+         * Date in YYYY-MM-DD format.
          */
         date: string;
         /**
@@ -7802,6 +10031,63 @@ export type PostVedicAstrologyPanchangHoraData = {
     query?: never;
     url: '/vedic-astrology/panchang/hora';
 };
+
+export type PostVedicAstrologyPanchangHoraErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyPanchangHoraError = PostVedicAstrologyPanchangHoraErrors[keyof PostVedicAstrologyPanchangHoraErrors];
 
 export type PostVedicAstrologyPanchangHoraResponses = {
     /**
@@ -7866,6 +10152,63 @@ export type PostVedicAstrologyDoshaManglikData = {
     url: '/vedic-astrology/dosha/manglik';
 };
 
+export type PostVedicAstrologyDoshaManglikErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDoshaManglikError = PostVedicAstrologyDoshaManglikErrors[keyof PostVedicAstrologyDoshaManglikErrors];
+
 export type PostVedicAstrologyDoshaManglikResponses = {
     /**
      * Manglik dosha detection result with severity, Mars house placement, cancellation exceptions, traditional remedies, and effects on marriage and personality.
@@ -7882,6 +10225,63 @@ export type PostVedicAstrologyDoshaKalsarpaData = {
     url: '/vedic-astrology/dosha/kalsarpa';
 };
 
+export type PostVedicAstrologyDoshaKalsarpaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDoshaKalsarpaError = PostVedicAstrologyDoshaKalsarpaErrors[keyof PostVedicAstrologyDoshaKalsarpaErrors];
+
 export type PostVedicAstrologyDoshaKalsarpaResponses = {
     /**
      * Kalsarpa dosha detection result with type identification (1 of 12 types), severity, Rahu-Ketu axis details, traditional remedies, and effects on career, health, and relationships.
@@ -7897,6 +10297,63 @@ export type PostVedicAstrologyDoshaSadhesatiData = {
     query?: never;
     url: '/vedic-astrology/dosha/sadhesati';
 };
+
+export type PostVedicAstrologyDoshaSadhesatiErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDoshaSadhesatiError = PostVedicAstrologyDoshaSadhesatiErrors[keyof PostVedicAstrologyDoshaSadhesatiErrors];
 
 export type PostVedicAstrologyDoshaSadhesatiResponses = {
     /**
@@ -7918,6 +10375,63 @@ export type GetVedicAstrologyYogaData = {
     };
     url: '/vedic-astrology/yoga';
 };
+
+export type GetVedicAstrologyYogaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVedicAstrologyYogaError = GetVedicAstrologyYogaErrors[keyof GetVedicAstrologyYogaErrors];
 
 export type GetVedicAstrologyYogaResponses = {
     /**
@@ -7965,13 +10479,69 @@ export type GetVedicAstrologyYogaByIdData = {
 
 export type GetVedicAstrologyYogaByIdErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Yoga not found
      */
     404: {
         /**
-         * Error message indicating the requested yoga ID was not found in the database. Use GET /yogas to browse available yoga IDs.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -8019,6 +10589,63 @@ export type GetVedicAstrologyKpAyanamsaData = {
     url: '/vedic-astrology/kp/ayanamsa';
 };
 
+export type GetVedicAstrologyKpAyanamsaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVedicAstrologyKpAyanamsaError = GetVedicAstrologyKpAyanamsaErrors[keyof GetVedicAstrologyKpAyanamsaErrors];
+
 export type GetVedicAstrologyKpAyanamsaResponses = {
     /**
      * Successfully calculated KP-Newcomb ayanamsa
@@ -8034,6 +10661,63 @@ export type PostVedicAstrologyKpPlanetsData = {
     query?: never;
     url: '/vedic-astrology/kp/planets';
 };
+
+export type PostVedicAstrologyKpPlanetsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpPlanetsError = PostVedicAstrologyKpPlanetsErrors[keyof PostVedicAstrologyKpPlanetsErrors];
 
 export type PostVedicAstrologyKpPlanetsResponses = {
     /**
@@ -8051,6 +10735,63 @@ export type PostVedicAstrologyKpCuspsData = {
     url: '/vedic-astrology/kp/cusps';
 };
 
+export type PostVedicAstrologyKpCuspsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpCuspsError = PostVedicAstrologyKpCuspsErrors[keyof PostVedicAstrologyKpCuspsErrors];
+
 export type PostVedicAstrologyKpCuspsResponses = {
     /**
      * Successfully calculated Placidus house cusps
@@ -8066,6 +10807,63 @@ export type PostVedicAstrologyKpChartData = {
     query?: never;
     url: '/vedic-astrology/kp/chart';
 };
+
+export type PostVedicAstrologyKpChartErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpChartError = PostVedicAstrologyKpChartErrors[keyof PostVedicAstrologyKpChartErrors];
 
 export type PostVedicAstrologyKpChartResponses = {
     /**
@@ -8111,6 +10909,63 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
     query?: never;
     url: '/vedic-astrology/kp/ruling-planets';
 };
+
+export type PostVedicAstrologyKpRulingPlanetsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpRulingPlanetsError = PostVedicAstrologyKpRulingPlanetsErrors[keyof PostVedicAstrologyKpRulingPlanetsErrors];
 
 export type PostVedicAstrologyKpRulingPlanetsResponses = {
     /**
@@ -8161,6 +11016,63 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
     url: '/vedic-astrology/kp/ruling-planets-interval';
 };
 
+export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpRulingPlanetsIntervalError = PostVedicAstrologyKpRulingPlanetsIntervalErrors[keyof PostVedicAstrologyKpRulingPlanetsIntervalErrors];
+
 export type PostVedicAstrologyKpRulingPlanetsIntervalResponses = {
     /**
      * Ruling planets with significators at intervals
@@ -8176,6 +11088,63 @@ export type PostVedicAstrologyKpSublordChangesData = {
     query?: never;
     url: '/vedic-astrology/kp/sublord-changes';
 };
+
+export type PostVedicAstrologyKpSublordChangesErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpSublordChangesError = PostVedicAstrologyKpSublordChangesErrors[keyof PostVedicAstrologyKpSublordChangesErrors];
 
 export type PostVedicAstrologyKpSublordChangesResponses = {
     /**
@@ -8193,6 +11162,63 @@ export type PostVedicAstrologyKpRasiChangesData = {
     url: '/vedic-astrology/kp/rasi-changes';
 };
 
+export type PostVedicAstrologyKpRasiChangesErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpRasiChangesError = PostVedicAstrologyKpRasiChangesErrors[keyof PostVedicAstrologyKpRasiChangesErrors];
+
 export type PostVedicAstrologyKpRasiChangesResponses = {
     /**
      * Sign ingress timings calculated successfully
@@ -8208,6 +11234,63 @@ export type PostVedicAstrologyKpPlanetsIntervalData = {
     query?: never;
     url: '/vedic-astrology/kp/planets-interval';
 };
+
+export type PostVedicAstrologyKpPlanetsIntervalErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpPlanetsIntervalError = PostVedicAstrologyKpPlanetsIntervalErrors[keyof PostVedicAstrologyKpPlanetsIntervalErrors];
 
 export type PostVedicAstrologyKpPlanetsIntervalResponses = {
     /**
@@ -8249,6 +11332,63 @@ export type PostVedicAstrologyAspectsData = {
     query?: never;
     url: '/vedic-astrology/aspects';
 };
+
+export type PostVedicAstrologyAspectsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyAspectsError = PostVedicAstrologyAspectsErrors[keyof PostVedicAstrologyAspectsErrors];
 
 export type PostVedicAstrologyAspectsResponses = {
     /**
@@ -8373,6 +11513,63 @@ export type PostVedicAstrologyAspectsMonthlyData = {
     url: '/vedic-astrology/aspects/monthly';
 };
 
+export type PostVedicAstrologyAspectsMonthlyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyAspectsMonthlyError = PostVedicAstrologyAspectsMonthlyErrors[keyof PostVedicAstrologyAspectsMonthlyErrors];
+
 export type PostVedicAstrologyAspectsMonthlyResponses = {
     /**
      * Monthly planetary aspect events
@@ -8459,6 +11656,63 @@ export type PostVedicAstrologyAspectsLunarData = {
     query?: never;
     url: '/vedic-astrology/aspects/lunar';
 };
+
+export type PostVedicAstrologyAspectsLunarErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyAspectsLunarError = PostVedicAstrologyAspectsLunarErrors[keyof PostVedicAstrologyAspectsLunarErrors];
 
 export type PostVedicAstrologyAspectsLunarResponses = {
     /**
@@ -8558,6 +11812,63 @@ export type PostVedicAstrologyTransitData = {
     query?: never;
     url: '/vedic-astrology/transit';
 };
+
+export type PostVedicAstrologyTransitErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyTransitError = PostVedicAstrologyTransitErrors[keyof PostVedicAstrologyTransitErrors];
 
 export type PostVedicAstrologyTransitResponses = {
     /**
@@ -8681,6 +11992,63 @@ export type PostVedicAstrologyTransitMonthlyData = {
     url: '/vedic-astrology/transit/monthly';
 };
 
+export type PostVedicAstrologyTransitMonthlyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyTransitMonthlyError = PostVedicAstrologyTransitMonthlyErrors[keyof PostVedicAstrologyTransitMonthlyErrors];
+
 export type PostVedicAstrologyTransitMonthlyResponses = {
     /**
      * Monthly transit data calculated successfully
@@ -8781,6 +12149,63 @@ export type PostVedicAstrologyParallelsData = {
     url: '/vedic-astrology/parallels';
 };
 
+export type PostVedicAstrologyParallelsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyParallelsError = PostVedicAstrologyParallelsErrors[keyof PostVedicAstrologyParallelsErrors];
+
 export type PostVedicAstrologyParallelsResponses = {
     /**
      * Declination parallels calculated successfully
@@ -8861,6 +12286,63 @@ export type PostVedicAstrologyParallelsMonthlyData = {
     url: '/vedic-astrology/parallels/monthly';
 };
 
+export type PostVedicAstrologyParallelsMonthlyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyParallelsMonthlyError = PostVedicAstrologyParallelsMonthlyErrors[keyof PostVedicAstrologyParallelsMonthlyErrors];
+
 export type PostVedicAstrologyParallelsMonthlyResponses = {
     /**
      * Monthly parallel events
@@ -8940,6 +12422,63 @@ export type PostVedicAstrologyEclipticCrossingsData = {
     url: '/vedic-astrology/ecliptic-crossings';
 };
 
+export type PostVedicAstrologyEclipticCrossingsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyEclipticCrossingsError = PostVedicAstrologyEclipticCrossingsErrors[keyof PostVedicAstrologyEclipticCrossingsErrors];
+
 export type PostVedicAstrologyEclipticCrossingsResponses = {
     /**
      * Ecliptic crossing events for the year
@@ -8999,6 +12538,63 @@ export type GetVedicAstrologyRashisData = {
     url: '/vedic-astrology/rashis';
 };
 
+export type GetVedicAstrologyRashisErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVedicAstrologyRashisError = GetVedicAstrologyRashisErrors[keyof GetVedicAstrologyRashisErrors];
+
 export type GetVedicAstrologyRashisResponses = {
     /**
      * Array of all 12 Vedic rashis (Mesha through Meen) with Sanskrit names, Western equivalents, sidereal date ranges, symbols, governing Adityas, and personality characteristics.
@@ -9027,10 +12623,69 @@ export type GetVedicAstrologyRashisByIdData = {
 
 export type GetVedicAstrologyRashisByIdErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Rashi not found
      */
     404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -9056,6 +12711,63 @@ export type GetVedicAstrologyNakshatrasData = {
     };
     url: '/vedic-astrology/nakshatras';
 };
+
+export type GetVedicAstrologyNakshatrasErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVedicAstrologyNakshatrasError = GetVedicAstrologyNakshatrasErrors[keyof GetVedicAstrologyNakshatrasErrors];
 
 export type GetVedicAstrologyNakshatrasResponses = {
     /**
@@ -9085,10 +12797,69 @@ export type GetVedicAstrologyNakshatrasByIdData = {
 
 export type GetVedicAstrologyNakshatrasByIdErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Nakshatra not found
      */
     404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -9110,6 +12881,63 @@ export type PostVedicAstrologyUpagrahaData = {
     url: '/vedic-astrology/upagraha';
 };
 
+export type PostVedicAstrologyUpagrahaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyUpagrahaError = PostVedicAstrologyUpagrahaErrors[keyof PostVedicAstrologyUpagrahaErrors];
+
 export type PostVedicAstrologyUpagrahaResponses = {
     /**
      * All 11 upagraha positions with rashi, nakshatra, and pada details.
@@ -9126,6 +12954,63 @@ export type PostVedicAstrologyAshtakavargaData = {
     url: '/vedic-astrology/ashtakavarga';
 };
 
+export type PostVedicAstrologyAshtakavargaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyAshtakavargaError = PostVedicAstrologyAshtakavargaErrors[keyof PostVedicAstrologyAshtakavargaErrors];
+
 export type PostVedicAstrologyAshtakavargaResponses = {
     /**
      * Complete Ashtakavarga with Bhinnashtakavarga, Sarvashtakavarga (337-point), Reduced Ashtakavarga (Trikona + Ekadipati Shodhana), and Shodhya Pinda planetary strength.
@@ -9141,6 +13026,63 @@ export type PostVedicAstrologyShadbalaData = {
     query?: never;
     url: '/vedic-astrology/shadbala';
 };
+
+export type PostVedicAstrologyShadbalaErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyShadbalaError = PostVedicAstrologyShadbalaErrors[keyof PostVedicAstrologyShadbalaErrors];
 
 export type PostVedicAstrologyShadbalaResponses = {
     /**
@@ -9174,6 +13116,63 @@ export type GetTarotCardsData = {
     };
     url: '/tarot/cards';
 };
+
+export type GetTarotCardsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetTarotCardsError = GetTarotCardsErrors[keyof GetTarotCardsErrors];
 
 export type GetTarotCardsResponses = {
     /**
@@ -9212,13 +13211,69 @@ export type GetTarotCardsByIdData = {
 
 export type GetTarotCardsByIdErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Card not found
      */
     404: {
         /**
-         * Error message indicating the requested card ID was not found in the 78-card Rider-Waite-Smith deck.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -9262,6 +13317,63 @@ export type PostTarotDrawData = {
     url: '/tarot/draw';
 };
 
+export type PostTarotDrawErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotDrawError = PostTarotDrawErrors[keyof PostTarotDrawErrors];
+
 export type PostTarotDrawResponses = {
     /**
      * Drawn cards
@@ -9303,13 +13415,56 @@ export type PostTarotDailyData = {
 
 export type PostTarotDailyErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Failed to draw card
      */
     500: {
         /**
-         * Error message when daily card draw fails unexpectedly.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
     };
 };
 
@@ -9394,13 +13549,56 @@ export type PostTarotYesNoData = {
 
 export type PostTarotYesNoErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Failed to draw card
      */
     500: {
         /**
-         * Error message when yes/no card draw fails unexpectedly.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
     };
 };
 
@@ -9478,6 +13676,63 @@ export type PostTarotSpreadsThreeCardData = {
     };
     url: '/tarot/spreads/three-card';
 };
+
+export type PostTarotSpreadsThreeCardErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsThreeCardError = PostTarotSpreadsThreeCardErrors[keyof PostTarotSpreadsThreeCardErrors];
 
 export type PostTarotSpreadsThreeCardResponses = {
     /**
@@ -9567,6 +13822,63 @@ export type PostTarotSpreadsCelticCrossData = {
     url: '/tarot/spreads/celtic-cross';
 };
 
+export type PostTarotSpreadsCelticCrossErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsCelticCrossError = PostTarotSpreadsCelticCrossErrors[keyof PostTarotSpreadsCelticCrossErrors];
+
 export type PostTarotSpreadsCelticCrossResponses = {
     /**
      * Celtic Cross spread reading
@@ -9655,6 +13967,63 @@ export type PostTarotSpreadsLoveData = {
     url: '/tarot/spreads/love';
 };
 
+export type PostTarotSpreadsLoveErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsLoveError = PostTarotSpreadsLoveErrors[keyof PostTarotSpreadsLoveErrors];
+
 export type PostTarotSpreadsLoveResponses = {
     /**
      * Love spread reading
@@ -9742,6 +14111,63 @@ export type PostTarotSpreadsCareerData = {
     };
     url: '/tarot/spreads/career';
 };
+
+export type PostTarotSpreadsCareerErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsCareerError = PostTarotSpreadsCareerErrors[keyof PostTarotSpreadsCareerErrors];
 
 export type PostTarotSpreadsCareerResponses = {
     /**
@@ -9854,6 +14280,63 @@ export type PostTarotSpreadsCustomData = {
     url: '/tarot/spreads/custom';
 };
 
+export type PostTarotSpreadsCustomErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsCustomError = PostTarotSpreadsCustomErrors[keyof PostTarotSpreadsCustomErrors];
+
 export type PostTarotSpreadsCustomResponses = {
     /**
      * Custom spread reading
@@ -9951,6 +14434,63 @@ export type PostNumerologyLifePathData = {
     };
     url: '/numerology/life-path';
 };
+
+export type PostNumerologyLifePathErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyLifePathError = PostNumerologyLifePathErrors[keyof PostNumerologyLifePathErrors];
 
 export type PostNumerologyLifePathResponses = {
     /**
@@ -10050,6 +14590,63 @@ export type PostNumerologyExpressionData = {
     url: '/numerology/expression';
 };
 
+export type PostNumerologyExpressionErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyExpressionError = PostNumerologyExpressionErrors[keyof PostNumerologyExpressionErrors];
+
 export type PostNumerologyExpressionResponses = {
     /**
      * Successfully calculated Expression number with detailed interpretation
@@ -10147,6 +14744,63 @@ export type PostNumerologySoulUrgeData = {
     };
     url: '/numerology/soul-urge';
 };
+
+export type PostNumerologySoulUrgeErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologySoulUrgeError = PostNumerologySoulUrgeErrors[keyof PostNumerologySoulUrgeErrors];
 
 export type PostNumerologySoulUrgeResponses = {
     /**
@@ -10246,6 +14900,63 @@ export type PostNumerologyPersonalityData = {
     url: '/numerology/personality';
 };
 
+export type PostNumerologyPersonalityErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyPersonalityError = PostNumerologyPersonalityErrors[keyof PostNumerologyPersonalityErrors];
+
 export type PostNumerologyPersonalityResponses = {
     /**
      * Successfully calculated Personality number with detailed interpretation
@@ -10343,6 +15054,63 @@ export type PostNumerologyBirthDayData = {
     };
     url: '/numerology/birth-day';
 };
+
+export type PostNumerologyBirthDayErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyBirthDayError = PostNumerologyBirthDayErrors[keyof PostNumerologyBirthDayErrors];
 
 export type PostNumerologyBirthDayResponses = {
     /**
@@ -10446,6 +15214,63 @@ export type PostNumerologyMaturityData = {
     url: '/numerology/maturity';
 };
 
+export type PostNumerologyMaturityErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyMaturityError = PostNumerologyMaturityErrors[keyof PostNumerologyMaturityErrors];
+
 export type PostNumerologyMaturityResponses = {
     /**
      * Successfully calculated Maturity number with detailed interpretation
@@ -10544,6 +15369,63 @@ export type PostNumerologyKarmicLessonsData = {
     url: '/numerology/karmic-lessons';
 };
 
+export type PostNumerologyKarmicLessonsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyKarmicLessonsError = PostNumerologyKarmicLessonsErrors[keyof PostNumerologyKarmicLessonsErrors];
+
 export type PostNumerologyKarmicLessonsResponses = {
     /**
      * Successfully analyzed karmic lessons with development guidance
@@ -10611,6 +15493,63 @@ export type PostNumerologyKarmicDebtData = {
     url: '/numerology/karmic-debt';
 };
 
+export type PostNumerologyKarmicDebtErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyKarmicDebtError = PostNumerologyKarmicDebtErrors[keyof PostNumerologyKarmicDebtErrors];
+
 export type PostNumerologyKarmicDebtResponses = {
     /**
      * Successfully detected karmic debt with detailed meanings
@@ -10671,6 +15610,63 @@ export type PostNumerologyPersonalYearData = {
     };
     url: '/numerology/personal-year';
 };
+
+export type PostNumerologyPersonalYearErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyPersonalYearError = PostNumerologyPersonalYearErrors[keyof PostNumerologyPersonalYearErrors];
 
 export type PostNumerologyPersonalYearResponses = {
     /**
@@ -10750,6 +15746,63 @@ export type PostNumerologyCompatibilityData = {
     };
     url: '/numerology/compatibility';
 };
+
+export type PostNumerologyCompatibilityErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyCompatibilityError = PostNumerologyCompatibilityErrors[keyof PostNumerologyCompatibilityErrors];
 
 export type PostNumerologyCompatibilityResponses = {
     /**
@@ -10867,6 +15920,63 @@ export type PostNumerologyChartData = {
     };
     url: '/numerology/chart';
 };
+
+export type PostNumerologyChartErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyChartError = PostNumerologyChartErrors[keyof PostNumerologyChartErrors];
 
 export type PostNumerologyChartResponses = {
     /**
@@ -11387,18 +16497,65 @@ export type GetNumerologyMeaningsByNumberErrors = {
      */
     400: {
         /**
-         * Validation error when the requested number is not a valid numerology number (1-9, 11, 22, or 33).
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
     /**
      * Number meaning not found
      */
     404: {
         /**
-         * Error message when the meaning for the requested number could not be found.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -11477,6 +16634,63 @@ export type PostNumerologyDailyData = {
     url: '/numerology/daily';
 };
 
+export type PostNumerologyDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyDailyError = PostNumerologyDailyErrors[keyof PostNumerologyDailyErrors];
+
 export type PostNumerologyDailyResponses = {
     /**
      * Daily numerology number with full interpretation
@@ -11554,16 +16768,73 @@ export type GetDreamsSymbolsData = {
          */
         letter?: string;
         /**
-         * Maximum number of symbols to return per page (1-50). Default: 20.
+         * Maximum items to return per page. Range: 1-50, default 20.
          */
         limit?: number;
         /**
-         * Number of symbols to skip for pagination. Default: 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/dreams/symbols';
 };
+
+export type GetDreamsSymbolsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetDreamsSymbolsError = GetDreamsSymbolsErrors[keyof GetDreamsSymbolsErrors];
 
 export type GetDreamsSymbolsResponses = {
     /**
@@ -11603,6 +16874,63 @@ export type GetDreamsSymbolsRandomData = {
     url: '/dreams/symbols/random';
 };
 
+export type GetDreamsSymbolsRandomErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetDreamsSymbolsRandomError = GetDreamsSymbolsRandomErrors[keyof GetDreamsSymbolsRandomErrors];
+
 export type GetDreamsSymbolsRandomResponses = {
     /**
      * Random dream symbol(s) with full interpretations.
@@ -11620,6 +16948,63 @@ export type GetDreamsSymbolsLettersData = {
     query?: never;
     url: '/dreams/symbols/letters';
 };
+
+export type GetDreamsSymbolsLettersErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetDreamsSymbolsLettersError = GetDreamsSymbolsLettersErrors[keyof GetDreamsSymbolsLettersErrors];
 
 export type GetDreamsSymbolsLettersResponses = {
     /**
@@ -11655,13 +17040,69 @@ export type GetDreamsSymbolsByIdData = {
 
 export type GetDreamsSymbolsByIdErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Symbol not found.
      */
     404: {
         /**
-         * Error message indicating the requested dream symbol ID was not found in the database. Use GET /symbols to browse available symbols.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -11691,6 +17132,63 @@ export type PostDreamsDailyData = {
     query?: never;
     url: '/dreams/daily';
 };
+
+export type PostDreamsDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostDreamsDailyError = PostDreamsDailyErrors[keyof PostDreamsDailyErrors];
 
 export type PostDreamsDailyResponses = {
     /**
@@ -11755,13 +17253,56 @@ export type PostIchingDailyData = {
 
 export type PostIchingDailyErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Failed to generate daily hexagram
      */
     500: {
         /**
-         * Error message when the daily hexagram generation fails unexpectedly.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
     };
 };
 
@@ -11872,6 +17413,63 @@ export type PostIchingDailyCastData = {
     };
     url: '/iching/daily/cast';
 };
+
+export type PostIchingDailyCastErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostIchingDailyCastError = PostIchingDailyCastErrors[keyof PostIchingDailyCastErrors];
 
 export type PostIchingDailyCastResponses = {
     /**
@@ -12037,16 +17635,73 @@ export type GetIchingHexagramsData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum number of hexagrams to return (1-20). Default: 20.
+         * Maximum items to return per page. Range: 1-20, default 20.
          */
         limit?: number;
         /**
-         * Number of hexagrams to skip for pagination. Default: 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/iching/hexagrams';
 };
+
+export type GetIchingHexagramsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetIchingHexagramsError = GetIchingHexagramsErrors[keyof GetIchingHexagramsErrors];
 
 export type GetIchingHexagramsResponses = {
     /**
@@ -12088,13 +17743,69 @@ export type GetIchingHexagramsRandomData = {
 
 export type GetIchingHexagramsRandomErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * No hexagrams available.
      */
     404: {
         /**
-         * Error message when no hexagrams are available for random selection.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -12127,13 +17838,69 @@ export type GetIchingHexagramsLookupData = {
 
 export type GetIchingHexagramsLookupErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * No hexagram found for pattern.
      */
     404: {
         /**
-         * Error message when no hexagram matches the provided binary line pattern.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -12167,13 +17934,69 @@ export type GetIchingHexagramsByNumberData = {
 
 export type GetIchingHexagramsByNumberErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Hexagram not found.
      */
     404: {
         /**
-         * Error message when the requested hexagram number (1-64) does not exist.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -12203,6 +18026,63 @@ export type GetIchingCastData = {
     };
     url: '/iching/cast';
 };
+
+export type GetIchingCastErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetIchingCastError = GetIchingCastErrors[keyof GetIchingCastErrors];
 
 export type GetIchingCastResponses = {
     /**
@@ -12234,6 +18114,63 @@ export type GetIchingTrigramsData = {
     query?: never;
     url: '/iching/trigrams';
 };
+
+export type GetIchingTrigramsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetIchingTrigramsError = GetIchingTrigramsErrors[keyof GetIchingTrigramsErrors];
 
 export type GetIchingTrigramsResponses = {
     /**
@@ -12267,13 +18204,69 @@ export type GetIchingTrigramsByIdentifierData = {
 
 export type GetIchingTrigramsByIdentifierErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Trigram not found.
      */
     404: {
         /**
-         * Error message when the requested trigram number or name does not match any of the 8 trigrams.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -12292,7 +18285,7 @@ export type GetCrystalsZodiacBySignData = {
     body?: never;
     path: {
         /**
-         * Zodiac sign name with first letter capitalized (e.g., Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces).
+         * Zodiac sign name, case-insensitive (e.g., pisces, Pisces, PISCES all work). Valid: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.
          */
         sign: 'Aries' | 'Taurus' | 'Gemini' | 'Cancer' | 'Leo' | 'Virgo' | 'Libra' | 'Scorpio' | 'Sagittarius' | 'Capricorn' | 'Aquarius' | 'Pisces';
     };
@@ -12302,16 +18295,73 @@ export type GetCrystalsZodiacBySignData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum number of crystals to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**
-         * Number of crystals to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/crystals/zodiac/{sign}';
 };
+
+export type GetCrystalsZodiacBySignErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsZodiacBySignError = GetCrystalsZodiacBySignErrors[keyof GetCrystalsZodiacBySignErrors];
 
 export type GetCrystalsZodiacBySignResponses = {
     /**
@@ -12364,7 +18414,7 @@ export type GetCrystalsChakraByChakraData = {
     body?: never;
     path: {
         /**
-         * Chakra name: Root (base), Sacral (creative), Solar Plexus (power), Heart (love), Throat (expression), Third Eye (intuition), Crown (spiritual connection).
+         * Chakra name, case-insensitive (e.g., heart, Heart, HEART all work). Valid: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
          */
         chakra: 'Root' | 'Sacral' | 'Solar Plexus' | 'Heart' | 'Throat' | 'Third Eye' | 'Crown';
     };
@@ -12374,16 +18424,73 @@ export type GetCrystalsChakraByChakraData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum number of crystals to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**
-         * Number of crystals to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/crystals/chakra/{chakra}';
 };
+
+export type GetCrystalsChakraByChakraErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsChakraByChakraError = GetCrystalsChakraByChakraErrors[keyof GetCrystalsChakraByChakraErrors];
 
 export type GetCrystalsChakraByChakraResponses = {
     /**
@@ -12436,7 +18543,7 @@ export type GetCrystalsElementByElementData = {
     body?: never;
     path: {
         /**
-         * Element name: Earth (stability, grounding), Water (emotion, intuition), Fire (energy, transformation), Air (intellect, communication), Storm (change, power).
+         * Element name, case-insensitive (e.g., water, Water, WATER all work). Valid: Earth, Water, Fire, Air, Storm.
          */
         element: 'Earth' | 'Water' | 'Fire' | 'Air' | 'Storm';
     };
@@ -12446,16 +18553,73 @@ export type GetCrystalsElementByElementData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum number of crystals to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**
-         * Number of crystals to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/crystals/element/{element}';
 };
+
+export type GetCrystalsElementByElementErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsElementByElementError = GetCrystalsElementByElementErrors[keyof GetCrystalsElementByElementErrors];
 
 export type GetCrystalsElementByElementResponses = {
     /**
@@ -12521,6 +18685,63 @@ export type GetCrystalsBirthstoneByMonthData = {
     url: '/crystals/birthstone/{month}';
 };
 
+export type GetCrystalsBirthstoneByMonthErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsBirthstoneByMonthError = GetCrystalsBirthstoneByMonthErrors[keyof GetCrystalsBirthstoneByMonthErrors];
+
 export type GetCrystalsBirthstoneByMonthResponses = {
     /**
      * Birthstone crystals for the specified month
@@ -12577,16 +18798,73 @@ export type GetCrystalsSearchData = {
          */
         q: string;
         /**
-         * Maximum number of crystals to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**
-         * Number of crystals to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/crystals/search';
 };
+
+export type GetCrystalsSearchErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsSearchError = GetCrystalsSearchErrors[keyof GetCrystalsSearchErrors];
 
 export type GetCrystalsSearchResponses = {
     /**
@@ -12654,13 +18932,69 @@ export type GetCrystalsPairingsBySlugData = {
 
 export type GetCrystalsPairingsBySlugErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Crystal not found in database
      */
     404: {
         /**
-         * Error message indicating the crystal was not found.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -12733,6 +19067,63 @@ export type GetCrystalsDailyData = {
     url: '/crystals/daily';
 };
 
+export type GetCrystalsDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsDailyError = GetCrystalsDailyErrors[keyof GetCrystalsDailyErrors];
+
 export type GetCrystalsDailyResponses = {
     /**
      * Daily crystal teaser with summary information
@@ -12787,6 +19178,63 @@ export type GetCrystalsRandomData = {
     url: '/crystals/random';
 };
 
+export type GetCrystalsRandomErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsRandomError = GetCrystalsRandomErrors[keyof GetCrystalsRandomErrors];
+
 export type GetCrystalsRandomResponses = {
     /**
      * A randomly selected crystal with summary information
@@ -12832,6 +19280,63 @@ export type GetCrystalsColorsData = {
     url: '/crystals/colors';
 };
 
+export type GetCrystalsColorsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsColorsError = GetCrystalsColorsErrors[keyof GetCrystalsColorsErrors];
+
 export type GetCrystalsColorsResponses = {
     /**
      * All unique crystal colors sorted alphabetically
@@ -12856,6 +19361,63 @@ export type GetCrystalsPlanetsData = {
     query?: never;
     url: '/crystals/planets';
 };
+
+export type GetCrystalsPlanetsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsPlanetsError = GetCrystalsPlanetsErrors[keyof GetCrystalsPlanetsErrors];
 
 export type GetCrystalsPlanetsResponses = {
     /**
@@ -12904,16 +19466,73 @@ export type GetCrystalsData = {
          */
         planet?: string;
         /**
-         * Maximum number of crystals to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**
-         * Number of crystals to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number;
     };
     url: '/crystals';
 };
+
+export type GetCrystalsErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetCrystalsError = GetCrystalsErrors[keyof GetCrystalsErrors];
 
 export type GetCrystalsResponses = {
     /**
@@ -12981,13 +19600,69 @@ export type GetCrystalsBySlugData = {
 
 export type GetCrystalsBySlugErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Crystal not found in database
      */
     404: {
         /**
-         * Error message indicating the crystal was not found.
+         * Human-readable error message. May change wording — do not parse programmatically.
          */
         error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 
@@ -13089,12 +19764,69 @@ export type GetLocationSearchData = {
          */
         q: string;
         /**
-         * Maximum number of results to return (1-50). Defaults to 10.
+         * Maximum items to return per page. Range: 1-50, default 10.
          */
         limit?: number;
     };
     url: '/location/search';
 };
+
+export type GetLocationSearchErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetLocationSearchError = GetLocationSearchErrors[keyof GetLocationSearchErrors];
 
 export type GetLocationSearchResponses = {
     /**
@@ -13149,6 +19881,63 @@ export type GetLocationCountriesData = {
     url: '/location/countries';
 };
 
+export type GetLocationCountriesErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetLocationCountriesError = GetLocationCountriesErrors[keyof GetLocationCountriesErrors];
+
 export type GetLocationCountriesResponses = {
     /**
      * Alphabetically sorted list of all 227 countries with ISO codes and city counts
@@ -13185,12 +19974,69 @@ export type GetLocationCountriesByIso2Data = {
     };
     query?: {
         /**
-         * Maximum number of cities to return (1-200). Defaults to 50.
+         * Maximum items to return per page. Range: 1-200, default 50.
          */
         limit?: number;
     };
     url: '/location/countries/{iso2}';
 };
+
+export type GetLocationCountriesByIso2Errors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetLocationCountriesByIso2Error = GetLocationCountriesByIso2Errors[keyof GetLocationCountriesByIso2Errors];
 
 export type GetLocationCountriesByIso2Responses = {
     /**
@@ -13247,10 +20093,62 @@ export type GetUsageData = {
 
 export type GetUsageErrors = {
     /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
      * Subscription not found
      */
     404: {
         error: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
     };
 };
 

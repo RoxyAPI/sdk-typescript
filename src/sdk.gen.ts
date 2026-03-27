@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetAngelNumbersDailyData, GetAngelNumbersDailyResponses, GetAngelNumbersLookupData, GetAngelNumbersLookupResponses, GetAngelNumbersNumbersByNumberData, GetAngelNumbersNumbersByNumberErrors, GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersData, GetAngelNumbersNumbersResponses, GetAstrologyHoroscopeBySignDailyData, GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignMonthlyData, GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignWeeklyData, GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyHoroscopeDailyData, GetAstrologyHoroscopeDailyResponses, GetAstrologyMoonPhaseCalendarByYearByMonthData, GetAstrologyMoonPhaseCalendarByYearByMonthResponses, GetAstrologyMoonPhaseCurrentData, GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseUpcomingData, GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyPlanetMeaningsByIdentifierData, GetAstrologyPlanetMeaningsByIdentifierErrors, GetAstrologyPlanetMeaningsByIdentifierResponses, GetAstrologyPlanetMeaningsData, GetAstrologyPlanetMeaningsResponses, GetAstrologySignsByIdentifierData, GetAstrologySignsByIdentifierErrors, GetAstrologySignsByIdentifierResponses, GetAstrologySignsData, GetAstrologySignsResponses, GetCrystalsBirthstoneByMonthData, GetCrystalsBirthstoneByMonthResponses, GetCrystalsBySlugData, GetCrystalsBySlugErrors, GetCrystalsBySlugResponses, GetCrystalsChakraByChakraData, GetCrystalsChakraByChakraResponses, GetCrystalsColorsData, GetCrystalsColorsResponses, GetCrystalsDailyData, GetCrystalsDailyResponses, GetCrystalsData, GetCrystalsElementByElementData, GetCrystalsElementByElementResponses, GetCrystalsPairingsBySlugData, GetCrystalsPairingsBySlugErrors, GetCrystalsPairingsBySlugResponses, GetCrystalsPlanetsData, GetCrystalsPlanetsResponses, GetCrystalsRandomData, GetCrystalsRandomResponses, GetCrystalsResponses, GetCrystalsSearchData, GetCrystalsSearchResponses, GetCrystalsZodiacBySignData, GetCrystalsZodiacBySignResponses, GetDreamsSymbolsByIdData, GetDreamsSymbolsByIdErrors, GetDreamsSymbolsByIdResponses, GetDreamsSymbolsData, GetDreamsSymbolsLettersData, GetDreamsSymbolsLettersResponses, GetDreamsSymbolsRandomData, GetDreamsSymbolsRandomResponses, GetDreamsSymbolsResponses, GetIchingCastData, GetIchingCastResponses, GetIchingHexagramsByNumberData, GetIchingHexagramsByNumberErrors, GetIchingHexagramsByNumberResponses, GetIchingHexagramsData, GetIchingHexagramsLookupData, GetIchingHexagramsLookupErrors, GetIchingHexagramsLookupResponses, GetIchingHexagramsRandomData, GetIchingHexagramsRandomErrors, GetIchingHexagramsRandomResponses, GetIchingHexagramsResponses, GetIchingTrigramsByIdentifierData, GetIchingTrigramsByIdentifierErrors, GetIchingTrigramsByIdentifierResponses, GetIchingTrigramsData, GetIchingTrigramsResponses, GetLocationCountriesByIso2Data, GetLocationCountriesByIso2Responses, GetLocationCountriesData, GetLocationCountriesResponses, GetLocationSearchData, GetLocationSearchResponses, GetNumerologyMeaningsByNumberData, GetNumerologyMeaningsByNumberErrors, GetNumerologyMeaningsByNumberResponses, GetTarotCardsByIdData, GetTarotCardsByIdErrors, GetTarotCardsByIdResponses, GetTarotCardsData, GetTarotCardsResponses, GetUsageData, GetUsageErrors, GetUsageResponses, GetVedicAstrologyKpAyanamsaData, GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyNakshatrasByIdData, GetVedicAstrologyNakshatrasByIdErrors, GetVedicAstrologyNakshatrasByIdResponses, GetVedicAstrologyNakshatrasData, GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyRashisByIdData, GetVedicAstrologyRashisByIdErrors, GetVedicAstrologyRashisByIdResponses, GetVedicAstrologyRashisData, GetVedicAstrologyRashisResponses, GetVedicAstrologyYogaByIdData, GetVedicAstrologyYogaByIdErrors, GetVedicAstrologyYogaByIdResponses, GetVedicAstrologyYogaData, GetVedicAstrologyYogaResponses, PostAstrologyAspectsData, PostAstrologyAspectsResponses, PostAstrologyCompatibilityScoreData, PostAstrologyCompatibilityScoreResponses, PostAstrologyCompositeChartData, PostAstrologyCompositeChartResponses, PostAstrologyHousesData, PostAstrologyHousesResponses, PostAstrologyLunarReturnData, PostAstrologyLunarReturnResponses, PostAstrologyNatalChartData, PostAstrologyNatalChartResponses, PostAstrologyPlanetaryReturnsData, PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetsData, PostAstrologyPlanetsResponses, PostAstrologySolarReturnData, PostAstrologySolarReturnResponses, PostAstrologySynastryData, PostAstrologySynastryResponses, PostAstrologyTransitAspectsData, PostAstrologyTransitAspectsResponses, PostAstrologyTransitsData, PostAstrologyTransitsResponses, PostDreamsDailyData, PostDreamsDailyResponses, PostIchingDailyCastData, PostIchingDailyCastResponses, PostIchingDailyData, PostIchingDailyErrors, PostIchingDailyResponses, PostNumerologyBirthDayData, PostNumerologyBirthDayResponses, PostNumerologyChartData, PostNumerologyChartResponses, PostNumerologyCompatibilityData, PostNumerologyCompatibilityResponses, PostNumerologyDailyData, PostNumerologyDailyResponses, PostNumerologyExpressionData, PostNumerologyExpressionResponses, PostNumerologyKarmicDebtData, PostNumerologyKarmicDebtResponses, PostNumerologyKarmicLessonsData, PostNumerologyKarmicLessonsResponses, PostNumerologyLifePathData, PostNumerologyLifePathResponses, PostNumerologyMaturityData, PostNumerologyMaturityResponses, PostNumerologyPersonalityData, PostNumerologyPersonalityResponses, PostNumerologyPersonalYearData, PostNumerologyPersonalYearResponses, PostNumerologySoulUrgeData, PostNumerologySoulUrgeResponses, PostTarotDailyData, PostTarotDailyErrors, PostTarotDailyResponses, PostTarotDrawData, PostTarotDrawResponses, PostTarotSpreadsCareerData, PostTarotSpreadsCareerResponses, PostTarotSpreadsCelticCrossData, PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCustomData, PostTarotSpreadsCustomResponses, PostTarotSpreadsLoveData, PostTarotSpreadsLoveResponses, PostTarotSpreadsThreeCardData, PostTarotSpreadsThreeCardResponses, PostTarotYesNoData, PostTarotYesNoErrors, PostTarotYesNoResponses, PostVedicAstrologyAshtakavargaData, PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAspectsData, PostVedicAstrologyAspectsLunarData, PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsMonthlyData, PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsResponses, PostVedicAstrologyBirthChartData, PostVedicAstrologyBirthChartResponses, PostVedicAstrologyCompatibilityData, PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyDashaCurrentData, PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaMajorData, PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaSubByMahadashaData, PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDivisionalChartData, PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDoshaKalsarpaData, PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaManglikData, PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaSadhesatiData, PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyEclipticCrossingsData, PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyKpChartData, PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpCuspsData, PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpPlanetsData, PostVedicAstrologyKpPlanetsIntervalData, PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpRasiChangesData, PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRulingPlanetsData, PostVedicAstrologyKpRulingPlanetsIntervalData, PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpSublordChangesData, PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyNavamsaData, PostVedicAstrologyNavamsaResponses, PostVedicAstrologyPanchangBasicData, PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangChoghadiyaData, PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangDetailedData, PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangHoraData, PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyParallelsData, PostVedicAstrologyParallelsMonthlyData, PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsResponses, PostVedicAstrologyPlanetaryPositionsData, PostVedicAstrologyPlanetaryPositionsMonthlyData, PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyShadbalaData, PostVedicAstrologyShadbalaResponses, PostVedicAstrologyTransitData, PostVedicAstrologyTransitMonthlyData, PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitResponses, PostVedicAstrologyUpagrahaData, PostVedicAstrologyUpagrahaResponses } from './types.gen';
+import type { GetAngelNumbersDailyData, GetAngelNumbersDailyErrors, GetAngelNumbersDailyResponses, GetAngelNumbersLookupData, GetAngelNumbersLookupErrors, GetAngelNumbersLookupResponses, GetAngelNumbersNumbersByNumberData, GetAngelNumbersNumbersByNumberErrors, GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersData, GetAngelNumbersNumbersErrors, GetAngelNumbersNumbersResponses, GetAstrologyHoroscopeBySignDailyData, GetAstrologyHoroscopeBySignDailyErrors, GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignMonthlyData, GetAstrologyHoroscopeBySignMonthlyErrors, GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignWeeklyData, GetAstrologyHoroscopeBySignWeeklyErrors, GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyHoroscopeDailyData, GetAstrologyHoroscopeDailyErrors, GetAstrologyHoroscopeDailyResponses, GetAstrologyMoonPhaseCalendarByYearByMonthData, GetAstrologyMoonPhaseCalendarByYearByMonthErrors, GetAstrologyMoonPhaseCalendarByYearByMonthResponses, GetAstrologyMoonPhaseCurrentData, GetAstrologyMoonPhaseCurrentErrors, GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseUpcomingData, GetAstrologyMoonPhaseUpcomingErrors, GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyPlanetMeaningsByIdentifierData, GetAstrologyPlanetMeaningsByIdentifierErrors, GetAstrologyPlanetMeaningsByIdentifierResponses, GetAstrologyPlanetMeaningsData, GetAstrologyPlanetMeaningsErrors, GetAstrologyPlanetMeaningsResponses, GetAstrologySignsByIdentifierData, GetAstrologySignsByIdentifierErrors, GetAstrologySignsByIdentifierResponses, GetAstrologySignsData, GetAstrologySignsErrors, GetAstrologySignsResponses, GetCrystalsBirthstoneByMonthData, GetCrystalsBirthstoneByMonthErrors, GetCrystalsBirthstoneByMonthResponses, GetCrystalsBySlugData, GetCrystalsBySlugErrors, GetCrystalsBySlugResponses, GetCrystalsChakraByChakraData, GetCrystalsChakraByChakraErrors, GetCrystalsChakraByChakraResponses, GetCrystalsColorsData, GetCrystalsColorsErrors, GetCrystalsColorsResponses, GetCrystalsDailyData, GetCrystalsDailyErrors, GetCrystalsDailyResponses, GetCrystalsData, GetCrystalsElementByElementData, GetCrystalsElementByElementErrors, GetCrystalsElementByElementResponses, GetCrystalsErrors, GetCrystalsPairingsBySlugData, GetCrystalsPairingsBySlugErrors, GetCrystalsPairingsBySlugResponses, GetCrystalsPlanetsData, GetCrystalsPlanetsErrors, GetCrystalsPlanetsResponses, GetCrystalsRandomData, GetCrystalsRandomErrors, GetCrystalsRandomResponses, GetCrystalsResponses, GetCrystalsSearchData, GetCrystalsSearchErrors, GetCrystalsSearchResponses, GetCrystalsZodiacBySignData, GetCrystalsZodiacBySignErrors, GetCrystalsZodiacBySignResponses, GetDreamsSymbolsByIdData, GetDreamsSymbolsByIdErrors, GetDreamsSymbolsByIdResponses, GetDreamsSymbolsData, GetDreamsSymbolsErrors, GetDreamsSymbolsLettersData, GetDreamsSymbolsLettersErrors, GetDreamsSymbolsLettersResponses, GetDreamsSymbolsRandomData, GetDreamsSymbolsRandomErrors, GetDreamsSymbolsRandomResponses, GetDreamsSymbolsResponses, GetIchingCastData, GetIchingCastErrors, GetIchingCastResponses, GetIchingHexagramsByNumberData, GetIchingHexagramsByNumberErrors, GetIchingHexagramsByNumberResponses, GetIchingHexagramsData, GetIchingHexagramsErrors, GetIchingHexagramsLookupData, GetIchingHexagramsLookupErrors, GetIchingHexagramsLookupResponses, GetIchingHexagramsRandomData, GetIchingHexagramsRandomErrors, GetIchingHexagramsRandomResponses, GetIchingHexagramsResponses, GetIchingTrigramsByIdentifierData, GetIchingTrigramsByIdentifierErrors, GetIchingTrigramsByIdentifierResponses, GetIchingTrigramsData, GetIchingTrigramsErrors, GetIchingTrigramsResponses, GetLocationCountriesByIso2Data, GetLocationCountriesByIso2Errors, GetLocationCountriesByIso2Responses, GetLocationCountriesData, GetLocationCountriesErrors, GetLocationCountriesResponses, GetLocationSearchData, GetLocationSearchErrors, GetLocationSearchResponses, GetNumerologyMeaningsByNumberData, GetNumerologyMeaningsByNumberErrors, GetNumerologyMeaningsByNumberResponses, GetTarotCardsByIdData, GetTarotCardsByIdErrors, GetTarotCardsByIdResponses, GetTarotCardsData, GetTarotCardsErrors, GetTarotCardsResponses, GetUsageData, GetUsageErrors, GetUsageResponses, GetVedicAstrologyKpAyanamsaData, GetVedicAstrologyKpAyanamsaErrors, GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyNakshatrasByIdData, GetVedicAstrologyNakshatrasByIdErrors, GetVedicAstrologyNakshatrasByIdResponses, GetVedicAstrologyNakshatrasData, GetVedicAstrologyNakshatrasErrors, GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyRashisByIdData, GetVedicAstrologyRashisByIdErrors, GetVedicAstrologyRashisByIdResponses, GetVedicAstrologyRashisData, GetVedicAstrologyRashisErrors, GetVedicAstrologyRashisResponses, GetVedicAstrologyYogaByIdData, GetVedicAstrologyYogaByIdErrors, GetVedicAstrologyYogaByIdResponses, GetVedicAstrologyYogaData, GetVedicAstrologyYogaErrors, GetVedicAstrologyYogaResponses, PostAstrologyAspectsData, PostAstrologyAspectsErrors, PostAstrologyAspectsResponses, PostAstrologyCompatibilityScoreData, PostAstrologyCompatibilityScoreErrors, PostAstrologyCompatibilityScoreResponses, PostAstrologyCompositeChartData, PostAstrologyCompositeChartErrors, PostAstrologyCompositeChartResponses, PostAstrologyHousesData, PostAstrologyHousesErrors, PostAstrologyHousesResponses, PostAstrologyLunarReturnData, PostAstrologyLunarReturnErrors, PostAstrologyLunarReturnResponses, PostAstrologyNatalChartData, PostAstrologyNatalChartErrors, PostAstrologyNatalChartResponses, PostAstrologyPlanetaryReturnsData, PostAstrologyPlanetaryReturnsErrors, PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetsData, PostAstrologyPlanetsErrors, PostAstrologyPlanetsResponses, PostAstrologySolarReturnData, PostAstrologySolarReturnErrors, PostAstrologySolarReturnResponses, PostAstrologySynastryData, PostAstrologySynastryErrors, PostAstrologySynastryResponses, PostAstrologyTransitAspectsData, PostAstrologyTransitAspectsErrors, PostAstrologyTransitAspectsResponses, PostAstrologyTransitsData, PostAstrologyTransitsErrors, PostAstrologyTransitsResponses, PostDreamsDailyData, PostDreamsDailyErrors, PostDreamsDailyResponses, PostIchingDailyCastData, PostIchingDailyCastErrors, PostIchingDailyCastResponses, PostIchingDailyData, PostIchingDailyErrors, PostIchingDailyResponses, PostNumerologyBirthDayData, PostNumerologyBirthDayErrors, PostNumerologyBirthDayResponses, PostNumerologyChartData, PostNumerologyChartErrors, PostNumerologyChartResponses, PostNumerologyCompatibilityData, PostNumerologyCompatibilityErrors, PostNumerologyCompatibilityResponses, PostNumerologyDailyData, PostNumerologyDailyErrors, PostNumerologyDailyResponses, PostNumerologyExpressionData, PostNumerologyExpressionErrors, PostNumerologyExpressionResponses, PostNumerologyKarmicDebtData, PostNumerologyKarmicDebtErrors, PostNumerologyKarmicDebtResponses, PostNumerologyKarmicLessonsData, PostNumerologyKarmicLessonsErrors, PostNumerologyKarmicLessonsResponses, PostNumerologyLifePathData, PostNumerologyLifePathErrors, PostNumerologyLifePathResponses, PostNumerologyMaturityData, PostNumerologyMaturityErrors, PostNumerologyMaturityResponses, PostNumerologyPersonalityData, PostNumerologyPersonalityErrors, PostNumerologyPersonalityResponses, PostNumerologyPersonalYearData, PostNumerologyPersonalYearErrors, PostNumerologyPersonalYearResponses, PostNumerologySoulUrgeData, PostNumerologySoulUrgeErrors, PostNumerologySoulUrgeResponses, PostTarotDailyData, PostTarotDailyErrors, PostTarotDailyResponses, PostTarotDrawData, PostTarotDrawErrors, PostTarotDrawResponses, PostTarotSpreadsCareerData, PostTarotSpreadsCareerErrors, PostTarotSpreadsCareerResponses, PostTarotSpreadsCelticCrossData, PostTarotSpreadsCelticCrossErrors, PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCustomData, PostTarotSpreadsCustomErrors, PostTarotSpreadsCustomResponses, PostTarotSpreadsLoveData, PostTarotSpreadsLoveErrors, PostTarotSpreadsLoveResponses, PostTarotSpreadsThreeCardData, PostTarotSpreadsThreeCardErrors, PostTarotSpreadsThreeCardResponses, PostTarotYesNoData, PostTarotYesNoErrors, PostTarotYesNoResponses, PostVedicAstrologyAshtakavargaData, PostVedicAstrologyAshtakavargaErrors, PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAspectsData, PostVedicAstrologyAspectsErrors, PostVedicAstrologyAspectsLunarData, PostVedicAstrologyAspectsLunarErrors, PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsMonthlyData, PostVedicAstrologyAspectsMonthlyErrors, PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsResponses, PostVedicAstrologyBirthChartData, PostVedicAstrologyBirthChartErrors, PostVedicAstrologyBirthChartResponses, PostVedicAstrologyCompatibilityData, PostVedicAstrologyCompatibilityErrors, PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyDashaCurrentData, PostVedicAstrologyDashaCurrentErrors, PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaMajorData, PostVedicAstrologyDashaMajorErrors, PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaSubByMahadashaData, PostVedicAstrologyDashaSubByMahadashaErrors, PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDivisionalChartData, PostVedicAstrologyDivisionalChartErrors, PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDoshaKalsarpaData, PostVedicAstrologyDoshaKalsarpaErrors, PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaManglikData, PostVedicAstrologyDoshaManglikErrors, PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaSadhesatiData, PostVedicAstrologyDoshaSadhesatiErrors, PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyEclipticCrossingsData, PostVedicAstrologyEclipticCrossingsErrors, PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyKpChartData, PostVedicAstrologyKpChartErrors, PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpCuspsData, PostVedicAstrologyKpCuspsErrors, PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpPlanetsData, PostVedicAstrologyKpPlanetsErrors, PostVedicAstrologyKpPlanetsIntervalData, PostVedicAstrologyKpPlanetsIntervalErrors, PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpRasiChangesData, PostVedicAstrologyKpRasiChangesErrors, PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRulingPlanetsData, PostVedicAstrologyKpRulingPlanetsErrors, PostVedicAstrologyKpRulingPlanetsIntervalData, PostVedicAstrologyKpRulingPlanetsIntervalErrors, PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpSublordChangesData, PostVedicAstrologyKpSublordChangesErrors, PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyNavamsaData, PostVedicAstrologyNavamsaErrors, PostVedicAstrologyNavamsaResponses, PostVedicAstrologyPanchangBasicData, PostVedicAstrologyPanchangBasicErrors, PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangChoghadiyaData, PostVedicAstrologyPanchangChoghadiyaErrors, PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangDetailedData, PostVedicAstrologyPanchangDetailedErrors, PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangHoraData, PostVedicAstrologyPanchangHoraErrors, PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyParallelsData, PostVedicAstrologyParallelsErrors, PostVedicAstrologyParallelsMonthlyData, PostVedicAstrologyParallelsMonthlyErrors, PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsResponses, PostVedicAstrologyPlanetaryPositionsData, PostVedicAstrologyPlanetaryPositionsErrors, PostVedicAstrologyPlanetaryPositionsMonthlyData, PostVedicAstrologyPlanetaryPositionsMonthlyErrors, PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyShadbalaData, PostVedicAstrologyShadbalaErrors, PostVedicAstrologyShadbalaResponses, PostVedicAstrologyTransitData, PostVedicAstrologyTransitErrors, PostVedicAstrologyTransitMonthlyData, PostVedicAstrologyTransitMonthlyErrors, PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitResponses, PostVedicAstrologyUpagrahaData, PostVedicAstrologyUpagrahaErrors, PostVedicAstrologyUpagrahaResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -53,7 +53,7 @@ export class AngelNumbers extends HeyApiClient {
      * Retrieve the complete database of angel numbers with summary information. Returns all 43 angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), mirror patterns (1212), and sequential numbers (1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
      */
     public listAngelNumbers<ThrowOnError extends boolean = false>(options?: Options<GetAngelNumbersNumbersData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAngelNumbersNumbersResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAngelNumbersNumbersResponses, GetAngelNumbersNumbersErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/angel-numbers/numbers',
             ...options
@@ -79,7 +79,7 @@ export class AngelNumbers extends HeyApiClient {
      * Smart angel number analysis that works for ANY number sequence, not just known angel numbers. Automatically classifies the pattern type (repeating, sequential, mirror, master, root), calculates the numerology digit root, checks the database for a known meaning, and provides the foundational digit root interpretation as a fallback. Perfect for synchronicity tracking apps where users enter arbitrary number sequences they encounter.
      */
     public analyzeNumberSequence<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersLookupData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAngelNumbersLookupResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetAngelNumbersLookupResponses, GetAngelNumbersLookupErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/angel-numbers/lookup',
             ...options
@@ -92,7 +92,7 @@ export class AngelNumbers extends HeyApiClient {
      * Get the angel number of the day with full meaning and interpretation. Returns a deterministic angel number based on the current date (or a provided seed date), ensuring all users see the same number for any given day. Includes complete spiritual, love, career, and twin flame interpretations. Perfect for daily guidance features, push notifications, content generation, and angel number widget integrations.
      */
     public getDailyAngelNumber<ThrowOnError extends boolean = false>(options?: Options<GetAngelNumbersDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAngelNumbersDailyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAngelNumbersDailyResponses, GetAngelNumbersDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/angel-numbers/daily',
             ...options
@@ -107,7 +107,7 @@ export class Astrology extends HeyApiClient {
      * Returns all 12 tropical zodiac signs (Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces) with essential information: name, symbol, element (fire, earth, air, water), date ranges, and short descriptions. Perfect for zodiac sign lists, horoscope widgets, birth chart calculators, astrology apps, star sign selectors, and zodiac reference tools. Use GET /signs/{identifier} for complete zodiac sign profiles with personality traits, compatibility, and detailed characteristics.
      */
     public listZodiacSigns<ThrowOnError extends boolean = false>(options?: Options<GetAstrologySignsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAstrologySignsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAstrologySignsResponses, GetAstrologySignsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/signs',
             ...options
@@ -133,7 +133,7 @@ export class Astrology extends HeyApiClient {
      * Returns all 10 astrological planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) with essential meanings: name, symbol, tagline, category (personal/social/generational), ruling sign, and short descriptions. Perfect for astrology reference apps, planet meaning widgets, birth chart interpretation tools, astrology learning platforms, planetary keywords reference, and zodiac planet guides. Use GET /planet-meanings/{identifier} for complete planet profiles with detailed interpretations, keywords, temperature, and dignities (rulership/detriment/exultation/fall).
      */
     public listPlanetMeanings<ThrowOnError extends boolean = false>(options?: Options<GetAstrologyPlanetMeaningsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAstrologyPlanetMeaningsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAstrologyPlanetMeaningsResponses, GetAstrologyPlanetMeaningsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/planet-meanings',
             ...options
@@ -159,7 +159,7 @@ export class Astrology extends HeyApiClient {
      * Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 10 planetary positions (Sun through Pluto), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. NASA JPL-validated astronomical accuracy.
      */
     public generateNatalChart<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyNatalChartData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyNatalChartResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyNatalChartResponses, PostAstrologyNatalChartErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/natal-chart',
             ...options,
@@ -176,7 +176,7 @@ export class Astrology extends HeyApiClient {
      * Calculate accurate tropical zodiac positions for all 10 planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. NASA JPL-validated accuracy.
      */
     public getPlanetaryPositions<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyPlanetsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyPlanetsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyPlanetsResponses, PostAstrologyPlanetsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/planets',
             ...options,
@@ -193,7 +193,7 @@ export class Astrology extends HeyApiClient {
      * Get current moon phase with illumination percentage, lunar age (days since new moon), zodiac sign, and distance from Earth. Returns phase name (New Moon, Waxing Crescent Moon, First Quarter Moon, Waxing Gibbous Moon, Full Moon, Waning Gibbous Moon, Last Quarter Moon, Waning Crescent Moon) plus exact lunar position. Perfect for moon tracking apps, lunar calendars, astrology widgets, and gardening by moon phase tools.
      */
     public getCurrentMoonPhase<ThrowOnError extends boolean = false>(options?: Options<GetAstrologyMoonPhaseCurrentData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAstrologyMoonPhaseCurrentResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseCurrentErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/moon-phase/current',
             ...options
@@ -206,7 +206,7 @@ export class Astrology extends HeyApiClient {
      * Get upcoming moon phase transitions (New Moon, First Quarter, Full Moon, Last Quarter) for the next weeks/months. Returns dates and phase names for each lunar quarter. Perfect for lunar event calendars, moon phase widgets, and astrology planning tools.
      */
     public getUpcomingMoonPhases<ThrowOnError extends boolean = false>(options?: Options<GetAstrologyMoonPhaseUpcomingData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAstrologyMoonPhaseUpcomingResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyMoonPhaseUpcomingErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/moon-phase/upcoming',
             ...options
@@ -219,7 +219,7 @@ export class Astrology extends HeyApiClient {
      * Get complete lunar calendar showing moon phase and illumination for every day of a specific month. Perfect for creating moon phase calendars, lunar planners, and astrology event schedules.
      */
     public getMoonCalendar<ThrowOnError extends boolean = false>(options: Options<GetAstrologyMoonPhaseCalendarByYearByMonthData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyMoonPhaseCalendarByYearByMonthResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetAstrologyMoonPhaseCalendarByYearByMonthResponses, GetAstrologyMoonPhaseCalendarByYearByMonthErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/moon-phase/calendar/{year}/{month}',
             ...options
@@ -232,7 +232,7 @@ export class Astrology extends HeyApiClient {
      * Calculate complete synastry (relationship compatibility) between two natal charts using Western tropical astrology. Analyzes inter-chart aspects between all planets to determine romantic, friendship, and karmic compatibility. Returns compatibility score (0-100), detailed inter-aspects with strength ratings, harmonious vs challenging aspect counts, and relationship dynamics analysis. Perfect for dating apps, matrimonial sites, relationship counseling tools, and astrology compatibility features. Based on professional astrological techniques.
      */
     public calculateSynastry<ThrowOnError extends boolean = false>(options?: Options<PostAstrologySynastryData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologySynastryResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologySynastryResponses, PostAstrologySynastryErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/synastry',
             ...options,
@@ -249,7 +249,7 @@ export class Astrology extends HeyApiClient {
      * Calculate astrological house cusps using Placidus, Whole Sign, Equal, or Koch house systems. Returns all 12 house cusps with zodiac signs, degrees, Ascendant, and Midheaven. Use "all" parameter to compare all 4 house systems side-by-side. Perfect for astrology charts, house cusp tables, and educational tools showing house system differences. Includes accurate Ascendant and MC calculations.
      */
     public calculateHouses<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyHousesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyHousesResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyHousesResponses, PostAstrologyHousesErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/houses',
             ...options,
@@ -266,7 +266,7 @@ export class Astrology extends HeyApiClient {
      * Calculate all major and minor aspects between planets for any date and time. Finds conjunctions (0°), oppositions (180°), trines (120°), squares (90°), sextiles (60°), and minor aspects. Returns aspect type, exact angle, orb, applying/separating status, and strength (0-100). Filter by specific planets or aspect types. Perfect for aspect tables, transit analysis, and aspect pattern detection. Uses standard Western astrology orbs.
      */
     public calculateAspects<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyAspectsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyAspectsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyAspectsResponses, PostAstrologyAspectsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/aspects',
             ...options,
@@ -283,7 +283,7 @@ export class Astrology extends HeyApiClient {
      * Calculate current or future planetary transits (positions of all planets now). Optionally compare transits to natal chart to find transit-to-natal aspects. Returns all 10 planet positions with signs, degrees, and speeds. When natal chart provided, includes transit aspects (transiting Sun conjunct natal Mars, etc.) with orbs and applying/separating status. Perfect for daily transit forecasts, aspect alerts, and personalized transit reports.
      */
     public calculateTransits<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyTransitsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyTransitsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyTransitsResponses, PostAstrologyTransitsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/transits',
             ...options,
@@ -300,7 +300,7 @@ export class Astrology extends HeyApiClient {
      * Calculate all transit-to-natal aspects with detailed interpretations, strength ratings, and timing guidance. Compares current (or future) planetary positions against your natal chart to identify active transits. Returns aspect type, orb, applying/separating status, narrative interpretation, impact rating, and practical guidance for each transit. Supports planet and aspect-type filtering. More detailed than the /transits endpoint — includes AI-friendly interpretation fields. Transit aspects API, transit-to-natal analysis, predictive astrology, personalized transit forecast.
      */
     public calculateTransitAspects<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyTransitAspectsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyTransitAspectsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyTransitAspectsResponses, PostAstrologyTransitAspectsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/transit-aspects',
             ...options,
@@ -317,7 +317,7 @@ export class Astrology extends HeyApiClient {
      * Generate a solar return chart for any year — the foundational technique for annual astrological forecasting. The chart is cast for the exact moment the transiting Sun returns to its natal ecliptic longitude (your astrological birthday). Returns full tropical zodiac chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Location-sensitive: relocating your solar return chart to a different city changes the houses and Ascendant. Solar return chart API, annual horoscope forecast, birthday chart calculator, yearly astrology prediction, relocated solar return.
      */
     public generateSolarReturn<ThrowOnError extends boolean = false>(options?: Options<PostAstrologySolarReturnData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologySolarReturnResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologySolarReturnResponses, PostAstrologySolarReturnErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/solar-return',
             ...options,
@@ -334,7 +334,7 @@ export class Astrology extends HeyApiClient {
      * Generate a lunar return chart for any month — cast for the exact moment the transiting Moon returns to its natal ecliptic longitude. The Moon completes one sidereal orbit every ~27.3 days, making this the primary technique for monthly astrological forecasting. Returns full tropical zodiac chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Reveals emotional patterns, domestic focus, and intuitive themes for the coming month. Lunar return chart API, monthly horoscope forecast, Moon cycle chart, emotional astrology prediction.
      */
     public generateLunarReturn<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyLunarReturnData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyLunarReturnResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyLunarReturnResponses, PostAstrologyLunarReturnErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/lunar-return',
             ...options,
@@ -351,7 +351,7 @@ export class Astrology extends HeyApiClient {
      * Generate a composite chart by calculating midpoints between two natal charts. The composite chart represents the relationship as a single entity, showing its core identity, emotional bond, communication style, and growth direction. Returns composite planetary positions, house cusps, Ascendant, Midheaven, aspects, and relationship interpretation. Composite chart API, midpoint chart calculator, relationship astrology, couple chart analysis.
      */
     public generateCompositeChart<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyCompositeChartData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyCompositeChartResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyCompositeChartResponses, PostAstrologyCompositeChartErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/composite-chart',
             ...options,
@@ -368,7 +368,7 @@ export class Astrology extends HeyApiClient {
      * Calculate a detailed compatibility score between two birth charts using Western synastry (inter-chart aspects). Returns overall score (0-100) plus category breakdowns for romantic, emotional, intellectual, physical, and spiritual compatibility. Each category analyzes specific planetary pairs: Venus-Mars for romance, Moon-Moon for emotions, Mercury-Mercury for intellect. Includes relationship strengths, challenges, and narrative interpretation. Compatibility score API, love match calculator, relationship astrology, synastry score.
      */
     public calculateCompatibility<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyCompatibilityScoreData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyCompatibilityScoreResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyCompatibilityScoreResponses, PostAstrologyCompatibilityScoreErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/compatibility-score',
             ...options,
@@ -385,7 +385,7 @@ export class Astrology extends HeyApiClient {
      * Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits through the sign, covering love, career, health, finance, and general outlook. Returns lucky number, lucky color, and compatible signs. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.
      */
     public getDailyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignDailyData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignDailyResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/horoscope/{sign}/daily',
             ...options
@@ -398,7 +398,7 @@ export class Astrology extends HeyApiClient {
      * Retrieve daily horoscope forecasts for all 12 zodiac signs in a single request. More efficient than making 12 individual sign requests. Each sign includes love, career, health, finance, lucky number, lucky color, and compatible signs. Bulk horoscope API, all signs daily forecast, zodiac horoscope feed.
      */
     public getAllDailyHoroscopes<ThrowOnError extends boolean = false>(options?: Options<GetAstrologyHoroscopeDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAstrologyHoroscopeDailyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetAstrologyHoroscopeDailyResponses, GetAstrologyHoroscopeDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/horoscope/daily',
             ...options
@@ -411,7 +411,7 @@ export class Astrology extends HeyApiClient {
      * Get weekly horoscope for any zodiac sign. Forecast covers a full 7-day period based on planetary transits through the sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.
      */
     public getWeeklyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignWeeklyData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignWeeklyResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyHoroscopeBySignWeeklyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/horoscope/{sign}/weekly',
             ...options
@@ -424,7 +424,7 @@ export class Astrology extends HeyApiClient {
      * Get monthly horoscope for any zodiac sign with week-by-week breakdown and key dates. Based on planetary transits through the sign, covering love, career, health, and finance for the entire month. Includes important astrological dates and lucky numbers. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.
      */
     public getMonthlyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignMonthlyData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignMonthlyResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignMonthlyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/horoscope/{sign}/monthly',
             ...options
@@ -437,7 +437,7 @@ export class Astrology extends HeyApiClient {
      * Generate a planetary return chart for Mercury, Venus, Mars, Jupiter, or Saturn. A planetary return occurs when a transiting planet conjuncts its natal longitude, marking the beginning of a new cycle. Saturn return (~29 years) is the most significant life milestone in Western astrology. Jupiter return (~12 years) signals expansion and growth phases. Mars return (~2 years) resets energy and drive. Returns full tropical zodiac chart with all planetary positions, house cusps, and aspects. Planetary return chart API, Saturn return calculator, Jupiter return chart, Mars return forecast.
      */
     public generatePlanetaryReturn<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyPlanetaryReturnsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAstrologyPlanetaryReturnsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetaryReturnsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/astrology/planetary-returns',
             ...options,
@@ -456,7 +456,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate complete Vedic birth chart (Janam Kundli, natal chart) with all 9 planetary positions (Sun through Ketu) plus Ascendant (Lagna). Kundli calculator API for astrology apps, matrimonial sites. Returns accurate graha positions grouped by zodiac signs (rashis) with nakshatra details and pada. Perfect for kundli generation, horoscope matching, and Vedic astrology software integration.
      */
     public generateBirthChart<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyBirthChartData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyBirthChartResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyBirthChartResponses, PostVedicAstrologyBirthChartErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/birth-chart',
             ...options,
@@ -473,7 +473,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate Navamsa (D9 divisional chart) for marriage compatibility analysis, spouse prediction, and spiritual life assessment. Navamsa calculator API reveals planetary strength in married life. Each planetary position is divided into 9 parts for accurate marriage astrology. Detects Vargottama planets (exalted status). Essential for matrimonial matching, relationship prediction, and marital harmony analysis in Vedic astrology.
      */
     public generateNavamsa<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyNavamsaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyNavamsaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyNavamsaResponses, PostVedicAstrologyNavamsaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/navamsa',
             ...options,
@@ -490,7 +490,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate any Vedic divisional chart (Varga) from D2 Hora to D60 Shashtiamsa. Divisional charts divide each zodiac sign into smaller segments to reveal detailed insights about specific life areas: wealth (D2), siblings (D3), property (D4), children (D7), marriage (D9), career (D10), parents (D12), vehicles (D16), spirituality (D20), education (D24), strength (D27), misfortunes (D30), merit (D40), character (D45), and past life karma (D60). Based on Brihat Parashara Hora Shastra (BPHS) Shodasha Varga system. Detects Vargottama planets (same sign in D1 and selected chart).
      */
     public generateDivisionalChart<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDivisionalChartData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyDivisionalChartResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDivisionalChartErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/divisional-chart',
             ...options,
@@ -507,7 +507,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate detailed Ashtakoot compatibility (Gun Milan) for kundli matching between two people. Returns accurate 36-point Guna Milan scale with breakdown across all 8 kootas (Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot, Nadi), Nadi and Bhakoot dosha detection with classical cancellation analysis per Muhurta Martanda and BPHS rules, and marriage recommendation. Perfect for kundli matching for marriage, matrimonial platforms, horoscope compatibility, and Vedic matchmaking services.
      */
     public calculateGunMilan<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyCompatibilityData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyCompatibilityResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyCompatibilityErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/compatibility',
             ...options,
@@ -524,7 +524,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get simplified planetary positions (graha positions) for all 9 planets (Sun through Ketu) plus Ascendant (Lagna). Real-time planet transit calculator for Vedic astrology. Navagraha positions API with nakshatra, pada, and rashi details. Includes house number placement using Whole Sign house system from Lagna. Faster response for basic planetary data without full chart structure. Perfect for planetary alignment tracking, daily transit updates, and astrology widgets.
      */
     public getPlanetPositions<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyPlanetaryPositionsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyPlanetaryPositionsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyPlanetaryPositionsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/planetary-positions',
             ...options,
@@ -541,7 +541,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get daily sidereal ecliptic positions for all 9 Vedic planets (Navagraha) for an entire month. Returns longitude, zodiac sign, degree within sign, and retrograde status for each planet on each day. Calculated at noon UTC. Essential for ephemeris generation, transit tracking, and planetary movement visualization. Monthly planetary ephemeris API, sidereal position table, daily graha gochara positions, ecliptic longitude calculator.
      */
     public getMonthlyEphemeris<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyPlanetaryPositionsMonthlyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyPlanetaryPositionsMonthlyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsMonthlyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/planetary-positions/monthly',
             ...options,
@@ -558,7 +558,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate current Vimshottari Dasha periods (Mahadasha, Antardasha, Pratyantardasha) with remaining time. Accurate dasha calculator API for life phase prediction and planetary period analysis. Returns dasha timeline with start/end dates for each period. Essential for understanding current planetary influences, dasha transitions, and timing events in Vedic astrology. 120-year dasha system based on moon nakshatra at birth.
      */
     public getCurrentDasha<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDashaCurrentData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyDashaCurrentResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaCurrentErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dasha/current',
             ...options,
@@ -575,7 +575,7 @@ export class VedicAstrology extends HeyApiClient {
      * Returns complete Vimshottari Dasha cycle starting from birth. Shows all major planetary periods from birth through 120 years.
      */
     public getMajorDashas<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDashaMajorData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyDashaMajorResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaMajorErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dasha/major',
             ...options,
@@ -592,7 +592,7 @@ export class VedicAstrology extends HeyApiClient {
      * Returns 9 Antardasha sub-periods within a Mahadasha. Each Mahadasha is divided into 9 proportional sub-periods.
      */
     public getSubDashas<ThrowOnError extends boolean = false>(options: Options<PostVedicAstrologyDashaSubByMahadashaData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostVedicAstrologyDashaSubByMahadashaResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDashaSubByMahadashaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dasha/sub/{mahadasha}',
             ...options,
@@ -609,7 +609,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate Panchang elements (Hindu calendar) for any date: Tithi (lunar day), Nakshatra (lunar mansion), Yoga, and Karana. Daily panchang API for determining auspicious timings (muhurta), festival dates, and planetary influences. Tithi calculator with Shukla/Krishna paksha. Accurate nakshatra today with ruling planet. Essential for Hindu calendar integration, muhurta selection, and Vedic timekeeping in astrology apps.
      */
     public getBasicPanchang<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyPanchangBasicData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangBasicResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangBasicErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/panchang/basic',
             ...options,
@@ -626,7 +626,7 @@ export class VedicAstrology extends HeyApiClient {
      * Complete daily panchang with all five limbs (Tithi, Nakshatra, Yoga, Karana, Vara) plus sunrise, sunset, moonrise, moonset times. Includes inauspicious periods (Rahu Kaal, Yamaganda, Gulika Kaal) and auspicious windows (Abhijit Muhurta, Brahma Muhurta). Current planetary hora with start/end times. Essential for muhurta selection, daily horoscope apps, Hindu calendar integration, and electional astrology. Accurate calculations based on observer location.
      */
     public getDetailedPanchang<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyPanchangDetailedData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangDetailedResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangDetailedErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/panchang/detailed',
             ...options,
@@ -643,7 +643,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate Choghadiya (Chaughadia) muhurta timings for any date and location. Divides day (sunrise to sunset) and night (sunset to next sunrise) into 8 equal auspicious/inauspicious periods. Each period ruled by a planet: Udveg (Sun, bad), Amrit (Moon, good), Rog (Mars, bad), Labh (Mercury, good), Shubh (Jupiter, good), Char (Venus, good), Kaal (Saturn, bad). Essential for muhurta selection, daily planning, and traditional Hindu timekeeping. Choghadiya calculator API, daily muhurat timings, auspicious time finder.
      */
     public getChoghadiya<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyPanchangChoghadiyaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangChoghadiyaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangChoghadiyaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/panchang/choghadiya',
             ...options,
@@ -660,7 +660,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate all 24 Hora (planetary hour) periods for any date and location. Day is divided into 12 equal horas from sunrise to sunset, night into 12 equal horas from sunset to next sunrise. Each hora is ruled by a planet in the Chaldean sequence starting from the day lord. Hora timings API, planetary hours calculator, Vedic hora chart, electional astrology timing.
      */
     public getHora<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyPanchangHoraData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangHoraResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyPanchangHoraErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/panchang/hora',
             ...options,
@@ -677,7 +677,7 @@ export class VedicAstrology extends HeyApiClient {
      * Detect Manglik dosha (Kuja dosha, Mars dosha) based on Mars position in inauspicious houses (1, 2, 4, 7, 8, 12) from Lagna. Accurate mangal dosha calculator for matrimonial compatibility checks in Vedic astrology. Returns severity levels (Mild/Moderate/Severe) and cancellation factors. Essential for kundli matching for marriage, manglik compatibility, and marriage astrology in matrimonial sites. Includes exceptions that reduce manglik dosha effects.
      */
     public checkManglikDosha<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDoshaManglikData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyDoshaManglikResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaManglikErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dosha/manglik',
             ...options,
@@ -694,7 +694,7 @@ export class VedicAstrology extends HeyApiClient {
      * Detect Kalsarpa dosha (Kalsarpa yoga) when all 7 planets are hemmed between Rahu-Ketu axis. Accurate kalsarpa dosha calculator identifying 12 types (Ananta, Kulik, Vasuki, Shankhapala, Padma, Mahapadma, Takshak, Karkotak, Shankhachud, Ghatak, Vishdhar, Sheshnag). Returns severity and effects based on Rahu house position. Essential for Vedic astrology dosha analysis, birth chart evaluation, and matrimonial compatibility. Considered significant dosha affecting life obstacles and spiritual growth.
      */
     public checkKalsarpaDosha<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDoshaKalsarpaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyDoshaKalsarpaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaKalsarpaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dosha/kalsarpa',
             ...options,
@@ -711,7 +711,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate Sadhesati (Sade Sati) periods when Saturn transits 12th, 1st, and 2nd houses from natal Moon. Accurate sade sati calculator with current status and phase identification (Rising/Peak/Setting). Shani sadhesati 7.5 year period tracker. Returns Saturn transit dates and effects on life. Essential for Saturn transit analysis, sadhesati remedies timing, and understanding challenging Saturn periods in Vedic astrology. Important for timing major life decisions.
      */
     public checkSadhesati<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDoshaSadhesatiData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyDoshaSadhesatiResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyDoshaSadhesatiErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dosha/sadhesati',
             ...options,
@@ -728,7 +728,7 @@ export class VedicAstrology extends HeyApiClient {
      * Returns list of all 300+ planetary yogas (astrological combinations) with basic information (id and name only). Use this to discover available yogas, then call GET /yogas/:id for detailed information. Perfect for building yoga browser interfaces, search functionality, and progressive data loading in astrology apps.
      */
     public listYogas<ThrowOnError extends boolean = false>(options?: Options<GetVedicAstrologyYogaData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetVedicAstrologyYogaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetVedicAstrologyYogaResponses, GetVedicAstrologyYogaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/yoga',
             ...options
@@ -754,7 +754,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get real-time KP-Newcomb ayanamsa value calculated using Newcomb precession theory - no preset tables. Returns precise ayanamsa for any date based on IAU modern precession standards. Essential for accurate KP chart calculations and research. Formula: A = 16.90709×(Year/10000) - 0.757371×(Year/1000)² - 6.92416, B = (Month-1 + Date/30)×1.1574074/1000. KP Newcomb ayanamsa API, dynamic ayanamsa calculator, Krishnamurti ayanamsa today, current KP ayanamsa
      */
     public getKpAyanamsa<ThrowOnError extends boolean = false>(options?: Options<GetVedicAstrologyKpAyanamsaData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetVedicAstrologyKpAyanamsaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyKpAyanamsaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/ayanamsa',
             ...options
@@ -767,7 +767,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get planetary positions with detailed KP star-lord and sub-lord calculations for precise event timing and significator analysis. Returns all 9 planets (Sun through Ketu) with nakshatra, star-lord, sub-lord, and KP horary numbers (1-249). Essential for KP astrology software, significator analysis, and event prediction. KP planet positions API, star lord sub lord calculator, KP significator API, Krishnamurti Paddhati planets
      */
     public getKpPlanets<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpPlanetsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpPlanetsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpPlanetsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/planets',
             ...options,
@@ -784,7 +784,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate unequal Placidus house cusps with ruling sign-lord, nakshatra-lord, and sub-lord for each cusp. Dynamic KP-Newcomb or custom ayanamsa support. Used in KP horary astrology, cusp sub-lord analysis, and birth chart rectification. Returns all 12 house cusps with KP sub-division details. SEO: Placidus house cusps API, KP cusp calculator, house cusps star sub lord, KP horary cusps
      */
     public getKpCusps<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpCuspsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpCuspsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpCuspsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/cusps',
             ...options,
@@ -801,7 +801,7 @@ export class VedicAstrology extends HeyApiClient {
      * Generate authentic Krishnamurti Paddhati birth charts with Placidus house cusps, star-lord and sub-lord calculations. Supports custom ayanamsa and dynamic KP-Newcomb ayanamsa calculation. Returns complete chart with all 9 planets (Sun through Ketu), Ascendant, 12 Placidus house cusps, nakshatra details, star-lords, sub-lords, and KP horary numbers (1-249). Perfect for KP astrology software, horary prediction apps, and event timing analysis. SEO: KP astrology chart API, Placidus house cusps planets, Krishnamurti Paddhati chart generator, KP birth chart calculator
      */
     public generateKpChart<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpChartData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpChartResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpChartErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/chart',
             ...options,
@@ -818,7 +818,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate the 5 ruling planets at any moment using Krishnamurti Paddhati horary astrology. Returns Day Lord, Moon Sign/Star/Sub Lord, Lagna Sign/Star/Sub Lord. Optionally provide birth data (birthDate, birthTime) to include significators showing which houses each ruling planet signifies in the birth chart - essential for KP prediction.
      */
     public getKpRulingPlanets<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpRulingPlanetsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpRulingPlanetsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpRulingPlanetsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/ruling-planets',
             ...options,
@@ -835,7 +835,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate ruling planets and their KP significators at regular time intervals using Krishnamurti Paddhati prashna (horary) astrology. For each interval, a full Placidus house chart is erected and significators are computed using the 4-level KP hierarchy: Level 1 (strongest) planets in star of house occupant, Level 2 occupants, Level 3 planets in star of house owner, Level 4 house owner. Returns Day Lord (sunrise-based Hindu Vara), Moon Sign/Star/Sub/Sub-Sub Lords, Lagna Sign/Star/Sub/Sub-Sub Lords, unique ruling planets set, and per-ruling-planet house significations. No birth data needed, significators come from each moments sky chart. Use for birth time rectification, muhurta selection, and KP horary number analysis.
      */
     public getKpRulingInterval<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpRulingPlanetsIntervalData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpRulingPlanetsIntervalResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsIntervalErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/ruling-planets-interval',
             ...options,
@@ -852,7 +852,7 @@ export class VedicAstrology extends HeyApiClient {
      * Track when planets cross KP sublord boundaries (1-249 divisions) for precise Krishnamurti Paddhati event timing. Returns exact timestamps when a planet transitions between sublords, essential for prashna kundali analysis and dasha predictions. Use this to find favorable windows when benefic sublords are active. Supports Sun, Moon, Mars, Mercury, Jupiter, Venus, and Saturn tracking over any date range.
      */
     public getKpSublordChanges<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpSublordChangesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpSublordChangesResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyKpSublordChangesErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/sublord-changes',
             ...options,
@@ -869,7 +869,7 @@ export class VedicAstrology extends HeyApiClient {
      * Track when planets enter new zodiac signs (rasi) with precise ingress timestamps. Essential for Vedic astrology transit analysis, muhurta selection, and predictive horoscope readings. Returns exact times when planets cross sign boundaries (0, 30, 60 degrees etc). Use for tracking Sun sankranti dates, Moon sign changes for panchang, or outer planet transits for yearly predictions.
      */
     public getKpRasiChanges<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpRasiChangesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpRasiChangesResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRasiChangesErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/rasi-changes',
             ...options,
@@ -886,7 +886,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate positions of all 9 planets (Sun through Saturn, Rahu, Ketu) at regular time intervals with full KP hierarchy: sign lord, star lord, sublord, and sub-sublord. Returns longitude, zodiac sign, nakshatra, sublord, sub-sublord, and KP number (1-249) for each planet at each timestamp. Ideal for tracking planetary motion, finding optimal muhurta windows, analyzing transit patterns, and building KP ephemeris tables. Maximum range of 7 days with 15-minute to 24-hour intervals.
      */
     public getKpPlanetsInterval<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpPlanetsIntervalData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyKpPlanetsIntervalResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsIntervalErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/kp/planets-interval',
             ...options,
@@ -903,7 +903,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate all planetary aspects (Drishti) for a given time. Returns full aspects (7th house for all planets) and special aspects (Mars 4th/8th, Jupiter 5th/9th, Saturn 3rd/10th). Includes aspect table grouped by planet, mutual aspects, and individual aspect details with orb calculation. Essential for birth chart analysis, compatibility checking, and transit predictions. Planetary aspects API, drishti calculator, vedic astrology aspects, graha drishti.
      */
     public calculateDrishti<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyAspectsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyAspectsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyAspectsResponses, PostVedicAstrologyAspectsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/aspects',
             ...options,
@@ -920,7 +920,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate all planetary aspect events (excluding Moon) for a given month. Detects 22 aspect types. 5 major (conjunction, opposition, trine, square, sextile) and 17 minor (vigintile, semi-sextile, undecile, semi-quintile, novile, semi-square, septile, quintile, binovile, centile, biseptile, tredecile, sesqui-square, bi-quintile, quincunx, triseptile, quadranovile). Returns exact date and time of closest approach using ternary search refinement. Uses degree-based aspect methodology on sidereal positions (Lahiri ayanamsa). For Moon-specific aspects, use the /aspects/lunar endpoint. Essential for transit timing, muhurta selection, and monthly astrological forecasting. Monthly planetary aspects API, graha drishti calendar, mutual aspect ephemeris, minor aspects.
      */
     public getMonthlyAspects<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyAspectsMonthlyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyAspectsMonthlyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsMonthlyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/aspects/monthly',
             ...options,
@@ -937,7 +937,7 @@ export class VedicAstrology extends HeyApiClient {
      * Track all lunar aspect events for a given month including major and minor aspects. The Moon traverses approximately 13 degrees per day, forming 22 aspect types with each planet. 5 major (conjunction, opposition, trine, square, sextile) and 17 minor (vigintile, semi-sextile, undecile, semi-quintile, novile, semi-square, septile, quintile, binovile, centile, biseptile, tredecile, sesqui-square, bi-quintile, quincunx, triseptile, quadranovile). Returns exact date and time of each Moon aspect event with ternary search refinement to the minute. Essential for muhurta selection, daily panchang analysis, and chandra gochar predictions. Monthly lunar aspects API, Moon transit calendar, chandra drishti ephemeris, minor lunar aspects.
      */
     public getLunarAspects<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyAspectsLunarData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyAspectsLunarResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsLunarErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/aspects/lunar',
             ...options,
@@ -954,7 +954,7 @@ export class VedicAstrology extends HeyApiClient {
      * Analyze planetary transits (Gochar) over natal chart positions. Returns transiting planets with their natal house positions, aspects to natal planets, and highlights key transits from slow-moving planets (Jupiter, Saturn, Rahu, Ketu). Essential for timing predictions, event forecasting, and understanding current planetary influences. Transit analysis API, gochar calculator, vedic transit predictions.
      */
     public calculateTransit<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyTransitData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyTransitResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyTransitResponses, PostVedicAstrologyTransitErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/transit',
             ...options,
@@ -971,7 +971,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get all planetary sign (rashi) changes for a given month. Shows when each planet transitions from one zodiac sign to another. Covers all 9 Vedic planets: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu. Includes starting positions at the beginning of the month. Essential for transit prediction, monthly horoscope generation, and muhurta planning. Monthly planetary transit API, gochar calendar, rashi parivartan dates.
      */
     public getMonthlyTransits<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyTransitMonthlyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyTransitMonthlyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitMonthlyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/transit/monthly',
             ...options,
@@ -988,7 +988,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate planetary declinations and find parallels (same declination) and contraparallels (opposite declination). Parallels are considered equivalent to conjunctions in strength, contraparallels to oppositions. Returns declination for each planet and all parallel/contraparallel aspects. Declination parallels API, planetary declination calculator, contraparallel aspects.
      */
     public calculateParallels<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyParallelsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyParallelsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyParallelsResponses, PostVedicAstrologyParallelsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/parallels',
             ...options,
@@ -1005,7 +1005,7 @@ export class VedicAstrology extends HeyApiClient {
      * Find all declination parallel and contraparallel events between the 7 visible planets for a given month. Parallels occur when two planets share the same celestial declination (equivalent to conjunction in strength). Contraparallels occur at opposite declinations (equivalent to opposition). Scanned daily at noon UTC. Essential for advanced transit analysis and hidden aspect discovery. Monthly declination parallels API, planetary parallel ephemeris, contraparallel event calendar.
      */
     public getMonthlyParallels<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyParallelsMonthlyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyParallelsMonthlyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsMonthlyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/parallels/monthly',
             ...options,
@@ -1022,7 +1022,7 @@ export class VedicAstrology extends HeyApiClient {
      * Find all ecliptic plane crossings for visible planets during a given year. An ecliptic crossing occurs when a planetary celestial latitude passes through 0 degrees, crossing from one side of the ecliptic to the other. Ascending crossings (south to north) correspond to the ascending node, descending crossings (north to south) to the descending node. Moon crosses ~2 times per month, outer planets cross less frequently. Returns exact date, time, direction, sidereal longitude, and zodiac sign. Ecliptic crossing API, planetary node crossing, ascending descending node ephemeris.
      */
     public getEclipticCrossings<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyEclipticCrossingsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyEclipticCrossingsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyEclipticCrossingsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/ecliptic-crossings',
             ...options,
@@ -1039,7 +1039,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get the complete list of 12 rashis (zodiac signs) in Vedic astrology. Returns Sanskrit names, Western equivalents, sidereal date ranges, symbols, governing Adityas, and personality characteristics for each rashi. Reference data for Mesha through Meen. Essential for zodiac sign lookup tables, astrology apps, and rashi-based UI components.
      */
     public listRashis<ThrowOnError extends boolean = false>(options?: Options<GetVedicAstrologyRashisData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetVedicAstrologyRashisResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetVedicAstrologyRashisResponses, GetVedicAstrologyRashisErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/rashis',
             ...options
@@ -1065,7 +1065,7 @@ export class VedicAstrology extends HeyApiClient {
      * Get the complete list of 27 nakshatras (lunar mansions) in Vedic astrology. Returns names, zodiac ranges, ruling planets, presiding deities, symbols, personality characteristics, and traditional remedies (mantras, gemstones, rituals) for each nakshatra from Ashwini to Revati. Essential for nakshatra lookup tables, dasha period calculations, muhurta selection, and astrology app reference data.
      */
     public listNakshatras<ThrowOnError extends boolean = false>(options?: Options<GetVedicAstrologyNakshatrasData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetVedicAstrologyNakshatrasResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyNakshatrasErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/nakshatras',
             ...options
@@ -1091,7 +1091,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate all 11 Vedic upagraha (sub-planet) positions per Brihat Parashara Hora Shastra (BPHS). Returns 6 time-based upagrahas (Gulika, Mandi, Kala, Mrityu, Ardhaprahara, Yamaghantaka) derived from the 8-part day/night division, plus 5 Sun-longitude-based upagrahas (Dhuma, Vyatipata, Parivesha, Indra Chapa, Upaketu). Essential for complete kundli analysis, dosha assessment, and advanced chart interpretation. Upagraha calculator API, Gulika Mandi position, sub-planet Vedic astrology.
      */
     public getUpagrahaPositions<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyUpagrahaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyUpagrahaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyUpagrahaResponses, PostVedicAstrologyUpagrahaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/upagraha',
             ...options,
@@ -1108,7 +1108,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate complete Ashtakavarga analysis per Brihat Parashara Hora Shastra (BPHS). Returns Bhinnashtakavarga (BAV), Sarvashtakavarga (SAV, total 337), Reduced Ashtakavarga (Trikona + Ekadipati Shodhana per Ch. 67-68), and Shodhya Pinda planetary strength (Rashi Pinda + Graha Pinda per Ch. 69). Essential for transit prediction timing, house strength analysis, dasha result evaluation, and planetary strength comparison. Ashtakavarga calculator API, bindu rekha points, Shodhya Pinda, Vedic astrology.
      */
     public calculateAshtakavarga<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyAshtakavargaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyAshtakavargaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAshtakavargaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/ashtakavarga',
             ...options,
@@ -1125,7 +1125,7 @@ export class VedicAstrology extends HeyApiClient {
      * Calculate complete Shadbala (six-fold planetary strength) per Brihat Parashara Hora Shastra (BPHS) and BV Raman Graha and Bhava Balas. Returns all 6 strength components (Sthana Bala, Dig Bala, Kala Bala, Chesta Bala, Naisargika Bala, Drik Bala) plus Ishta Phala, Kashta Phala, strength ratio, and relative ranking for all 7 classical planets. Essential for evaluating planetary strength in Vedic birth chart analysis, dasha prediction, transit interpretation, and yoga assessment. Shadbala calculator API, planetary strength Vedic astrology, graha bala, Ishta Kashta Phala.
      */
     public calculateShadbala<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyShadbalaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostVedicAstrologyShadbalaResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostVedicAstrologyShadbalaResponses, PostVedicAstrologyShadbalaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/shadbala',
             ...options,
@@ -1144,7 +1144,7 @@ export class Tarot extends HeyApiClient {
      * Retrieve the complete Rider-Waite-Smith tarot deck of 78 cards: 22 Major Arcana (numbered 0-21, representing life lessons, spiritual themes, and karmic influences like The Fool, Death, The Tower) plus 56 Minor Arcana (4 suits × 14 cards each for daily situations and practical matters). Filter by arcana type (major for spiritual guidance, minor for everyday concerns), suit (cups for emotions and relationships, wands for creativity and passion, swords for intellect and conflict, pentacles for material wealth and finances), or card number (Ace=1 for new beginnings, 2-10 for progression, Page=11 for messages, Knight=12 for action, Queen=13 for mastery, King=14 for authority). Returns lightweight basic card data - use GET /cards/:id for full upright and reversed interpretations with keywords. Perfect for building tarot reference libraries, card databases, learning applications, or browsing the complete traditional deck used by professional tarot readers worldwide.
      */
     public listCards<ThrowOnError extends boolean = false>(options?: Options<GetTarotCardsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetTarotCardsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetTarotCardsResponses, GetTarotCardsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/cards',
             ...options
@@ -1170,7 +1170,7 @@ export class Tarot extends HeyApiClient {
      * Draw 1-78 tarot cards from the complete Rider-Waite-Smith deck with seeded reproducibility for consistent personalized readings. Provide an optional seed string (like "user123-2025-12-27" or "readingId") to ensure the same seed always returns identical cards in the exact same order - essential for daily tarot features, personalized user experiences, shareable readings, or reproducible testing. Omit seed for true random draws each time. Control card reversals (upright vs reversed/inverted orientations - reversed cards provide alternative meanings when drawn upside down) and duplicates (traditional deck draws each of 78 cards once, or oracle-style allows repeating same card). Each drawn card includes position number, reversal state (boolean), keywords for quick interpretation, full meaning text (400+ words), authentic Rider-Waite imagery, and card metadata. Perfect for custom spread builders, random card generators, automated tarot reading platforms, daily card features, meditation apps, journaling prompts, divination tools, and any application requiring reproducible or random tarot draws from the industry-standard 78-card deck (22 Major Arcana spiritual lessons + 56 Minor Arcana practical guidance across 4 suits).
      */
     public drawCards<ThrowOnError extends boolean = false>(options: Options<PostTarotDrawData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotDrawResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostTarotDrawResponses, PostTarotDrawErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/draw',
             ...options,
@@ -1221,7 +1221,7 @@ export class Tarot extends HeyApiClient {
      * Perform the classic three-card tarot spread revealing Past (what led to this situation), Present (current energy and circumstances), and Future (likely outcome if current path continues). The most popular beginner-friendly spread, perfect for quick insights, daily guidance, or exploring specific questions. Each position includes a drawn card with reversal state, keywords, full meaning, and position-specific interpretation. Returns a summary connecting all three cards. Ideal for tarot reading apps, decision-making tools, and personal growth platforms. Optionally provide a seed for reproducible readings.
      */
     public castThreeCard<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsThreeCardData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsThreeCardResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostTarotSpreadsThreeCardResponses, PostTarotSpreadsThreeCardErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/spreads/three-card',
             ...options,
@@ -1238,7 +1238,7 @@ export class Tarot extends HeyApiClient {
      * Perform the legendary Celtic Cross spread - the most comprehensive and detailed tarot reading available, used by professional tarot readers worldwide for over a century. This 10-card layout reveals the complete picture of any situation through distinct positions: Present Situation (what is happening now), Challenge (obstacles crossing your path), Distant Past (root causes), Recent Past (recent influences), Best Outcome (potential positive result), Near Future (what is approaching in weeks ahead), Your Approach (your attitude and self-perception), External Influences (environment and other people impact), Hopes and Fears (your desires and anxieties), and Final Outcome (where everything is headed). Perfect for life-changing decisions, complex relationship questions, career transitions, spiritual guidance, and deep self-discovery. Ideal for professional tarot apps, life coaching platforms, spiritual wellness websites, and divination tools requiring authoritative comprehensive readings. Each card position provides layered insight combining traditional tarot wisdom with modern psychological interpretation for actionable guidance.
      */
     public castCelticCross<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCelticCrossData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsCelticCrossResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCelticCrossErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/spreads/celtic-cross',
             ...options,
@@ -1255,7 +1255,7 @@ export class Tarot extends HeyApiClient {
      * Perform a specialized 5-card relationship tarot spread analyzing romantic connections, emotional dynamics, and partnership potential. This love-focused reading examines five crucial relationship aspects: You (your current emotional state, needs, and what you bring to the relationship), Partner/Other (their emotional perspective, desires, and energy), Relationship Dynamic (the current energy and connection between you both), Challenge (obstacles needing attention, healing, or communication), and Outcome (where this romantic connection is naturally heading). Perfect for dating apps, relationship counseling platforms, matchmaking services, wellness apps, and romantic guidance tools. Provides deep insight into new relationships, existing partnerships, potential connections, breakup recovery, or self-love journeys. Ideal for understanding compatibility, resolving conflicts, strengthening bonds, or deciding whether to pursue or continue a relationship. Each position reveals emotional truths combining traditional tarot relationship wisdom with modern relationship psychology. Use for individual readings or couples readings to gain perspective on romantic situations from singleness to marriage.
      */
     public castLoveSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsLoveData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsLoveResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostTarotSpreadsLoveResponses, PostTarotSpreadsLoveErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/spreads/love',
             ...options,
@@ -1272,7 +1272,7 @@ export class Tarot extends HeyApiClient {
      * Perform a comprehensive 7-card career tarot spread using SWOT analysis framework (Strengths, Weaknesses, Opportunities, Threats) for professional guidance, business decisions, and vocational clarity. This career-focused reading examines seven strategic business aspects: Current Situation (your present professional position and workplace energy), Strengths (your professional assets, talents, and competitive advantages), Weaknesses (areas needing development, skill gaps, or limiting beliefs), Opportunities (potential growth paths, new ventures, or doors opening), Threats (obstacles, competition, or external challenges), Advice (actionable guidance for navigating your career path), and Outcome (where your professional journey is heading if you follow the guidance). Perfect for career coaching platforms, professional development apps, business consulting tools, job search websites, entrepreneurship platforms, and executive coaching services. Use for career transitions, job offers evaluation, promotion decisions, starting a business, workplace conflicts, finding your calling, or strategic career planning. Combines traditional tarot wisdom with modern SWOT business analysis for practical professional insight. Ideal for employees, entrepreneurs, freelancers, career changers, and anyone seeking vocational direction.
      */
     public castCareerSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCareerData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsCareerResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostTarotSpreadsCareerResponses, PostTarotSpreadsCareerErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/spreads/career',
             ...options,
@@ -1289,7 +1289,7 @@ export class Tarot extends HeyApiClient {
      * Build and perform your own custom tarot spread with personalized positions and interpretations (1-10 cards). This flexible endpoint lets you create unique spread layouts for any purpose - define your own position names, meanings, and card count to match your specific needs or therapeutic framework. Perfect for therapists using tarot in counseling, coaches creating signature spreads, app developers building custom reading features, spiritual practitioners with proprietary methods, or anyone wanting to design specialized layouts beyond traditional spreads. Create spreads for specific themes like chakra readings (7 cards), lunar phases (8 cards), elements (4 cards), goals setting (any count), shadow work, inner child healing, decision matrices, or creative problem-solving. Each position requires a name and interpretation - you define what each card position represents in your reading. The API draws the exact number of cards you specify and maps them to your custom positions. No pre-generated summary provided - you interpret the reading based on your framework. Ideal for innovative tarot apps, therapeutic tools, personal development platforms, spiritual coaching services, or experimental divination methods. Maximum 10 positions to maintain reading clarity and practical interpretation time.
      */
     public castCustomSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCustomData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsCustomResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).post<PostTarotSpreadsCustomResponses, PostTarotSpreadsCustomErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/tarot/spreads/custom',
             ...options,
@@ -1308,7 +1308,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Life Path number from your birth date using Pythagorean numerology. This is the most significant number in your numerology chart, revealing your life purpose, natural talents, and destiny path. Automatically detects Master Numbers (11, 22, 33) and Karmic Debt numbers (13, 14, 16, 19). Returns comprehensive interpretation including personality traits, strengths, challenges, career guidance, relationship compatibility, and spiritual insights. Perfect for numerology apps, birth chart calculators, life purpose discovery tools, personal development platforms, and astrology services. Get detailed 300-500 word meanings for all numbers 1-9, 11, 22, and 33.
      */
     public calculateLifePath<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyLifePathData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyLifePathResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyLifePathResponses, PostNumerologyLifePathErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/life-path',
             ...options,
@@ -1325,7 +1325,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Expression (Destiny) number from your full birth name using Pythagorean numerology. This number reveals your natural talents, abilities, and life goals. It shows what you came here to do and what tools you have to accomplish your life purpose. Returns comprehensive interpretation including personality traits, career paths, relationship dynamics, and spiritual insights. Automatically detects Master Numbers (11, 22, 33). Perfect for name numerology apps, career guidance tools, personal development platforms, and talent assessment services. Get detailed 300-500 word meanings for all numbers 1-9, 11, 22, and 33.
      */
     public calculateExpression<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyExpressionData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyExpressionResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyExpressionResponses, PostNumerologyExpressionErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/expression',
             ...options,
@@ -1342,7 +1342,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Soul Urge (Heart Desire) number from the vowels in your birth name using Pythagorean numerology. This number reveals your innermost desires, motivations, and what your soul truly wants to experience. It shows what drives you from within, your emotional needs, and what brings you fulfillment. Returns comprehensive interpretation including personality traits, emotional needs, relationship desires, and spiritual longings. Automatically detects Master Numbers (11, 22, 33). Perfect for self-discovery apps, emotional intelligence tools, relationship counseling platforms, and personal development services. Get detailed 300-500 word meanings for all numbers 1-9, 11, 22, and 33.
      */
     public calculateSoulUrge<ThrowOnError extends boolean = false>(options?: Options<PostNumerologySoulUrgeData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologySoulUrgeResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologySoulUrgeResponses, PostNumerologySoulUrgeErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/soul-urge',
             ...options,
@@ -1359,7 +1359,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Personality number from the consonants in your birth name using Pythagorean numerology. This number reveals how others perceive you, your outer personality, and first impressions you make. It represents the mask you show the world and your social persona. Returns comprehensive interpretation including public image, social dynamics, professional presence, and relationship first impressions. Automatically detects Master Numbers (11, 22, 33). Perfect for personal branding apps, social skills training, professional development platforms, and communication coaching services. Get detailed 300-500 word meanings for all numbers 1-9, 11, 22, and 33.
      */
     public calculatePersonality<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyPersonalityData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyPersonalityResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyPersonalityResponses, PostNumerologyPersonalityErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/personality',
             ...options,
@@ -1376,7 +1376,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Birth Day number from the day you were born (1-31) using Pythagorean numerology. This number reveals special talents and abilities you possess from birth. It shows natural gifts that can help you achieve your life purpose. Returns comprehensive interpretation including innate talents, natural abilities, career advantages, and how to leverage your special gifts. Automatically detects Master Numbers (11, 22) and reduces double-digit days. Perfect for talent discovery apps, career counseling platforms, personal development services, and skill assessment tools. Get detailed 300-500 word meanings for all numbers 1-9, 11, and 22.
      */
     public calculateBirthDay<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyBirthDayData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyBirthDayResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyBirthDayResponses, PostNumerologyBirthDayErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/birth-day',
             ...options,
@@ -1393,7 +1393,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Maturity (Realization) number by adding Life Path and Expression numbers using Pythagorean numerology. This number reveals who you become in the second half of life, typically manifesting after age 35-40. It shows the ultimate goal of personal development and mature self-expression. Returns comprehensive interpretation including life transformation, mature personality, later-life purpose, and wisdom development. Automatically detects Master Numbers (11, 22, 33). Perfect for life coaching apps, midlife guidance platforms, personal development services, and aging wisdom tools. Get detailed 300-500 word meanings for all numbers 1-9, 11, 22, and 33.
      */
     public calculateMaturity<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyMaturityData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyMaturityResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyMaturityResponses, PostNumerologyMaturityErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/maturity',
             ...options,
@@ -1410,7 +1410,7 @@ export class Numerology extends HeyApiClient {
      * Analyze your Karmic Lessons from your birth name using Pythagorean numerology. Karmic lessons are indicated by numbers missing from your name (numbers 1-9 that do not appear). These represent challenges you came to learn and skills you need to develop in this lifetime. Returns comprehensive analysis including missing numbers, specific lessons for each, challenges to overcome, and practical guidance for development. Perfect for spiritual growth apps, personal development platforms, life coaching services, and self-improvement tools. Get detailed lesson descriptions, development strategies, and practical exercises for each missing number.
      */
     public analyzeKarmicLessons<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyKarmicLessonsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyKarmicLessonsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyKarmicLessonsResponses, PostNumerologyKarmicLessonsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/karmic-lessons',
             ...options,
@@ -1427,7 +1427,7 @@ export class Numerology extends HeyApiClient {
      * Check for Karmic Debt numbers (13, 14, 16, 19) in Life Path, Expression, Soul Urge, or Personality calculations using Pythagorean numerology. Karmic debt indicates challenges carried from past lives that must be resolved in this lifetime. These numbers appear during reduction and represent specific lessons and tests. Returns comprehensive analysis including debt descriptions, challenges to overcome, and resolution guidance. Perfect for spiritual growth apps, karmic astrology platforms, past life exploration services, and personal transformation tools. Get detailed meanings for all four karmic debt numbers with practical resolution strategies.
      */
     public checkKarmicDebt<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyKarmicDebtData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyKarmicDebtResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyKarmicDebtResponses, PostNumerologyKarmicDebtErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/karmic-debt',
             ...options,
@@ -1444,7 +1444,7 @@ export class Numerology extends HeyApiClient {
      * Calculate your Personal Year number from your birth month, day, and current year using Pythagorean numerology. Personal Year runs in 9-year cycles (1-9) and reveals the theme, opportunities, and challenges for the current year. Each year has a specific energy and lessons. Returns comprehensive annual forecast including year theme, opportunities, challenges, and actionable advice. Perfect for yearly planning apps, life coaching platforms, astrology services, and personal development tools. Get detailed forecasts for all 9 Personal Year cycles with practical guidance.
      */
     public calculatePersonalYear<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyPersonalYearData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyPersonalYearResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyPersonalYearResponses, PostNumerologyPersonalYearErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/personal-year',
             ...options,
@@ -1461,7 +1461,7 @@ export class Numerology extends HeyApiClient {
      * Calculate numerology compatibility between two people using their Life Path, Expression, and Soul Urge numbers based on Pythagorean numerology. Provides comprehensive relationship analysis with overall compatibility score (0-100), individual aspect compatibility (Life Path 50% weight, Expression 30%, Soul Urge 20%), relationship strengths, challenges, and practical advice. Uses detailed compatibility matrix for all number combinations. Perfect for dating apps, relationship counseling platforms, matchmaking services, and compatibility tools. Get actionable insights for improving relationship dynamics.
      */
     public calculateNumCompatibility<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyCompatibilityData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyCompatibilityResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyCompatibilityResponses, PostNumerologyCompatibilityErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/compatibility',
             ...options,
@@ -1478,7 +1478,7 @@ export class Numerology extends HeyApiClient {
      * Generate a comprehensive numerology chart combining all major calculations: Life Path, Expression, Soul Urge, Personality, Birth Day, Maturity, Karmic Lessons, Karmic Debt, and Personal Year. This single endpoint provides everything needed for a full numerology reading. Returns detailed interpretations for all numbers, karmic analysis, yearly forecast, and holistic summary. Perfect for numerology apps, complete reading services, birth chart generators, and comprehensive analysis tools. Save multiple API calls by getting the full chart in one request. Ideal for generating PDF reports or detailed user profiles.
      */
     public generateNumerologyChart<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyChartData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyChartResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyChartResponses, PostNumerologyChartErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/chart',
             ...options,
@@ -1508,7 +1508,7 @@ export class Numerology extends HeyApiClient {
      * Receive a daily numerology number (1-9, 11, 22, 33) for guidance and reflection. Uses seeded randomness so the same seed gets the same number on the same date, perfect for "Number of the Day" features in numerology apps, wellness platforms, and daily guidance tools. Returns the number with full interpretation including archetype, keywords, strengths, challenges, career, relationships, and spiritual insights. Ideal for daily push notifications, morning briefings, and personalized numerology experiences.
      */
     public getDailyNumber<ThrowOnError extends boolean = false>(options?: Options<PostNumerologyDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostNumerologyDailyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostNumerologyDailyResponses, PostNumerologyDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/numerology/daily',
             ...options,
@@ -1527,7 +1527,7 @@ export class Dreams extends HeyApiClient {
      * Browse and search our complete dream interpretation dictionary containing 2,000+ dream symbols with psychological meanings. Find dream meanings for animals (snake dreams, spider dreams, dog dreams), common scenarios (falling dreams, flying dreams, being chased, drowning), people (dreams about mother, father, baby, ex), objects (car, house, water, fire), emotions (fear, anxiety, love), body parts (teeth falling out, hair, eyes), colors, numbers, and abstract concepts. Filter by starting letter for A-Z navigation or search by keyword to find what your dreams mean.
      */
     public searchDreamSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetDreamsSymbolsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetDreamsSymbolsResponses, GetDreamsSymbolsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/dreams/symbols',
             ...options
@@ -1540,7 +1540,7 @@ export class Dreams extends HeyApiClient {
      * Discover random dream symbols and their interpretations for daily dream insights and exploration. Each request returns different symbols from the 2,000+ dream meaning database - perfect for dream of the day features, dream journaling prompts, meditation on subconscious themes, or exploring what different dreams mean. Get one or multiple random dream interpretations with full psychological meanings.
      */
     public getRandomSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsRandomData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetDreamsSymbolsRandomResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetDreamsSymbolsRandomResponses, GetDreamsSymbolsRandomErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/dreams/symbols/random',
             ...options
@@ -1553,7 +1553,7 @@ export class Dreams extends HeyApiClient {
      * Get the count of dream symbols available for each letter A-Z. Build alphabetical dream dictionary navigation to help users browse dream interpretations by letter - from abandonment dreams to zodiac dreams. See how many dream meanings exist for each starting letter.
      */
     public getSymbolLetterCounts<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsLettersData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetDreamsSymbolsLettersResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetDreamsSymbolsLettersResponses, GetDreamsSymbolsLettersErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/dreams/symbols/letters',
             ...options
@@ -1579,7 +1579,7 @@ export class Dreams extends HeyApiClient {
      * Receive a single dream symbol for daily reflection and subconscious exploration. Uses seeded randomness so the same seed gets the same symbol on the same day, perfect for "Dream Symbol of the Day" features. Provide a seed (userId, email hash, session token) for reproducible consistency, or omit for date-based daily symbols. Returns the symbol with full psychological interpretation. Great for dream journal apps, wellness platforms, morning ritual apps, and meditation tools.
      */
     public getDailyDreamSymbol<ThrowOnError extends boolean = false>(options?: Options<PostDreamsDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostDreamsDailyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostDreamsDailyResponses, PostDreamsDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/dreams/daily',
             ...options,
@@ -1615,7 +1615,7 @@ export class Iching extends HeyApiClient {
      * Cast a complete daily I-Ching reading using the traditional three-coin method with seeded randomness. Unlike the simple daily hexagram, this provides the full casting experience with line values (6-9), changing line positions, and the resulting hexagram if transformation occurs. Same seed + same date = same casting result. Perfect for I-Ching divination apps requiring authentic oracle experience with daily consistency.
      */
     public castDailyReading<ThrowOnError extends boolean = false>(options?: Options<PostIchingDailyCastData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostIchingDailyCastResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).post<PostIchingDailyCastResponses, PostIchingDailyCastErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/iching/daily/cast',
             ...options,
@@ -1632,7 +1632,7 @@ export class Iching extends HeyApiClient {
      * Browse all 64 I-Ching hexagrams from the Book of Changes with their Chinese names, English translations, and trigram compositions. The hexagrams are ordered by the traditional King Wen sequence used in I-Ching divination for 3,000 years. Each hexagram represents a unique life situation combining two trigrams (Heaven, Earth, Thunder, Wind, Water, Fire, Mountain, Lake) into profound wisdom for decision-making and self-understanding.
      */
     public listHexagrams<ThrowOnError extends boolean = false>(options?: Options<GetIchingHexagramsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetIchingHexagramsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetIchingHexagramsResponses, GetIchingHexagramsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/iching/hexagrams',
             ...options
@@ -1684,7 +1684,7 @@ export class Iching extends HeyApiClient {
      * Generate an authentic I-Ching reading using the traditional three-coin casting method. Each of the six lines is determined by virtually tossing three coins, producing values 6-9 where 6 (old yin) and 9 (old yang) are changing lines. Returns the primary hexagram with full interpretation, the line values showing which lines are changing, and if any lines change, the resulting hexagram that the primary transforms into. Optionally provide a seed for reproducible castings. Perfect for divination apps, oracle features, and decision-making tools.
      */
     public castReading<ThrowOnError extends boolean = false>(options?: Options<GetIchingCastData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetIchingCastResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetIchingCastResponses, GetIchingCastErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/iching/cast',
             ...options
@@ -1697,7 +1697,7 @@ export class Iching extends HeyApiClient {
      * Retrieve all 8 I-Ching trigrams (bagua) - the fundamental building blocks of hexagrams. Each trigram consists of three lines and represents a primal force of nature: Heaven (Qian), Earth (Kun), Thunder (Zhen), Wind (Xun), Water (Kan), Fire (Li), Mountain (Gen), and Lake (Dui). Understanding trigrams is essential for interpreting hexagram meanings, as each hexagram combines an upper and lower trigram.
      */
     public listTrigrams<ThrowOnError extends boolean = false>(options?: Options<GetIchingTrigramsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetIchingTrigramsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetIchingTrigramsResponses, GetIchingTrigramsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/iching/trigrams',
             ...options
@@ -1725,7 +1725,7 @@ export class Crystals extends HeyApiClient {
      * Get healing crystals and gemstones associated with a specific zodiac sign. Returns summary data for each crystal. Use the /crystals/:slug detail endpoint for full healing properties. Supports all 12 zodiac signs from Aries through Pisces. Perfect for personalized crystal recommendations based on astrological birth chart data.
      */
     public getCrystalsByZodiac<ThrowOnError extends boolean = false>(options: Options<GetCrystalsZodiacBySignData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetCrystalsZodiacBySignResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetCrystalsZodiacBySignResponses, GetCrystalsZodiacBySignErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/zodiac/{sign}',
             ...options
@@ -1738,7 +1738,7 @@ export class Crystals extends HeyApiClient {
      * Get healing crystals and gemstones that resonate with a specific chakra energy center. Returns summary data for each crystal. Use the /crystals/:slug detail endpoint for full healing properties. Supports all 7 primary chakras: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, and Crown. Essential for crystal grid building, chakra balancing, and energy healing applications.
      */
     public getCrystalsByChakra<ThrowOnError extends boolean = false>(options: Options<GetCrystalsChakraByChakraData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetCrystalsChakraByChakraResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetCrystalsChakraByChakraResponses, GetCrystalsChakraByChakraErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/chakra/{chakra}',
             ...options
@@ -1751,7 +1751,7 @@ export class Crystals extends HeyApiClient {
      * Get healing crystals and gemstones associated with a specific natural element. Returns summary data for each crystal. Use the /crystals/:slug detail endpoint for full healing properties. Supports five elements: Earth, Water, Fire, Air, and Storm. Essential for elemental crystal selection, nature-based healing, and element-themed crystal grid applications.
      */
     public getCrystalsByElement<ThrowOnError extends boolean = false>(options: Options<GetCrystalsElementByElementData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetCrystalsElementByElementResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetCrystalsElementByElementResponses, GetCrystalsElementByElementErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/element/{element}',
             ...options
@@ -1764,7 +1764,7 @@ export class Crystals extends HeyApiClient {
      * Get the traditional birthstone crystals for a given birth month. Returns summary data for each crystal. Use the /crystals/:slug detail endpoint for full healing properties. Based on GIA-authoritative birthstone assignments. Perfect for birthday gift recommendations, personalized crystal suggestions, and birthstone jewelry applications.
      */
     public getBirthstones<ThrowOnError extends boolean = false>(options: Options<GetCrystalsBirthstoneByMonthData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetCrystalsBirthstoneByMonthResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetCrystalsBirthstoneByMonthResponses, GetCrystalsBirthstoneByMonthErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/birthstone/{month}',
             ...options
@@ -1777,7 +1777,7 @@ export class Crystals extends HeyApiClient {
      * Search for healing crystals by keyword or name. Matches against crystal names, healing keywords, descriptions, and spiritual/emotional/physical meaning fields. Returns summary data for each crystal. Use the /crystals/:slug detail endpoint for full healing properties. Useful for building crystal search bars, keyword-based recommendation features, and healing property lookups.
      */
     public searchCrystals<ThrowOnError extends boolean = false>(options: Options<GetCrystalsSearchData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetCrystalsSearchResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetCrystalsSearchResponses, GetCrystalsSearchErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/search',
             ...options
@@ -1803,7 +1803,7 @@ export class Crystals extends HeyApiClient {
      * Get the crystal of the day as a discovery teaser. Returns a deterministic crystal based on the current date (or a provided seed date), ensuring all users see the same crystal for any given day. Use the /crystals/:slug detail endpoint for complete spiritual, emotional, and physical healing properties. Perfect for daily guidance features, push notifications, wellness app widgets, and crystal journal integrations.
      */
     public getDailyCrystal<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetCrystalsDailyResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetCrystalsDailyResponses, GetCrystalsDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/daily',
             ...options
@@ -1816,7 +1816,7 @@ export class Crystals extends HeyApiClient {
      * Get a randomly selected healing crystal as a discovery teaser. Returns a different crystal on each request (non-deterministic). Use the /crystals/:slug detail endpoint for complete spiritual, emotional, and physical healing properties. Perfect for crystal discovery features, surprise crystal picks, crystal roulette games, and exploration widgets. For a deterministic daily crystal that is the same for all users on a given date, use the /daily endpoint instead.
      */
     public getRandomCrystal<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsRandomData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetCrystalsRandomResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetCrystalsRandomResponses, GetCrystalsRandomErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/random',
             ...options
@@ -1829,7 +1829,7 @@ export class Crystals extends HeyApiClient {
      * List all unique crystal colors available in the database. Use these values with the color filter on GET /crystals to find crystals by color. Essential reference endpoint for building color-based crystal browsing, visual crystal pickers, and filtering UI.
      */
     public listCrystalColors<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsColorsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetCrystalsColorsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetCrystalsColorsResponses, GetCrystalsColorsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/colors',
             ...options
@@ -1842,7 +1842,7 @@ export class Crystals extends HeyApiClient {
      * List all unique planetary associations available in the database. Use these values with the planet filter on GET /crystals to find crystals by ruling planet. Essential reference endpoint for astrology app builders who want to recommend crystals based on planetary placements in a birth chart.
      */
     public listCrystalPlanets<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsPlanetsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetCrystalsPlanetsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetCrystalsPlanetsResponses, GetCrystalsPlanetsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals/planets',
             ...options
@@ -1855,7 +1855,7 @@ export class Crystals extends HeyApiClient {
      * Retrieve healing crystals and gemstones with pagination. Supports optional filtering by chakra, zodiac sign, element, color, or planet. Returns minimal summary fields per crystal. Use the detail endpoint for full healing properties. Perfect for building crystal explorer apps, healing stone guides, and personalized crystal recommendation engines.
      */
     public listCrystals<ThrowOnError extends boolean = false>(options?: Options<GetCrystalsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetCrystalsResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetCrystalsResponses, GetCrystalsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/crystals',
             ...options
@@ -1883,7 +1883,7 @@ export class Location extends HeyApiClient {
      * City autocomplete and geocoding search across 7,000+ locations in 227 countries. Returns geographic coordinates (latitude, longitude), IANA timezone, and DST-aware UTC offset for each match. Built for birth chart location pickers, horoscope apps, event scheduling, and any feature requiring place-to-coordinates resolution. Partial name matching with intelligent ranking: exact prefix matches first, then sorted by population for relevance. Covers all major cities in Europe, Americas, Asia, Africa, and Oceania.
      */
     public searchCities<ThrowOnError extends boolean = false>(options: Options<GetLocationSearchData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetLocationSearchResponses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetLocationSearchResponses, GetLocationSearchErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/location/search',
             ...options
@@ -1896,7 +1896,7 @@ export class Location extends HeyApiClient {
      * Returns all 227 countries with ISO 3166-1 alpha-2 and alpha-3 codes, plus the number of searchable cities per country. Use this endpoint to build country dropdown menus, regional filters, or to check city coverage before querying. Sorted alphabetically by country name. Covers Europe, Americas, Asia, Middle East, Africa, and Oceania.
      */
     public listCountries<ThrowOnError extends boolean = false>(options?: Options<GetLocationCountriesData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetLocationCountriesResponses, unknown, ThrowOnError>({
+        return (options?.client ?? this.client).get<GetLocationCountriesResponses, GetLocationCountriesErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/location/countries',
             ...options
@@ -1909,7 +1909,7 @@ export class Location extends HeyApiClient {
      * Returns all cities for a specific country, identified by ISO 3166-1 alpha-2 code (e.g. DE for Germany, FR for France, GB for United Kingdom, US for United States). Each city includes geographic coordinates, IANA timezone, and DST-aware UTC offset for direct use in astrology birth chart, horoscope, transit, and panchang calculations. Cities sorted by population with the largest metropolitan areas first.
      */
     public getCitiesByCountry<ThrowOnError extends boolean = false>(options: Options<GetLocationCountriesByIso2Data, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetLocationCountriesByIso2Responses, unknown, ThrowOnError>({
+        return (options.client ?? this.client).get<GetLocationCountriesByIso2Responses, GetLocationCountriesByIso2Errors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/location/countries/{iso2}',
             ...options
