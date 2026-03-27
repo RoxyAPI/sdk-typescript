@@ -47,11 +47,11 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/roxyapi/sdk-typescript.git"
+		"url": "git+https://github.com/RoxyAPI/sdk-typescript.git"
 	},
 	"homepage": "https://roxyapi.com/docs/sdk",
 	"bugs": {
-		"url": "https://github.com/roxyapi/sdk-typescript/issues"
+		"url": "https://github.com/RoxyAPI/sdk-typescript/issues"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.9",
