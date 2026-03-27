@@ -58,8 +58,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           npm version ${{ github.event.inputs.version_bump || 'patch' }} --no-git-tag-version
-          git add package.json specs/openapi.json src/
           VERSION=$(node -p "require('./package.json').version")
+          echo "export const VERSION = '$VERSION';" > src/version.ts
+          git add package.json src/version.ts specs/openapi.json src/
           git commit -m "release: v$VERSION"
           git tag "v$VERSION"
           git push --follow-tags

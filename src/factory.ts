@@ -4,9 +4,9 @@
  */
 export * from './index';
 
-import { version } from '../package.json';
 import { createClient, createConfig } from './client';
 import { Roxy } from './sdk.gen';
+import { VERSION } from './version';
 
 type AuthToken = string | (() => Promise<string> | string);
 
@@ -24,7 +24,7 @@ export function createRoxy(auth: AuthToken): Roxy {
 			baseUrl: 'https://roxyapi.com/api/v2',
 			auth,
 			headers: {
-				'X-SDK-Client': `roxyapi-sdk-typescript/${version}`,
+				'X-SDK-Client': `roxyapi-sdk-typescript/${VERSION}`,
 			},
 		}),
 	);
