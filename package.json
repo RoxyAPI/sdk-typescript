@@ -20,7 +20,9 @@
 	"types": "./dist/factory.d.ts",
 	"files": [
 		"dist",
-		"src"
+		"src",
+		"docs",
+		"AGENTS.md"
 	],
 	"scripts": {
 		"generate": "bun run scripts/generate.ts",
