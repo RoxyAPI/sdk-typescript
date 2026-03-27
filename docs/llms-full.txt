@@ -644,7 +644,9 @@ const { data } = await roxy.usage.getUsageStats();
 
 ## Error Handling
 
-Every method returns `{ data, error, response }`:
+Every method returns `{ data, error, response }`. All errors have `{ error: string, code: string }`:
+- `error` — human-readable message (may change wording, do not parse)
+- `code` — machine-readable identifier (stable, safe to switch on)
 
 ```typescript
 const { data, error, response } = await roxy.astrology.getDailyHoroscope({
@@ -652,7 +654,11 @@ const { data, error, response } = await roxy.astrology.getDailyHoroscope({
 });
 
 if (error) {
-  console.error('API error:', error);
+  // Switch on error.code for programmatic handling
+  if (error.code === 'rate_limit_exceeded') {
+    // wait and retry
+  }
+  console.error('Code:', error.code, 'Message:', error.error);
   console.error('Status:', response?.status);
   return;
 }
@@ -661,11 +667,18 @@ if (error) {
 console.log(data.sign, data.overview);
 ```
 
-Common errors:
-- `401` — Invalid or missing API key
-- `403` — Subscription expired or limit reached
-- `404` — Resource not found (invalid sign, id, etc.)
-- `429` — Rate limited
+Error codes:
+
+| Status | Code | When |
+|--------|------|------|
+| 400 | `validation_error` | Missing or invalid parameters |
+| 401 | `api_key_required` | No API key provided |
+| 401 | `invalid_api_key` | Key format invalid or tampered |
+| 401 | `subscription_not_found` | Key references non-existent subscription |
+| 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
+| 404 | `not_found` | Resource not found |
+| 429 | `rate_limit_exceeded` | Monthly quota reached |
+| 500 | `internal_error` | Server error |
 
 ## Advanced Client Configuration
 

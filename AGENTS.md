@@ -85,21 +85,34 @@ const { data } = await roxy.crystals.searchCrystals({
 
 ### Error handling
 
+All errors return `{ error: string, code: string }`. The `error` field is human-readable (may change wording). The `code` field is machine-readable (stable, safe to switch on).
+
 ```typescript
 const { data, error, response } = await roxy.astrology.getDailyHoroscope({
   path: { sign: 'aries' },
 });
 
 if (error) {
-  // error is { error: string } on 4xx/5xx
-  console.error('Status:', response?.status, 'Error:', error);
+  // error is { error: string, code: string } on 4xx/5xx
+  console.error('Code:', error.code, 'Message:', error.error);
   return;
 }
 // data is fully typed after error check
 console.log(data.sign, data.overview);
 ```
 
-Common error codes: `401` invalid/missing API key, `403` subscription expired or limit reached, `429` rate limited, `404` resource not found.
+Error codes:
+
+| Status | Code | When |
+|--------|------|------|
+| 400 | `validation_error` | Missing or invalid parameters |
+| 401 | `api_key_required` | No API key provided |
+| 401 | `invalid_api_key` | Key format invalid or tampered |
+| 401 | `subscription_not_found` | Key references non-existent subscription |
+| 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
+| 404 | `not_found` | Resource not found |
+| 429 | `rate_limit_exceeded` | Monthly quota reached |
+| 500 | `internal_error` | Server error |
 
 ## Common tasks
 
@@ -142,6 +155,7 @@ const city = cities[0];
 - **Date format is `YYYY-MM-DD`, time is `HH:MM:SS`.** Both are strings. Timezone is optional (IANA format like `America/New_York`).
 - **All list endpoints may return paginated objects** (e.g. `{ items: [...], total: N }`) rather than raw arrays. Check the type.
 - **`data` and `error` are mutually exclusive.** If `error` is set, `data` is `undefined` and vice versa.
+- **Errors have `error` (message) and `code` (machine-readable).** Switch on `code`, not `error` — the message may change wording.
 
 ## Links
 

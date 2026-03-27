@@ -91,7 +91,7 @@ const roxy = new Roxy({ client });
 
 ## Error handling
 
-Every method returns `{ data, error, response }`. Check `error` for API errors, or enable `throwOnError` to throw instead.
+Every method returns `{ data, error, response }`. Errors have `{ error: string, code: string }` — switch on `code` for programmatic handling.
 
 ```typescript
 const { data, error } = await roxy.astrology.getZodiacSign({
@@ -99,7 +99,7 @@ const { data, error } = await roxy.astrology.getZodiacSign({
 });
 
 if (error) {
-  console.error(error);
+  console.error(error.code, error.error); // e.g. "not_found", "Zodiac sign 'xyz' not found"
 } else {
   console.log(data);
 }
