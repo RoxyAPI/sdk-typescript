@@ -156,7 +156,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Generate natal chart - Birth chart calculator API with houses and aspects
      *
-     * Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 10 planetary positions (Sun through Pluto), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. NASA JPL-validated astronomical accuracy.
+     * Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 10 planetary positions (Sun through Pluto), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. Verified against NASA JPL Horizons.
      */
     public generateNatalChart<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyNatalChartData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostAstrologyNatalChartResponses, PostAstrologyNatalChartErrors, ThrowOnError>({
@@ -173,7 +173,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Get planetary positions - Ephemeris calculator for all planets
      *
-     * Calculate accurate tropical zodiac positions for all 10 planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. NASA JPL-validated accuracy.
+     * Calculate accurate tropical zodiac positions for all 10 planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. Verified against NASA JPL Horizons.
      */
     public getPlanetaryPositions<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyPlanetsData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostAstrologyPlanetsResponses, PostAstrologyPlanetsErrors, ThrowOnError>({

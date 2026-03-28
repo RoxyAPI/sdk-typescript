@@ -5578,7 +5578,12 @@ export type PostAstrologyAspectsResponse = PostAstrologyAspectsResponses[keyof P
 export type PostAstrologyTransitsData = {
     body?: TransitsRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/astrology/transits';
 };
 
@@ -6006,7 +6011,12 @@ export type PostAstrologySolarReturnData = {
         houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/astrology/solar-return';
 };
 
@@ -6301,7 +6311,12 @@ export type PostAstrologyLunarReturnData = {
         houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/astrology/lunar-return';
 };
 
@@ -7676,7 +7691,12 @@ export type PostAstrologyPlanetaryReturnsData = {
         houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/astrology/planetary-returns';
 };
 
@@ -18111,7 +18131,12 @@ export type GetIchingCastResponse = GetIchingCastResponses[keyof GetIchingCastRe
 export type GetIchingTrigramsData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/iching/trigrams';
 };
 
@@ -18198,7 +18223,12 @@ export type GetIchingTrigramsByIdentifierData = {
          */
         identifier: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/iching/trigrams/{identifier}';
 };
 

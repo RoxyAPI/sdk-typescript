@@ -40,7 +40,7 @@
     },
     {
       "name": "Vedic Astrology",
-      "description": "Production-grade Vedic (Jyotish) and KP astrology API for AI agents and developers. NASA JPL-validated planetary positions with sub-arcminute accuracy. Birth charts with 15 divisional charts (D1-D60), Ashtakoot Gun Milan compatibility, Vimshottari Dasha predictions, dosha detection with remedies, 300+ planetary yogas, complete Panchang, and KP horary with 249-level sub-lord analysis. 40+ endpoints optimized for matrimonial apps, horoscope platforms, spiritual wellness services, and AI-powered astrology chatbots."
+      "description": "Production-grade Vedic (Jyotish) and KP astrology API for AI agents and developers. VSOP87 calculations verified against NASA JPL Horizons with sub-arcminute accuracy. Birth charts with 15 divisional charts (D1-D60), Ashtakoot Gun Milan compatibility, Vimshottari Dasha predictions, dosha detection with remedies, 300+ planetary yogas, complete Panchang, and KP horary with 249-level sub-lord analysis. 40+ endpoints optimized for matrimonial apps, horoscope platforms, spiritual wellness services, and AI-powered astrology chatbots."
     },
     {
       "name": "Tarot",
@@ -8200,7 +8200,7 @@
           "Western Astrology"
         ],
         "summary": "Generate natal chart - Birth chart calculator API with houses and aspects",
-        "description": "Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 10 planetary positions (Sun through Pluto), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. NASA JPL-validated astronomical accuracy.",
+        "description": "Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 10 planetary positions (Sun through Pluto), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. Verified against NASA JPL Horizons.",
         "security": [
           {
             "apiKey": []
@@ -8356,7 +8356,7 @@
           "Western Astrology"
         ],
         "summary": "Get planetary positions - Ephemeris calculator for all planets",
-        "description": "Calculate accurate tropical zodiac positions for all 10 planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. NASA JPL-validated accuracy.",
+        "description": "Calculate accurate tropical zodiac positions for all 10 planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. Verified against NASA JPL Horizons.",
         "security": [
           {
             "apiKey": []
@@ -10314,6 +10314,30 @@
             "apiKey": []
           }
         ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -11199,6 +11223,30 @@
             "apiKey": []
           }
         ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -11815,6 +11863,30 @@
         "security": [
           {
             "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
           }
         ],
         "requestBody": {
@@ -14550,6 +14622,30 @@
         "security": [
           {
             "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
           }
         ],
         "requestBody": {
@@ -34213,6 +34309,30 @@
             "apiKey": []
           }
         ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of all 8 trigrams with basic information.",
@@ -34365,6 +34485,28 @@
             "description": "Trigram number (1-8) or English name (Heaven, Earth, Thunder, Wind, Water, Fire, Mountain, Lake).",
             "name": "identifier",
             "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
           }
         ],
         "responses": {
