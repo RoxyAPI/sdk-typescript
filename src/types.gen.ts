@@ -7249,7 +7249,12 @@ export type GetAstrologyHoroscopeBySignDailyResponse = GetAstrologyHoroscopeBySi
 export type GetAstrologyHoroscopeDailyData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/astrology/horoscope/daily';
 };
 
@@ -8754,7 +8759,12 @@ export type PostVedicAstrologyDashaMajorData = {
         timezone?: number;
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/dasha/major';
 };
 
@@ -8916,7 +8926,12 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          */
         mahadasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
     };
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/dasha/sub/{mahadasha}';
 };
 
