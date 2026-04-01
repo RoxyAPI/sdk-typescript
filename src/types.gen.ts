@@ -3330,6 +3330,14 @@ export type GetAngelNumbersNumbersData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
+         * Maximum items to return per page. Range: 1-50, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
+        /**
          * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome patterns like 1212. "master" returns 11, 22, 33. "root" returns single digits 0-9.
          */
         type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root';
@@ -3398,36 +3406,53 @@ export type GetAngelNumbersNumbersResponses = {
     /**
      * List of angel numbers with summary information
      */
-    200: Array<{
+    200: {
         /**
-         * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
+         * Total number of angel numbers matching the applied filters. 43 for the full set, fewer when filtered by type.
          */
-        number: string;
+        total: number;
         /**
-         * Short descriptive title capturing the core theme and spiritual significance of this angel number.
+         * Maximum items returned per page.
          */
-        title: string;
+        limit: number;
         /**
-         * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
+         * Number of items skipped from the start of the result set.
          */
-        coreMessage: string;
+        offset: number;
         /**
-         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+         * Array of angel number summaries for the current page.
          */
-        type: string;
-        /**
-         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
-         */
-        digitRoot: number;
-        /**
-         * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
-         */
-        keywords: Array<string>;
-        /**
-         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
-         */
-        energy: string;
-    }>;
+        numbers: Array<{
+            /**
+             * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
+             */
+            number: string;
+            /**
+             * Short descriptive title capturing the core theme and spiritual significance of this angel number.
+             */
+            title: string;
+            /**
+             * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
+             */
+            coreMessage: string;
+            /**
+             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+             */
+            type: string;
+            /**
+             * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
+             */
+            digitRoot: number;
+            /**
+             * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
+             */
+            keywords: Array<string>;
+            /**
+             * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
+             */
+            energy: string;
+        }>;
+    };
 };
 
 export type GetAngelNumbersNumbersResponse = GetAngelNumbersNumbersResponses[keyof GetAngelNumbersNumbersResponses];
@@ -3761,23 +3786,28 @@ export type GetAngelNumbersLookupResponses = {
 
 export type GetAngelNumbersLookupResponse = GetAngelNumbersLookupResponses[keyof GetAngelNumbersLookupResponses];
 
-export type GetAngelNumbersDailyData = {
-    body?: never;
+export type PostAngelNumbersDailyData = {
+    body?: {
+        /**
+         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         */
+        seed?: string;
+        /**
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
+         */
+        date?: string;
+    };
     path?: never;
     query?: {
         /**
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Date seed in YYYY-MM-DD format for deterministic selection. If omitted, uses the current UTC date. Same seed always returns the same angel number.
-         */
-        seed?: string;
     };
     url: '/angel-numbers/daily';
 };
 
-export type GetAngelNumbersDailyErrors = {
+export type PostAngelNumbersDailyErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -3832,9 +3862,9 @@ export type GetAngelNumbersDailyErrors = {
     };
 };
 
-export type GetAngelNumbersDailyError = GetAngelNumbersDailyErrors[keyof GetAngelNumbersDailyErrors];
+export type PostAngelNumbersDailyError = PostAngelNumbersDailyErrors[keyof PostAngelNumbersDailyErrors];
 
-export type GetAngelNumbersDailyResponses = {
+export type PostAngelNumbersDailyResponses = {
     /**
      * Daily angel number with complete interpretation
      */
@@ -3843,6 +3873,10 @@ export type GetAngelNumbersDailyResponses = {
          * The date used for angel number selection (UTC).
          */
         date: string;
+        /**
+         * Computed seed used for this reading. Same seed always produces the same angel number.
+         */
+        seed: string;
         /**
          * Angel number sequence selected for today. Three or more digit repeating, sequential, or mirror pattern (e.g., 111, 444, 1212).
          */
@@ -3903,7 +3937,7 @@ export type GetAngelNumbersDailyResponses = {
     };
 };
 
-export type GetAngelNumbersDailyResponse = GetAngelNumbersDailyResponses[keyof GetAngelNumbersDailyResponses];
+export type PostAngelNumbersDailyResponse = PostAngelNumbersDailyResponses[keyof PostAngelNumbersDailyResponses];
 
 export type GetAstrologySignsData = {
     body?: never;
@@ -4017,13 +4051,13 @@ export type GetAstrologySignsResponses = {
 
 export type GetAstrologySignsResponse = GetAstrologySignsResponses[keyof GetAstrologySignsResponses];
 
-export type GetAstrologySignsByIdentifierData = {
+export type GetAstrologySignsByIdData = {
     body?: never;
     path: {
         /**
          * Sign ID (lowercase, e.g., aries, taurus) or display name (case-insensitive, e.g., Aries, TAURUS).
          */
-        identifier: string;
+        id: string;
     };
     query?: {
         /**
@@ -4031,10 +4065,10 @@ export type GetAstrologySignsByIdentifierData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/astrology/signs/{identifier}';
+    url: '/astrology/signs/{id}';
 };
 
-export type GetAstrologySignsByIdentifierErrors = {
+export type GetAstrologySignsByIdErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -4102,9 +4136,9 @@ export type GetAstrologySignsByIdentifierErrors = {
     };
 };
 
-export type GetAstrologySignsByIdentifierError = GetAstrologySignsByIdentifierErrors[keyof GetAstrologySignsByIdentifierErrors];
+export type GetAstrologySignsByIdError = GetAstrologySignsByIdErrors[keyof GetAstrologySignsByIdErrors];
 
-export type GetAstrologySignsByIdentifierResponses = {
+export type GetAstrologySignsByIdResponses = {
     /**
      * Successfully retrieved zodiac sign
      */
@@ -4194,7 +4228,7 @@ export type GetAstrologySignsByIdentifierResponses = {
     };
 };
 
-export type GetAstrologySignsByIdentifierResponse = GetAstrologySignsByIdentifierResponses[keyof GetAstrologySignsByIdentifierResponses];
+export type GetAstrologySignsByIdResponse = GetAstrologySignsByIdResponses[keyof GetAstrologySignsByIdResponses];
 
 export type GetAstrologyPlanetMeaningsData = {
     body?: never;
@@ -4303,13 +4337,13 @@ export type GetAstrologyPlanetMeaningsResponses = {
 
 export type GetAstrologyPlanetMeaningsResponse = GetAstrologyPlanetMeaningsResponses[keyof GetAstrologyPlanetMeaningsResponses];
 
-export type GetAstrologyPlanetMeaningsByIdentifierData = {
+export type GetAstrologyPlanetMeaningsByIdData = {
     body?: never;
     path: {
         /**
          * Planet ID (lowercase, e.g., sun, moon, mercury) or display name (case-insensitive, e.g., Sun, MOON).
          */
-        identifier: string;
+        id: string;
     };
     query?: {
         /**
@@ -4317,10 +4351,10 @@ export type GetAstrologyPlanetMeaningsByIdentifierData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/astrology/planet-meanings/{identifier}';
+    url: '/astrology/planet-meanings/{id}';
 };
 
-export type GetAstrologyPlanetMeaningsByIdentifierErrors = {
+export type GetAstrologyPlanetMeaningsByIdErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -4388,9 +4422,9 @@ export type GetAstrologyPlanetMeaningsByIdentifierErrors = {
     };
 };
 
-export type GetAstrologyPlanetMeaningsByIdentifierError = GetAstrologyPlanetMeaningsByIdentifierErrors[keyof GetAstrologyPlanetMeaningsByIdentifierErrors];
+export type GetAstrologyPlanetMeaningsByIdError = GetAstrologyPlanetMeaningsByIdErrors[keyof GetAstrologyPlanetMeaningsByIdErrors];
 
-export type GetAstrologyPlanetMeaningsByIdentifierResponses = {
+export type GetAstrologyPlanetMeaningsByIdResponses = {
     /**
      * Successfully retrieved planet meaning
      */
@@ -4472,7 +4506,7 @@ export type GetAstrologyPlanetMeaningsByIdentifierResponses = {
     };
 };
 
-export type GetAstrologyPlanetMeaningsByIdentifierResponse = GetAstrologyPlanetMeaningsByIdentifierResponses[keyof GetAstrologyPlanetMeaningsByIdentifierResponses];
+export type GetAstrologyPlanetMeaningsByIdResponse = GetAstrologyPlanetMeaningsByIdResponses[keyof GetAstrologyPlanetMeaningsByIdResponses];
 
 export type PostAstrologyNatalChartData = {
     body?: NatalChartRequest;
@@ -13137,6 +13171,14 @@ export type GetTarotCardsData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
+         * Maximum items to return per page. Range: 1-100, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
+        /**
          * Filter by arcana type. Major arcana (0-21) represents life lessons and spiritual themes. Minor arcana (Ace-King in 4 suits) represents daily situations and practical matters.
          */
         arcana?: 'major' | 'minor';
@@ -13218,6 +13260,14 @@ export type GetTarotCardsResponses = {
          * Total number of tarot cards matching the applied filters. 78 for the full deck, 22 for Major Arcana, 56 for Minor Arcana, 14 per suit.
          */
         total: number;
+        /**
+         * Maximum items returned per page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped from the start of the result set.
+         */
+        offset: number;
         /**
          * Array of tarot cards with basic metadata. Use GET /cards/:id for full upright and reversed interpretations.
          */
@@ -13430,11 +13480,11 @@ export type PostTarotDrawResponse = PostTarotDrawResponses[keyof PostTarotDrawRe
 export type PostTarotDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible daily readings. Same seed + same date = same card every time. Pass any unique identifier (userId, email hash, session token, device ID). Omit for anonymous daily cards.
+         * Optional seed for reproducible readings. Same seed + same date = same card every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
          */
         seed?: string;
         /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily cards or pre-generating future readings. Must be valid ISO date string.
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
          */
         date?: string;
     };
@@ -16655,7 +16705,7 @@ export type PostNumerologyDailyData = {
          */
         seed?: string;
         /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily numbers or pre-generating future readings.
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
          */
         date?: string;
     };
@@ -16797,7 +16847,7 @@ export type GetDreamsSymbolsData = {
         /**
          * Search query to match against symbol names and meanings. Case-insensitive.
          */
-        search?: string;
+        q?: string;
         /**
          * Filter symbols by starting letter (a-z). Case-insensitive.
          */
@@ -17155,11 +17205,11 @@ export type GetDreamsSymbolsByIdResponse = GetDreamsSymbolsByIdResponses[keyof G
 export type PostDreamsDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible daily symbols. Same seed + same date = same symbol every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily symbols.
+         * Optional seed for reproducible readings. Same seed + same date = same symbol every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
          */
         seed?: string;
         /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily symbols or pre-generating future ones.
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
          */
         date?: string;
     };
@@ -17268,11 +17318,11 @@ export type PostDreamsDailyResponse = PostDreamsDailyResponses[keyof PostDreamsD
 export type PostIchingDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token, device ID). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
          */
         seed?: string;
         /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily hexagrams or pre-generating future readings.
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
          */
         date?: string;
     };
@@ -17431,11 +17481,11 @@ export type PostIchingDailyResponse = PostIchingDailyResponses[keyof PostIchingD
 export type PostIchingDailyCastData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token, device ID). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
          */
         seed?: string;
         /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily hexagrams or pre-generating future readings.
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
          */
         date?: string;
     };
@@ -18230,13 +18280,13 @@ export type GetIchingTrigramsResponses = {
 
 export type GetIchingTrigramsResponse = GetIchingTrigramsResponses[keyof GetIchingTrigramsResponses];
 
-export type GetIchingTrigramsByIdentifierData = {
+export type GetIchingTrigramsByIdData = {
     body?: never;
     path: {
         /**
          * Trigram number (1-8) or English name (Heaven, Earth, Thunder, Wind, Water, Fire, Mountain, Lake).
          */
-        identifier: string;
+        id: string;
     };
     query?: {
         /**
@@ -18244,10 +18294,10 @@ export type GetIchingTrigramsByIdentifierData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/iching/trigrams/{identifier}';
+    url: '/iching/trigrams/{id}';
 };
 
-export type GetIchingTrigramsByIdentifierErrors = {
+export type GetIchingTrigramsByIdErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -18315,16 +18365,16 @@ export type GetIchingTrigramsByIdentifierErrors = {
     };
 };
 
-export type GetIchingTrigramsByIdentifierError = GetIchingTrigramsByIdentifierErrors[keyof GetIchingTrigramsByIdentifierErrors];
+export type GetIchingTrigramsByIdError = GetIchingTrigramsByIdErrors[keyof GetIchingTrigramsByIdErrors];
 
-export type GetIchingTrigramsByIdentifierResponses = {
+export type GetIchingTrigramsByIdResponses = {
     /**
      * Trigram details.
      */
     200: Trigram;
 };
 
-export type GetIchingTrigramsByIdentifierResponse = GetIchingTrigramsByIdentifierResponses[keyof GetIchingTrigramsByIdentifierResponses];
+export type GetIchingTrigramsByIdResponse = GetIchingTrigramsByIdResponses[keyof GetIchingTrigramsByIdResponses];
 
 export type GetCrystalsZodiacBySignData = {
     body?: never;
@@ -18340,7 +18390,7 @@ export type GetCrystalsZodiacBySignData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum items to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-30, default 20.
          */
         limit?: number;
         /**
@@ -18430,7 +18480,7 @@ export type GetCrystalsZodiacBySignResponses = {
          */
         offset: number;
         /**
-         * Crystal summaries for this zodiac sign. Call /crystals/:slug for full healing properties.
+         * Crystal summaries for this zodiac sign. Call /crystals/:id for full healing properties.
          */
         crystals: Array<{
             /**
@@ -18440,7 +18490,7 @@ export type GetCrystalsZodiacBySignResponses = {
             /**
              * URL-safe crystal identifier for detail lookup.
              */
-            slug: string;
+            id: string;
             /**
              * URL to crystal photograph for visual identification.
              */
@@ -18469,7 +18519,7 @@ export type GetCrystalsChakraByChakraData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum items to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-30, default 20.
          */
         limit?: number;
         /**
@@ -18559,7 +18609,7 @@ export type GetCrystalsChakraByChakraResponses = {
          */
         offset: number;
         /**
-         * Crystal summaries for this chakra. Call /crystals/:slug for full healing properties.
+         * Crystal summaries for this chakra. Call /crystals/:id for full healing properties.
          */
         crystals: Array<{
             /**
@@ -18569,7 +18619,7 @@ export type GetCrystalsChakraByChakraResponses = {
             /**
              * URL-safe crystal identifier for detail lookup.
              */
-            slug: string;
+            id: string;
             /**
              * URL to crystal photograph for visual identification.
              */
@@ -18598,7 +18648,7 @@ export type GetCrystalsElementByElementData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum items to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-30, default 20.
          */
         limit?: number;
         /**
@@ -18688,7 +18738,7 @@ export type GetCrystalsElementByElementResponses = {
          */
         offset: number;
         /**
-         * Crystal summaries for this element. Call /crystals/:slug for full healing properties.
+         * Crystal summaries for this element. Call /crystals/:id for full healing properties.
          */
         crystals: Array<{
             /**
@@ -18698,7 +18748,7 @@ export type GetCrystalsElementByElementResponses = {
             /**
              * URL-safe crystal identifier for detail lookup.
              */
-            slug: string;
+            id: string;
             /**
              * URL to crystal photograph for visual identification.
              */
@@ -18803,9 +18853,9 @@ export type GetCrystalsBirthstoneByMonthResponses = {
         /**
          * Number of birthstone crystals for this month.
          */
-        count: number;
+        total: number;
         /**
-         * Birthstone crystals for this month. Call /crystals/:slug for full healing properties.
+         * Birthstone crystals for this month. Call /crystals/:id for full healing properties.
          */
         crystals: Array<{
             /**
@@ -18815,9 +18865,9 @@ export type GetCrystalsBirthstoneByMonthResponses = {
             /**
              * URL-safe crystal identifier for detail lookup.
              */
-            slug: string;
+            id: string;
             /**
-             * URL to crystal photograph.
+             * URL to crystal photograph for visual identification.
              */
             imageUrl: string;
             /**
@@ -18843,7 +18893,7 @@ export type GetCrystalsSearchData = {
          */
         q: string;
         /**
-         * Maximum items to return per page. Range: 1-100, default 20.
+         * Maximum items to return per page. Range: 1-50, default 20.
          */
         limit?: number;
         /**
@@ -18933,7 +18983,7 @@ export type GetCrystalsSearchResponses = {
          */
         offset: number;
         /**
-         * Matching crystal summaries. Call /crystals/:slug for full healing properties.
+         * Matching crystal summaries. Call /crystals/:id for full healing properties.
          */
         crystals: Array<{
             /**
@@ -18943,9 +18993,9 @@ export type GetCrystalsSearchResponses = {
             /**
              * URL-safe crystal identifier for detail lookup.
              */
-            slug: string;
+            id: string;
             /**
-             * URL to crystal photograph.
+             * URL to crystal photograph for visual identification.
              */
             imageUrl: string;
             /**
@@ -18958,13 +19008,13 @@ export type GetCrystalsSearchResponses = {
 
 export type GetCrystalsSearchResponse = GetCrystalsSearchResponses[keyof GetCrystalsSearchResponses];
 
-export type GetCrystalsPairingsBySlugData = {
+export type GetCrystalsPairingsByIdData = {
     body?: never;
     path: {
         /**
          * URL-safe crystal identifier to find pairings for (e.g., "amethyst", "rose-quartz").
          */
-        slug: string;
+        id: string;
     };
     query?: {
         /**
@@ -18972,10 +19022,10 @@ export type GetCrystalsPairingsBySlugData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/crystals/pairings/{slug}';
+    url: '/crystals/pairings/{id}';
 };
 
-export type GetCrystalsPairingsBySlugErrors = {
+export type GetCrystalsPairingsByIdErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -19043,15 +19093,15 @@ export type GetCrystalsPairingsBySlugErrors = {
     };
 };
 
-export type GetCrystalsPairingsBySlugError = GetCrystalsPairingsBySlugErrors[keyof GetCrystalsPairingsBySlugErrors];
+export type GetCrystalsPairingsByIdError = GetCrystalsPairingsByIdErrors[keyof GetCrystalsPairingsByIdErrors];
 
-export type GetCrystalsPairingsBySlugResponses = {
+export type GetCrystalsPairingsByIdResponses = {
     /**
      * Crystal pairing recommendations
      */
     200: {
         /**
-         * The crystal slug that pairings were requested for.
+         * The crystal identifier that pairings were requested for.
          */
         crystal: string;
         /**
@@ -19073,7 +19123,7 @@ export type GetCrystalsPairingsBySlugResponses = {
             /**
              * URL-safe identifier for the paired crystal.
              */
-            slug: string;
+            id: string;
             /**
              * URL to paired crystal photograph.
              */
@@ -19094,25 +19144,30 @@ export type GetCrystalsPairingsBySlugResponses = {
     };
 };
 
-export type GetCrystalsPairingsBySlugResponse = GetCrystalsPairingsBySlugResponses[keyof GetCrystalsPairingsBySlugResponses];
+export type GetCrystalsPairingsByIdResponse = GetCrystalsPairingsByIdResponses[keyof GetCrystalsPairingsByIdResponses];
 
-export type GetCrystalsDailyData = {
-    body?: never;
+export type PostCrystalsDailyData = {
+    body?: {
+        /**
+         * Optional seed for reproducible readings. Same seed + same date = same crystal every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         */
+        seed?: string;
+        /**
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
+         */
+        date?: string;
+    };
     path?: never;
     query?: {
         /**
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Date seed in YYYY-MM-DD format for deterministic selection. If omitted, uses the current UTC date. Same seed always returns the same crystal.
-         */
-        seed?: string;
     };
     url: '/crystals/daily';
 };
 
-export type GetCrystalsDailyErrors = {
+export type PostCrystalsDailyErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -19167,9 +19222,9 @@ export type GetCrystalsDailyErrors = {
     };
 };
 
-export type GetCrystalsDailyError = GetCrystalsDailyErrors[keyof GetCrystalsDailyErrors];
+export type PostCrystalsDailyError = PostCrystalsDailyErrors[keyof PostCrystalsDailyErrors];
 
-export type GetCrystalsDailyResponses = {
+export type PostCrystalsDailyResponses = {
     /**
      * Daily crystal teaser with summary information
      */
@@ -19179,13 +19234,17 @@ export type GetCrystalsDailyResponses = {
          */
         date: string;
         /**
+         * Computed seed used for this reading. Same seed always produces the same crystal.
+         */
+        seed: string;
+        /**
          * Display name of the crystal selected for this date.
          */
         name: string;
         /**
-         * URL-safe identifier. Call /crystals/:slug for full healing properties.
+         * URL-safe identifier. Call /crystals/:id for full healing properties.
          */
-        slug: string;
+        id: string;
         /**
          * URL to crystal photograph. Use for daily crystal card display and visual features.
          */
@@ -19209,7 +19268,7 @@ export type GetCrystalsDailyResponses = {
     };
 };
 
-export type GetCrystalsDailyResponse = GetCrystalsDailyResponses[keyof GetCrystalsDailyResponses];
+export type PostCrystalsDailyResponse = PostCrystalsDailyResponses[keyof PostCrystalsDailyResponses];
 
 export type GetCrystalsRandomData = {
     body?: never;
@@ -19290,9 +19349,9 @@ export type GetCrystalsRandomResponses = {
          */
         name: string;
         /**
-         * URL-safe identifier. Call /crystals/:slug for full healing properties.
+         * URL-safe identifier. Call /crystals/:id for full healing properties.
          */
-        slug: string;
+        id: string;
         /**
          * URL to crystal photograph for visual display.
          */
@@ -19601,38 +19660,38 @@ export type GetCrystalsResponses = {
          */
         crystals: Array<{
             /**
-             * Display name of the crystal or healing stone.
+             * Crystal display name.
              */
             name: string;
             /**
-             * URL-safe identifier for the crystal. Use this value in the detail endpoint path to retrieve full healing properties.
+             * URL-safe crystal identifier for detail lookup.
              */
-            slug: string;
+            id: string;
             /**
-             * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
+             * URL to crystal photograph for visual identification.
              */
             imageUrl: string;
+            /**
+             * Primary colors of this crystal variety. Null when color data is unavailable.
+             */
+            colors: Array<string>;
             /**
              * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
              */
             chakras: Array<string>;
-            /**
-             * Primary colors of this crystal variety. Null when color data is unavailable. Useful for color-based crystal selection and visual display.
-             */
-            colors: Array<string>;
         }>;
     };
 };
 
 export type GetCrystalsResponse = GetCrystalsResponses[keyof GetCrystalsResponses];
 
-export type GetCrystalsBySlugData = {
+export type GetCrystalsByIdData = {
     body?: never;
     path: {
         /**
          * URL-safe crystal identifier (e.g., "amethyst", "rose-quartz", "black-tourmaline"). Must match an entry in the database.
          */
-        slug: string;
+        id: string;
     };
     query?: {
         /**
@@ -19640,10 +19699,10 @@ export type GetCrystalsBySlugData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/crystals/{slug}';
+    url: '/crystals/{id}';
 };
 
-export type GetCrystalsBySlugErrors = {
+export type GetCrystalsByIdErrors = {
     /**
      * Validation error (missing or invalid parameters)
      */
@@ -19711,9 +19770,9 @@ export type GetCrystalsBySlugErrors = {
     };
 };
 
-export type GetCrystalsBySlugError = GetCrystalsBySlugErrors[keyof GetCrystalsBySlugErrors];
+export type GetCrystalsByIdError = GetCrystalsByIdErrors[keyof GetCrystalsByIdErrors];
 
-export type GetCrystalsBySlugResponses = {
+export type GetCrystalsByIdResponses = {
     /**
      * Complete crystal healing properties with all associations
      */
@@ -19725,7 +19784,7 @@ export type GetCrystalsBySlugResponses = {
         /**
          * URL-safe identifier for the crystal.
          */
-        slug: string;
+        id: string;
         /**
          * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
          */
@@ -19792,13 +19851,13 @@ export type GetCrystalsBySlugResponses = {
          */
         affirmation: string;
         /**
-         * Crystal slugs that pair well with this stone for enhanced healing combinations. Use for crystal grid and pairing recommendations.
+         * Crystal identifiers that pair well with this stone for enhanced healing combinations. Use for crystal grid and pairing recommendations.
          */
         pairsWith: Array<string>;
     };
 };
 
-export type GetCrystalsBySlugResponse = GetCrystalsBySlugResponses[keyof GetCrystalsBySlugResponses];
+export type GetCrystalsByIdResponse = GetCrystalsByIdResponses[keyof GetCrystalsByIdResponses];
 
 export type GetLocationSearchData = {
     body?: never;
@@ -19812,6 +19871,10 @@ export type GetLocationSearchData = {
          * Maximum items to return per page. Range: 1-50, default 10.
          */
         limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
     };
     url: '/location/search';
 };
@@ -19877,44 +19940,61 @@ export type GetLocationSearchResponses = {
     /**
      * Matching cities sorted by relevance (prefix match first) then population
      */
-    200: Array<{
+    200: {
         /**
-         * City name as commonly used. Matches the local or internationally recognized name for the location.
+         * Total number of cities matching the search query.
          */
-        city: string;
+        total: number;
         /**
-         * State, province, canton, or administrative region. Helps disambiguate cities with the same name across regions (e.g. Springfield IL vs Springfield MO).
+         * Page size used for this response.
          */
-        province: string;
+        limit: number;
         /**
-         * Full country name in English.
+         * Number of cities skipped. Use with limit for pagination.
          */
-        country: string;
+        offset: number;
         /**
-         * ISO 3166-1 alpha-2 country code. Use for filtering cities by country or building country-specific location pickers.
+         * City results for the current page, sorted by relevance (prefix match first) then population.
          */
-        iso2: string;
-        /**
-         * Geographic latitude in decimal degrees (-90 to 90). Pass directly to birth chart, natal chart, horoscope, synastry, transit, kundli, and panchang API endpoints as the latitude parameter.
-         */
-        latitude: number;
-        /**
-         * Geographic longitude in decimal degrees (-180 to 180). Pass directly to astrology, horoscope, and panchang API endpoints alongside latitude.
-         */
-        longitude: number;
-        /**
-         * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Use with JavaScript Date, Luxon, day.js, or any date library for accurate local time conversion.
-         */
-        timezone: string;
-        /**
-         * Current UTC offset in decimal hours, automatically adjusted for daylight saving time. Pass directly as the timezone parameter in astrology API endpoints. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
-         */
-        utcOffset: number;
-        /**
-         * City population estimate from geographic databases. Larger cities rank higher in search results, ensuring major metropolitan areas appear first in autocomplete suggestions.
-         */
-        population: number;
-    }>;
+        cities: Array<{
+            /**
+             * City name as commonly used. Matches the local or internationally recognized name for the location.
+             */
+            city: string;
+            /**
+             * State, province, canton, or administrative region. Helps disambiguate cities with the same name across regions (e.g. Springfield IL vs Springfield MO).
+             */
+            province: string;
+            /**
+             * Full country name in English.
+             */
+            country: string;
+            /**
+             * ISO 3166-1 alpha-2 country code. Use for filtering cities by country or building country-specific location pickers.
+             */
+            iso2: string;
+            /**
+             * Geographic latitude in decimal degrees (-90 to 90). Pass directly to birth chart, natal chart, horoscope, synastry, transit, kundli, and panchang API endpoints as the latitude parameter.
+             */
+            latitude: number;
+            /**
+             * Geographic longitude in decimal degrees (-180 to 180). Pass directly to astrology, horoscope, and panchang API endpoints alongside latitude.
+             */
+            longitude: number;
+            /**
+             * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Use with JavaScript Date, Luxon, day.js, or any date library for accurate local time conversion.
+             */
+            timezone: string;
+            /**
+             * Current UTC offset in decimal hours, automatically adjusted for daylight saving time. Pass directly as the timezone parameter in astrology API endpoints. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
+             */
+            utcOffset: number;
+            /**
+             * City population estimate from geographic databases. Larger cities rank higher in search results, ensuring major metropolitan areas appear first in autocomplete suggestions.
+             */
+            population: number;
+        }>;
+    };
 };
 
 export type GetLocationSearchResponse = GetLocationSearchResponses[keyof GetLocationSearchResponses];
@@ -19922,7 +20002,16 @@ export type GetLocationSearchResponse = GetLocationSearchResponses[keyof GetLoca
 export type GetLocationCountriesData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Maximum items to return per page. Range: 1-50, default 50.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
+    };
     url: '/location/countries';
 };
 
@@ -19987,24 +20076,41 @@ export type GetLocationCountriesResponses = {
     /**
      * Alphabetically sorted list of all 227 countries with ISO codes and city counts
      */
-    200: Array<{
+    200: {
         /**
-         * Full country name in English. Use for display in location pickers and dropdown menus.
+         * Total number of countries available.
          */
-        name: string;
+        total: number;
         /**
-         * ISO 3166-1 alpha-2 country code. Use as the identifier when fetching cities for a specific country via the /countries/{iso2} endpoint.
+         * Page size used for this response.
          */
-        iso2: string;
+        limit: number;
         /**
-         * ISO 3166-1 alpha-3 country code. Three-letter standard used in international data exchange.
+         * Number of countries skipped. Use with limit for pagination.
          */
-        iso3: string;
+        offset: number;
         /**
-         * Number of searchable cities available for this country. Useful for showing coverage in UI or deciding whether to offer city search for a given country.
+         * Countries for the current page, sorted alphabetically by name.
          */
-        cityCount: number;
-    }>;
+        countries: Array<{
+            /**
+             * Full country name in English. Use for display in location pickers and dropdown menus.
+             */
+            name: string;
+            /**
+             * ISO 3166-1 alpha-2 country code. Use as the identifier when fetching cities for a specific country via the /countries/{iso2} endpoint.
+             */
+            iso2: string;
+            /**
+             * ISO 3166-1 alpha-3 country code. Three-letter standard used in international data exchange.
+             */
+            iso3: string;
+            /**
+             * Number of searchable cities available for this country. Useful for showing coverage in UI or deciding whether to offer city search for a given country.
+             */
+            cityCount: number;
+        }>;
+    };
 };
 
 export type GetLocationCountriesResponse = GetLocationCountriesResponses[keyof GetLocationCountriesResponses];
@@ -20022,6 +20128,10 @@ export type GetLocationCountriesByIso2Data = {
          * Maximum items to return per page. Range: 1-200, default 50.
          */
         limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
     };
     url: '/location/countries/{iso2}';
 };
@@ -20087,44 +20197,61 @@ export type GetLocationCountriesByIso2Responses = {
     /**
      * Cities in the specified country, sorted by population (largest first)
      */
-    200: Array<{
+    200: {
         /**
-         * City name as commonly used. Matches the local or internationally recognized name for the location.
+         * Total number of cities available for this country.
          */
-        city: string;
+        total: number;
         /**
-         * State, province, canton, or administrative region. Helps disambiguate cities with the same name across regions (e.g. Springfield IL vs Springfield MO).
+         * Page size used for this response.
          */
-        province: string;
+        limit: number;
         /**
-         * Full country name in English.
+         * Number of cities skipped. Use with limit for pagination.
          */
-        country: string;
+        offset: number;
         /**
-         * ISO 3166-1 alpha-2 country code. Use for filtering cities by country or building country-specific location pickers.
+         * Cities for the current page, sorted by population (largest first).
          */
-        iso2: string;
-        /**
-         * Geographic latitude in decimal degrees (-90 to 90). Pass directly to birth chart, natal chart, horoscope, synastry, transit, kundli, and panchang API endpoints as the latitude parameter.
-         */
-        latitude: number;
-        /**
-         * Geographic longitude in decimal degrees (-180 to 180). Pass directly to astrology, horoscope, and panchang API endpoints alongside latitude.
-         */
-        longitude: number;
-        /**
-         * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Use with JavaScript Date, Luxon, day.js, or any date library for accurate local time conversion.
-         */
-        timezone: string;
-        /**
-         * Current UTC offset in decimal hours, automatically adjusted for daylight saving time. Pass directly as the timezone parameter in astrology API endpoints. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
-         */
-        utcOffset: number;
-        /**
-         * City population estimate from geographic databases. Larger cities rank higher in search results, ensuring major metropolitan areas appear first in autocomplete suggestions.
-         */
-        population: number;
-    }>;
+        cities: Array<{
+            /**
+             * City name as commonly used. Matches the local or internationally recognized name for the location.
+             */
+            city: string;
+            /**
+             * State, province, canton, or administrative region. Helps disambiguate cities with the same name across regions (e.g. Springfield IL vs Springfield MO).
+             */
+            province: string;
+            /**
+             * Full country name in English.
+             */
+            country: string;
+            /**
+             * ISO 3166-1 alpha-2 country code. Use for filtering cities by country or building country-specific location pickers.
+             */
+            iso2: string;
+            /**
+             * Geographic latitude in decimal degrees (-90 to 90). Pass directly to birth chart, natal chart, horoscope, synastry, transit, kundli, and panchang API endpoints as the latitude parameter.
+             */
+            latitude: number;
+            /**
+             * Geographic longitude in decimal degrees (-180 to 180). Pass directly to astrology, horoscope, and panchang API endpoints alongside latitude.
+             */
+            longitude: number;
+            /**
+             * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Use with JavaScript Date, Luxon, day.js, or any date library for accurate local time conversion.
+             */
+            timezone: string;
+            /**
+             * Current UTC offset in decimal hours, automatically adjusted for daylight saving time. Pass directly as the timezone parameter in astrology API endpoints. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
+             */
+            utcOffset: number;
+            /**
+             * City population estimate from geographic databases. Larger cities rank higher in search results, ensuring major metropolitan areas appear first in autocomplete suggestions.
+             */
+            population: number;
+        }>;
+    };
 };
 
 export type GetLocationCountriesByIso2Response = GetLocationCountriesByIso2Responses[keyof GetLocationCountriesByIso2Responses];
