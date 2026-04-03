@@ -7165,6 +7165,10 @@ export type GetAstrologyHoroscopeBySignDailyData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Forecast date in YYYY-MM-DD format. Defaults to today. Supports future and past dates for editorial scheduling.
+         */
+        date?: string;
     };
     url: '/astrology/horoscope/{sign}/daily';
 };
@@ -7240,15 +7244,15 @@ export type GetAstrologyHoroscopeBySignDailyResponses = {
          */
         date: string;
         /**
-         * General daily overview based on current planetary transits through the sign.
+         * General daily overview based on Moon house activation and planetary transits. Unique per sign based on whole-sign house positions.
          */
         overview: string;
         /**
-         * Love and relationship forecast. Influenced by Venus and Moon transits.
+         * Love and relationship forecast. Based on Venus house position relative to this sign, providing unique guidance per sign.
          */
         love: string;
         /**
-         * Career and professional outlook. Influenced by Saturn, Jupiter, and Mars transits.
+         * Career and professional outlook. Based on Mars house position relative to this sign, with Saturn and Jupiter influences.
          */
         career: string;
         /**
@@ -7272,145 +7276,29 @@ export type GetAstrologyHoroscopeBySignDailyResponses = {
          */
         luckyColor: string;
         /**
-         * Most compatible zodiac signs today, based on elemental harmony.
+         * Most compatible zodiac signs today. First sign is where Venus transits, second is the Moon sign, remainder from elemental harmony.
          */
         compatibleSigns: Array<string>;
+        /**
+         * Active planetary transits affecting this sign today, with house activations. Each transit shows the planet, its current sign, and which house it activates for the queried sign.
+         */
+        activeTransits: Array<string>;
+        /**
+         * Current Moon sign. Changes every 2-3 days, sets the emotional tone for all signs.
+         */
+        moonSign: string;
+        /**
+         * Current lunar phase (New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Full Moon, Waning Gibbous, Last Quarter, Waning Crescent).
+         */
+        moonPhase: string;
+        /**
+         * Overall energy intensity for this sign today (1-10). Higher when more transits activate this sign directly. Useful for content widgets and visual indicators.
+         */
+        energyRating: number;
     };
 };
 
 export type GetAstrologyHoroscopeBySignDailyResponse = GetAstrologyHoroscopeBySignDailyResponses[keyof GetAstrologyHoroscopeBySignDailyResponses];
-
-export type GetAstrologyHoroscopeDailyData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/astrology/horoscope/daily';
-};
-
-export type GetAstrologyHoroscopeDailyErrors = {
-    /**
-     * Validation error (missing or invalid parameters)
-     */
-    400: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetAstrologyHoroscopeDailyError = GetAstrologyHoroscopeDailyErrors[keyof GetAstrologyHoroscopeDailyErrors];
-
-export type GetAstrologyHoroscopeDailyResponses = {
-    /**
-     * Daily horoscopes retrieved successfully
-     */
-    200: {
-        /**
-         * Date of these horoscope forecasts (YYYY-MM-DD).
-         */
-        date: string;
-        /**
-         * Daily horoscope forecasts for all 12 zodiac signs (Aries through Pisces).
-         */
-        horoscopes: Array<{
-            /**
-             * Zodiac sign for this horoscope.
-             */
-            sign: string;
-            /**
-             * Date of this daily horoscope (YYYY-MM-DD).
-             */
-            date: string;
-            /**
-             * General daily overview based on current planetary transits through the sign.
-             */
-            overview: string;
-            /**
-             * Love and relationship forecast. Influenced by Venus and Moon transits.
-             */
-            love: string;
-            /**
-             * Career and professional outlook. Influenced by Saturn, Jupiter, and Mars transits.
-             */
-            career: string;
-            /**
-             * Health, energy, and wellness guidance for the day.
-             */
-            health: string;
-            /**
-             * Financial outlook and money-related guidance.
-             */
-            finance: string;
-            /**
-             * Actionable daily advice based on the dominant transit energy.
-             */
-            advice: string;
-            /**
-             * Lucky number for the day.
-             */
-            luckyNumber: number;
-            /**
-             * Lucky color for the day, derived from the sign element.
-             */
-            luckyColor: string;
-            /**
-             * Most compatible zodiac signs today, based on elemental harmony.
-             */
-            compatibleSigns: Array<string>;
-        }>;
-    };
-};
-
-export type GetAstrologyHoroscopeDailyResponse = GetAstrologyHoroscopeDailyResponses[keyof GetAstrologyHoroscopeDailyResponses];
 
 export type GetAstrologyHoroscopeBySignWeeklyData = {
     body?: never;
@@ -7648,7 +7536,7 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
          */
         finance: string;
         /**
-         * Week-by-week breakdown of the monthly forecast.
+         * Week-by-week breakdown with sign-specific focus areas based on transit house positions.
          */
         weekByWeek: Array<{
             /**
@@ -7656,7 +7544,7 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
              */
             week: number;
             /**
-             * Primary focus area for this week.
+             * Primary focus area for this week, derived from planetary house activations for this sign.
              */
             focus: string;
             /**
@@ -7665,7 +7553,7 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
             advice: string;
         }>;
         /**
-         * Key astrological dates this month (lunar phases, planetary ingresses, retrogrades).
+         * Key astrological dates this month with actual New Moon, Full Moon, and retrograde dates calculated from ephemeris data.
          */
         keyDates: Array<{
             /**
@@ -7673,7 +7561,7 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
              */
             date: string;
             /**
-             * Astrological event or theme active on this date.
+             * Astrological event active on this date (lunar phases, retrogrades, sign ingresses).
              */
             event: string;
         }>;

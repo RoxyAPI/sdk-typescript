@@ -36,7 +36,7 @@
     },
     {
       "name": "Western Astrology",
-      "description": "Production-ready Western astrology API + MCP for AI agents and developers. Natal birth charts, daily/weekly/monthly horoscopes, synastry compatibility scores, composite charts, solar and lunar returns, real-time transit aspects, and moon phases. 4 house systems (Placidus, Koch, Whole Sign, Equal) with accurate tropical ephemeris. 23+ endpoints optimized for horoscope platforms, astrology dating apps, AI chatbots, wellness products, and zodiac content engines. No astronomy expertise needed."
+      "description": "Production-ready Western astrology API + MCP for AI agents and developers. Natal birth charts, publisher-grade daily/weekly/monthly horoscopes with unique content per sign (house-based transit system, active transits, Moon sign, Moon phase, energy rating), synastry compatibility scores, composite charts, solar and lunar returns, real-time transit aspects, and moon phases. 4 house systems (Placidus, Koch, Whole Sign, Equal) with accurate tropical ephemeris. 23+ endpoints optimized for horoscope platforms, astrology dating apps, AI chatbots, wellness products, and zodiac content engines. Schedule future horoscopes with date parameter for editorial workflows. No astronomy expertise needed."
     },
     {
       "name": "Vedic Astrology",
@@ -13677,8 +13677,8 @@
         "tags": [
           "Western Astrology"
         ],
-        "summary": "Daily horoscope by zodiac sign - Transit-based forecast",
-        "description": "Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits through the sign, covering love, career, health, finance, and general outlook. Returns lucky number, lucky color, and compatible signs. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.",
+        "summary": "Daily horoscope by zodiac sign - Transit-based forecast with house activations",
+        "description": "Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits using whole-sign house positions, so every sign receives unique content. Returns love, career, health, finance, overview with active transits, Moon sign, Moon phase, energy rating, lucky number, lucky color, and compatible signs. Supports date parameter for editorial scheduling. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.",
         "security": [
           {
             "apiKey": []
@@ -13731,6 +13731,18 @@
             "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
             "name": "lang",
             "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "example": "2026-04-03",
+              "description": "Forecast date in YYYY-MM-DD format. Defaults to today. Supports future and past dates for editorial scheduling."
+            },
+            "required": false,
+            "description": "Forecast date in YYYY-MM-DD format. Defaults to today. Supports future and past dates for editorial scheduling.",
+            "name": "date",
+            "in": "query"
           }
         ],
         "responses": {
@@ -13748,20 +13760,20 @@
                     },
                     "date": {
                       "type": "string",
-                      "example": "2026-02-25",
+                      "example": "2026-04-03",
                       "description": "Date of this daily horoscope (YYYY-MM-DD)."
                     },
                     "overview": {
                       "type": "string",
-                      "description": "General daily overview based on current planetary transits through the sign."
+                      "description": "General daily overview based on Moon house activation and planetary transits. Unique per sign based on whole-sign house positions."
                     },
                     "love": {
                       "type": "string",
-                      "description": "Love and relationship forecast. Influenced by Venus and Moon transits."
+                      "description": "Love and relationship forecast. Based on Venus house position relative to this sign, providing unique guidance per sign."
                     },
                     "career": {
                       "type": "string",
-                      "description": "Career and professional outlook. Influenced by Saturn, Jupiter, and Mars transits."
+                      "description": "Career and professional outlook. Based on Mars house position relative to this sign, with Saturn and Jupiter influences."
                     },
                     "health": {
                       "type": "string",
@@ -13795,7 +13807,35 @@
                         "Sagittarius",
                         "Gemini"
                       ],
-                      "description": "Most compatible zodiac signs today, based on elemental harmony."
+                      "description": "Most compatible zodiac signs today. First sign is where Venus transits, second is the Moon sign, remainder from elemental harmony."
+                    },
+                    "activeTransits": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "Moon in Libra (7th house of partnerships and relationships)",
+                        "Venus in Taurus (2nd house of finances and personal values)"
+                      ],
+                      "description": "Active planetary transits affecting this sign today, with house activations. Each transit shows the planet, its current sign, and which house it activates for the queried sign."
+                    },
+                    "moonSign": {
+                      "type": "string",
+                      "example": "Libra",
+                      "description": "Current Moon sign. Changes every 2-3 days, sets the emotional tone for all signs."
+                    },
+                    "moonPhase": {
+                      "type": "string",
+                      "example": "Waxing Gibbous Moon",
+                      "description": "Current lunar phase (New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Full Moon, Waning Gibbous, Last Quarter, Waning Crescent)."
+                    },
+                    "energyRating": {
+                      "type": "number",
+                      "minimum": 1,
+                      "maximum": 10,
+                      "example": 7,
+                      "description": "Overall energy intensity for this sign today (1-10). Higher when more transits activate this sign directly. Useful for content widgets and visual indicators."
                     }
                   },
                   "required": [
@@ -13809,243 +13849,11 @@
                     "advice",
                     "luckyNumber",
                     "luckyColor",
-                    "compatibleSigns"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation error (missing or invalid parameters)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Human-readable error message. May change wording."
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "Machine-readable error code. Stable identifier."
-                    }
-                  },
-                  "required": [
-                    "error",
-                    "code"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid or missing API key",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Human-readable error message. May change wording."
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "Machine-readable error code. Stable identifier."
-                    }
-                  },
-                  "required": [
-                    "error",
-                    "code"
-                  ]
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Monthly rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Human-readable error message. May change wording."
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "Machine-readable error code. Stable identifier."
-                    }
-                  },
-                  "required": [
-                    "error",
-                    "code"
-                  ]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Human-readable error message. May change wording."
-                    },
-                    "code": {
-                      "type": "string",
-                      "description": "Machine-readable error code. Stable identifier."
-                    }
-                  },
-                  "required": [
-                    "error",
-                    "code"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/astrology/horoscope/daily": {
-      "get": {
-        "operationId": "getAllDailyHoroscopes",
-        "tags": [
-          "Western Astrology"
-        ],
-        "summary": "All zodiac signs daily horoscope - Batch forecast for all 12 signs",
-        "description": "Retrieve daily horoscope forecasts for all 12 zodiac signs in a single request. More efficient than making 12 individual sign requests. Each sign includes love, career, health, finance, lucky number, lucky color, and compatible signs. Bulk horoscope API, all signs daily forecast, zodiac horoscope feed.",
-        "security": [
-          {
-            "apiKey": []
-          }
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "enum": [
-                "en",
-                "tr",
-                "de",
-                "es",
-                "hi",
-                "pt",
-                "fr",
-                "ru"
-              ],
-              "default": "en",
-              "example": "en",
-              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
-            },
-            "required": false,
-            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
-            "name": "lang",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Daily horoscopes retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "date": {
-                      "type": "string",
-                      "example": "2026-02-25",
-                      "description": "Date of these horoscope forecasts (YYYY-MM-DD)."
-                    },
-                    "horoscopes": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "sign": {
-                            "type": "string",
-                            "example": "Aries",
-                            "description": "Zodiac sign for this horoscope."
-                          },
-                          "date": {
-                            "type": "string",
-                            "example": "2026-02-25",
-                            "description": "Date of this daily horoscope (YYYY-MM-DD)."
-                          },
-                          "overview": {
-                            "type": "string",
-                            "description": "General daily overview based on current planetary transits through the sign."
-                          },
-                          "love": {
-                            "type": "string",
-                            "description": "Love and relationship forecast. Influenced by Venus and Moon transits."
-                          },
-                          "career": {
-                            "type": "string",
-                            "description": "Career and professional outlook. Influenced by Saturn, Jupiter, and Mars transits."
-                          },
-                          "health": {
-                            "type": "string",
-                            "description": "Health, energy, and wellness guidance for the day."
-                          },
-                          "finance": {
-                            "type": "string",
-                            "description": "Financial outlook and money-related guidance."
-                          },
-                          "advice": {
-                            "type": "string",
-                            "description": "Actionable daily advice based on the dominant transit energy."
-                          },
-                          "luckyNumber": {
-                            "type": "number",
-                            "example": 7,
-                            "description": "Lucky number for the day."
-                          },
-                          "luckyColor": {
-                            "type": "string",
-                            "example": "Gold",
-                            "description": "Lucky color for the day, derived from the sign element."
-                          },
-                          "compatibleSigns": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            },
-                            "example": [
-                              "Leo",
-                              "Sagittarius",
-                              "Gemini"
-                            ],
-                            "description": "Most compatible zodiac signs today, based on elemental harmony."
-                          }
-                        },
-                        "required": [
-                          "sign",
-                          "date",
-                          "overview",
-                          "love",
-                          "career",
-                          "health",
-                          "finance",
-                          "advice",
-                          "luckyNumber",
-                          "luckyColor",
-                          "compatibleSigns"
-                        ]
-                      },
-                      "description": "Daily horoscope forecasts for all 12 zodiac signs (Aries through Pisces)."
-                    }
-                  },
-                  "required": [
-                    "date",
-                    "horoscopes"
+                    "compatibleSigns",
+                    "activeTransits",
+                    "moonSign",
+                    "moonPhase",
+                    "energyRating"
                   ]
                 }
               }
@@ -14157,7 +13965,7 @@
           "Western Astrology"
         ],
         "summary": "Weekly horoscope by zodiac sign - 7-day transit forecast",
-        "description": "Get weekly horoscope for any zodiac sign. Forecast covers a full 7-day period based on planetary transits through the sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.",
+        "description": "Get weekly horoscope for any zodiac sign. Forecast covers a full 7-day period based on planetary transits with house-based content unique to each sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.",
         "security": [
           {
             "apiKey": []
@@ -14227,7 +14035,7 @@
                     },
                     "week": {
                       "type": "string",
-                      "example": "2026-02-23",
+                      "example": "2026-03-30",
                       "description": "Start date of the forecast week (Monday)."
                     },
                     "overview": {
@@ -14413,8 +14221,8 @@
         "tags": [
           "Western Astrology"
         ],
-        "summary": "Monthly horoscope by zodiac sign - 30-day transit forecast",
-        "description": "Get monthly horoscope for any zodiac sign with week-by-week breakdown and key dates. Based on planetary transits through the sign, covering love, career, health, and finance for the entire month. Includes important astrological dates and lucky numbers. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.",
+        "summary": "Monthly horoscope by zodiac sign - 30-day transit forecast with key dates",
+        "description": "Get monthly horoscope for any zodiac sign with sign-specific week-by-week breakdown and real lunar phase key dates. Based on planetary transits with house activations unique to each sign, covering love, career, health, and finance for the entire month. Key dates include actual New Moon, Full Moon, and retrograde dates from ephemeris calculations. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.",
         "security": [
           {
             "apiKey": []
@@ -14484,7 +14292,7 @@
                     },
                     "month": {
                       "type": "string",
-                      "example": "2026-02",
+                      "example": "2026-04",
                       "description": "Month of this forecast (YYYY-MM)."
                     },
                     "overview": {
@@ -14519,7 +14327,7 @@
                           },
                           "focus": {
                             "type": "string",
-                            "description": "Primary focus area for this week."
+                            "description": "Primary focus area for this week, derived from planetary house activations for this sign."
                           },
                           "advice": {
                             "type": "string",
@@ -14532,7 +14340,7 @@
                           "advice"
                         ]
                       },
-                      "description": "Week-by-week breakdown of the monthly forecast."
+                      "description": "Week-by-week breakdown with sign-specific focus areas based on transit house positions."
                     },
                     "keyDates": {
                       "type": "array",
@@ -14541,12 +14349,12 @@
                         "properties": {
                           "date": {
                             "type": "string",
-                            "example": "2026-02-15",
+                            "example": "2026-04-15",
                             "description": "Date of the astrological event (YYYY-MM-DD)."
                           },
                           "event": {
                             "type": "string",
-                            "description": "Astrological event or theme active on this date."
+                            "description": "Astrological event active on this date (lunar phases, retrogrades, sign ingresses)."
                           }
                         },
                         "required": [
@@ -14554,7 +14362,7 @@
                           "event"
                         ]
                       },
-                      "description": "Key astrological dates this month (lunar phases, planetary ingresses, retrogrades)."
+                      "description": "Key astrological dates this month with actual New Moon, Full Moon, and retrograde dates calculated from ephemeris data."
                     },
                     "luckyNumbers": {
                       "type": "array",
