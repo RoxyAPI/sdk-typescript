@@ -48,7 +48,7 @@
     },
     {
       "name": "Numerology",
-      "description": "Production-ready Pythagorean numerology API + MCP for AI agents and developers. Calculate life path numbers, destiny numbers, soul urge, personality numbers, relationship compatibility, karmic debt analysis, and complete numerology charts. Master number detection (11, 22, 33), karmic lessons, personal year forecasts, and name numerology. 12+ endpoints with detailed interpretations optimized for numerology apps, baby name tools, AI chatbots, wellness platforms, and spiritual services."
+      "description": "Production-ready Pythagorean numerology API + MCP for AI agents and developers. Calculate life path, expression, soul urge, personality, and maturity numbers. Pinnacle and Challenge life phase timing with meanings. Hidden Passion, Subconscious Self, and Cornerstone/Capstone name analysis. Birth day 1-31 profiles, lucky associations (colors, gemstones, planets), personal year and month forecasts, relationship compatibility, karmic debt and lessons. 16 endpoints with detailed interpretations optimized for numerology apps, editorial platforms, AI chatbots, wellness platforms, and spiritual services."
     },
     {
       "name": "Dreams",
@@ -9487,36 +9487,31 @@
                   "person1": {
                     "type": "object",
                     "properties": {
-                      "name": {
-                        "type": "string",
-                        "example": "Alex",
-                        "description": "Optional display name for this person. Included in the response for easy identification."
-                      },
                       "date": {
                         "type": "string",
                         "format": "date",
                         "example": "1990-07-15",
-                        "description": "Birth date in YYYY-MM-DD format."
+                        "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
                       "time": {
                         "type": "string",
                         "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
                         "example": "14:30:00",
-                        "description": "Birth time in 24-hour HH:MM:SS format. Determines Ascendant and house placements."
+                        "description": "Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown."
                       },
                       "latitude": {
                         "type": "number",
                         "minimum": -90,
                         "maximum": 90,
                         "example": 40.7128,
-                        "description": "Birth location latitude in decimal degrees (-90 to 90)."
+                        "description": "Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South."
                       },
                       "longitude": {
                         "type": "number",
                         "minimum": -180,
                         "maximum": 180,
                         "example": -74.006,
-                        "description": "Birth location longitude in decimal degrees (-180 to 180)."
+                        "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
                         "type": "number",
@@ -9524,6 +9519,11 @@
                         "maximum": 14,
                         "example": -5,
                         "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Alex",
+                        "description": "Optional display name for this person. Included in the response for easy identification."
                       }
                     },
                     "required": [
@@ -9537,36 +9537,31 @@
                   "person2": {
                     "type": "object",
                     "properties": {
-                      "name": {
-                        "type": "string",
-                        "example": "Alex",
-                        "description": "Optional display name for this person. Included in the response for easy identification."
-                      },
                       "date": {
                         "type": "string",
                         "format": "date",
                         "example": "1990-07-15",
-                        "description": "Birth date in YYYY-MM-DD format."
+                        "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
                       "time": {
                         "type": "string",
                         "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
                         "example": "14:30:00",
-                        "description": "Birth time in 24-hour HH:MM:SS format. Determines Ascendant and house placements."
+                        "description": "Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown."
                       },
                       "latitude": {
                         "type": "number",
                         "minimum": -90,
                         "maximum": 90,
                         "example": 40.7128,
-                        "description": "Birth location latitude in decimal degrees (-90 to 90)."
+                        "description": "Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South."
                       },
                       "longitude": {
                         "type": "number",
                         "minimum": -180,
                         "maximum": 180,
                         "example": -74.006,
-                        "description": "Birth location longitude in decimal degrees (-180 to 180)."
+                        "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
                         "type": "number",
@@ -9574,6 +9569,11 @@
                         "maximum": 14,
                         "example": -5,
                         "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Alex",
+                        "description": "Optional display name for this person. Included in the response for easy identification."
                       }
                     },
                     "required": [
@@ -10574,6 +10574,7 @@
                     "properties": {
                       "date": {
                         "type": "string",
+                        "format": "date",
                         "example": "1990-07-15",
                         "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
@@ -11440,6 +11441,7 @@
                           "properties": {
                             "date": {
                               "type": "string",
+                              "format": "date",
                               "example": "1990-07-15",
                               "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                             },
@@ -12077,6 +12079,7 @@
                           "properties": {
                             "date": {
                               "type": "string",
+                              "format": "date",
                               "example": "1990-07-15",
                               "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                             },
@@ -12605,6 +12608,7 @@
                     "properties": {
                       "date": {
                         "type": "string",
+                        "format": "date",
                         "example": "1990-07-15",
                         "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
@@ -12650,6 +12654,7 @@
                     "properties": {
                       "date": {
                         "type": "string",
+                        "format": "date",
                         "example": "1990-07-15",
                         "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
@@ -12741,6 +12746,7 @@
                       "properties": {
                         "date": {
                           "type": "string",
+                          "format": "date",
                           "example": "1990-07-15",
                           "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                         },
@@ -12786,6 +12792,7 @@
                       "properties": {
                         "date": {
                           "type": "string",
+                          "format": "date",
                           "example": "1990-07-15",
                           "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                         },
@@ -13289,8 +13296,8 @@
         "tags": [
           "Western Astrology"
         ],
-        "summary": "Compatibility Score - Relationship compatibility analysis with category breakdown",
-        "description": "Calculate a detailed compatibility score between two birth charts using Western synastry (inter-chart aspects). Returns overall score (0-100) plus category breakdowns for romantic, emotional, intellectual, physical, and spiritual compatibility. Each category analyzes specific planetary pairs: Venus-Mars for romance, Moon-Moon for emotions, Mercury-Mercury for intellect. Includes relationship strengths, challenges, and narrative interpretation. Compatibility score API, love match calculator, relationship astrology, synastry score.",
+        "summary": "Compatibility Score. Relationship compatibility analysis with category breakdown",
+        "description": "Calculate a detailed compatibility score between two birth charts using Western synastry (inter-chart aspects). Returns overall score (0-100) plus category breakdowns for romantic, emotional, intellectual, physical, and spiritual compatibility. Each category analyzes specific planetary pairs: Venus-Mars for romance, Moon-Moon for emotions, Mercury-Mercury for intellect. Includes Sun, Moon, Venus, and Mars sign compatibility narratives, element balance analysis, relationship archetype classification, and the most significant inter-chart aspects with relationship-specific interpretations.",
         "security": [
           {
             "apiKey": []
@@ -13331,6 +13338,7 @@
                     "properties": {
                       "date": {
                         "type": "string",
+                        "format": "date",
                         "example": "1990-07-15",
                         "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
@@ -13376,6 +13384,7 @@
                     "properties": {
                       "date": {
                         "type": "string",
+                        "format": "date",
                         "example": "1990-07-15",
                         "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                       },
@@ -13485,7 +13494,7 @@
                           "minimum": 0,
                           "maximum": 100,
                           "example": 80,
-                          "description": "Physical compatibility score based on Mars-Mars and Mars-Venus inter-aspects."
+                          "description": "Physical compatibility score based on Mars-Mars and Mars-Sun inter-aspects."
                         },
                         "spiritual": {
                           "type": "number",
@@ -13504,19 +13513,430 @@
                       ],
                       "description": "Compatibility breakdown by life area. Each category evaluates specific planetary pair interactions that govern that domain."
                     },
+                    "persons": {
+                      "type": "object",
+                      "properties": {
+                        "person1": {
+                          "type": "object",
+                          "properties": {
+                            "sun": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Sun sign position. Core identity and ego."
+                            },
+                            "moon": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Moon sign position. Emotional nature and instincts."
+                            },
+                            "venus": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Venus sign position. Love language and relationship style."
+                            },
+                            "mars": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Mars sign position. Passion, desire, and conflict style."
+                            }
+                          },
+                          "required": [
+                            "sun",
+                            "moon",
+                            "venus",
+                            "mars"
+                          ],
+                          "description": "Key planet positions for person 1. Sun, Moon, Venus, and Mars sign placements."
+                        },
+                        "person2": {
+                          "type": "object",
+                          "properties": {
+                            "sun": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Sun sign position. Core identity and ego."
+                            },
+                            "moon": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Moon sign position. Emotional nature and instincts."
+                            },
+                            "venus": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Venus sign position. Love language and relationship style."
+                            },
+                            "mars": {
+                              "type": "object",
+                              "properties": {
+                                "sign": {
+                                  "type": "string",
+                                  "example": "gemini",
+                                  "description": "Zodiac sign this planet occupies in the tropical zodiac."
+                                },
+                                "degree": {
+                                  "type": "number",
+                                  "example": 24.5,
+                                  "description": "Degree within the zodiac sign (0-29.999)."
+                                }
+                              },
+                              "required": [
+                                "sign",
+                                "degree"
+                              ],
+                              "description": "Mars sign position. Passion, desire, and conflict style."
+                            }
+                          },
+                          "required": [
+                            "sun",
+                            "moon",
+                            "venus",
+                            "mars"
+                          ],
+                          "description": "Key planet positions for person 2. Sun, Moon, Venus, and Mars sign placements."
+                        }
+                      },
+                      "required": [
+                        "person1",
+                        "person2"
+                      ],
+                      "description": "Summary of key planetary positions for both people. Includes the four planets most relevant to relationship compatibility."
+                    },
+                    "signCompatibility": {
+                      "type": "object",
+                      "properties": {
+                        "sun": {
+                          "type": "object",
+                          "properties": {
+                            "person1Sign": {
+                              "type": "string",
+                              "example": "gemini",
+                              "description": "Person 1 sign for this planet."
+                            },
+                            "person2Sign": {
+                              "type": "string",
+                              "example": "pisces",
+                              "description": "Person 2 sign for this planet."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Narrative analysis of how these two signs interact through this planet."
+                            }
+                          },
+                          "required": [
+                            "person1Sign",
+                            "person2Sign",
+                            "description"
+                          ],
+                          "description": "Sun sign compatibility. Reveals core personality dynamic as a couple."
+                        },
+                        "moon": {
+                          "type": "object",
+                          "properties": {
+                            "person1Sign": {
+                              "type": "string",
+                              "example": "gemini",
+                              "description": "Person 1 sign for this planet."
+                            },
+                            "person2Sign": {
+                              "type": "string",
+                              "example": "pisces",
+                              "description": "Person 2 sign for this planet."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Narrative analysis of how these two signs interact through this planet."
+                            }
+                          },
+                          "required": [
+                            "person1Sign",
+                            "person2Sign",
+                            "description"
+                          ],
+                          "description": "Moon sign compatibility. Reveals how you process emotions and nurture each other."
+                        },
+                        "venus": {
+                          "type": "object",
+                          "properties": {
+                            "person1Sign": {
+                              "type": "string",
+                              "example": "gemini",
+                              "description": "Person 1 sign for this planet."
+                            },
+                            "person2Sign": {
+                              "type": "string",
+                              "example": "pisces",
+                              "description": "Person 2 sign for this planet."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Narrative analysis of how these two signs interact through this planet."
+                            }
+                          },
+                          "required": [
+                            "person1Sign",
+                            "person2Sign",
+                            "description"
+                          ],
+                          "description": "Venus sign compatibility. Reveals love languages and what you find beautiful together."
+                        },
+                        "mars": {
+                          "type": "object",
+                          "properties": {
+                            "person1Sign": {
+                              "type": "string",
+                              "example": "gemini",
+                              "description": "Person 1 sign for this planet."
+                            },
+                            "person2Sign": {
+                              "type": "string",
+                              "example": "pisces",
+                              "description": "Person 2 sign for this planet."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Narrative analysis of how these two signs interact through this planet."
+                            }
+                          },
+                          "required": [
+                            "person1Sign",
+                            "person2Sign",
+                            "description"
+                          ],
+                          "description": "Mars sign compatibility. Reveals how you handle passion, conflict, and desire."
+                        }
+                      },
+                      "required": [
+                        "sun",
+                        "moon",
+                        "venus",
+                        "mars"
+                      ],
+                      "description": "Sign-by-sign compatibility analysis for the four key relationship planets. Each entry describes how the two signs interact through that planetary lens."
+                    },
+                    "elementBalance": {
+                      "type": "object",
+                      "properties": {
+                        "person1": {
+                          "type": "object",
+                          "properties": {
+                            "fire": {
+                              "type": "number",
+                              "example": 3,
+                              "description": "Count of planets in fire signs (Aries, Leo, Sagittarius)."
+                            },
+                            "earth": {
+                              "type": "number",
+                              "example": 2,
+                              "description": "Count of planets in earth signs (Taurus, Virgo, Capricorn)."
+                            },
+                            "air": {
+                              "type": "number",
+                              "example": 4,
+                              "description": "Count of planets in air signs (Gemini, Libra, Aquarius)."
+                            },
+                            "water": {
+                              "type": "number",
+                              "example": 3,
+                              "description": "Count of planets in water signs (Cancer, Scorpio, Pisces)."
+                            }
+                          },
+                          "required": [
+                            "fire",
+                            "earth",
+                            "air",
+                            "water"
+                          ],
+                          "description": "Element distribution across person 1 natal planets."
+                        },
+                        "person2": {
+                          "type": "object",
+                          "properties": {
+                            "fire": {
+                              "type": "number",
+                              "example": 3,
+                              "description": "Count of planets in fire signs (Aries, Leo, Sagittarius)."
+                            },
+                            "earth": {
+                              "type": "number",
+                              "example": 2,
+                              "description": "Count of planets in earth signs (Taurus, Virgo, Capricorn)."
+                            },
+                            "air": {
+                              "type": "number",
+                              "example": 4,
+                              "description": "Count of planets in air signs (Gemini, Libra, Aquarius)."
+                            },
+                            "water": {
+                              "type": "number",
+                              "example": 3,
+                              "description": "Count of planets in water signs (Cancer, Scorpio, Pisces)."
+                            }
+                          },
+                          "required": [
+                            "fire",
+                            "earth",
+                            "air",
+                            "water"
+                          ],
+                          "description": "Element distribution across person 2 natal planets."
+                        },
+                        "sharedElement": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "water",
+                          "description": "Dominant element shared by both charts, or null if dominant elements differ."
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "How the elemental balance between charts shapes the relationship dynamic."
+                        }
+                      },
+                      "required": [
+                        "person1",
+                        "person2",
+                        "sharedElement",
+                        "description"
+                      ],
+                      "description": "Elemental balance comparison. Shows how fire, earth, air, and water energy is distributed across both charts."
+                    },
+                    "archetype": {
+                      "type": "object",
+                      "properties": {
+                        "label": {
+                          "type": "string",
+                          "example": "Kindred Spirits",
+                          "description": "Relationship archetype label. A headline-friendly label for the dynamic."
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Narrative description of the relationship archetype and what it means."
+                        }
+                      },
+                      "required": [
+                        "label",
+                        "description"
+                      ],
+                      "description": "Relationship archetype based on score pattern, category strengths, and elemental balance. One of eight archetypes: Kindred Spirits, Opposites Attract, The Power Couple, The Nurturers, The Adventurers, Growth Partners, The Balancers, The Mystics."
+                    },
                     "strengths": {
                       "type": "array",
                       "items": {
                         "type": "string"
                       },
-                      "description": "Identified relationship strengths based on harmonious inter-chart aspects."
+                      "description": "Top relationship strengths based on harmonious inter-chart aspects. Each includes the planet pair, aspect type, and relationship-specific interpretation."
                     },
                     "challenges": {
                       "type": "array",
                       "items": {
                         "type": "string"
                       },
-                      "description": "Potential friction points based on challenging inter-chart aspects. Growth opportunities in the relationship."
+                      "description": "Potential friction points based on challenging inter-chart aspects. Each includes specific guidance for navigating the tension."
                     },
                     "summary": {
                       "type": "string",
@@ -13557,16 +13977,72 @@
                         "neutral"
                       ],
                       "description": "Synastry aspect breakdown showing the balance of harmonious, challenging, and neutral inter-chart aspects."
+                    },
+                    "keyAspects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "planet1": {
+                            "type": "string",
+                            "example": "Venus",
+                            "description": "First planet in the aspect."
+                          },
+                          "planet2": {
+                            "type": "string",
+                            "example": "Mars",
+                            "description": "Second planet in the aspect."
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "TRINE",
+                            "description": "Aspect type (conjunction, trine, square, etc.)."
+                          },
+                          "orb": {
+                            "type": "number",
+                            "example": 2.3,
+                            "description": "Deviation from exact aspect in degrees. Tighter orb = stronger influence."
+                          },
+                          "interpretation": {
+                            "type": "string",
+                            "enum": [
+                              "harmonious",
+                              "challenging",
+                              "neutral"
+                            ],
+                            "example": "harmonious",
+                            "description": "Aspect nature. Harmonious flows easily. Challenging creates growth-oriented tension."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Relationship-specific interpretation of this aspect between the two charts."
+                          }
+                        },
+                        "required": [
+                          "planet1",
+                          "planet2",
+                          "type",
+                          "orb",
+                          "interpretation",
+                          "description"
+                        ]
+                      },
+                      "description": "The most significant inter-chart aspects involving personal planets (Sun through Saturn), sorted by strength. Each includes a relationship-specific interpretation."
                     }
                   },
                   "required": [
                     "overallScore",
                     "categories",
+                    "persons",
+                    "signCompatibility",
+                    "elementBalance",
+                    "archetype",
                     "strengths",
                     "challenges",
                     "summary",
                     "interpretation",
-                    "aspectBreakdown"
+                    "aspectBreakdown",
+                    "keyAspects"
                   ]
                 }
               }
@@ -14692,6 +15168,7 @@
                           "properties": {
                             "date": {
                               "type": "string",
+                              "format": "date",
                               "example": "1990-07-15",
                               "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
                             },
@@ -27917,6 +28394,390 @@
         }
       }
     },
+    "/numerology/bridge": {
+      "post": {
+        "operationId": "calculateBridgeNumbers",
+        "tags": [
+          "Numerology"
+        ],
+        "summary": "Calculate Bridge Numbers - Harmonize different aspects of personality",
+        "description": "Calculate three Bridge Numbers that reveal the adjustments needed to create harmony between different aspects of your numerology profile. Bridge Numbers are the absolute difference between pairs of core numbers: Life Path and Expression, Expression and Personality, Expression and Soul Urge. A Bridge of 0 means the two aspects are already aligned. Higher bridges (1 to 8) indicate greater tension and provide specific guidance on what changes to make. Bridge Numbers are essential for personal development, coaching applications, self-improvement platforms, and AI-powered personality analysis tools. Requires both a full birth name and birth date to calculate all four core numbers (Life Path, Expression, Soul Urge, Personality) internally before deriving the bridges.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "John William Smith",
+                    "description": "Full legal birth name as it appears on the birth certificate. Used to calculate Expression, Soul Urge, and Personality numbers. Include first, middle, and last names separated by spaces."
+                  },
+                  "year": {
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 2100,
+                    "example": 1990,
+                    "description": "Birth year between 100 and 2100. Used to calculate the Life Path number via Pythagorean reduction."
+                  },
+                  "month": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12,
+                    "example": 7,
+                    "description": "Birth month (1 to 12)"
+                  },
+                  "day": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 31,
+                    "example": 15,
+                    "description": "Birth day (1 to 31)"
+                  }
+                },
+                "required": [
+                  "fullName",
+                  "year",
+                  "month",
+                  "day"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully calculated three Bridge Numbers with actionable harmony guidance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "lifePathExpression": {
+                      "type": "object",
+                      "properties": {
+                        "bridge": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 8,
+                          "example": 3,
+                          "description": "Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment."
+                        },
+                        "from": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Life Path",
+                              "description": "Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared."
+                            },
+                            "number": {
+                              "type": "number",
+                              "example": 5,
+                              "description": "The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "number"
+                          ]
+                        },
+                        "to": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Expression",
+                              "description": "Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared."
+                            },
+                            "number": {
+                              "type": "number",
+                              "example": 8,
+                              "description": "The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "number"
+                          ]
+                        },
+                        "meaning": {
+                          "type": "string",
+                          "example": "Focus on developing self-discipline and a consistent work ethic. Channel your creative ideas into structured plans with clear milestones. Regular routines and organized habits will help you align your inner vision with your outer expression.",
+                          "description": "Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony."
+                        }
+                      },
+                      "required": [
+                        "bridge",
+                        "from",
+                        "to",
+                        "meaning"
+                      ],
+                      "description": "Bridge between Life Path and Expression numbers. Reveals the gap between your destined life purpose (from birth date) and your natural talents and abilities (from birth name). A high bridge here means your innate skills may not directly serve your life mission without conscious effort."
+                    },
+                    "expressionPersonality": {
+                      "type": "object",
+                      "properties": {
+                        "bridge": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 8,
+                          "example": 3,
+                          "description": "Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment."
+                        },
+                        "from": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Life Path",
+                              "description": "Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared."
+                            },
+                            "number": {
+                              "type": "number",
+                              "example": 5,
+                              "description": "The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "number"
+                          ]
+                        },
+                        "to": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Expression",
+                              "description": "Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared."
+                            },
+                            "number": {
+                              "type": "number",
+                              "example": 8,
+                              "description": "The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "number"
+                          ]
+                        },
+                        "meaning": {
+                          "type": "string",
+                          "example": "Focus on developing self-discipline and a consistent work ethic. Channel your creative ideas into structured plans with clear milestones. Regular routines and organized habits will help you align your inner vision with your outer expression.",
+                          "description": "Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony."
+                        }
+                      },
+                      "required": [
+                        "bridge",
+                        "from",
+                        "to",
+                        "meaning"
+                      ],
+                      "description": "Bridge between Expression and Personality numbers. Reveals the gap between your true talents (all letters) and how others perceive you (consonants only). A high bridge means others may not see your real capabilities, requiring you to present yourself more authentically."
+                    },
+                    "expressionSoulUrge": {
+                      "type": "object",
+                      "properties": {
+                        "bridge": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 8,
+                          "example": 3,
+                          "description": "Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment."
+                        },
+                        "from": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Life Path",
+                              "description": "Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared."
+                            },
+                            "number": {
+                              "type": "number",
+                              "example": 5,
+                              "description": "The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "number"
+                          ]
+                        },
+                        "to": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Expression",
+                              "description": "Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared."
+                            },
+                            "number": {
+                              "type": "number",
+                              "example": 8,
+                              "description": "The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "number"
+                          ]
+                        },
+                        "meaning": {
+                          "type": "string",
+                          "example": "Focus on developing self-discipline and a consistent work ethic. Channel your creative ideas into structured plans with clear milestones. Regular routines and organized habits will help you align your inner vision with your outer expression.",
+                          "description": "Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony."
+                        }
+                      },
+                      "required": [
+                        "bridge",
+                        "from",
+                        "to",
+                        "meaning"
+                      ],
+                      "description": "Bridge between Expression and Soul Urge numbers. Reveals the gap between your outward talents (all letters) and your deepest inner desires (vowels only). A high bridge means what you are good at may differ from what your soul truly craves, calling for realignment."
+                    }
+                  },
+                  "required": [
+                    "lifePathExpression",
+                    "expressionPersonality",
+                    "expressionSoulUrge"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error (missing or invalid parameters)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Monthly rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/numerology/soul-urge": {
       "post": {
         "operationId": "calculateSoulUrge",
@@ -27985,12 +28846,12 @@
                     "number": {
                       "type": "number",
                       "example": 6,
-                      "description": "Soul Urge number (1-9, 11, 22, 33)"
+                      "description": "Your Soul Urge number (also called Heart Desire number), revealing your innermost motivations and what your soul truly craves. Values range from 1 to 9 for single digits, or 11, 22, 33 for Master Numbers."
                     },
                     "calculation": {
                       "type": "string",
                       "example": "6+9+1 + 9+9+1 + 9 = 44 → 4+4 = 8",
-                      "description": "Step-by-step calculation showing vowel values only"
+                      "description": "Full step-by-step Pythagorean reduction using only the vowels (A, E, I, O, U) from the birth name. Shows each vowel mapped to its numeric value, grouped by word, then summed and reduced to the final Soul Urge number."
                     },
                     "type": {
                       "type": "string",
@@ -27999,17 +28860,17 @@
                         "master"
                       ],
                       "example": "single",
-                      "description": "Number type classification"
+                      "description": "Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22, 33). Master Numbers in the Soul Urge position indicate a soul with amplified spiritual longing and heightened inner sensitivity."
                     },
                     "hasKarmicDebt": {
                       "type": "boolean",
                       "example": false,
-                      "description": "Whether calculation passed through karmic debt number"
+                      "description": "Indicates whether a Karmic Debt number (13, 14, 16, or 19) appeared during the vowel reduction chain. Karmic Debt in the Soul Urge reveals past-life emotional patterns and unresolved inner desires carried into this lifetime."
                     },
                     "karmicDebtNumber": {
                       "type": "number",
                       "example": 13,
-                      "description": "Karmic debt number if detected (13, 14, 16, 19)"
+                      "description": "The specific Karmic Debt number detected during the vowel reduction, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life emotional lesson that influences your deepest desires and motivations."
                     },
                     "karmicDebtMeaning": {
                       "type": "object",
@@ -28295,12 +29156,12 @@
                     "number": {
                       "type": "number",
                       "example": 9,
-                      "description": "Personality number (1-9, 11, 22, 33)"
+                      "description": "Your Personality number, derived from the consonants in your birth name. Reveals how others perceive you, your outer persona, and the first impression you project. Values range from 1 to 9 for single digits, or 11, 22, 33 for Master Numbers."
                     },
                     "calculation": {
                       "type": "string",
                       "example": "1+8+5 + 5+3+3+4 + 1+4+2+8 = 44 → 4+4 = 8",
-                      "description": "Step-by-step calculation showing consonant values only"
+                      "description": "Full step-by-step Pythagorean reduction using only the consonants from the birth name. Shows each consonant mapped to its numeric value, grouped by word, then summed and reduced to the final Personality number."
                     },
                     "type": {
                       "type": "string",
@@ -28309,17 +29170,17 @@
                         "master"
                       ],
                       "example": "single",
-                      "description": "Number type classification"
+                      "description": "Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22, 33). Master Numbers in the Personality position indicate a powerful outer presence that others immediately sense, carrying heightened charisma and public influence."
                     },
                     "hasKarmicDebt": {
                       "type": "boolean",
                       "example": false,
-                      "description": "Whether calculation passed through karmic debt number"
+                      "description": "Indicates whether a Karmic Debt number (13, 14, 16, or 19) appeared during the consonant reduction chain. Karmic Debt in the Personality position reveals past-life patterns that influence how others perceive you and the social challenges you must overcome."
                     },
                     "karmicDebtNumber": {
                       "type": "number",
                       "example": 16,
-                      "description": "Karmic debt number if detected (13, 14, 16, 19)"
+                      "description": "The specific Karmic Debt number detected during the consonant reduction, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life lesson that shapes your public image and social interactions."
                     },
                     "karmicDebtMeaning": {
                       "type": "object",
@@ -28606,12 +29467,12 @@
                     "number": {
                       "type": "number",
                       "example": 5,
-                      "description": "Birth Day number (1-9, 11, 22)"
+                      "description": "Your Birth Day number, revealing the special talents and innate abilities you carry from the day you were born. Values range from 1 to 9 for single digits, or 11, 22 for Master Numbers (days 11 and 22 are never reduced)."
                     },
                     "calculation": {
                       "type": "string",
                       "example": "23 → 2+3 = 5",
-                      "description": "Step-by-step calculation (single digit if 1-9)"
+                      "description": "Step-by-step digit reduction of the birth day. Single-digit days (1 to 9) remain as-is, Master Number days (11, 22) are preserved, and all other double-digit days are reduced by summing their digits."
                     },
                     "type": {
                       "type": "string",
@@ -28620,17 +29481,17 @@
                         "master"
                       ],
                       "example": "single",
-                      "description": "Number type classification"
+                      "description": "Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22). Master Numbers in the Birth Day position indicate extraordinary innate gifts that are available from birth and demand conscious development."
                     },
                     "hasKarmicDebt": {
                       "type": "boolean",
                       "example": false,
-                      "description": "Whether day number has karmic debt"
+                      "description": "Indicates whether a Karmic Debt number (13, 14, 16, or 19) corresponds to the birth day. Karmic Debt in the Birth Day position reveals past-life challenges woven directly into your natural talents, influencing how your gifts manifest."
                     },
                     "karmicDebtNumber": {
                       "type": "number",
                       "example": 19,
-                      "description": "Karmic debt number if present (13, 14, 16, 19)"
+                      "description": "The specific Karmic Debt number detected from the birth day, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life lesson embedded in the talents your birth day bestows."
                     },
                     "karmicDebtMeaning": {
                       "type": "object",
@@ -28896,20 +29757,43 @@
                     "minimum": 1,
                     "maximum": 33,
                     "example": 5,
-                    "description": "Your Life Path number (1-9, 11, 22, 33)"
+                    "description": "Your Life Path number (1-9, 11, 22, 33). Optional if year, month, day are provided."
                   },
                   "expression": {
                     "type": "integer",
                     "minimum": 1,
                     "maximum": 33,
                     "example": 7,
-                    "description": "Your Expression number (1-9, 11, 22, 33)"
+                    "description": "Your Expression number (1-9, 11, 22, 33). Optional if fullName is provided."
+                  },
+                  "fullName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "John William Smith",
+                    "description": "Full birth name to calculate Expression number automatically. Use instead of passing expression directly."
+                  },
+                  "year": {
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 2100,
+                    "example": 1990,
+                    "description": "Birth year to calculate Life Path automatically. Use with month and day instead of passing lifePath directly."
+                  },
+                  "month": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12,
+                    "example": 7,
+                    "description": "Birth month (1-12). Required with year and day for automatic Life Path calculation."
+                  },
+                  "day": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 31,
+                    "example": 15,
+                    "description": "Birth day (1-31). Required with year and month for automatic Life Path calculation."
                   }
-                },
-                "required": [
-                  "lifePath",
-                  "expression"
-                ]
+                }
               }
             }
           }
@@ -28925,12 +29809,12 @@
                     "number": {
                       "type": "number",
                       "example": 3,
-                      "description": "Maturity number (1-9, 11, 22, 33)"
+                      "description": "Your Maturity number (also called Realization number), revealing who you are becoming in the second half of life. Derived from the sum of your Life Path and Expression numbers. Values range from 1 to 9 for single digits, or 11, 22, 33 for Master Numbers."
                     },
                     "calculation": {
                       "type": "string",
                       "example": "5 + 7 = 12 → 1+2 = 3",
-                      "description": "Step-by-step calculation showing Life Path + Expression"
+                      "description": "Full step-by-step reduction showing Life Path plus Expression combined and reduced to the final Maturity number. This synthesis represents the convergence of your life purpose and natural talents into mature wisdom."
                     },
                     "type": {
                       "type": "string",
@@ -28939,17 +29823,17 @@
                         "master"
                       ],
                       "example": "single",
-                      "description": "Number type classification"
+                      "description": "Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22, 33). Master Numbers in the Maturity position indicate a powerful late-life awakening with extraordinary potential for spiritual leadership and legacy."
                     },
                     "hasKarmicDebt": {
                       "type": "boolean",
                       "example": false,
-                      "description": "Whether calculation passed through karmic debt number"
+                      "description": "Indicates whether a Karmic Debt number (13, 14, 16, or 19) appeared during the Life Path plus Expression reduction. Karmic Debt in the Maturity position reveals past-life lessons that surface during midlife transformation, typically after age 35 to 40."
                     },
                     "karmicDebtNumber": {
                       "type": "number",
                       "example": 14,
-                      "description": "Karmic debt number if detected (13, 14, 16, 19)"
+                      "description": "The specific Karmic Debt number detected during the Maturity reduction, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life challenge that becomes especially prominent as you enter the second half of life."
                     },
                     "karmicDebtMeaning": {
                       "type": "object",
@@ -29534,12 +30418,481 @@
                           "resolution"
                         ]
                       }
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Human-readable summary. Explains what the karmic debt findings mean or provides a positive affirmation when no debt is found."
                     }
                   },
                   "required": [
                     "hasKarmicDebt",
                     "debtNumbers",
-                    "meanings"
+                    "meanings",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error (missing or invalid parameters)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Monthly rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/numerology/personal-day": {
+      "post": {
+        "operationId": "calculatePersonalDay",
+        "tags": [
+          "Numerology"
+        ],
+        "summary": "Calculate Personal Day - Daily personalized numerology forecast",
+        "description": "Calculate your Personal Day number from birth month, day, and a target date. Personal Day is the most granular cycle in Pythagorean numerology, revealing the specific energy and theme for a single calendar day personalized to you. Unlike generic daily numbers, this is based on YOUR birth data combined with the calendar date. Returns the daily theme, actionable guidance, and parent month and year context. Perfect for daily push notifications, morning briefings, calendar widget integrations, daily content generation, and life coaching tools.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "month": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12,
+                    "example": 7,
+                    "description": "Birth month (1-12)"
+                  },
+                  "day": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 31,
+                    "example": 18,
+                    "description": "Birth day (1-31)"
+                  },
+                  "targetDate": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                    "example": "2026-04-04",
+                    "description": "Target date in YYYY-MM-DD format (defaults to today)"
+                  }
+                },
+                "required": [
+                  "month",
+                  "day"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully calculated Personal Day with forecast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "personalDay": {
+                      "type": "number",
+                      "example": 7,
+                      "description": "Personal Day number (1-9). The most granular numerology cycle, revealing the energy and theme for this specific day based on your birth data."
+                    },
+                    "theme": {
+                      "type": "string",
+                      "example": "Rest and Reflection",
+                      "description": "Central theme for this Personal Day. A concise label capturing the dominant energy of the day."
+                    },
+                    "guidance": {
+                      "type": "string",
+                      "example": "Step back from external demands and go inward. Reflect, meditate, study, or simply rest.",
+                      "description": "Actionable daily guidance. Specific advice for how to work with the energy of this Personal Day."
+                    },
+                    "targetDate": {
+                      "type": "string",
+                      "example": "2026-04-04",
+                      "description": "The calendar date this forecast applies to in YYYY-MM-DD format."
+                    },
+                    "personalMonth": {
+                      "type": "number",
+                      "example": 3,
+                      "description": "The parent Personal Month number this day falls within."
+                    },
+                    "personalMonthTheme": {
+                      "type": "string",
+                      "example": "Creative Expression",
+                      "description": "Theme of the parent Personal Month, providing broader context for the daily forecast."
+                    },
+                    "personalYear": {
+                      "type": "number",
+                      "example": 8,
+                      "description": "The parent Personal Year number this day falls within."
+                    },
+                    "personalYearTheme": {
+                      "type": "string",
+                      "example": "Power and Achievement",
+                      "description": "Theme of the parent Personal Year, providing the broadest cycle context."
+                    }
+                  },
+                  "required": [
+                    "personalDay",
+                    "theme",
+                    "guidance",
+                    "targetDate",
+                    "personalMonth",
+                    "personalMonthTheme",
+                    "personalYear",
+                    "personalYearTheme"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error (missing or invalid parameters)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Monthly rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Human-readable error message. May change wording."
+                    },
+                    "code": {
+                      "type": "string",
+                      "description": "Machine-readable error code. Stable identifier."
+                    }
+                  },
+                  "required": [
+                    "error",
+                    "code"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/numerology/personal-month": {
+      "post": {
+        "operationId": "calculatePersonalMonth",
+        "tags": [
+          "Numerology"
+        ],
+        "summary": "Calculate Personal Month - Monthly numerology forecast",
+        "description": "Calculate your Personal Month number from birth month, day, and a target year and month. Personal Month reveals the specific theme and energy influencing each calendar month within your Personal Year cycle. Returns the monthly theme, practical focus guidance, and the parent Personal Year context. Perfect for monthly forecast features, push notification content, calendar integrations, editorial monthly columns, and life coaching tools.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "month": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12,
+                    "example": 7,
+                    "description": "Birth month (1-12)"
+                  },
+                  "day": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 31,
+                    "example": 18,
+                    "description": "Birth day (1-31)"
+                  },
+                  "year": {
+                    "type": "integer",
+                    "minimum": 2020,
+                    "maximum": 2100,
+                    "example": 2026,
+                    "description": "Target year for calculation (defaults to current year)"
+                  },
+                  "targetMonth": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12,
+                    "example": 4,
+                    "description": "Target calendar month to forecast (1-12, defaults to current month)"
+                  }
+                },
+                "required": [
+                  "month",
+                  "day"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully calculated Personal Month with forecast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "personalMonth": {
+                      "type": "number",
+                      "example": 3,
+                      "description": "Personal Month number (1-9). Each month in the cycle carries specific energy and themes that guide decisions and focus."
+                    },
+                    "theme": {
+                      "type": "string",
+                      "example": "Creative Expression",
+                      "description": "Central theme for this Personal Month. A concise label capturing the dominant energy."
+                    },
+                    "focus": {
+                      "type": "string",
+                      "example": "Express yourself creatively, socialize, and communicate. Writing, art, and public speaking are favored.",
+                      "description": "Practical guidance for this month. Specific actions, areas of focus, and advice for making the most of this monthly energy."
+                    },
+                    "calendarMonth": {
+                      "type": "number",
+                      "example": 4,
+                      "description": "The calendar month this forecast applies to (1-12)."
+                    },
+                    "personalYear": {
+                      "type": "number",
+                      "example": 8,
+                      "description": "The parent Personal Year number this month falls within."
+                    },
+                    "personalYearTheme": {
+                      "type": "string",
+                      "example": "Power and Achievement",
+                      "description": "Theme of the parent Personal Year, providing broader context for the monthly forecast."
+                    }
+                  },
+                  "required": [
+                    "personalMonth",
+                    "theme",
+                    "focus",
+                    "calendarMonth",
+                    "personalYear",
+                    "personalYearTheme"
                   ]
                 }
               }
@@ -29895,7 +31248,7 @@
           "Numerology"
         ],
         "summary": "Calculate Compatibility - Relationship dynamics between two people",
-        "description": "Calculate numerology compatibility between two people using their Life Path, Expression, and Soul Urge numbers based on Pythagorean numerology. Provides comprehensive relationship analysis with overall compatibility score (0-100), individual aspect compatibility (Life Path 50% weight, Expression 30%, Soul Urge 20%), relationship strengths, challenges, and practical advice. Uses detailed compatibility matrix for all number combinations. Perfect for dating apps, relationship counseling platforms, matchmaking services, and compatibility tools. Get actionable insights for improving relationship dynamics.",
+        "description": "Calculate numerology compatibility between two people using Pythagorean numerology. Accepts two input modes per person: pre-calculated Life Path, Expression, and Soul Urge numbers, or raw name and birthdate for automatic calculation. You can mix modes across persons (e.g. numbers for person1, raw inputs for person2). Provides comprehensive relationship analysis with overall compatibility score (0-100), individual aspect compatibility (Life Path 50% weight, Expression 30%, Soul Urge 20%), relationship strengths, challenges, and practical advice. Uses detailed compatibility matrix for all number combinations. Perfect for dating apps, relationship counseling platforms, matchmaking services, and compatibility tools. Get actionable insights for improving relationship dynamics.",
         "security": [
           {
             "apiKey": []
@@ -29939,28 +31292,50 @@
                         "minimum": 1,
                         "maximum": 33,
                         "example": 5,
-                        "description": "Person 1 Life Path number (1-9, 11, 22, 33)"
+                        "description": "Person 1 Life Path number (1-9, 11, 22, 33). Optional if year, month, day are provided."
                       },
                       "expression": {
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 33,
                         "example": 7,
-                        "description": "Person 1 Expression number (1-9, 11, 22, 33)"
+                        "description": "Person 1 Expression number (1-9, 11, 22, 33). Optional if fullName is provided."
                       },
                       "soulUrge": {
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 33,
                         "example": 6,
-                        "description": "Person 1 Soul Urge number (1-9, 11, 22, 33)"
+                        "description": "Person 1 Soul Urge number (1-9, 11, 22, 33). Optional if fullName is provided."
+                      },
+                      "fullName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "example": "John William Smith",
+                        "description": "Full birth name to calculate Expression and Soul Urge numbers automatically. Use instead of passing expression and soulUrge directly."
+                      },
+                      "year": {
+                        "type": "integer",
+                        "minimum": 100,
+                        "maximum": 2100,
+                        "example": 1990,
+                        "description": "Birth year to calculate Life Path automatically. Use with month and day instead of passing lifePath directly."
+                      },
+                      "month": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 12,
+                        "example": 7,
+                        "description": "Birth month (1-12). Required with year and day for automatic Life Path calculation."
+                      },
+                      "day": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 31,
+                        "example": 15,
+                        "description": "Birth day (1-31). Required with year and month for automatic Life Path calculation."
                       }
-                    },
-                    "required": [
-                      "lifePath",
-                      "expression",
-                      "soulUrge"
-                    ]
+                    }
                   },
                   "person2": {
                     "type": "object",
@@ -29970,28 +31345,50 @@
                         "minimum": 1,
                         "maximum": 33,
                         "example": 3,
-                        "description": "Person 2 Life Path number (1-9, 11, 22, 33)"
+                        "description": "Person 2 Life Path number (1-9, 11, 22, 33). Optional if year, month, day are provided."
                       },
                       "expression": {
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 33,
                         "example": 9,
-                        "description": "Person 2 Expression number (1-9, 11, 22, 33)"
+                        "description": "Person 2 Expression number (1-9, 11, 22, 33). Optional if fullName is provided."
                       },
                       "soulUrge": {
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 33,
                         "example": 2,
-                        "description": "Person 2 Soul Urge number (1-9, 11, 22, 33)"
+                        "description": "Person 2 Soul Urge number (1-9, 11, 22, 33). Optional if fullName is provided."
+                      },
+                      "fullName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "example": "Jane Marie Doe",
+                        "description": "Full birth name to calculate Expression and Soul Urge numbers automatically. Use instead of passing expression and soulUrge directly."
+                      },
+                      "year": {
+                        "type": "integer",
+                        "minimum": 100,
+                        "maximum": 2100,
+                        "example": 1992,
+                        "description": "Birth year to calculate Life Path automatically. Use with month and day instead of passing lifePath directly."
+                      },
+                      "month": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 12,
+                        "example": 3,
+                        "description": "Birth month (1-12). Required with year and day for automatic Life Path calculation."
+                      },
+                      "day": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 31,
+                        "example": 22,
+                        "description": "Birth day (1-31). Required with year and month for automatic Life Path calculation."
                       }
-                    },
-                    "required": [
-                      "lifePath",
-                      "expression",
-                      "soulUrge"
-                    ]
+                    }
                   }
                 },
                 "required": [
@@ -30017,8 +31414,8 @@
                     },
                     "rating": {
                       "type": "string",
-                      "example": "Good",
-                      "description": "Compatibility rating (Poor/Fair/Good/Excellent/Exceptional)"
+                      "example": "Very Compatible",
+                      "description": "Compatibility rating: Highly Compatible, Very Compatible, Compatible, Moderately Compatible, or Challenging."
                     },
                     "lifePath": {
                       "type": "object",
@@ -30759,6 +32156,26 @@
                               "type": "number",
                               "description": "Birth Day number (1-31). A special talent number based on the day of the month you were born."
                             },
+                            "calculation": {
+                              "type": "string",
+                              "description": "Step-by-step calculation showing how the Birth Day number was reduced from the calendar day of birth."
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "single",
+                                "master"
+                              ],
+                              "description": "Whether this is a single digit (1-9) or master number (11, 22). Birth days of 11 and 22 are preserved as master numbers."
+                            },
+                            "hasKarmicDebt": {
+                              "type": "boolean",
+                              "description": "True if the birth day is a karmic debt number (13, 14, 16, 19)."
+                            },
+                            "karmicDebtNumber": {
+                              "type": "number",
+                              "description": "The karmic debt number if the birth day carries one (13, 14, 16, or 19)."
+                            },
                             "meaning": {
                               "type": "object",
                               "properties": {
@@ -30819,6 +32236,9 @@
                           },
                           "required": [
                             "number",
+                            "calculation",
+                            "type",
+                            "hasKarmicDebt",
                             "meaning"
                           ],
                           "description": "Birth Day number. Reveals a special talent or gift based on the calendar day of birth."
@@ -31076,6 +32496,29 @@
                             "advice": {
                               "type": "string",
                               "description": "Strategic guidance for making the most of this Personal Year. Covers timing decisions, areas to focus on, and the mindset that aligns with the current numerological energy."
+                            },
+                            "personalMonth": {
+                              "type": "object",
+                              "properties": {
+                                "personalMonth": {
+                                  "type": "number",
+                                  "description": "Personal Month number (1-9)."
+                                },
+                                "theme": {
+                                  "type": "string",
+                                  "description": "Central theme for this Personal Month."
+                                },
+                                "focus": {
+                                  "type": "string",
+                                  "description": "Practical focus and guidance for this month."
+                                }
+                              },
+                              "required": [
+                                "personalMonth",
+                                "theme",
+                                "focus"
+                              ],
+                              "description": "Personal Month forecast nested within the Personal Year cycle."
                             }
                           },
                           "required": [
@@ -31085,17 +32528,433 @@
                             "forecast",
                             "opportunities",
                             "challenges",
-                            "advice"
+                            "advice",
+                            "personalMonth"
                           ],
-                          "description": "Personal Year forecast. Yearly numerology cycle revealing the theme, opportunities, and challenges for the specified year."
+                          "description": "Personal Year forecast with nested Personal Month. Yearly and monthly numerology cycles."
+                        },
+                        "pinnacles": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "position": {
+                                "type": "number",
+                                "description": "Pinnacle position (1-4). Four major life phases."
+                              },
+                              "number": {
+                                "type": "number",
+                                "description": "Pinnacle number (1-9, 11, 22, 33). Defines the theme of this life phase."
+                              },
+                              "startAge": {
+                                "type": "number",
+                                "description": "Age when this Pinnacle phase begins."
+                              },
+                              "endAge": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Age when this phase ends. Null for the 4th Pinnacle (lasts rest of life)."
+                              },
+                              "meaning": {
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "type": "string",
+                                    "description": "Pinnacle phase title."
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "description": "What this Pinnacle phase brings to your life."
+                                  },
+                                  "opportunities": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "description": "Key opportunities during this phase."
+                                  },
+                                  "challenges": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "description": "Challenges to navigate during this phase."
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "description",
+                                  "opportunities",
+                                  "challenges"
+                                ],
+                                "description": "Meaning and interpretation for this Pinnacle number."
+                              }
+                            },
+                            "required": [
+                              "position",
+                              "number",
+                              "startAge",
+                              "endAge",
+                              "meaning"
+                            ]
+                          },
+                          "description": "Four Pinnacle numbers representing major life phases with age ranges and meanings."
+                        },
+                        "challenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "position": {
+                                "type": "number",
+                                "description": "Challenge position (1-4). Four life obstacle periods."
+                              },
+                              "number": {
+                                "type": "number",
+                                "description": "Challenge number (0-8). Defines the obstacle of this period."
+                              },
+                              "startAge": {
+                                "type": "number",
+                                "description": "Age when this Challenge period begins."
+                              },
+                              "endAge": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Age when this period ends. Null for the 4th Challenge."
+                              },
+                              "meaning": {
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "type": "string",
+                                    "description": "Challenge title."
+                                  },
+                                  "description": {
+                                    "type": "string",
+                                    "description": "What this Challenge demands you overcome."
+                                  },
+                                  "lesson": {
+                                    "type": "string",
+                                    "description": "Core lesson to learn during this period."
+                                  },
+                                  "howToOvercome": {
+                                    "type": "string",
+                                    "description": "Actionable guidance for working through this Challenge."
+                                  }
+                                },
+                                "required": [
+                                  "title",
+                                  "description",
+                                  "lesson",
+                                  "howToOvercome"
+                                ],
+                                "description": "Meaning and resolution guidance for this Challenge number."
+                              }
+                            },
+                            "required": [
+                              "position",
+                              "number",
+                              "startAge",
+                              "endAge",
+                              "meaning"
+                            ]
+                          },
+                          "description": "Four Challenge numbers representing life obstacles aligned with Pinnacle timing."
+                        },
+                        "hiddenPassion": {
+                          "type": "object",
+                          "properties": {
+                            "number": {
+                              "type": "number",
+                              "description": "Hidden Passion number (1-9). The most frequently occurring number in the birth name."
+                            },
+                            "count": {
+                              "type": "number",
+                              "description": "How many times this number appears in the name."
+                            },
+                            "allPassions": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "description": "All numbers tied for highest frequency (usually one, sometimes multiple)."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "Archetype title for this Hidden Passion."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "What this dominant number drive reveals about latent talents and obsessions."
+                            }
+                          },
+                          "required": [
+                            "number",
+                            "count",
+                            "allPassions",
+                            "title",
+                            "description"
+                          ],
+                          "description": "Hidden Passion number. The most frequent number in the name revealing an overwhelming drive or talent."
+                        },
+                        "subconsciousSelf": {
+                          "type": "object",
+                          "properties": {
+                            "number": {
+                              "type": "number",
+                              "description": "Subconscious Self number (1-9). Count of unique numbers present in the name."
+                            },
+                            "uniqueNumbers": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              },
+                              "description": "Which numbers (1-9) are present in the birth name."
+                            },
+                            "title": {
+                              "type": "string",
+                              "description": "Archetype title for this Subconscious Self level."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "How you handle emergencies and unexpected challenges based on the breadth of numbers in your name."
+                            }
+                          },
+                          "required": [
+                            "number",
+                            "uniqueNumbers",
+                            "title",
+                            "description"
+                          ],
+                          "description": "Subconscious Self number. Reveals inner confidence and emergency response style."
+                        },
+                        "nameLetters": {
+                          "type": "object",
+                          "properties": {
+                            "cornerstone": {
+                              "type": "object",
+                              "properties": {
+                                "letter": {
+                                  "type": "string",
+                                  "description": "First letter of the first name."
+                                },
+                                "number": {
+                                  "type": "number",
+                                  "description": "Pythagorean number value of the Cornerstone letter."
+                                },
+                                "meaning": {
+                                  "type": "string",
+                                  "description": "How you approach new situations and initiate action."
+                                }
+                              },
+                              "required": [
+                                "letter",
+                                "number",
+                                "meaning"
+                              ],
+                              "description": "Cornerstone letter analysis. Reveals approach to new situations."
+                            },
+                            "capstone": {
+                              "type": "object",
+                              "properties": {
+                                "letter": {
+                                  "type": "string",
+                                  "description": "Last letter of the first name."
+                                },
+                                "number": {
+                                  "type": "number",
+                                  "description": "Pythagorean number value of the Capstone letter."
+                                },
+                                "meaning": {
+                                  "type": "string",
+                                  "description": "How you complete tasks and handle endings."
+                                }
+                              },
+                              "required": [
+                                "letter",
+                                "number",
+                                "meaning"
+                              ],
+                              "description": "Capstone letter analysis. Reveals completion and follow-through style."
+                            },
+                            "firstVowel": {
+                              "type": "object",
+                              "properties": {
+                                "letter": {
+                                  "type": "string",
+                                  "description": "First vowel in the full name (A, E, I, O, or U)."
+                                },
+                                "meaning": {
+                                  "type": "string",
+                                  "description": "Instinctive emotional response and inner reaction style."
+                                }
+                              },
+                              "required": [
+                                "letter",
+                                "meaning"
+                              ],
+                              "description": "First Vowel analysis. Reveals instinctive emotional reactions."
+                            }
+                          },
+                          "required": [
+                            "cornerstone",
+                            "capstone",
+                            "firstVowel"
+                          ],
+                          "description": "Name letter analysis: Cornerstone, Capstone, and First Vowel."
                         }
                       },
                       "required": [
                         "karmicLessons",
                         "karmicDebt",
-                        "personalYear"
+                        "personalYear",
+                        "pinnacles",
+                        "challenges",
+                        "hiddenPassion",
+                        "subconsciousSelf",
+                        "nameLetters"
                       ],
-                      "description": "Additional numerology insights beyond core numbers: karmic analysis and yearly forecast."
+                      "description": "Additional numerology insights: karmic analysis, yearly/monthly forecasts, pinnacles, challenges, hidden passion, subconscious self, and name letter analysis."
+                    },
+                    "birthDayProfile": {
+                      "type": "object",
+                      "properties": {
+                        "day": {
+                          "type": "number",
+                          "description": "Calendar day of birth (1-31)."
+                        },
+                        "reducesTo": {
+                          "type": "number",
+                          "description": "Single digit or master number this day reduces to."
+                        },
+                        "title": {
+                          "type": "string",
+                          "description": "Unique archetype title for this specific birth day."
+                        },
+                        "keywords": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Personality traits specific to this birth day."
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Detailed personality profile unique to this calendar day, not just the reduced digit."
+                        },
+                        "strengths": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Strengths specific to this birth day."
+                        },
+                        "challenges": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Challenges specific to this birth day."
+                        },
+                        "career": {
+                          "type": "string",
+                          "description": "Career guidance for this specific birth day."
+                        },
+                        "relationships": {
+                          "type": "string",
+                          "description": "Relationship dynamics for this birth day."
+                        }
+                      },
+                      "required": [
+                        "day",
+                        "reducesTo",
+                        "title",
+                        "keywords",
+                        "description",
+                        "strengths",
+                        "challenges",
+                        "career",
+                        "relationships"
+                      ],
+                      "description": "Birth Day profile with day-specific meaning (1-31). Unlike the core Birth Day number, this provides unique interpretation per calendar day."
+                    },
+                    "maturityStatus": {
+                      "type": "object",
+                      "properties": {
+                        "isActive": {
+                          "type": "boolean",
+                          "description": "Whether the Maturity number is currently active (typically activates around age 35-40)."
+                        },
+                        "currentAge": {
+                          "type": "number",
+                          "description": "Current age calculated from the birth year."
+                        },
+                        "activationRange": {
+                          "type": "string",
+                          "description": "Age range when the Maturity number typically activates (35-40)."
+                        }
+                      },
+                      "required": [
+                        "isActive",
+                        "currentAge",
+                        "activationRange"
+                      ],
+                      "description": "Maturity number activation status based on current age."
+                    },
+                    "luckyAssociations": {
+                      "type": "object",
+                      "properties": {
+                        "colors": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Lucky colors associated with the Life Path number."
+                        },
+                        "gemstones": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Lucky gemstones aligned to the ruling planet."
+                        },
+                        "day": {
+                          "type": "string",
+                          "description": "Lucky day of the week."
+                        },
+                        "element": {
+                          "type": "string",
+                          "description": "Classical element (Fire, Water, Earth, Air)."
+                        },
+                        "rulingPlanet": {
+                          "type": "string",
+                          "description": "Ruling planet for this Life Path number."
+                        },
+                        "compatibleNumbers": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "description": "Most compatible Life Path numbers."
+                        },
+                        "incompatibleNumbers": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          },
+                          "description": "Least compatible Life Path numbers."
+                        }
+                      },
+                      "required": [
+                        "colors",
+                        "gemstones",
+                        "day",
+                        "element",
+                        "rulingPlanet",
+                        "compatibleNumbers",
+                        "incompatibleNumbers"
+                      ],
+                      "description": "Lucky associations based on Life Path number: colors, gemstones, day, element, planet, and compatibility."
                     },
                     "summary": {
                       "type": "string",
@@ -31107,6 +32966,7 @@
                     "profile",
                     "coreNumbers",
                     "additionalInsights",
+                    "maturityStatus",
                     "summary"
                   ]
                 }

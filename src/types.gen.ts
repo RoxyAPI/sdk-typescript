@@ -5121,55 +5121,55 @@ export type PostAstrologySynastryData = {
     body?: {
         person1: {
             /**
-             * Optional display name for this person. Included in the response for easy identification.
-             */
-            name?: string;
-            /**
-             * Birth date in YYYY-MM-DD format.
+             * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
              */
             date: string;
             /**
-             * Birth time in 24-hour HH:MM:SS format. Determines Ascendant and house placements.
+             * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
              */
             time: string;
             /**
-             * Birth location latitude in decimal degrees (-90 to 90).
+             * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
              */
             latitude: number;
             /**
-             * Birth location longitude in decimal degrees (-180 to 180).
+             * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
              */
             longitude: number;
             /**
              * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
              */
             timezone: number;
+            /**
+             * Optional display name for this person. Included in the response for easy identification.
+             */
+            name?: string;
         };
         person2: {
             /**
-             * Optional display name for this person. Included in the response for easy identification.
-             */
-            name?: string;
-            /**
-             * Birth date in YYYY-MM-DD format.
+             * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
              */
             date: string;
             /**
-             * Birth time in 24-hour HH:MM:SS format. Determines Ascendant and house placements.
+             * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
              */
             time: string;
             /**
-             * Birth location latitude in decimal degrees (-90 to 90).
+             * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
              */
             latitude: number;
             /**
-             * Birth location longitude in decimal degrees (-180 to 180).
+             * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
              */
             longitude: number;
             /**
              * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
              */
             timezone: number;
+            /**
+             * Optional display name for this person. Included in the response for easy identification.
+             */
+            name?: string;
         };
         /**
          * House system for both natal charts. Placidus (default), Whole Sign, Equal, or Koch.
@@ -7102,7 +7102,7 @@ export type PostAstrologyCompatibilityScoreResponses = {
              */
             intellectual: number;
             /**
-             * Physical compatibility score based on Mars-Mars and Mars-Venus inter-aspects.
+             * Physical compatibility score based on Mars-Mars and Mars-Sun inter-aspects.
              */
             physical: number;
             /**
@@ -7111,11 +7111,271 @@ export type PostAstrologyCompatibilityScoreResponses = {
             spiritual: number;
         };
         /**
-         * Identified relationship strengths based on harmonious inter-chart aspects.
+         * Summary of key planetary positions for both people. Includes the four planets most relevant to relationship compatibility.
+         */
+        persons: {
+            /**
+             * Key planet positions for person 1. Sun, Moon, Venus, and Mars sign placements.
+             */
+            person1: {
+                /**
+                 * Sun sign position. Core identity and ego.
+                 */
+                sun: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+                /**
+                 * Moon sign position. Emotional nature and instincts.
+                 */
+                moon: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+                /**
+                 * Venus sign position. Love language and relationship style.
+                 */
+                venus: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+                /**
+                 * Mars sign position. Passion, desire, and conflict style.
+                 */
+                mars: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+            };
+            /**
+             * Key planet positions for person 2. Sun, Moon, Venus, and Mars sign placements.
+             */
+            person2: {
+                /**
+                 * Sun sign position. Core identity and ego.
+                 */
+                sun: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+                /**
+                 * Moon sign position. Emotional nature and instincts.
+                 */
+                moon: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+                /**
+                 * Venus sign position. Love language and relationship style.
+                 */
+                venus: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+                /**
+                 * Mars sign position. Passion, desire, and conflict style.
+                 */
+                mars: {
+                    /**
+                     * Zodiac sign this planet occupies in the tropical zodiac.
+                     */
+                    sign: string;
+                    /**
+                     * Degree within the zodiac sign (0-29.999).
+                     */
+                    degree: number;
+                };
+            };
+        };
+        /**
+         * Sign-by-sign compatibility analysis for the four key relationship planets. Each entry describes how the two signs interact through that planetary lens.
+         */
+        signCompatibility: {
+            /**
+             * Sun sign compatibility. Reveals core personality dynamic as a couple.
+             */
+            sun: {
+                /**
+                 * Person 1 sign for this planet.
+                 */
+                person1Sign: string;
+                /**
+                 * Person 2 sign for this planet.
+                 */
+                person2Sign: string;
+                /**
+                 * Narrative analysis of how these two signs interact through this planet.
+                 */
+                description: string;
+            };
+            /**
+             * Moon sign compatibility. Reveals how you process emotions and nurture each other.
+             */
+            moon: {
+                /**
+                 * Person 1 sign for this planet.
+                 */
+                person1Sign: string;
+                /**
+                 * Person 2 sign for this planet.
+                 */
+                person2Sign: string;
+                /**
+                 * Narrative analysis of how these two signs interact through this planet.
+                 */
+                description: string;
+            };
+            /**
+             * Venus sign compatibility. Reveals love languages and what you find beautiful together.
+             */
+            venus: {
+                /**
+                 * Person 1 sign for this planet.
+                 */
+                person1Sign: string;
+                /**
+                 * Person 2 sign for this planet.
+                 */
+                person2Sign: string;
+                /**
+                 * Narrative analysis of how these two signs interact through this planet.
+                 */
+                description: string;
+            };
+            /**
+             * Mars sign compatibility. Reveals how you handle passion, conflict, and desire.
+             */
+            mars: {
+                /**
+                 * Person 1 sign for this planet.
+                 */
+                person1Sign: string;
+                /**
+                 * Person 2 sign for this planet.
+                 */
+                person2Sign: string;
+                /**
+                 * Narrative analysis of how these two signs interact through this planet.
+                 */
+                description: string;
+            };
+        };
+        /**
+         * Elemental balance comparison. Shows how fire, earth, air, and water energy is distributed across both charts.
+         */
+        elementBalance: {
+            /**
+             * Element distribution across person 1 natal planets.
+             */
+            person1: {
+                /**
+                 * Count of planets in fire signs (Aries, Leo, Sagittarius).
+                 */
+                fire: number;
+                /**
+                 * Count of planets in earth signs (Taurus, Virgo, Capricorn).
+                 */
+                earth: number;
+                /**
+                 * Count of planets in air signs (Gemini, Libra, Aquarius).
+                 */
+                air: number;
+                /**
+                 * Count of planets in water signs (Cancer, Scorpio, Pisces).
+                 */
+                water: number;
+            };
+            /**
+             * Element distribution across person 2 natal planets.
+             */
+            person2: {
+                /**
+                 * Count of planets in fire signs (Aries, Leo, Sagittarius).
+                 */
+                fire: number;
+                /**
+                 * Count of planets in earth signs (Taurus, Virgo, Capricorn).
+                 */
+                earth: number;
+                /**
+                 * Count of planets in air signs (Gemini, Libra, Aquarius).
+                 */
+                air: number;
+                /**
+                 * Count of planets in water signs (Cancer, Scorpio, Pisces).
+                 */
+                water: number;
+            };
+            /**
+             * Dominant element shared by both charts, or null if dominant elements differ.
+             */
+            sharedElement: string;
+            /**
+             * How the elemental balance between charts shapes the relationship dynamic.
+             */
+            description: string;
+        };
+        /**
+         * Relationship archetype based on score pattern, category strengths, and elemental balance. One of eight archetypes: Kindred Spirits, Opposites Attract, The Power Couple, The Nurturers, The Adventurers, Growth Partners, The Balancers, The Mystics.
+         */
+        archetype: {
+            /**
+             * Relationship archetype label. A headline-friendly label for the dynamic.
+             */
+            label: string;
+            /**
+             * Narrative description of the relationship archetype and what it means.
+             */
+            description: string;
+        };
+        /**
+         * Top relationship strengths based on harmonious inter-chart aspects. Each includes the planet pair, aspect type, and relationship-specific interpretation.
          */
         strengths: Array<string>;
         /**
-         * Potential friction points based on challenging inter-chart aspects. Growth opportunities in the relationship.
+         * Potential friction points based on challenging inter-chart aspects. Each includes specific guidance for navigating the tension.
          */
         challenges: Array<string>;
         /**
@@ -7147,6 +7407,35 @@ export type PostAstrologyCompatibilityScoreResponses = {
              */
             neutral: number;
         };
+        /**
+         * The most significant inter-chart aspects involving personal planets (Sun through Saturn), sorted by strength. Each includes a relationship-specific interpretation.
+         */
+        keyAspects: Array<{
+            /**
+             * First planet in the aspect.
+             */
+            planet1: string;
+            /**
+             * Second planet in the aspect.
+             */
+            planet2: string;
+            /**
+             * Aspect type (conjunction, trine, square, etc.).
+             */
+            type: string;
+            /**
+             * Deviation from exact aspect in degrees. Tighter orb = stronger influence.
+             */
+            orb: number;
+            /**
+             * Aspect nature. Harmonious flows easily. Challenging creates growth-oriented tension.
+             */
+            interpretation: 'harmonious' | 'challenging' | 'neutral';
+            /**
+             * Relationship-specific interpretation of this aspect between the two charts.
+             */
+            description: string;
+        }>;
     };
 };
 
@@ -14701,6 +14990,201 @@ export type PostNumerologyExpressionResponses = {
 
 export type PostNumerologyExpressionResponse = PostNumerologyExpressionResponses[keyof PostNumerologyExpressionResponses];
 
+export type PostNumerologyBridgeData = {
+    body?: {
+        /**
+         * Full legal birth name as it appears on the birth certificate. Used to calculate Expression, Soul Urge, and Personality numbers. Include first, middle, and last names separated by spaces.
+         */
+        fullName: string;
+        /**
+         * Birth year between 100 and 2100. Used to calculate the Life Path number via Pythagorean reduction.
+         */
+        year: number;
+        /**
+         * Birth month (1 to 12)
+         */
+        month: number;
+        /**
+         * Birth day (1 to 31)
+         */
+        day: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/bridge';
+};
+
+export type PostNumerologyBridgeErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyBridgeError = PostNumerologyBridgeErrors[keyof PostNumerologyBridgeErrors];
+
+export type PostNumerologyBridgeResponses = {
+    /**
+     * Successfully calculated three Bridge Numbers with actionable harmony guidance
+     */
+    200: {
+        /**
+         * Bridge between Life Path and Expression numbers. Reveals the gap between your destined life purpose (from birth date) and your natural talents and abilities (from birth name). A high bridge here means your innate skills may not directly serve your life mission without conscious effort.
+         */
+        lifePathExpression: {
+            /**
+             * Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment.
+             */
+            bridge: number;
+            from: {
+                /**
+                 * Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            to: {
+                /**
+                 * Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            /**
+             * Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony.
+             */
+            meaning: string;
+        };
+        /**
+         * Bridge between Expression and Personality numbers. Reveals the gap between your true talents (all letters) and how others perceive you (consonants only). A high bridge means others may not see your real capabilities, requiring you to present yourself more authentically.
+         */
+        expressionPersonality: {
+            /**
+             * Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment.
+             */
+            bridge: number;
+            from: {
+                /**
+                 * Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            to: {
+                /**
+                 * Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            /**
+             * Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony.
+             */
+            meaning: string;
+        };
+        /**
+         * Bridge between Expression and Soul Urge numbers. Reveals the gap between your outward talents (all letters) and your deepest inner desires (vowels only). A high bridge means what you are good at may differ from what your soul truly craves, calling for realignment.
+         */
+        expressionSoulUrge: {
+            /**
+             * Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment.
+             */
+            bridge: number;
+            from: {
+                /**
+                 * Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            to: {
+                /**
+                 * Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            /**
+             * Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony.
+             */
+            meaning: string;
+        };
+    };
+};
+
+export type PostNumerologyBridgeResponse = PostNumerologyBridgeResponses[keyof PostNumerologyBridgeResponses];
+
 export type PostNumerologySoulUrgeData = {
     body?: {
         /**
@@ -14781,23 +15265,23 @@ export type PostNumerologySoulUrgeResponses = {
      */
     200: {
         /**
-         * Soul Urge number (1-9, 11, 22, 33)
+         * Your Soul Urge number (also called Heart Desire number), revealing your innermost motivations and what your soul truly craves. Values range from 1 to 9 for single digits, or 11, 22, 33 for Master Numbers.
          */
         number: number;
         /**
-         * Step-by-step calculation showing vowel values only
+         * Full step-by-step Pythagorean reduction using only the vowels (A, E, I, O, U) from the birth name. Shows each vowel mapped to its numeric value, grouped by word, then summed and reduced to the final Soul Urge number.
          */
         calculation: string;
         /**
-         * Number type classification
+         * Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22, 33). Master Numbers in the Soul Urge position indicate a soul with amplified spiritual longing and heightened inner sensitivity.
          */
         type: 'single' | 'master';
         /**
-         * Whether calculation passed through karmic debt number
+         * Indicates whether a Karmic Debt number (13, 14, 16, or 19) appeared during the vowel reduction chain. Karmic Debt in the Soul Urge reveals past-life emotional patterns and unresolved inner desires carried into this lifetime.
          */
         hasKarmicDebt: boolean;
         /**
-         * Karmic debt number if detected (13, 14, 16, 19)
+         * The specific Karmic Debt number detected during the vowel reduction, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life emotional lesson that influences your deepest desires and motivations.
          */
         karmicDebtNumber?: number;
         /**
@@ -14936,23 +15420,23 @@ export type PostNumerologyPersonalityResponses = {
      */
     200: {
         /**
-         * Personality number (1-9, 11, 22, 33)
+         * Your Personality number, derived from the consonants in your birth name. Reveals how others perceive you, your outer persona, and the first impression you project. Values range from 1 to 9 for single digits, or 11, 22, 33 for Master Numbers.
          */
         number: number;
         /**
-         * Step-by-step calculation showing consonant values only
+         * Full step-by-step Pythagorean reduction using only the consonants from the birth name. Shows each consonant mapped to its numeric value, grouped by word, then summed and reduced to the final Personality number.
          */
         calculation: string;
         /**
-         * Number type classification
+         * Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22, 33). Master Numbers in the Personality position indicate a powerful outer presence that others immediately sense, carrying heightened charisma and public influence.
          */
         type: 'single' | 'master';
         /**
-         * Whether calculation passed through karmic debt number
+         * Indicates whether a Karmic Debt number (13, 14, 16, or 19) appeared during the consonant reduction chain. Karmic Debt in the Personality position reveals past-life patterns that influence how others perceive you and the social challenges you must overcome.
          */
         hasKarmicDebt: boolean;
         /**
-         * Karmic debt number if detected (13, 14, 16, 19)
+         * The specific Karmic Debt number detected during the consonant reduction, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life lesson that shapes your public image and social interactions.
          */
         karmicDebtNumber?: number;
         /**
@@ -15091,23 +15575,23 @@ export type PostNumerologyBirthDayResponses = {
      */
     200: {
         /**
-         * Birth Day number (1-9, 11, 22)
+         * Your Birth Day number, revealing the special talents and innate abilities you carry from the day you were born. Values range from 1 to 9 for single digits, or 11, 22 for Master Numbers (days 11 and 22 are never reduced).
          */
         number: number;
         /**
-         * Step-by-step calculation (single digit if 1-9)
+         * Step-by-step digit reduction of the birth day. Single-digit days (1 to 9) remain as-is, Master Number days (11, 22) are preserved, and all other double-digit days are reduced by summing their digits.
          */
         calculation: string;
         /**
-         * Number type classification
+         * Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22). Master Numbers in the Birth Day position indicate extraordinary innate gifts that are available from birth and demand conscious development.
          */
         type: 'single' | 'master';
         /**
-         * Whether day number has karmic debt
+         * Indicates whether a Karmic Debt number (13, 14, 16, or 19) corresponds to the birth day. Karmic Debt in the Birth Day position reveals past-life challenges woven directly into your natural talents, influencing how your gifts manifest.
          */
         hasKarmicDebt: boolean;
         /**
-         * Karmic debt number if present (13, 14, 16, 19)
+         * The specific Karmic Debt number detected from the birth day, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life lesson embedded in the talents your birth day bestows.
          */
         karmicDebtNumber?: number;
         /**
@@ -15169,13 +15653,29 @@ export type PostNumerologyBirthDayResponse = PostNumerologyBirthDayResponses[key
 export type PostNumerologyMaturityData = {
     body?: {
         /**
-         * Your Life Path number (1-9, 11, 22, 33)
+         * Your Life Path number (1-9, 11, 22, 33). Optional if year, month, day are provided.
          */
-        lifePath: number;
+        lifePath?: number;
         /**
-         * Your Expression number (1-9, 11, 22, 33)
+         * Your Expression number (1-9, 11, 22, 33). Optional if fullName is provided.
          */
-        expression: number;
+        expression?: number;
+        /**
+         * Full birth name to calculate Expression number automatically. Use instead of passing expression directly.
+         */
+        fullName?: string;
+        /**
+         * Birth year to calculate Life Path automatically. Use with month and day instead of passing lifePath directly.
+         */
+        year?: number;
+        /**
+         * Birth month (1-12). Required with year and day for automatic Life Path calculation.
+         */
+        month?: number;
+        /**
+         * Birth day (1-31). Required with year and month for automatic Life Path calculation.
+         */
+        day?: number;
     };
     path?: never;
     query?: {
@@ -15250,23 +15750,23 @@ export type PostNumerologyMaturityResponses = {
      */
     200: {
         /**
-         * Maturity number (1-9, 11, 22, 33)
+         * Your Maturity number (also called Realization number), revealing who you are becoming in the second half of life. Derived from the sum of your Life Path and Expression numbers. Values range from 1 to 9 for single digits, or 11, 22, 33 for Master Numbers.
          */
         number: number;
         /**
-         * Step-by-step calculation showing Life Path + Expression
+         * Full step-by-step reduction showing Life Path plus Expression combined and reduced to the final Maturity number. This synthesis represents the convergence of your life purpose and natural talents into mature wisdom.
          */
         calculation: string;
         /**
-         * Number type classification
+         * Whether this is a standard single-digit number (1 to 9) or a Master Number (11, 22, 33). Master Numbers in the Maturity position indicate a powerful late-life awakening with extraordinary potential for spiritual leadership and legacy.
          */
         type: 'single' | 'master';
         /**
-         * Whether calculation passed through karmic debt number
+         * Indicates whether a Karmic Debt number (13, 14, 16, or 19) appeared during the Life Path plus Expression reduction. Karmic Debt in the Maturity position reveals past-life lessons that surface during midlife transformation, typically after age 35 to 40.
          */
         hasKarmicDebt: boolean;
         /**
-         * Karmic debt number if detected (13, 14, 16, 19)
+         * The specific Karmic Debt number detected during the Maturity reduction, if any. Each debt number (13, 14, 16, 19) represents a distinct past-life challenge that becomes especially prominent as you enter the second half of life.
          */
         karmicDebtNumber?: number;
         /**
@@ -15554,10 +16054,258 @@ export type PostNumerologyKarmicDebtResponses = {
              */
             resolution: string;
         }>;
+        /**
+         * Human-readable summary. Explains what the karmic debt findings mean or provides a positive affirmation when no debt is found.
+         */
+        message: string;
     };
 };
 
 export type PostNumerologyKarmicDebtResponse = PostNumerologyKarmicDebtResponses[keyof PostNumerologyKarmicDebtResponses];
+
+export type PostNumerologyPersonalDayData = {
+    body?: {
+        /**
+         * Birth month (1-12)
+         */
+        month: number;
+        /**
+         * Birth day (1-31)
+         */
+        day: number;
+        /**
+         * Target date in YYYY-MM-DD format (defaults to today)
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/personal-day';
+};
+
+export type PostNumerologyPersonalDayErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyPersonalDayError = PostNumerologyPersonalDayErrors[keyof PostNumerologyPersonalDayErrors];
+
+export type PostNumerologyPersonalDayResponses = {
+    /**
+     * Successfully calculated Personal Day with forecast
+     */
+    200: {
+        /**
+         * Personal Day number (1-9). The most granular numerology cycle, revealing the energy and theme for this specific day based on your birth data.
+         */
+        personalDay: number;
+        /**
+         * Central theme for this Personal Day. A concise label capturing the dominant energy of the day.
+         */
+        theme: string;
+        /**
+         * Actionable daily guidance. Specific advice for how to work with the energy of this Personal Day.
+         */
+        guidance: string;
+        /**
+         * The calendar date this forecast applies to in YYYY-MM-DD format.
+         */
+        targetDate: string;
+        /**
+         * The parent Personal Month number this day falls within.
+         */
+        personalMonth: number;
+        /**
+         * Theme of the parent Personal Month, providing broader context for the daily forecast.
+         */
+        personalMonthTheme: string;
+        /**
+         * The parent Personal Year number this day falls within.
+         */
+        personalYear: number;
+        /**
+         * Theme of the parent Personal Year, providing the broadest cycle context.
+         */
+        personalYearTheme: string;
+    };
+};
+
+export type PostNumerologyPersonalDayResponse = PostNumerologyPersonalDayResponses[keyof PostNumerologyPersonalDayResponses];
+
+export type PostNumerologyPersonalMonthData = {
+    body?: {
+        /**
+         * Birth month (1-12)
+         */
+        month: number;
+        /**
+         * Birth day (1-31)
+         */
+        day: number;
+        /**
+         * Target year for calculation (defaults to current year)
+         */
+        year?: number;
+        /**
+         * Target calendar month to forecast (1-12, defaults to current month)
+         */
+        targetMonth?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/personal-month';
+};
+
+export type PostNumerologyPersonalMonthErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyPersonalMonthError = PostNumerologyPersonalMonthErrors[keyof PostNumerologyPersonalMonthErrors];
+
+export type PostNumerologyPersonalMonthResponses = {
+    /**
+     * Successfully calculated Personal Month with forecast
+     */
+    200: {
+        /**
+         * Personal Month number (1-9). Each month in the cycle carries specific energy and themes that guide decisions and focus.
+         */
+        personalMonth: number;
+        /**
+         * Central theme for this Personal Month. A concise label capturing the dominant energy.
+         */
+        theme: string;
+        /**
+         * Practical guidance for this month. Specific actions, areas of focus, and advice for making the most of this monthly energy.
+         */
+        focus: string;
+        /**
+         * The calendar month this forecast applies to (1-12).
+         */
+        calendarMonth: number;
+        /**
+         * The parent Personal Year number this month falls within.
+         */
+        personalYear: number;
+        /**
+         * Theme of the parent Personal Year, providing broader context for the monthly forecast.
+         */
+        personalYearTheme: string;
+    };
+};
+
+export type PostNumerologyPersonalMonthResponse = PostNumerologyPersonalMonthResponses[keyof PostNumerologyPersonalMonthResponses];
 
 export type PostNumerologyPersonalYearData = {
     body?: {
@@ -15683,31 +16431,63 @@ export type PostNumerologyCompatibilityData = {
     body?: {
         person1: {
             /**
-             * Person 1 Life Path number (1-9, 11, 22, 33)
+             * Person 1 Life Path number (1-9, 11, 22, 33). Optional if year, month, day are provided.
              */
-            lifePath: number;
+            lifePath?: number;
             /**
-             * Person 1 Expression number (1-9, 11, 22, 33)
+             * Person 1 Expression number (1-9, 11, 22, 33). Optional if fullName is provided.
              */
-            expression: number;
+            expression?: number;
             /**
-             * Person 1 Soul Urge number (1-9, 11, 22, 33)
+             * Person 1 Soul Urge number (1-9, 11, 22, 33). Optional if fullName is provided.
              */
-            soulUrge: number;
+            soulUrge?: number;
+            /**
+             * Full birth name to calculate Expression and Soul Urge numbers automatically. Use instead of passing expression and soulUrge directly.
+             */
+            fullName?: string;
+            /**
+             * Birth year to calculate Life Path automatically. Use with month and day instead of passing lifePath directly.
+             */
+            year?: number;
+            /**
+             * Birth month (1-12). Required with year and day for automatic Life Path calculation.
+             */
+            month?: number;
+            /**
+             * Birth day (1-31). Required with year and month for automatic Life Path calculation.
+             */
+            day?: number;
         };
         person2: {
             /**
-             * Person 2 Life Path number (1-9, 11, 22, 33)
+             * Person 2 Life Path number (1-9, 11, 22, 33). Optional if year, month, day are provided.
              */
-            lifePath: number;
+            lifePath?: number;
             /**
-             * Person 2 Expression number (1-9, 11, 22, 33)
+             * Person 2 Expression number (1-9, 11, 22, 33). Optional if fullName is provided.
              */
-            expression: number;
+            expression?: number;
             /**
-             * Person 2 Soul Urge number (1-9, 11, 22, 33)
+             * Person 2 Soul Urge number (1-9, 11, 22, 33). Optional if fullName is provided.
              */
-            soulUrge: number;
+            soulUrge?: number;
+            /**
+             * Full birth name to calculate Expression and Soul Urge numbers automatically. Use instead of passing expression and soulUrge directly.
+             */
+            fullName?: string;
+            /**
+             * Birth year to calculate Life Path automatically. Use with month and day instead of passing lifePath directly.
+             */
+            year?: number;
+            /**
+             * Birth month (1-12). Required with year and day for automatic Life Path calculation.
+             */
+            month?: number;
+            /**
+             * Birth day (1-31). Required with year and month for automatic Life Path calculation.
+             */
+            day?: number;
         };
     };
     path?: never;
@@ -15787,7 +16567,7 @@ export type PostNumerologyCompatibilityResponses = {
          */
         overallScore: number;
         /**
-         * Compatibility rating (Poor/Fair/Good/Excellent/Exceptional)
+         * Compatibility rating: Highly Compatible, Very Compatible, Compatible, Moderately Compatible, or Challenging.
          */
         rating: string;
         lifePath: {
@@ -16230,6 +17010,22 @@ export type PostNumerologyChartResponses = {
                  */
                 number: number;
                 /**
+                 * Step-by-step calculation showing how the Birth Day number was reduced from the calendar day of birth.
+                 */
+                calculation: string;
+                /**
+                 * Whether this is a single digit (1-9) or master number (11, 22). Birth days of 11 and 22 are preserved as master numbers.
+                 */
+                type: 'single' | 'master';
+                /**
+                 * True if the birth day is a karmic debt number (13, 14, 16, 19).
+                 */
+                hasKarmicDebt: boolean;
+                /**
+                 * The karmic debt number if the birth day carries one (13, 14, 16, or 19).
+                 */
+                karmicDebtNumber?: number;
+                /**
                  * Complete interpretation of the Birth Day number with archetype, innate talents, career advantages, and relationship dynamics.
                  */
                 meaning: {
@@ -16331,7 +17127,7 @@ export type PostNumerologyChartResponses = {
             };
         };
         /**
-         * Additional numerology insights beyond core numbers: karmic analysis and yearly forecast.
+         * Additional numerology insights: karmic analysis, yearly/monthly forecasts, pinnacles, challenges, hidden passion, subconscious self, and name letter analysis.
          */
         additionalInsights: {
             /**
@@ -16405,7 +17201,7 @@ export type PostNumerologyChartResponses = {
                 }>;
             };
             /**
-             * Personal Year forecast. Yearly numerology cycle revealing the theme, opportunities, and challenges for the specified year.
+             * Personal Year forecast with nested Personal Month. Yearly and monthly numerology cycles.
              */
             personalYear: {
                 /**
@@ -16436,7 +17232,297 @@ export type PostNumerologyChartResponses = {
                  * Strategic guidance for making the most of this Personal Year. Covers timing decisions, areas to focus on, and the mindset that aligns with the current numerological energy.
                  */
                 advice: string;
+                /**
+                 * Personal Month forecast nested within the Personal Year cycle.
+                 */
+                personalMonth: {
+                    /**
+                     * Personal Month number (1-9).
+                     */
+                    personalMonth: number;
+                    /**
+                     * Central theme for this Personal Month.
+                     */
+                    theme: string;
+                    /**
+                     * Practical focus and guidance for this month.
+                     */
+                    focus: string;
+                };
             };
+            /**
+             * Four Pinnacle numbers representing major life phases with age ranges and meanings.
+             */
+            pinnacles: Array<{
+                /**
+                 * Pinnacle position (1-4). Four major life phases.
+                 */
+                position: number;
+                /**
+                 * Pinnacle number (1-9, 11, 22, 33). Defines the theme of this life phase.
+                 */
+                number: number;
+                /**
+                 * Age when this Pinnacle phase begins.
+                 */
+                startAge: number;
+                /**
+                 * Age when this phase ends. Null for the 4th Pinnacle (lasts rest of life).
+                 */
+                endAge: number;
+                /**
+                 * Meaning and interpretation for this Pinnacle number.
+                 */
+                meaning: {
+                    /**
+                     * Pinnacle phase title.
+                     */
+                    title: string;
+                    /**
+                     * What this Pinnacle phase brings to your life.
+                     */
+                    description: string;
+                    /**
+                     * Key opportunities during this phase.
+                     */
+                    opportunities: Array<string>;
+                    /**
+                     * Challenges to navigate during this phase.
+                     */
+                    challenges: Array<string>;
+                };
+            }>;
+            /**
+             * Four Challenge numbers representing life obstacles aligned with Pinnacle timing.
+             */
+            challenges: Array<{
+                /**
+                 * Challenge position (1-4). Four life obstacle periods.
+                 */
+                position: number;
+                /**
+                 * Challenge number (0-8). Defines the obstacle of this period.
+                 */
+                number: number;
+                /**
+                 * Age when this Challenge period begins.
+                 */
+                startAge: number;
+                /**
+                 * Age when this period ends. Null for the 4th Challenge.
+                 */
+                endAge: number;
+                /**
+                 * Meaning and resolution guidance for this Challenge number.
+                 */
+                meaning: {
+                    /**
+                     * Challenge title.
+                     */
+                    title: string;
+                    /**
+                     * What this Challenge demands you overcome.
+                     */
+                    description: string;
+                    /**
+                     * Core lesson to learn during this period.
+                     */
+                    lesson: string;
+                    /**
+                     * Actionable guidance for working through this Challenge.
+                     */
+                    howToOvercome: string;
+                };
+            }>;
+            /**
+             * Hidden Passion number. The most frequent number in the name revealing an overwhelming drive or talent.
+             */
+            hiddenPassion: {
+                /**
+                 * Hidden Passion number (1-9). The most frequently occurring number in the birth name.
+                 */
+                number: number;
+                /**
+                 * How many times this number appears in the name.
+                 */
+                count: number;
+                /**
+                 * All numbers tied for highest frequency (usually one, sometimes multiple).
+                 */
+                allPassions: Array<number>;
+                /**
+                 * Archetype title for this Hidden Passion.
+                 */
+                title: string;
+                /**
+                 * What this dominant number drive reveals about latent talents and obsessions.
+                 */
+                description: string;
+            };
+            /**
+             * Subconscious Self number. Reveals inner confidence and emergency response style.
+             */
+            subconsciousSelf: {
+                /**
+                 * Subconscious Self number (1-9). Count of unique numbers present in the name.
+                 */
+                number: number;
+                /**
+                 * Which numbers (1-9) are present in the birth name.
+                 */
+                uniqueNumbers: Array<number>;
+                /**
+                 * Archetype title for this Subconscious Self level.
+                 */
+                title: string;
+                /**
+                 * How you handle emergencies and unexpected challenges based on the breadth of numbers in your name.
+                 */
+                description: string;
+            };
+            /**
+             * Name letter analysis: Cornerstone, Capstone, and First Vowel.
+             */
+            nameLetters: {
+                /**
+                 * Cornerstone letter analysis. Reveals approach to new situations.
+                 */
+                cornerstone: {
+                    /**
+                     * First letter of the first name.
+                     */
+                    letter: string;
+                    /**
+                     * Pythagorean number value of the Cornerstone letter.
+                     */
+                    number: number;
+                    /**
+                     * How you approach new situations and initiate action.
+                     */
+                    meaning: string;
+                };
+                /**
+                 * Capstone letter analysis. Reveals completion and follow-through style.
+                 */
+                capstone: {
+                    /**
+                     * Last letter of the first name.
+                     */
+                    letter: string;
+                    /**
+                     * Pythagorean number value of the Capstone letter.
+                     */
+                    number: number;
+                    /**
+                     * How you complete tasks and handle endings.
+                     */
+                    meaning: string;
+                };
+                /**
+                 * First Vowel analysis. Reveals instinctive emotional reactions.
+                 */
+                firstVowel: {
+                    /**
+                     * First vowel in the full name (A, E, I, O, or U).
+                     */
+                    letter: string;
+                    /**
+                     * Instinctive emotional response and inner reaction style.
+                     */
+                    meaning: string;
+                };
+            };
+        };
+        /**
+         * Birth Day profile with day-specific meaning (1-31). Unlike the core Birth Day number, this provides unique interpretation per calendar day.
+         */
+        birthDayProfile?: {
+            /**
+             * Calendar day of birth (1-31).
+             */
+            day: number;
+            /**
+             * Single digit or master number this day reduces to.
+             */
+            reducesTo: number;
+            /**
+             * Unique archetype title for this specific birth day.
+             */
+            title: string;
+            /**
+             * Personality traits specific to this birth day.
+             */
+            keywords: Array<string>;
+            /**
+             * Detailed personality profile unique to this calendar day, not just the reduced digit.
+             */
+            description: string;
+            /**
+             * Strengths specific to this birth day.
+             */
+            strengths: Array<string>;
+            /**
+             * Challenges specific to this birth day.
+             */
+            challenges: Array<string>;
+            /**
+             * Career guidance for this specific birth day.
+             */
+            career: string;
+            /**
+             * Relationship dynamics for this birth day.
+             */
+            relationships: string;
+        };
+        /**
+         * Maturity number activation status based on current age.
+         */
+        maturityStatus: {
+            /**
+             * Whether the Maturity number is currently active (typically activates around age 35-40).
+             */
+            isActive: boolean;
+            /**
+             * Current age calculated from the birth year.
+             */
+            currentAge: number;
+            /**
+             * Age range when the Maturity number typically activates (35-40).
+             */
+            activationRange: string;
+        };
+        /**
+         * Lucky associations based on Life Path number: colors, gemstones, day, element, planet, and compatibility.
+         */
+        luckyAssociations?: {
+            /**
+             * Lucky colors associated with the Life Path number.
+             */
+            colors: Array<string>;
+            /**
+             * Lucky gemstones aligned to the ruling planet.
+             */
+            gemstones: Array<string>;
+            /**
+             * Lucky day of the week.
+             */
+            day: string;
+            /**
+             * Classical element (Fire, Water, Earth, Air).
+             */
+            element: string;
+            /**
+             * Ruling planet for this Life Path number.
+             */
+            rulingPlanet: string;
+            /**
+             * Most compatible Life Path numbers.
+             */
+            compatibleNumbers: Array<number>;
+            /**
+             * Least compatible Life Path numbers.
+             */
+            incompatibleNumbers: Array<number>;
         };
         /**
          * AI-ready holistic summary weaving all core numbers, karmic insights, and yearly forecast into a cohesive narrative. Ideal for generating personalized reports, chatbot responses, or one-page numerology overviews.
