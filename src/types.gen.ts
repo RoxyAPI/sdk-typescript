@@ -575,7 +575,32 @@ export type TransitsResponse = {
         /**
          * Aspect nature: harmonious (trine, sextile), challenging (square, opposition), or neutral (conjunction).
          */
-        interpretation: string;
+        nature: string;
+        /**
+         * Rich interpretation of the transit aspect including narrative summary, timing, impact assessment, practical guidance, and keywords.
+         */
+        interpretation: {
+            /**
+             * Narrative interpretation of what this transit aspect means and how it manifests.
+             */
+            summary: string;
+            /**
+             * How long this transit influence lasts based on the transiting planet speed.
+             */
+            timing: string;
+            /**
+             * Strength and nature of the transit impact on your natal chart.
+             */
+            impact: string;
+            /**
+             * Practical advice for working with or navigating this transit energy.
+             */
+            guidance: string;
+            /**
+             * Key themes activated by this transit aspect.
+             */
+            keywords: Array<string>;
+        };
     }>;
     /**
      * Transit aspect summary counts (only included when natalChart is provided). Quick overview of the current transit weather.
@@ -3321,624 +3346,6 @@ export type Trigram = {
     meaning: string;
 };
 
-export type GetAngelNumbersNumbersData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Maximum items to return per page. Range: 1-50, default 20.
-         */
-        limit?: number;
-        /**
-         * Number of items to skip for pagination. Default 0.
-         */
-        offset?: number;
-        /**
-         * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome patterns like 1212. "master" returns 11, 22, 33. "root" returns single digits 0-9.
-         */
-        type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root';
-    };
-    url: '/angel-numbers/numbers';
-};
-
-export type GetAngelNumbersNumbersErrors = {
-    /**
-     * Validation error (missing or invalid parameters)
-     */
-    400: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetAngelNumbersNumbersError = GetAngelNumbersNumbersErrors[keyof GetAngelNumbersNumbersErrors];
-
-export type GetAngelNumbersNumbersResponses = {
-    /**
-     * List of angel numbers with summary information
-     */
-    200: {
-        /**
-         * Total number of angel numbers matching the applied filters. 43 for the full set, fewer when filtered by type.
-         */
-        total: number;
-        /**
-         * Maximum items returned per page.
-         */
-        limit: number;
-        /**
-         * Number of items skipped from the start of the result set.
-         */
-        offset: number;
-        /**
-         * Array of angel number summaries for the current page.
-         */
-        numbers: Array<{
-            /**
-             * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
-             */
-            number: string;
-            /**
-             * Short descriptive title capturing the core theme and spiritual significance of this angel number.
-             */
-            title: string;
-            /**
-             * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
-             */
-            coreMessage: string;
-            /**
-             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
-             */
-            type: string;
-            /**
-             * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
-             */
-            digitRoot: number;
-            /**
-             * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
-             */
-            keywords: Array<string>;
-            /**
-             * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
-             */
-            energy: string;
-        }>;
-    };
-};
-
-export type GetAngelNumbersNumbersResponse = GetAngelNumbersNumbersResponses[keyof GetAngelNumbersNumbersResponses];
-
-export type GetAngelNumbersNumbersByNumberData = {
-    body?: never;
-    path: {
-        /**
-         * Angel number sequence to look up (e.g., "111", "444", "1212", "1234"). Must match an entry in the database.
-         */
-        number: string;
-    };
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/angel-numbers/numbers/{number}';
-};
-
-export type GetAngelNumbersNumbersByNumberErrors = {
-    /**
-     * Validation error (missing or invalid parameters)
-     */
-    400: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Angel number not found in database
-     */
-    404: {
-        /**
-         * Human-readable error message. May change wording — do not parse programmatically.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetAngelNumbersNumbersByNumberError = GetAngelNumbersNumbersByNumberErrors[keyof GetAngelNumbersNumbersByNumberErrors];
-
-export type GetAngelNumbersNumbersByNumberResponses = {
-    /**
-     * Complete angel number meaning with all interpretations
-     */
-    200: {
-        /**
-         * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
-         */
-        number: string;
-        /**
-         * Short descriptive title capturing the core theme and spiritual significance of this angel number.
-         */
-        title: string;
-        /**
-         * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
-         */
-        coreMessage: string;
-        /**
-         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
-         */
-        type: string;
-        /**
-         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
-         */
-        digitRoot: number;
-        /**
-         * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
-         */
-        keywords: Array<string>;
-        /**
-         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
-         */
-        energy: string;
-        meaning: {
-            /**
-             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of this angel number sequence.
-             */
-            spiritual: string;
-            /**
-             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
-             */
-            love: string;
-            /**
-             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life aligned with this angel number energy.
-             */
-            career: string;
-            /**
-             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
-             */
-            twinFlame: string;
-        };
-        /**
-         * Positive affirmation aligned with this angel number. Can be used for daily affirmation features, meditation guidance, or spiritual journal prompts.
-         */
-        affirmation: string;
-        /**
-         * Three to five specific, actionable steps to take when you see this angel number. Practical spiritual guidance for daily life.
-         */
-        actionSteps: Array<string>;
-    };
-};
-
-export type GetAngelNumbersNumbersByNumberResponse = GetAngelNumbersNumbersByNumberResponses[keyof GetAngelNumbersNumbersByNumberResponses];
-
-export type GetAngelNumbersLookupData = {
-    body?: never;
-    path?: never;
-    query: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Number sequence to analyze (1-8 digits). Can be any number the user has encountered: clock times (1111), addresses (717), receipts (888), license plates (4444), or any repeating pattern.
-         */
-        number: string;
-    };
-    url: '/angel-numbers/lookup';
-};
-
-export type GetAngelNumbersLookupErrors = {
-    /**
-     * Validation error (missing or invalid parameters)
-     */
-    400: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetAngelNumbersLookupError = GetAngelNumbersLookupErrors[keyof GetAngelNumbersLookupErrors];
-
-export type GetAngelNumbersLookupResponses = {
-    /**
-     * Complete analysis of the number sequence with pattern classification and meaning
-     */
-    200: {
-        /**
-         * The number sequence that was analyzed.
-         */
-        number: string;
-        /**
-         * Pattern classification detected for this number. "repeating" means all same digits. "sequential" means consecutive ascending or descending. "mirror" means palindrome or alternating pattern. "master" means numerology master number. "root" means single digit.
-         */
-        type: string;
-        /**
-         * Numerology digit root from summing and reducing all digits. Links to foundational single-digit meaning. Master numbers 11, 22, 33 are preserved.
-         */
-        digitRoot: number;
-        /**
-         * Total number of digits in the sequence.
-         */
-        digits: number;
-        /**
-         * Count of unique digits. A repeating number like 111 has 1 unique digit; 1234 has 4.
-         */
-        uniqueDigits: number;
-        /**
-         * Whether the number reads the same forwards and backwards (e.g., 1221, 1001).
-         */
-        isPalindrome: boolean;
-        /**
-         * Whether all digits are identical (e.g., 111, 4444, 777).
-         */
-        isRepeating: boolean;
-        /**
-         * Full angel number meaning if this number exists in the database (43 known numbers). Null if the number is not in the database, in which case use the analysis fields (type, digitRoot) for interpretation.
-         */
-        knownMeaning: {
-            /**
-             * Title of the matched angel number meaning.
-             */
-            title: string;
-            /**
-             * Core message summary.
-             */
-            coreMessage: string;
-            /**
-             * Energy classification (positive, neutral, cautionary).
-             */
-            energy: string;
-            /**
-             * Keywords for this angel number.
-             */
-            keywords: Array<string>;
-            /**
-             * Detailed interpretations across four life areas: spiritual, love, career, and twin flame.
-             */
-            meaning: {
-                /**
-                 * Spiritual interpretation covering divine guidance, higher purpose, and metaphysical significance.
-                 */
-                spiritual: string;
-                /**
-                 * Love and relationship interpretation for singles, couples, and those healing from past relationships.
-                 */
-                love: string;
-                /**
-                 * Career and financial guidance including professional opportunities and money mindset.
-                 */
-                career: string;
-                /**
-                 * Twin flame connection interpretation covering union, separation, and spiritual growth.
-                 */
-                twinFlame: string;
-            };
-            /**
-             * Positive affirmation for this number.
-             */
-            affirmation: string;
-            /**
-             * Actionable steps when you see this number.
-             */
-            actionSteps: Array<string>;
-        };
-        /**
-         * The foundational meaning of this number based on its digit root. Every number reduces to a root digit (0-9) or master number (11, 22, 33), which provides the base interpretation even for unknown sequences.
-         */
-        digitRootMeaning: {
-            /**
-             * Root digit number (0-9) or master number (11, 22, 33).
-             */
-            number: string;
-            /**
-             * Title of the root digit meaning in numerology.
-             */
-            title: string;
-            /**
-             * Core message of the foundational root digit.
-             */
-            coreMessage: string;
-        };
-    };
-};
-
-export type GetAngelNumbersLookupResponse = GetAngelNumbersLookupResponses[keyof GetAngelNumbersLookupResponses];
-
-export type PostAngelNumbersDailyData = {
-    body?: {
-        /**
-         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
-         */
-        seed?: string;
-        /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
-         */
-        date?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/angel-numbers/daily';
-};
-
-export type PostAngelNumbersDailyErrors = {
-    /**
-     * Validation error (missing or invalid parameters)
-     */
-    400: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostAngelNumbersDailyError = PostAngelNumbersDailyErrors[keyof PostAngelNumbersDailyErrors];
-
-export type PostAngelNumbersDailyResponses = {
-    /**
-     * Daily angel number with complete interpretation
-     */
-    200: {
-        /**
-         * The date used for angel number selection (UTC).
-         */
-        date: string;
-        /**
-         * Computed seed used for this reading. Same seed always produces the same angel number.
-         */
-        seed: string;
-        /**
-         * Angel number sequence selected for today. Three or more digit repeating, sequential, or mirror pattern (e.g., 111, 444, 1212).
-         */
-        number: string;
-        /**
-         * Short descriptive title capturing the core theme and spiritual significance of the daily angel number.
-         */
-        title: string;
-        /**
-         * One to two sentence summary of the divine message for today. Ideal for push notifications, daily guidance widgets, and quick reference.
-         */
-        coreMessage: string;
-        /**
-         * Pattern classification of the daily angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221).
-         */
-        type: string;
-        /**
-         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links the daily angel number to its foundational numerology meaning.
-         */
-        digitRoot: number;
-        /**
-         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy. "cautionary" indicates a gentle warning to rebalance or pay attention.
-         */
-        energy: string;
-        /**
-         * Detailed interpretations across four life areas for the daily angel number.
-         */
-        meaning: {
-            /**
-             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of the angel number selected for this date.
-             */
-            spiritual: string;
-            /**
-             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
-             */
-            love: string;
-            /**
-             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life.
-             */
-            career: string;
-            /**
-             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
-             */
-            twinFlame: string;
-        };
-        /**
-         * Five to eight keywords capturing the spiritual themes and energy of the daily angel number. Useful for search, filtering, and content generation.
-         */
-        keywords: Array<string>;
-        /**
-         * Positive affirmation aligned with the daily angel number. Use for daily affirmation features, meditation guidance, or spiritual journal prompts.
-         */
-        affirmation: string;
-        /**
-         * Three to five specific, actionable steps to take today based on the angel number guidance. Practical spiritual advice for daily life.
-         */
-        actionSteps: Array<string>;
-    };
-};
-
-export type PostAngelNumbersDailyResponse = PostAngelNumbersDailyResponses[keyof PostAngelNumbersDailyResponses];
-
 export type GetAstrologySignsData = {
     body?: never;
     path?: never;
@@ -5830,7 +5237,7 @@ export type PostAstrologyTransitAspectsResponses = {
             /**
              * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
              */
-            sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+            sign: string;
             /**
              * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
              */
@@ -5867,7 +5274,7 @@ export type PostAstrologyTransitAspectsResponses = {
             /**
              * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
              */
-            sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+            sign: string;
             /**
              * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
              */
@@ -6193,7 +5600,7 @@ export type PostAstrologySolarReturnResponses = {
                 /**
                  * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
                  */
-                sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+                sign: string;
                 /**
                  * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
                  */
@@ -6226,7 +5633,7 @@ export type PostAstrologySolarReturnResponses = {
                 /**
                  * Zodiac sign on this house cusp. Colors the themes of this life area.
                  */
-                sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+                sign: string;
                 /**
                  * Degree within the zodiac sign on this cusp (0-29.999).
                  */
@@ -6489,7 +5896,7 @@ export type PostAstrologyLunarReturnResponses = {
                 /**
                  * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
                  */
-                sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+                sign: string;
                 /**
                  * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
                  */
@@ -6522,7 +5929,7 @@ export type PostAstrologyLunarReturnResponses = {
                 /**
                  * Zodiac sign on this house cusp. Colors the themes of this life area.
                  */
-                sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+                sign: string;
                 /**
                  * Degree within the zodiac sign on this cusp (0-29.999).
                  */
@@ -6807,7 +6214,7 @@ export type PostAstrologyCompositeChartResponses = {
             /**
              * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
              */
-            sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+            sign: string;
             /**
              * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
              */
@@ -8059,7 +7466,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                 /**
                  * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
                  */
-                sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+                sign: string;
                 /**
                  * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
                  */
@@ -8092,7 +7499,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                 /**
                  * Zodiac sign on this house cusp. Colors the themes of this life area.
                  */
-                sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+                sign: string;
                 /**
                  * Degree within the zodiac sign on this cusp (0-29.999).
                  */
@@ -18288,6 +17695,624 @@ export type PostDreamsDailyResponses = {
 };
 
 export type PostDreamsDailyResponse = PostDreamsDailyResponses[keyof PostDreamsDailyResponses];
+
+export type GetAngelNumbersNumbersData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Maximum items to return per page. Range: 1-50, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
+        /**
+         * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome patterns like 1212. "master" returns 11, 22, 33. "root" returns single digits 0-9.
+         */
+        type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root';
+    };
+    url: '/angel-numbers/numbers';
+};
+
+export type GetAngelNumbersNumbersErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersNumbersError = GetAngelNumbersNumbersErrors[keyof GetAngelNumbersNumbersErrors];
+
+export type GetAngelNumbersNumbersResponses = {
+    /**
+     * List of angel numbers with summary information
+     */
+    200: {
+        /**
+         * Total number of angel numbers matching the applied filters. 43 for the full set, fewer when filtered by type.
+         */
+        total: number;
+        /**
+         * Maximum items returned per page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped from the start of the result set.
+         */
+        offset: number;
+        /**
+         * Array of angel number summaries for the current page.
+         */
+        numbers: Array<{
+            /**
+             * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
+             */
+            number: string;
+            /**
+             * Short descriptive title capturing the core theme and spiritual significance of this angel number.
+             */
+            title: string;
+            /**
+             * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
+             */
+            coreMessage: string;
+            /**
+             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+             */
+            type: string;
+            /**
+             * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
+             */
+            digitRoot: number;
+            /**
+             * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
+             */
+            keywords: Array<string>;
+            /**
+             * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
+             */
+            energy: string;
+        }>;
+    };
+};
+
+export type GetAngelNumbersNumbersResponse = GetAngelNumbersNumbersResponses[keyof GetAngelNumbersNumbersResponses];
+
+export type GetAngelNumbersNumbersByNumberData = {
+    body?: never;
+    path: {
+        /**
+         * Angel number sequence to look up (e.g., "111", "444", "1212", "1234"). Must match an entry in the database.
+         */
+        number: string;
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/angel-numbers/numbers/{number}';
+};
+
+export type GetAngelNumbersNumbersByNumberErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Angel number not found in database
+     */
+    404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersNumbersByNumberError = GetAngelNumbersNumbersByNumberErrors[keyof GetAngelNumbersNumbersByNumberErrors];
+
+export type GetAngelNumbersNumbersByNumberResponses = {
+    /**
+     * Complete angel number meaning with all interpretations
+     */
+    200: {
+        /**
+         * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
+         */
+        number: string;
+        /**
+         * Short descriptive title capturing the core theme and spiritual significance of this angel number.
+         */
+        title: string;
+        /**
+         * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
+         */
+        coreMessage: string;
+        /**
+         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+         */
+        type: string;
+        /**
+         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
+         */
+        digitRoot: number;
+        /**
+         * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
+         */
+        keywords: Array<string>;
+        /**
+         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
+         */
+        energy: string;
+        meaning: {
+            /**
+             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of this angel number sequence.
+             */
+            spiritual: string;
+            /**
+             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
+             */
+            love: string;
+            /**
+             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life aligned with this angel number energy.
+             */
+            career: string;
+            /**
+             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
+             */
+            twinFlame: string;
+        };
+        /**
+         * Positive affirmation aligned with this angel number. Can be used for daily affirmation features, meditation guidance, or spiritual journal prompts.
+         */
+        affirmation: string;
+        /**
+         * Three to five specific, actionable steps to take when you see this angel number. Practical spiritual guidance for daily life.
+         */
+        actionSteps: Array<string>;
+    };
+};
+
+export type GetAngelNumbersNumbersByNumberResponse = GetAngelNumbersNumbersByNumberResponses[keyof GetAngelNumbersNumbersByNumberResponses];
+
+export type GetAngelNumbersLookupData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Number sequence to analyze (1-8 digits). Can be any number the user has encountered: clock times (1111), addresses (717), receipts (888), license plates (4444), or any repeating pattern.
+         */
+        number: string;
+    };
+    url: '/angel-numbers/lookup';
+};
+
+export type GetAngelNumbersLookupErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersLookupError = GetAngelNumbersLookupErrors[keyof GetAngelNumbersLookupErrors];
+
+export type GetAngelNumbersLookupResponses = {
+    /**
+     * Complete analysis of the number sequence with pattern classification and meaning
+     */
+    200: {
+        /**
+         * The number sequence that was analyzed.
+         */
+        number: string;
+        /**
+         * Pattern classification detected for this number. "repeating" means all same digits. "sequential" means consecutive ascending or descending. "mirror" means palindrome or alternating pattern. "master" means numerology master number. "root" means single digit.
+         */
+        type: string;
+        /**
+         * Numerology digit root from summing and reducing all digits. Links to foundational single-digit meaning. Master numbers 11, 22, 33 are preserved.
+         */
+        digitRoot: number;
+        /**
+         * Total number of digits in the sequence.
+         */
+        digits: number;
+        /**
+         * Count of unique digits. A repeating number like 111 has 1 unique digit; 1234 has 4.
+         */
+        uniqueDigits: number;
+        /**
+         * Whether the number reads the same forwards and backwards (e.g., 1221, 1001).
+         */
+        isPalindrome: boolean;
+        /**
+         * Whether all digits are identical (e.g., 111, 4444, 777).
+         */
+        isRepeating: boolean;
+        /**
+         * Full angel number meaning if this number exists in the database (43 known numbers). Null if the number is not in the database, in which case use the analysis fields (type, digitRoot) for interpretation.
+         */
+        knownMeaning: {
+            /**
+             * Title of the matched angel number meaning.
+             */
+            title: string;
+            /**
+             * Core message summary.
+             */
+            coreMessage: string;
+            /**
+             * Energy classification (positive, neutral, cautionary).
+             */
+            energy: string;
+            /**
+             * Keywords for this angel number.
+             */
+            keywords: Array<string>;
+            /**
+             * Detailed interpretations across four life areas: spiritual, love, career, and twin flame.
+             */
+            meaning: {
+                /**
+                 * Spiritual interpretation covering divine guidance, higher purpose, and metaphysical significance.
+                 */
+                spiritual: string;
+                /**
+                 * Love and relationship interpretation for singles, couples, and those healing from past relationships.
+                 */
+                love: string;
+                /**
+                 * Career and financial guidance including professional opportunities and money mindset.
+                 */
+                career: string;
+                /**
+                 * Twin flame connection interpretation covering union, separation, and spiritual growth.
+                 */
+                twinFlame: string;
+            };
+            /**
+             * Positive affirmation for this number.
+             */
+            affirmation: string;
+            /**
+             * Actionable steps when you see this number.
+             */
+            actionSteps: Array<string>;
+        };
+        /**
+         * The foundational meaning of this number based on its digit root. Every number reduces to a root digit (0-9) or master number (11, 22, 33), which provides the base interpretation even for unknown sequences.
+         */
+        digitRootMeaning: {
+            /**
+             * Root digit number (0-9) or master number (11, 22, 33).
+             */
+            number: string;
+            /**
+             * Title of the root digit meaning in numerology.
+             */
+            title: string;
+            /**
+             * Core message of the foundational root digit.
+             */
+            coreMessage: string;
+        };
+    };
+};
+
+export type GetAngelNumbersLookupResponse = GetAngelNumbersLookupResponses[keyof GetAngelNumbersLookupResponses];
+
+export type PostAngelNumbersDailyData = {
+    body?: {
+        /**
+         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         */
+        seed?: string;
+        /**
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
+         */
+        date?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/angel-numbers/daily';
+};
+
+export type PostAngelNumbersDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAngelNumbersDailyError = PostAngelNumbersDailyErrors[keyof PostAngelNumbersDailyErrors];
+
+export type PostAngelNumbersDailyResponses = {
+    /**
+     * Daily angel number with complete interpretation
+     */
+    200: {
+        /**
+         * The date used for angel number selection (UTC).
+         */
+        date: string;
+        /**
+         * Computed seed used for this reading. Same seed always produces the same angel number.
+         */
+        seed: string;
+        /**
+         * Angel number sequence selected for today. Three or more digit repeating, sequential, or mirror pattern (e.g., 111, 444, 1212).
+         */
+        number: string;
+        /**
+         * Short descriptive title capturing the core theme and spiritual significance of the daily angel number.
+         */
+        title: string;
+        /**
+         * One to two sentence summary of the divine message for today. Ideal for push notifications, daily guidance widgets, and quick reference.
+         */
+        coreMessage: string;
+        /**
+         * Pattern classification of the daily angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221).
+         */
+        type: string;
+        /**
+         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links the daily angel number to its foundational numerology meaning.
+         */
+        digitRoot: number;
+        /**
+         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy. "cautionary" indicates a gentle warning to rebalance or pay attention.
+         */
+        energy: string;
+        /**
+         * Detailed interpretations across four life areas for the daily angel number.
+         */
+        meaning: {
+            /**
+             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of the angel number selected for this date.
+             */
+            spiritual: string;
+            /**
+             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
+             */
+            love: string;
+            /**
+             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life.
+             */
+            career: string;
+            /**
+             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
+             */
+            twinFlame: string;
+        };
+        /**
+         * Five to eight keywords capturing the spiritual themes and energy of the daily angel number. Useful for search, filtering, and content generation.
+         */
+        keywords: Array<string>;
+        /**
+         * Positive affirmation aligned with the daily angel number. Use for daily affirmation features, meditation guidance, or spiritual journal prompts.
+         */
+        affirmation: string;
+        /**
+         * Three to five specific, actionable steps to take today based on the angel number guidance. Practical spiritual advice for daily life.
+         */
+        actionSteps: Array<string>;
+    };
+};
+
+export type PostAngelNumbersDailyResponse = PostAngelNumbersDailyResponses[keyof PostAngelNumbersDailyResponses];
 
 export type PostIchingDailyData = {
     body?: {
