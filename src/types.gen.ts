@@ -20858,6 +20858,966 @@ export type GetCrystalsByIdResponses = {
 
 export type GetCrystalsByIdResponse = GetCrystalsByIdResponses[keyof GetCrystalsByIdResponses];
 
+export type PostBiorhythmReadingData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format. This is the anchor for all biorhythm cycle calculations.
+         */
+        birthDate: string;
+        /**
+         * Date to calculate the reading for in YYYY-MM-DD format. Defaults to today (UTC) if omitted.
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/reading';
+};
+
+export type PostBiorhythmReadingErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmReadingError = PostBiorhythmReadingErrors[keyof PostBiorhythmReadingErrors];
+
+export type PostBiorhythmReadingResponses = {
+    /**
+     * Complete biorhythm reading with all 10 cycles, energy rating, interpretation, and critical alerts
+     */
+    200: {
+        /**
+         * Birth date used for this calculation (YYYY-MM-DD).
+         */
+        birthDate: string;
+        /**
+         * Date this reading is for (YYYY-MM-DD).
+         */
+        targetDate: string;
+        /**
+         * Total days alive from birth date to target date. This is the basis for all cycle calculations.
+         */
+        daysSinceBirth: number;
+        /**
+         * All 10 biorhythm cycle readings. Keys: physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom.
+         */
+        cycles: {
+            [key: string]: {
+                /**
+                 * Percentage position in the cycle from -100 (trough) to 100 (peak). 0 represents a critical zero crossing.
+                 */
+                value: number;
+                /**
+                 * Raw sine wave value before percentage conversion, ranging from -1.0 to 1.0.
+                 */
+                rawValue: number;
+                /**
+                 * Current phase of the cycle. One of: peak, high, rising, critical_ascending, critical_descending, falling, low, trough.
+                 */
+                phase: string;
+                /**
+                 * Human-readable phase name for display in UIs, dashboards, and reports.
+                 */
+                phaseLabel: string;
+                /**
+                 * Current day position within the cycle (1-based). Ranges from 1 to the cycle period length.
+                 */
+                dayInCycle: number;
+                /**
+                 * Number of days until the next peak (100%) in this cycle.
+                 */
+                daysUntilPeak: number;
+                /**
+                 * Number of days until the next trough (-100%) in this cycle.
+                 */
+                daysUntilTrough: number;
+                /**
+                 * Number of days until the next zero crossing in this cycle.
+                 */
+                daysUntilCritical: number;
+                /**
+                 * Short-term direction of the cycle. One of: rising, falling, peaking, bottoming.
+                 */
+                trend: string;
+                /**
+                 * Editorial 2-3 sentence reading specific to this cycle at its current phase position.
+                 */
+                interpretation: string;
+            };
+        };
+        /**
+         * Overall energy score from 1 (deep recovery) to 10 (peak performance), derived from the three primary cycle positions.
+         */
+        energyRating: number;
+        /**
+         * Summary phase label. One of: high_energy, mixed, recovery, critical.
+         */
+        overallPhase: string;
+        /**
+         * Editorial 3-5 sentence reading combining all cycle states into a coherent daily assessment.
+         */
+        interpretation: string;
+        /**
+         * Actionable 1-2 sentence guidance for the day based on the combined cycle analysis.
+         */
+        advice: string;
+        /**
+         * Critical day alerts. Present only when one or more primary cycles are at or near zero crossing.
+         */
+        criticalAlerts: Array<{
+            /**
+             * Which cycle is at or near zero crossing.
+             */
+            cycle: string;
+            /**
+             * Alert type. zero_crossing when a cycle crosses zero, approaching_critical when within 1 day of zero.
+             */
+            type: string;
+            /**
+             * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
+             */
+            direction: string;
+            /**
+             * Specific advisory text for this critical alert.
+             */
+            advisory: string;
+        }>;
+    };
+};
+
+export type PostBiorhythmReadingResponse = PostBiorhythmReadingResponses[keyof PostBiorhythmReadingResponses];
+
+export type PostBiorhythmForecastData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format.
+         */
+        birthDate: string;
+        /**
+         * Start date of the forecast range in YYYY-MM-DD format. Defaults to today (UTC).
+         */
+        startDate?: string;
+        /**
+         * End date of the forecast range in YYYY-MM-DD format. Defaults to startDate + 30 days. Maximum range: 90 days.
+         */
+        endDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/forecast';
+};
+
+export type PostBiorhythmForecastErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmForecastError = PostBiorhythmForecastErrors[keyof PostBiorhythmForecastErrors];
+
+export type PostBiorhythmForecastResponses = {
+    /**
+     * Biorhythm forecast with daily readings, summary, and best/worst day identification
+     */
+    200: {
+        /**
+         * Birth date used for this calculation.
+         */
+        birthDate: string;
+        /**
+         * First day of the forecast range.
+         */
+        startDate: string;
+        /**
+         * Last day of the forecast range.
+         */
+        endDate: string;
+        /**
+         * Number of days in the forecast range.
+         */
+        totalDays: number;
+        summary: {
+            /**
+             * Date with the highest average primary cycle values in the range. Best day for demanding activities.
+             */
+            bestDay: string;
+            /**
+             * Date with the lowest average primary cycle values in the range. Best scheduled as a rest day.
+             */
+            worstDay: string;
+            /**
+             * Total number of days where at least one primary cycle crosses zero in the range.
+             */
+            criticalDayCount: number;
+            /**
+             * Average energy rating (1-10) across the entire forecast period.
+             */
+            averageEnergy: number;
+            /**
+             * Overview guidance for the entire forecast period based on average energy and cycle patterns.
+             */
+            periodAdvice: string;
+        };
+        /**
+         * Array of daily readings, one per day in the forecast range.
+         */
+        days: Array<{
+            /**
+             * Date of this daily reading (YYYY-MM-DD).
+             */
+            date: string;
+            /**
+             * Days from birth date to this date.
+             */
+            daysSinceBirth: number;
+            /**
+             * Physical cycle value (-100 to 100).
+             */
+            physical: number;
+            /**
+             * Emotional cycle value (-100 to 100).
+             */
+            emotional: number;
+            /**
+             * Intellectual cycle value (-100 to 100).
+             */
+            intellectual: number;
+            /**
+             * Intuitive cycle value (-100 to 100).
+             */
+            intuitive: number;
+            /**
+             * Energy rating for this day (1-10).
+             */
+            energyRating: number;
+            /**
+             * True if any primary cycle crosses zero on this day.
+             */
+            isCritical: boolean;
+            /**
+             * Which primary cycles are critical on this day. Empty array if none.
+             */
+            criticalCycles: Array<string>;
+        }>;
+    };
+};
+
+export type PostBiorhythmForecastResponse = PostBiorhythmForecastResponses[keyof PostBiorhythmForecastResponses];
+
+export type PostBiorhythmCriticalDaysData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format.
+         */
+        birthDate: string;
+        /**
+         * Start date of the search range in YYYY-MM-DD format. Defaults to today (UTC).
+         */
+        startDate?: string;
+        /**
+         * End date of the search range in YYYY-MM-DD format. Defaults to startDate + 90 days. Maximum range: 180 days.
+         */
+        endDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/critical-days';
+};
+
+export type PostBiorhythmCriticalDaysErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmCriticalDaysError = PostBiorhythmCriticalDaysErrors[keyof PostBiorhythmCriticalDaysErrors];
+
+export type PostBiorhythmCriticalDaysResponses = {
+    /**
+     * Critical days with zero crossing details, severity levels, and advisory text
+     */
+    200: {
+        /**
+         * Birth date used for this calculation.
+         */
+        birthDate: string;
+        /**
+         * Start of the search range.
+         */
+        startDate: string;
+        /**
+         * End of the search range.
+         */
+        endDate: string;
+        /**
+         * Total count of critical day events in the range. A double critical day counts as two events.
+         */
+        totalCriticalDays: number;
+        /**
+         * All critical day events in the range, sorted by date.
+         */
+        criticalDays: Array<{
+            /**
+             * Date of the zero crossing (YYYY-MM-DD).
+             */
+            date: string;
+            /**
+             * Which primary cycle crosses zero on this date.
+             */
+            cycle: string;
+            /**
+             * Cycle period in days.
+             */
+            period: number;
+            /**
+             * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
+             */
+            direction: string;
+            /**
+             * How many primary cycles are critical on this date. single, double, or triple.
+             */
+            severity: string;
+            /**
+             * Advisory text explaining the significance of this critical day and recommended precautions.
+             */
+            advisory: string;
+        }>;
+        /**
+         * Dates where 2 or more primary cycles cross zero simultaneously. These are particularly significant days requiring extra caution.
+         */
+        doubleCriticalDays: Array<string>;
+        /**
+         * Date where all 3 primary cycles cross zero simultaneously. Extremely rare event. Null if none found in range.
+         */
+        tripleCriticalDay: string;
+    };
+};
+
+export type PostBiorhythmCriticalDaysResponse = PostBiorhythmCriticalDaysResponses[keyof PostBiorhythmCriticalDaysResponses];
+
+export type PostBiorhythmCompatibilityData = {
+    body?: {
+        person1: {
+            /**
+             * Birth date of person 1 in YYYY-MM-DD format.
+             */
+            birthDate: string;
+        };
+        person2: {
+            /**
+             * Birth date of person 2 in YYYY-MM-DD format.
+             */
+            birthDate: string;
+        };
+        /**
+         * Date to evaluate compatibility on in YYYY-MM-DD format. Defaults to today (UTC). Compatibility varies by day since biorhythm cycles are continuous.
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/compatibility';
+};
+
+export type PostBiorhythmCompatibilityErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmCompatibilityError = PostBiorhythmCompatibilityErrors[keyof PostBiorhythmCompatibilityErrors];
+
+export type PostBiorhythmCompatibilityResponses = {
+    /**
+     * Biorhythm compatibility analysis with per-cycle alignment, overall score, and relationship guidance
+     */
+    200: {
+        person1: {
+            /**
+             * Birth date of person 1.
+             */
+            birthDate: string;
+        };
+        person2: {
+            /**
+             * Birth date of person 2.
+             */
+            birthDate: string;
+        };
+        /**
+         * Date this compatibility was calculated for.
+         */
+        targetDate: string;
+        /**
+         * Overall compatibility score from 0 (fully opposed) to 100 (perfectly synchronized).
+         */
+        overallScore: number;
+        /**
+         * Compatibility rating label. One of: Highly Aligned, Well Aligned, Moderately Aligned, Misaligned, Opposed.
+         */
+        rating: string;
+        /**
+         * Per-cycle compatibility analysis for physical, emotional, and intellectual cycles.
+         */
+        cycles: {
+            [key: string]: {
+                /**
+                 * Person 1 cycle value on the target date (-100 to 100).
+                 */
+                person1Value: number;
+                /**
+                 * Person 2 cycle value on the target date (-100 to 100).
+                 */
+                person2Value: number;
+                /**
+                 * Absolute difference between the two values (0-200). Lower values indicate better alignment.
+                 */
+                difference: number;
+                /**
+                 * Alignment score from 0 (perfectly opposed) to 100 (perfectly in sync).
+                 */
+                alignment: number;
+                /**
+                 * Alignment phase. One of: in_sync, complementary, neutral, opposing.
+                 */
+                phase: string;
+                /**
+                 * Human-readable description of how this cycle alignment affects the relationship.
+                 */
+                description: string;
+            };
+        };
+        /**
+         * Relationship strengths based on the compatibility profile.
+         */
+        strengths: Array<string>;
+        /**
+         * Potential relationship challenges to be aware of.
+         */
+        challenges: Array<string>;
+        /**
+         * Practical relationship guidance based on the combined cycle analysis.
+         */
+        advice: string;
+        dailySync: {
+            /**
+             * Absolute difference in physical cycle values (0-200). Lower = more aligned.
+             */
+            physicalDiff: number;
+            /**
+             * Absolute difference in emotional cycle values (0-200). Lower = more aligned.
+             */
+            emotionalDiff: number;
+            /**
+             * Absolute difference in intellectual cycle values (0-200). Lower = more aligned.
+             */
+            intellectualDiff: number;
+        };
+    };
+};
+
+export type PostBiorhythmCompatibilityResponse = PostBiorhythmCompatibilityResponses[keyof PostBiorhythmCompatibilityResponses];
+
+export type PostBiorhythmPhasesData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format.
+         */
+        birthDate: string;
+        /**
+         * Date to get phase information for in YYYY-MM-DD format. Defaults to today (UTC).
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/phases';
+};
+
+export type PostBiorhythmPhasesErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmPhasesError = PostBiorhythmPhasesErrors[keyof PostBiorhythmPhasesErrors];
+
+export type PostBiorhythmPhasesResponses = {
+    /**
+     * Phase information for all 10 cycles with summary
+     */
+    200: {
+        /**
+         * Birth date used for this calculation.
+         */
+        birthDate: string;
+        /**
+         * Date this phase info is for.
+         */
+        targetDate: string;
+        /**
+         * Total days alive from birth date to target date.
+         */
+        daysSinceBirth: number;
+        /**
+         * Phase information for all 10 cycles keyed by cycle ID.
+         */
+        phases: {
+            [key: string]: {
+                /**
+                 * Cycle value from -100 to 100.
+                 */
+                value: number;
+                /**
+                 * Current phase identifier.
+                 */
+                phase: string;
+                /**
+                 * Human-readable phase label.
+                 */
+                phaseLabel: string;
+                /**
+                 * Current day position within the cycle.
+                 */
+                dayInCycle: number;
+                /**
+                 * Cycle period in days. 0 for composite cycles (passion, mastery, wisdom).
+                 */
+                totalDays: number;
+                /**
+                 * Days until next zero crossing.
+                 */
+                daysUntilCritical: number;
+                /**
+                 * Short-term direction: rising, falling, peaking, or bottoming.
+                 */
+                trend: string;
+            };
+        };
+        /**
+         * Quick overview string summarizing the current state of all cycles.
+         */
+        summary: string;
+    };
+};
+
+export type PostBiorhythmPhasesResponse = PostBiorhythmPhasesResponses[keyof PostBiorhythmPhasesResponses];
+
+export type PostBiorhythmDailyData = {
+    body?: {
+        /**
+         * Optional seed for reproducible readings. Same seed + same date = same reading every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         */
+        seed?: string;
+        /**
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
+         */
+        date?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/daily';
+};
+
+export type PostBiorhythmDailyErrors = {
+    /**
+     * Validation error (missing or invalid parameters)
+     */
+    400: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmDailyError = PostBiorhythmDailyErrors[keyof PostBiorhythmDailyErrors];
+
+export type PostBiorhythmDailyResponses = {
+    /**
+     * Daily biorhythm reading with spotlight cycle and actionable guidance
+     */
+    200: {
+        /**
+         * Date this daily reading is for (YYYY-MM-DD, UTC).
+         */
+        date: string;
+        /**
+         * Computed seed used for this reading. Same seed always produces the same reading.
+         */
+        seed: string;
+        /**
+         * Overall energy score from 1 to 10.
+         */
+        energyRating: number;
+        /**
+         * Summary phase. One of: high_energy, mixed, recovery, critical.
+         */
+        overallPhase: string;
+        spotlight: {
+            /**
+             * Which primary cycle is featured as the daily spotlight.
+             */
+            cycle: string;
+            /**
+             * Current value of the spotlight cycle (-100 to 100).
+             */
+            value: number;
+            /**
+             * Current phase of the spotlight cycle.
+             */
+            phase: string;
+            /**
+             * Personalized message about the spotlight cycle and what it means for today.
+             */
+            message: string;
+        };
+        quickRead: {
+            /**
+             * Physical cycle value (-100 to 100).
+             */
+            physical: number;
+            /**
+             * Emotional cycle value (-100 to 100).
+             */
+            emotional: number;
+            /**
+             * Intellectual cycle value (-100 to 100).
+             */
+            intellectual: number;
+        };
+        /**
+         * Concise daily biorhythm message combining energy rating and spotlight cycle.
+         */
+        dailyMessage: string;
+        /**
+         * Actionable 1-2 sentence guidance for the day.
+         */
+        advice: string;
+    };
+};
+
+export type PostBiorhythmDailyResponse = PostBiorhythmDailyResponses[keyof PostBiorhythmDailyResponses];
+
 export type GetLocationSearchData = {
     body?: never;
     path?: never;
