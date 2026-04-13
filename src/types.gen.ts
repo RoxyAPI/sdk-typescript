@@ -3360,17 +3360,49 @@ export type GetAstrologySignsData = {
 
 export type GetAstrologySignsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -3384,6 +3416,21 @@ export type GetAstrologySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -3477,17 +3524,49 @@ export type GetAstrologySignsByIdData = {
 
 export type GetAstrologySignsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -3514,6 +3593,21 @@ export type GetAstrologySignsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -3651,17 +3745,49 @@ export type GetAstrologyPlanetMeaningsData = {
 
 export type GetAstrologyPlanetMeaningsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -3675,6 +3801,21 @@ export type GetAstrologyPlanetMeaningsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -3763,17 +3904,49 @@ export type GetAstrologyPlanetMeaningsByIdData = {
 
 export type GetAstrologyPlanetMeaningsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -3800,6 +3973,21 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -3929,17 +4117,49 @@ export type PostAstrologyNatalChartData = {
 
 export type PostAstrologyNatalChartErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -3953,6 +4173,21 @@ export type PostAstrologyNatalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4028,17 +4263,49 @@ export type PostAstrologyPlanetsData = {
 
 export type PostAstrologyPlanetsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4052,6 +4319,21 @@ export type PostAstrologyPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4189,17 +4471,49 @@ export type GetAstrologyMoonPhaseCurrentData = {
 
 export type GetAstrologyMoonPhaseCurrentErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4213,6 +4527,21 @@ export type GetAstrologyMoonPhaseCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4333,17 +4662,49 @@ export type GetAstrologyMoonPhaseUpcomingData = {
 
 export type GetAstrologyMoonPhaseUpcomingErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4357,6 +4718,21 @@ export type GetAstrologyMoonPhaseUpcomingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4434,17 +4810,49 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthData = {
 
 export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4458,6 +4866,21 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4595,17 +5018,49 @@ export type PostAstrologySynastryData = {
 
 export type PostAstrologySynastryErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4619,6 +5074,21 @@ export type PostAstrologySynastryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4874,17 +5344,49 @@ export type PostAstrologyHousesData = {
 
 export type PostAstrologyHousesErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4898,6 +5400,21 @@ export type PostAstrologyHousesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -4952,17 +5469,49 @@ export type PostAstrologyAspectsData = {
 
 export type PostAstrologyAspectsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -4976,6 +5525,21 @@ export type PostAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -5030,17 +5594,49 @@ export type PostAstrologyTransitsData = {
 
 export type PostAstrologyTransitsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -5054,6 +5650,21 @@ export type PostAstrologyTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -5154,17 +5765,49 @@ export type PostAstrologyTransitAspectsData = {
 
 export type PostAstrologyTransitAspectsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -5178,6 +5821,21 @@ export type PostAstrologyTransitAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -5463,17 +6121,49 @@ export type PostAstrologySolarReturnData = {
 
 export type PostAstrologySolarReturnErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -5487,6 +6177,21 @@ export type PostAstrologySolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -5763,17 +6468,49 @@ export type PostAstrologyLunarReturnData = {
 
 export type PostAstrologyLunarReturnErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -5787,6 +6524,21 @@ export type PostAstrologyLunarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -6085,17 +6837,49 @@ export type PostAstrologyCompositeChartData = {
 
 export type PostAstrologyCompositeChartErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -6109,6 +6893,21 @@ export type PostAstrologyCompositeChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -6428,17 +7227,49 @@ export type PostAstrologyCompatibilityScoreData = {
 
 export type PostAstrologyCompatibilityScoreErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -6452,6 +7283,21 @@ export type PostAstrologyCompatibilityScoreErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -6871,17 +7717,49 @@ export type GetAstrologyHoroscopeBySignDailyData = {
 
 export type GetAstrologyHoroscopeBySignDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -6895,6 +7773,21 @@ export type GetAstrologyHoroscopeBySignDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7015,17 +7908,49 @@ export type GetAstrologyHoroscopeBySignWeeklyData = {
 
 export type GetAstrologyHoroscopeBySignWeeklyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7039,6 +7964,21 @@ export type GetAstrologyHoroscopeBySignWeeklyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7143,17 +8083,49 @@ export type GetAstrologyHoroscopeBySignMonthlyData = {
 
 export type GetAstrologyHoroscopeBySignMonthlyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7167,6 +8139,21 @@ export type GetAstrologyHoroscopeBySignMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7325,17 +8312,49 @@ export type PostAstrologyPlanetaryReturnsData = {
 
 export type PostAstrologyPlanetaryReturnsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7349,6 +8368,21 @@ export type PostAstrologyPlanetaryReturnsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7596,17 +8630,49 @@ export type PostVedicAstrologyBirthChartData = {
 
 export type PostVedicAstrologyBirthChartErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7620,6 +8686,21 @@ export type PostVedicAstrologyBirthChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7669,17 +8750,49 @@ export type PostVedicAstrologyNavamsaData = {
 
 export type PostVedicAstrologyNavamsaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7693,6 +8806,21 @@ export type PostVedicAstrologyNavamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7742,17 +8870,49 @@ export type PostVedicAstrologyDivisionalChartData = {
 
 export type PostVedicAstrologyDivisionalChartErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7766,6 +8926,21 @@ export type PostVedicAstrologyDivisionalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7820,17 +8995,49 @@ export type PostVedicAstrologyCompatibilityData = {
 
 export type PostVedicAstrologyCompatibilityErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7844,6 +9051,21 @@ export type PostVedicAstrologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7898,17 +9120,49 @@ export type PostVedicAstrologyPlanetaryPositionsData = {
 
 export type PostVedicAstrologyPlanetaryPositionsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -7922,6 +9176,21 @@ export type PostVedicAstrologyPlanetaryPositionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -7984,17 +9253,49 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyData = {
 
 export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -8008,6 +9309,21 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -8126,17 +9442,49 @@ export type PostVedicAstrologyDashaCurrentData = {
 
 export type PostVedicAstrologyDashaCurrentErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -8150,6 +9498,21 @@ export type PostVedicAstrologyDashaCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -8388,17 +9751,49 @@ export type PostVedicAstrologyDashaMajorData = {
 
 export type PostVedicAstrologyDashaMajorErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -8412,6 +9807,21 @@ export type PostVedicAstrologyDashaMajorErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -8555,17 +9965,49 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
 
 export type PostVedicAstrologyDashaSubByMahadashaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -8579,6 +10021,21 @@ export type PostVedicAstrologyDashaSubByMahadashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -8713,17 +10170,49 @@ export type PostVedicAstrologyPanchangBasicData = {
 
 export type PostVedicAstrologyPanchangBasicErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -8737,6 +10226,21 @@ export type PostVedicAstrologyPanchangBasicErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -8921,17 +10425,49 @@ export type PostVedicAstrologyPanchangDetailedData = {
 
 export type PostVedicAstrologyPanchangDetailedErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -8945,6 +10481,21 @@ export type PostVedicAstrologyPanchangDetailedErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -9545,17 +11096,49 @@ export type PostVedicAstrologyPanchangChoghadiyaData = {
 
 export type PostVedicAstrologyPanchangChoghadiyaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -9569,6 +11152,21 @@ export type PostVedicAstrologyPanchangChoghadiyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -9687,17 +11285,49 @@ export type PostVedicAstrologyPanchangHoraData = {
 
 export type PostVedicAstrologyPanchangHoraErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -9711,6 +11341,21 @@ export type PostVedicAstrologyPanchangHoraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -9807,17 +11452,49 @@ export type PostVedicAstrologyDoshaManglikData = {
 
 export type PostVedicAstrologyDoshaManglikErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -9831,6 +11508,21 @@ export type PostVedicAstrologyDoshaManglikErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -9880,17 +11572,49 @@ export type PostVedicAstrologyDoshaKalsarpaData = {
 
 export type PostVedicAstrologyDoshaKalsarpaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -9904,6 +11628,21 @@ export type PostVedicAstrologyDoshaKalsarpaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -9953,17 +11692,49 @@ export type PostVedicAstrologyDoshaSadhesatiData = {
 
 export type PostVedicAstrologyDoshaSadhesatiErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -9977,6 +11748,21 @@ export type PostVedicAstrologyDoshaSadhesatiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10031,17 +11817,49 @@ export type GetVedicAstrologyYogaData = {
 
 export type GetVedicAstrologyYogaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10055,6 +11873,21 @@ export type GetVedicAstrologyYogaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10132,17 +11965,49 @@ export type GetVedicAstrologyYogaByIdData = {
 
 export type GetVedicAstrologyYogaByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10169,6 +12034,21 @@ export type GetVedicAstrologyYogaByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10244,17 +12124,49 @@ export type GetVedicAstrologyKpAyanamsaData = {
 
 export type GetVedicAstrologyKpAyanamsaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10268,6 +12180,21 @@ export type GetVedicAstrologyKpAyanamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10317,17 +12244,49 @@ export type PostVedicAstrologyKpPlanetsData = {
 
 export type PostVedicAstrologyKpPlanetsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10341,6 +12300,21 @@ export type PostVedicAstrologyKpPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10390,17 +12364,49 @@ export type PostVedicAstrologyKpCuspsData = {
 
 export type PostVedicAstrologyKpCuspsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10414,6 +12420,21 @@ export type PostVedicAstrologyKpCuspsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10463,17 +12484,49 @@ export type PostVedicAstrologyKpChartData = {
 
 export type PostVedicAstrologyKpChartErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10487,6 +12540,21 @@ export type PostVedicAstrologyKpChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10565,17 +12633,49 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
 
 export type PostVedicAstrologyKpRulingPlanetsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10589,6 +12689,21 @@ export type PostVedicAstrologyKpRulingPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10671,17 +12786,49 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
 
 export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10695,6 +12842,21 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10744,17 +12906,49 @@ export type PostVedicAstrologyKpSublordChangesData = {
 
 export type PostVedicAstrologyKpSublordChangesErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10768,6 +12962,21 @@ export type PostVedicAstrologyKpSublordChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10817,17 +13026,49 @@ export type PostVedicAstrologyKpRasiChangesData = {
 
 export type PostVedicAstrologyKpRasiChangesErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10841,6 +13082,21 @@ export type PostVedicAstrologyKpRasiChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10890,17 +13146,49 @@ export type PostVedicAstrologyKpPlanetsIntervalData = {
 
 export type PostVedicAstrologyKpPlanetsIntervalErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -10914,6 +13202,21 @@ export type PostVedicAstrologyKpPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -10988,17 +13291,49 @@ export type PostVedicAstrologyAspectsData = {
 
 export type PostVedicAstrologyAspectsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11012,6 +13347,21 @@ export type PostVedicAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -11168,17 +13518,49 @@ export type PostVedicAstrologyAspectsMonthlyData = {
 
 export type PostVedicAstrologyAspectsMonthlyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11192,6 +13574,21 @@ export type PostVedicAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -11312,17 +13709,49 @@ export type PostVedicAstrologyAspectsLunarData = {
 
 export type PostVedicAstrologyAspectsLunarErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11336,6 +13765,21 @@ export type PostVedicAstrologyAspectsLunarErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -11468,17 +13912,49 @@ export type PostVedicAstrologyTransitData = {
 
 export type PostVedicAstrologyTransitErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11492,6 +13968,21 @@ export type PostVedicAstrologyTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -11647,17 +14138,49 @@ export type PostVedicAstrologyTransitMonthlyData = {
 
 export type PostVedicAstrologyTransitMonthlyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11671,6 +14194,21 @@ export type PostVedicAstrologyTransitMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -11804,17 +14342,49 @@ export type PostVedicAstrologyParallelsData = {
 
 export type PostVedicAstrologyParallelsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11828,6 +14398,21 @@ export type PostVedicAstrologyParallelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -11941,17 +14526,49 @@ export type PostVedicAstrologyParallelsMonthlyData = {
 
 export type PostVedicAstrologyParallelsMonthlyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -11965,6 +14582,21 @@ export type PostVedicAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12077,17 +14709,49 @@ export type PostVedicAstrologyEclipticCrossingsData = {
 
 export type PostVedicAstrologyEclipticCrossingsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12101,6 +14765,21 @@ export type PostVedicAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12193,17 +14872,49 @@ export type GetVedicAstrologyRashisData = {
 
 export type GetVedicAstrologyRashisErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12217,6 +14928,21 @@ export type GetVedicAstrologyRashisErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12276,17 +15002,49 @@ export type GetVedicAstrologyRashisByIdData = {
 
 export type GetVedicAstrologyRashisByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12313,6 +15071,21 @@ export type GetVedicAstrologyRashisByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12367,17 +15140,49 @@ export type GetVedicAstrologyNakshatrasData = {
 
 export type GetVedicAstrologyNakshatrasErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12391,6 +15196,21 @@ export type GetVedicAstrologyNakshatrasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12450,17 +15270,49 @@ export type GetVedicAstrologyNakshatrasByIdData = {
 
 export type GetVedicAstrologyNakshatrasByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12487,6 +15339,21 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12536,17 +15403,49 @@ export type PostVedicAstrologyUpagrahaData = {
 
 export type PostVedicAstrologyUpagrahaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12560,6 +15459,21 @@ export type PostVedicAstrologyUpagrahaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12609,17 +15523,49 @@ export type PostVedicAstrologyAshtakavargaData = {
 
 export type PostVedicAstrologyAshtakavargaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12633,6 +15579,21 @@ export type PostVedicAstrologyAshtakavargaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12682,17 +15643,49 @@ export type PostVedicAstrologyShadbalaData = {
 
 export type PostVedicAstrologyShadbalaErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12706,6 +15699,21 @@ export type PostVedicAstrologyShadbalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12780,17 +15788,49 @@ export type GetTarotCardsData = {
 
 export type GetTarotCardsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12804,6 +15844,21 @@ export type GetTarotCardsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12880,17 +15935,49 @@ export type GetTarotCardsByIdData = {
 
 export type GetTarotCardsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -12917,6 +16004,21 @@ export type GetTarotCardsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -12988,17 +16090,49 @@ export type PostTarotDrawData = {
 
 export type PostTarotDrawErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13012,6 +16146,21 @@ export type PostTarotDrawErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13084,17 +16233,49 @@ export type PostTarotDailyData = {
 
 export type PostTarotDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13108,6 +16289,21 @@ export type PostTarotDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13218,17 +16414,49 @@ export type PostTarotYesNoData = {
 
 export type PostTarotYesNoErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13242,6 +16470,21 @@ export type PostTarotYesNoErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13348,17 +16591,49 @@ export type PostTarotSpreadsThreeCardData = {
 
 export type PostTarotSpreadsThreeCardErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13372,6 +16647,21 @@ export type PostTarotSpreadsThreeCardErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13493,17 +16783,49 @@ export type PostTarotSpreadsCelticCrossData = {
 
 export type PostTarotSpreadsCelticCrossErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13517,6 +16839,21 @@ export type PostTarotSpreadsCelticCrossErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13638,17 +16975,49 @@ export type PostTarotSpreadsLoveData = {
 
 export type PostTarotSpreadsLoveErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13662,6 +17031,21 @@ export type PostTarotSpreadsLoveErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13783,17 +17167,49 @@ export type PostTarotSpreadsCareerData = {
 
 export type PostTarotSpreadsCareerErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13807,6 +17223,21 @@ export type PostTarotSpreadsCareerErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -13951,17 +17382,49 @@ export type PostTarotSpreadsCustomData = {
 
 export type PostTarotSpreadsCustomErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -13975,6 +17438,21 @@ export type PostTarotSpreadsCustomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -14106,17 +17584,49 @@ export type PostNumerologyLifePathData = {
 
 export type PostNumerologyLifePathErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -14130,6 +17640,21 @@ export type PostNumerologyLifePathErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -14261,17 +17786,49 @@ export type PostNumerologyExpressionData = {
 
 export type PostNumerologyExpressionErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -14285,6 +17842,21 @@ export type PostNumerologyExpressionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -14428,17 +18000,49 @@ export type PostNumerologyBridgeData = {
 
 export type PostNumerologyBridgeErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -14452,6 +18056,21 @@ export type PostNumerologyBridgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -14611,17 +18230,49 @@ export type PostNumerologySoulUrgeData = {
 
 export type PostNumerologySoulUrgeErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -14635,6 +18286,21 @@ export type PostNumerologySoulUrgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -14766,17 +18432,49 @@ export type PostNumerologyPersonalityData = {
 
 export type PostNumerologyPersonalityErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -14790,6 +18488,21 @@ export type PostNumerologyPersonalityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -14921,17 +18634,49 @@ export type PostNumerologyBirthDayData = {
 
 export type PostNumerologyBirthDayErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -14945,6 +18690,21 @@ export type PostNumerologyBirthDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15096,17 +18856,49 @@ export type PostNumerologyMaturityData = {
 
 export type PostNumerologyMaturityErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15120,6 +18912,21 @@ export type PostNumerologyMaturityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15251,17 +19058,49 @@ export type PostNumerologyKarmicLessonsData = {
 
 export type PostNumerologyKarmicLessonsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15275,6 +19114,21 @@ export type PostNumerologyKarmicLessonsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15375,17 +19229,49 @@ export type PostNumerologyKarmicDebtData = {
 
 export type PostNumerologyKarmicDebtErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15399,6 +19285,21 @@ export type PostNumerologyKarmicDebtErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15497,17 +19398,49 @@ export type PostNumerologyPersonalDayData = {
 
 export type PostNumerologyPersonalDayErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15521,6 +19454,21 @@ export type PostNumerologyPersonalDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15625,17 +19573,49 @@ export type PostNumerologyPersonalMonthData = {
 
 export type PostNumerologyPersonalMonthErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15649,6 +19629,21 @@ export type PostNumerologyPersonalMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15741,17 +19736,49 @@ export type PostNumerologyPersonalYearData = {
 
 export type PostNumerologyPersonalYearErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15765,6 +19792,21 @@ export type PostNumerologyPersonalYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -15909,17 +19951,49 @@ export type PostNumerologyCompatibilityData = {
 
 export type PostNumerologyCompatibilityErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -15933,6 +20007,21 @@ export type PostNumerologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -16083,17 +20172,49 @@ export type PostNumerologyChartData = {
 
 export type PostNumerologyChartErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -16107,6 +20228,21 @@ export type PostNumerologyChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -16998,6 +21134,21 @@ export type GetNumerologyMeaningsByNumberErrors = {
         code: string;
     };
     /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
      * Monthly rate limit exceeded
      */
     429: {
@@ -17102,17 +21253,49 @@ export type PostNumerologyDailyData = {
 
 export type PostNumerologyDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17126,6 +21309,21 @@ export type PostNumerologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17247,17 +21445,49 @@ export type GetDreamsSymbolsData = {
 
 export type GetDreamsSymbolsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17271,6 +21501,21 @@ export type GetDreamsSymbolsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17342,17 +21587,49 @@ export type GetDreamsSymbolsRandomData = {
 
 export type GetDreamsSymbolsRandomErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17366,6 +21643,21 @@ export type GetDreamsSymbolsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17417,17 +21709,49 @@ export type GetDreamsSymbolsLettersData = {
 
 export type GetDreamsSymbolsLettersErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17441,6 +21765,21 @@ export type GetDreamsSymbolsLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17506,17 +21845,49 @@ export type GetDreamsSymbolsByIdData = {
 
 export type GetDreamsSymbolsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17543,6 +21914,21 @@ export type GetDreamsSymbolsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17601,17 +21987,49 @@ export type PostDreamsDailyData = {
 
 export type PostDreamsDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17625,6 +22043,21 @@ export type PostDreamsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17722,17 +22155,49 @@ export type GetAngelNumbersNumbersData = {
 
 export type GetAngelNumbersNumbersErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17746,6 +22211,21 @@ export type GetAngelNumbersNumbersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -17851,17 +22331,49 @@ export type GetAngelNumbersNumbersByNumberData = {
 
 export type GetAngelNumbersNumbersByNumberErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -17888,6 +22400,21 @@ export type GetAngelNumbersNumbersByNumberErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18001,17 +22528,49 @@ export type GetAngelNumbersLookupData = {
 
 export type GetAngelNumbersLookupErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18025,6 +22584,21 @@ export type GetAngelNumbersLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18184,17 +22758,49 @@ export type PostAngelNumbersDailyData = {
 
 export type PostAngelNumbersDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18208,6 +22814,21 @@ export type PostAngelNumbersDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18337,17 +22958,49 @@ export type PostIchingDailyData = {
 
 export type PostIchingDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18361,6 +23014,21 @@ export type PostIchingDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18500,17 +23168,49 @@ export type PostIchingDailyCastData = {
 
 export type PostIchingDailyCastErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18524,6 +23224,21 @@ export type PostIchingDailyCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18732,17 +23447,49 @@ export type GetIchingHexagramsData = {
 
 export type GetIchingHexagramsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18756,6 +23503,21 @@ export type GetIchingHexagramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18827,17 +23589,49 @@ export type GetIchingHexagramsRandomData = {
 
 export type GetIchingHexagramsRandomErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18864,6 +23658,21 @@ export type GetIchingHexagramsRandomErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -18922,17 +23731,49 @@ export type GetIchingHexagramsLookupData = {
 
 export type GetIchingHexagramsLookupErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -18959,6 +23800,21 @@ export type GetIchingHexagramsLookupErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19018,17 +23874,49 @@ export type GetIchingHexagramsByNumberData = {
 
 export type GetIchingHexagramsByNumberErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19055,6 +23943,21 @@ export type GetIchingHexagramsByNumberErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19113,17 +24016,49 @@ export type GetIchingCastData = {
 
 export type GetIchingCastErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19137,6 +24072,21 @@ export type GetIchingCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19206,17 +24156,49 @@ export type GetIchingTrigramsData = {
 
 export type GetIchingTrigramsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19230,6 +24212,21 @@ export type GetIchingTrigramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19298,17 +24295,49 @@ export type GetIchingTrigramsByIdData = {
 
 export type GetIchingTrigramsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19335,6 +24364,21 @@ export type GetIchingTrigramsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19402,17 +24446,49 @@ export type GetCrystalsZodiacBySignData = {
 
 export type GetCrystalsZodiacBySignErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19426,6 +24502,21 @@ export type GetCrystalsZodiacBySignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19531,17 +24622,49 @@ export type GetCrystalsChakraByChakraData = {
 
 export type GetCrystalsChakraByChakraErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19555,6 +24678,21 @@ export type GetCrystalsChakraByChakraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19660,17 +24798,49 @@ export type GetCrystalsElementByElementData = {
 
 export type GetCrystalsElementByElementErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19684,6 +24854,21 @@ export type GetCrystalsElementByElementErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19781,17 +24966,49 @@ export type GetCrystalsBirthstoneByMonthData = {
 
 export type GetCrystalsBirthstoneByMonthErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19805,6 +25022,21 @@ export type GetCrystalsBirthstoneByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -19905,17 +25137,49 @@ export type GetCrystalsSearchData = {
 
 export type GetCrystalsSearchErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -19929,6 +25193,21 @@ export type GetCrystalsSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20026,17 +25305,49 @@ export type GetCrystalsPairingsByIdData = {
 
 export type GetCrystalsPairingsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20063,6 +25374,21 @@ export type GetCrystalsPairingsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20168,17 +25494,49 @@ export type PostCrystalsDailyData = {
 
 export type PostCrystalsDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20192,6 +25550,21 @@ export type PostCrystalsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20283,17 +25656,49 @@ export type GetCrystalsRandomData = {
 
 export type GetCrystalsRandomErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20307,6 +25712,21 @@ export type GetCrystalsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20385,17 +25805,49 @@ export type GetCrystalsColorsData = {
 
 export type GetCrystalsColorsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20409,6 +25861,21 @@ export type GetCrystalsColorsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20467,17 +25934,49 @@ export type GetCrystalsPlanetsData = {
 
 export type GetCrystalsPlanetsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20491,6 +25990,21 @@ export type GetCrystalsPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20582,17 +26096,49 @@ export type GetCrystalsData = {
 
 export type GetCrystalsErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20606,6 +26152,21 @@ export type GetCrystalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20703,17 +26264,49 @@ export type GetCrystalsByIdData = {
 
 export type GetCrystalsByIdErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20740,6 +26333,21 @@ export type GetCrystalsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -20881,17 +26489,49 @@ export type PostBiorhythmReadingData = {
 
 export type PostBiorhythmReadingErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -20905,6 +26545,21 @@ export type PostBiorhythmReadingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21069,17 +26724,49 @@ export type PostBiorhythmForecastData = {
 
 export type PostBiorhythmForecastErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -21093,6 +26780,21 @@ export type PostBiorhythmForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21240,17 +26942,49 @@ export type PostBiorhythmCriticalDaysData = {
 
 export type PostBiorhythmCriticalDaysErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -21264,6 +26998,21 @@ export type PostBiorhythmCriticalDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21389,17 +27138,49 @@ export type PostBiorhythmCompatibilityData = {
 
 export type PostBiorhythmCompatibilityErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -21413,6 +27194,21 @@ export type PostBiorhythmCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21558,17 +27354,49 @@ export type PostBiorhythmPhasesData = {
 
 export type PostBiorhythmPhasesErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -21582,6 +27410,21 @@ export type PostBiorhythmPhasesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21697,17 +27540,49 @@ export type PostBiorhythmDailyData = {
 
 export type PostBiorhythmDailyErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -21721,6 +27596,21 @@ export type PostBiorhythmDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21840,17 +27730,49 @@ export type GetLocationSearchData = {
 
 export type GetLocationSearchErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -21864,6 +27786,21 @@ export type GetLocationSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -21976,17 +27913,49 @@ export type GetLocationCountriesData = {
 
 export type GetLocationCountriesErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -22000,6 +27969,21 @@ export type GetLocationCountriesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -22097,17 +28081,49 @@ export type GetLocationCountriesByIso2Data = {
 
 export type GetLocationCountriesByIso2Errors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -22121,6 +28137,21 @@ export type GetLocationCountriesByIso2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
@@ -22224,17 +28255,49 @@ export type GetUsageData = {
 
 export type GetUsageErrors = {
     /**
-     * Validation error (missing or invalid parameters)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -22254,6 +28317,21 @@ export type GetUsageErrors = {
      */
     404: {
         error: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
     };
     /**
      * Monthly rate limit exceeded
