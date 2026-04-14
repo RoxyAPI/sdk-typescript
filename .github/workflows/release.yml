@@ -38,7 +38,9 @@ jobs:
       - name: Check if spec changed
         id: diff
         run: |
-          if git diff --quiet specs/openapi.json; then
+          OLD=$(git show HEAD:specs/openapi.json | jq -cS '{paths, components}')
+          NEW=$(jq -cS '{paths, components}' specs/openapi.json)
+          if [ "$OLD" = "$NEW" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
