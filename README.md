@@ -49,18 +49,21 @@ const { data: reading } = await roxy.tarot.castCelticCross({
 
 ## Domains
 
-| Namespace | What it covers |
-|-----------|----------------|
-| `roxy.angelNumbers` | Angel number lookup, pattern analysis, daily guidance |
-| `roxy.astrology` | Western astrology:natal charts, horoscopes, synastry, moon phases |
-| `roxy.vedicAstrology` | Vedic/Jyotish:birth charts, dashas, nakshatras, panchang, KP system |
-| `roxy.tarot` | 78-card readings:spreads, daily pulls, yes/no, Celtic Cross |
-| `roxy.numerology` | Life path, expression, soul urge, personal year, karmic lessons |
-| `roxy.iching` | I Ching hexagrams, trigrams, daily readings |
-| `roxy.crystals` | Crystal meanings, healing properties, zodiac and chakra pairings |
-| `roxy.dreams` | Dream symbol interpretations:3,000+ symbols |
-| `roxy.location` | City and country search for birth chart coordinates |
-| `roxy.usage` | API usage stats, rate limits, subscription info |
+<!-- BEGIN:DOMAINS -->
+| Namespace | Endpoints | What it covers |
+|-----------|-----------|----------------|
+| `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases |
+| `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system |
+| `roxy.tarot` | 10 | 78-card readings: spreads, daily pulls, yes/no, Celtic Cross |
+| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic lessons |
+| `roxy.dreams` | 5 | Dream symbol dictionary: 3,000+ interpretations |
+| `roxy.angelNumbers` | 4 | Angel number lookup, pattern analysis, daily guidance |
+| `roxy.iching` | 9 | I Ching hexagrams, trigrams, daily readings |
+| `roxy.crystals` | 12 | Crystal meanings, healing properties, zodiac and chakra pairings |
+| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility |
+| `roxy.location` | 3 | City and country search for birth chart coordinates |
+| `roxy.usage` | 1 | API usage stats, rate limits, subscription info |
+<!-- END:DOMAINS -->
 
 ## Authentication
 
@@ -88,6 +91,19 @@ const client = createClient(
 );
 const roxy = new Roxy({ client });
 ```
+
+## Multi-language responses
+
+Interpretations, readings, and editorial text are available in 8 languages: English (`en`), Turkish (`tr`), German (`de`), Spanish (`es`), French (`fr`), Hindi (`hi`), Portuguese (`pt`), Russian (`ru`). Pass `query: { lang }` on any supported endpoint:
+
+```typescript
+const { data } = await roxy.tarot.getDailyCard({
+  body: { date: '2026-04-14' },
+  query: { lang: 'es' },
+});
+```
+
+Supported domains: `astrology`, `vedicAstrology`, `tarot`, `numerology`, `crystals`, `iching`, `angelNumbers`, `biorhythm`. `dreams`, `location`, and `usage` are English-only (dream content is pre-authored, and the other two are structural). Languages without translations yet fall back to English.
 
 ## Error handling
 

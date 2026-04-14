@@ -28,3 +28,6 @@ console.log('Spec saved to', SPEC_PATH);
 console.log('Running hey-api generator...');
 execSync('bunx openapi-ts', { stdio: 'inherit' });
 console.log('SDK generated successfully.');
+
+console.log('Syncing README.md and AGENTS.md from spec...');
+execSync('bun run scripts/sync-docs.ts', { stdio: 'inherit' });

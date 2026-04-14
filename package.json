@@ -26,6 +26,7 @@
 	],
 	"scripts": {
 		"generate": "bun run scripts/generate.ts",
+		"docs:sync": "bun run scripts/sync-docs.ts",
 		"build": "tsup src/factory.ts src/client/index.ts --format esm,cjs && tsc -p tsconfig.build.json --emitDeclarationOnly",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",

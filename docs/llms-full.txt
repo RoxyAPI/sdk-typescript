@@ -9,6 +9,15 @@ import { createRoxy } from '@roxyapi/sdk';
 const roxy = createRoxy(process.env.ROXY_API_KEY!);
 ```
 
+**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `fr`, `hi`, `pt`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, tarot, numerology, crystals, iching, angelNumbers, biorhythm. English-only: dreams, location, usage. Languages without translations yet fall back to English.
+
+```typescript
+const { data } = await roxy.astrology.getDailyHoroscope({
+  path: { sign: 'aries' },
+  query: { lang: 'es' },
+});
+```
+
 ---
 
 ## Astrology (Western) — `roxy.astrology`
@@ -609,6 +618,48 @@ const { data } = await roxy.dreams.getDreamSymbol({ path: { id: 'flying' } });
 
 // Daily dream symbol
 const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { date: '2026-03-27' } });
+```
+
+---
+
+## Biorhythm — `roxy.biorhythm`
+
+10-cycle biorhythm calculations (physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom). All methods are POST. Only `birthDate` (`YYYY-MM-DD`) is required; dates default to today (UTC) when omitted. Every method accepts an optional `query: { lang }` (`en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`).
+
+```typescript
+// Complete reading for a target date — all 10 cycles, phase detection, energy rating, interpretation, advice, critical day alerts
+const { data } = await roxy.biorhythm.getReading({
+  body: { birthDate: '1990-01-15', targetDate: '2026-04-14' },
+});
+
+// Multi-day forecast (max 90-day range). Returns daily cycle values, energy ratings, critical days, best/worst day summary
+const { data } = await roxy.biorhythm.getForecast({
+  body: { birthDate: '1990-01-15', startDate: '2026-04-14', endDate: '2026-05-14' },
+});
+
+// Critical days (zero crossings) in a range (max 180 days). Flags rare double and triple critical days
+const { data } = await roxy.biorhythm.getCriticalDays({
+  body: { birthDate: '1990-01-15', startDate: '2026-04-14', endDate: '2026-07-14' },
+});
+
+// Compatibility between two people on a target date (per-cycle scores, overall rating, strengths, challenges, advice)
+const { data } = await roxy.biorhythm.calculateBioCompatibility({
+  body: {
+    person1: { birthDate: '1990-01-15' },
+    person2: { birthDate: '1988-06-22' },
+    targetDate: '2026-04-14',
+  },
+});
+
+// Lightweight phase info for dashboards and widgets — no editorial text
+const { data } = await roxy.biorhythm.getPhases({
+  body: { birthDate: '1990-01-15' },
+});
+
+// Daily check-in with seeded randomness — same seed + same date = same reading (perfect for push notifications)
+const { data } = await roxy.biorhythm.getDailyBiorhythm({
+  body: { birthDate: '1990-01-15', seed: 'user-123' },
+});
 ```
 
 ---

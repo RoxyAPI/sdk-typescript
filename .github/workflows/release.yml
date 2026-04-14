@@ -35,6 +35,9 @@ jobs:
       - name: Regenerate SDK
         run: bun run generate
 
+      - name: Sync docs from spec
+        run: bun run docs:sync
+
       - name: Check if spec changed
         id: diff
         run: |
@@ -74,7 +77,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           VERSION=$(node -p "require('./package.json').version")
-          git add package.json src/version.ts specs/openapi.json src/
+          git add package.json src/version.ts specs/openapi.json src/ README.md AGENTS.md
           git commit -m "release: v$VERSION"
           git tag "v$VERSION"
           git push --follow-tags

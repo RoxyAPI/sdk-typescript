@@ -7,6 +7,10 @@ pre-commit:
       stage_fixed: true
     typecheck:
       run: bun typecheck
+    docs-sync:
+      glob: "{specs/openapi.json,scripts/tag-descriptions.ts,scripts/sync-docs.ts,docs/llms-full.txt}"
+      run: bun run docs:sync && git add README.md AGENTS.md
+      stage_fixed: true
 
 pre-push:
   parallel: false
@@ -17,6 +21,9 @@ pre-push:
     biome-full:
       run: bun run check
       priority: 2
+    docs-drift:
+      run: bun run docs:sync && git diff --exit-code -- README.md AGENTS.md || { echo "✗ README.md/AGENTS.md drifted from spec — commit the sync output"; exit 1; }
+      priority: 3
     test:
       run: bun run test
-      priority: 3
+      priority: 4

@@ -22,18 +22,23 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
 Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every method in that domain.
 
-| Namespace | What it covers |
-|-----------|----------------|
-| `roxy.astrology` | Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility |
-| `roxy.vedicAstrology` | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas |
-| `roxy.tarot` | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
-| `roxy.numerology` | Life path, expression, soul urge, personal year, karmic analysis, compatibility |
-| `roxy.crystals` | Crystal healing properties, zodiac/chakra pairings, birthstones, search |
-| `roxy.iching` | I Ching: hexagrams, trigrams, coin casting, daily readings |
-| `roxy.angelNumbers` | Angel number meanings, pattern analysis, daily guidance |
-| `roxy.dreams` | Dream symbol dictionary and interpretations |
-| `roxy.location` | City geocoding for birth chart coordinates |
-| `roxy.usage` | API usage stats and subscription info |
+<!-- BEGIN:DOMAINS -->
+| Namespace | Endpoints | What it covers |
+|-----------|-----------|----------------|
+| `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility |
+| `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas |
+| `roxy.tarot` | 10 | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
+| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic analysis, compatibility |
+| `roxy.dreams` | 5 | Dream symbol dictionary and interpretations |
+| `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
+| `roxy.iching` | 9 | I Ching: hexagrams, trigrams, coin casting, daily readings |
+| `roxy.crystals` | 12 | Crystal healing properties, zodiac/chakra pairings, birthstones, search |
+| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility, daily check-ins (wellness, dating, productivity) |
+| `roxy.location` | 3 | City geocoding for birth chart coordinates |
+| `roxy.usage` | 1 | API usage stats and subscription info |
+<!-- END:DOMAINS -->
+
+**Total:** 130 endpoints across 10 domains + usage. Counts auto-sync from `specs/openapi.json` at release time.
 
 ## Critical patterns
 
@@ -83,6 +88,24 @@ const { data } = await roxy.crystals.searchCrystals({
 });
 ```
 
+### Multi-language responses via `query: { lang }`
+
+Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `fr`, `hi`, `pt`, `ru`. Pass `lang` as a query param on any supported endpoint. Defaults to `en`.
+
+```typescript
+const { data } = await roxy.tarot.getDailyCard({
+  body: { date: '2026-04-14' },
+  query: { lang: 'es' },
+});
+
+const { data } = await roxy.numerology.calculateLifePath({
+  body: { year: 1990, month: 1, day: 15 },
+  query: { lang: 'hi' },
+});
+```
+
+Supported: `astrology`, `vedicAstrology`, `tarot`, `numerology`, `crystals`, `iching`, `angelNumbers`, `biorhythm`. Not supported (English-only): `dreams`, `location`, `usage`. Languages without translations yet fall back to English.
+
 ### Error handling
 
 All errors return `{ error: string, code: string }`. The `error` field is human-readable (may change wording). The `code` field is machine-readable (stable, safe to switch on).
@@ -130,6 +153,9 @@ Error codes:
 | I Ching reading | `roxy.iching.castReading()` |
 | Angel number meaning | `roxy.angelNumbers.getAngelNumber({ path: { number: '1111' } })` |
 | Dream symbol lookup | `roxy.dreams.getDreamSymbol({ path: { id: 'flying' } })` |
+| Biorhythm reading | `roxy.biorhythm.getReading({ body: { birthDate: '1990-01-15' } })` |
+| Biorhythm forecast | `roxy.biorhythm.getForecast({ body: { birthDate: '1990-01-15', endDate: '2026-05-01' } })` |
+| Biorhythm compatibility | `roxy.biorhythm.calculateBioCompatibility({ body: { person1: { birthDate }, person2: { birthDate } } })` |
 | Find city coordinates | `roxy.location.searchCities({ query: { q: 'Mumbai' } })` |
 | Check API usage | `roxy.usage.getUsageStats()` |
 
