@@ -240,7 +240,7 @@ This package ships with bundled documentation that AI coding agents read directl
 
 Agents supporting `AGENTS.md` (Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI) will pick it up automatically. For other tools, point your agent to `node_modules/@roxyapi/sdk/AGENTS.md`.
 
-Also available: [MCP server](https://roxyapi.com/docs/mcp) per domain at `https://roxyapi.com/mcp/{domain}-api` for agents that speak the Model Context Protocol.
+Also available: [remote MCP server](https://roxyapi.com/docs/mcp) per domain at `https://roxyapi.com/mcp/{domain}-api` (Streamable HTTP, no stdio / no self-hosting) for agents that speak the Model Context Protocol.
 
 ## Links
 

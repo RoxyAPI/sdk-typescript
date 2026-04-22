@@ -216,7 +216,7 @@ DST matters. If the birth date falls inside a daylight-saving window, use the su
 
 ## MCP equivalents
 
-Every method has a matching MCP tool. The MCP server per domain is at `https://roxyapi.com/mcp/{domain}-api`. Tool names follow `{method}_{path_snake_case}`, for example:
+Every method has a matching MCP tool. The remote MCP server per domain is at `https://roxyapi.com/mcp/{domain}-api` (Streamable HTTP, no stdio / no self-hosting). Tool names follow `{method}_{path_snake_case}`, for example:
 
 - `POST /astrology/natal-chart` -> `post_astrology_natal_chart` on `/mcp/astrology-api`
 - `GET /astrology/horoscope/{sign}/daily` -> `get_astrology_horoscope_sign_daily` on `/mcp/astrology-api`
