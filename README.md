@@ -28,16 +28,18 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 const { data } = await roxy.location.searchCities({
   query: { q: 'Mumbai, India' },
 });
-const { latitude, longitude, utcOffset } = data.cities[0];
+const { latitude, longitude, timezone } = data.cities[0];
 
-// Step 2: Western natal chart. Pass utcOffset as the `timezone` number.
+// Step 2: Western natal chart. `timezone` can be the IANA string from the
+// location response — the server resolves it to the DST-correct offset for
+// the chart's own date.
 const { data: chart } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone: utcOffset },
+  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
 
 // Vedic kundli uses the same inputs (timezone optional, defaults to 5.5 IST)
 const { data: kundli } = await roxy.vedicAstrology.generateBirthChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone: utcOffset },
+  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
 ```
 
@@ -49,10 +51,10 @@ Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibi
 
 ```typescript
 const { data } = await roxy.location.searchCities({ query: { q: 'Tokyo' } });
-const { latitude, longitude, utcOffset } = data.cities[0];
-// Pass utcOffset (5.5, -5, 9, ...) as `timezone` to astrology endpoints.
-// The `timezone` field on the city is the IANA string ("Asia/Tokyo"), keep
-// that for your own date formatting, not for RoxyAPI chart calls.
+const { latitude, longitude, timezone } = data.cities[0];
+// `timezone` is the IANA string ("Asia/Tokyo"). Pass it straight into any
+// chart endpoint — the server resolves it to the DST-correct offset for the
+// chart's date. If you prefer a decimal, `data.cities[0].utcOffset` also works.
 ```
 
 ## Domains

@@ -57,10 +57,10 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 
 ```typescript
 const { data } = await roxy.location.searchCities({ query: { q: 'Delhi' } });
-const { latitude, longitude, utcOffset } = data.cities[0];
+const { latitude, longitude, timezone } = data.cities[0];
 
 const { data: chart } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone: utcOffset },
+  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
 ```
 
@@ -179,7 +179,7 @@ These are the fields AI agents most often get wrong. Copy the format column exac
 
 | Field | Format | Good | Bad |
 |-------|--------|------|-----|
-| `timezone` | Decimal hours from UTC (number) | `5.5` (India IST, GMT+5:30), `5.75` (Nepal NPT, GMT+5:45), `-5` (NY EST), `9.5` (Adelaide), `0` (UTC) | `"5:30"`, `"5:45"`, `5.45`, `"GMT-5"`, `"Asia/Kolkata"`, `"+0530"` |
+| `timezone` | Decimal hours (number) OR IANA string | `5.5`, `-5`, `0` (decimal) OR `"Asia/Kolkata"`, `"America/New_York"` (IANA, resolved to DST-correct offset for the chart date) | `"5:30"`, `"+0530"`, `"GMT-5"`, partial names |
 | `date` | ISO date string | `"1990-01-15"` | `"Jan 15 1990"`, `new Date()`, `"15/01/1990"`, `"1990-1-15"` |
 | `time` | 24-hour string | `"14:30:00"`, `"09:00:00"` | `"2:30 PM"`, `"14:30"` (no seconds), `"9:0:0"` (no leading zeros) |
 | `latitude` | Decimal degrees (number) | `28.6139` (Delhi), `-33.8688` (Sydney), `40.7128` (NYC) | `"28°36'N"`, `"28 36 50"`, strings |
