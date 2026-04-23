@@ -4,6 +4,7 @@
 [![Docs](https://img.shields.io/badge/docs-roxyapi.com-blue)](https://roxyapi.com/docs/sdk)
 [![API Reference](https://img.shields.io/badge/api%20reference-roxyapi.com-blue)](https://roxyapi.com/api-reference)
 [![Pricing](https://img.shields.io/badge/pricing-roxyapi.com-blue)](https://roxyapi.com/pricing)
+[![SafeSkill 95/100](https://img.shields.io/badge/SafeSkill-95%2F100_Verified%20Safe-brightgreen)](https://safeskill.dev/scan/roxyapi-sdk-typescript)
 
 The TypeScript SDK for [Roxy](https://roxyapi.com), the multi-domain spiritual intelligence API. One key, ten domains, fully typed. Western astrology API, Vedic astrology API, numerology API, tarot API, biorhythm API, I Ching API, crystals API, dream interpretation API, and angel numbers API behind a single subscription.
 
