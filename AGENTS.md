@@ -216,12 +216,12 @@ DST matters. If the birth date falls inside a daylight-saving window, use the su
 
 ## MCP equivalents
 
-Every method has a matching MCP tool. The remote MCP server per domain is at `https://roxyapi.com/mcp/{domain}-api` (Streamable HTTP, no stdio / no self-hosting). Tool names follow `{method}_{path_snake_case}`, for example:
+Every method has a matching MCP tool. The remote MCP server per domain is at `https://roxyapi.com/mcp/{domain}` (Streamable HTTP, no stdio / no self-hosting). Tool names follow `{method}_{path_snake_case}`, for example:
 
-- `POST /astrology/natal-chart` -> `post_astrology_natal_chart` on `/mcp/astrology-api`
-- `GET /astrology/horoscope/{sign}/daily` -> `get_astrology_horoscope_sign_daily` on `/mcp/astrology-api`
-- `POST /vedic-astrology/birth-chart` -> `post_vedic_astrology_birth_chart` on `/mcp/vedic-astrology-api`
-- `POST /tarot/spreads/celtic-cross` -> `post_tarot_spreads_celtic_cross` on `/mcp/tarot-api`
+- `POST /astrology/natal-chart` -> `post_astrology_natal_chart` on `/mcp/astrology`
+- `GET /astrology/horoscope/{sign}/daily` -> `get_astrology_horoscope_sign_daily` on `/mcp/astrology`
+- `POST /vedic-astrology/birth-chart` -> `post_vedic_astrology_birth_chart` on `/mcp/vedic-astrology`
+- `POST /tarot/spreads/celtic-cross` -> `post_tarot_spreads_celtic_cross` on `/mcp/tarot`
 
 Use the SDK for typed TypeScript apps. Use MCP for AI agents (Claude Desktop, Cursor MCP, OpenAI agents) where the agent selects tools based on user intent.
 
