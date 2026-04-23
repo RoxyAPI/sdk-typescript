@@ -24,9 +24,12 @@ Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibi
 
 ```typescript
 const { data } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
-const { latitude, longitude, utcOffset } = data.cities[0];
-// Use `utcOffset` (decimal: 5.5, -5, 9, ...) as the `timezone` number on chart calls.
-// The city's `timezone` field is the IANA string ("Asia/Kolkata"), not what chart endpoints expect.
+const { latitude, longitude, timezone } = data.cities[0];
+// `timezone` is the IANA string ("Asia/Kolkata"). Pass it directly to any chart
+// endpoint and the server resolves it to the DST-correct decimal offset using
+// the chart's own `date`, so a January 1990 New York chart picks EST (-5) even
+// when you looked the city up in July. If you prefer numbers, `utcOffset`
+// (5.5, -5, 9, ...) also works and produces identical charts.
 ```
 
 ## Domains
@@ -228,7 +231,7 @@ LLMs hallucinate confidently in this category. These are the specific traps you 
 - **Tarot reversals are a product choice.** `allowReversals: false` on a tarot draw means no reversed cards in that draw, period. It is not cosmically meaningful, it is a config flag.
 - **Angel number lookup works for any positive integer.** Digit-root fallback covers non-canonical numbers. Do not generate validation logic that rejects anything other than `111` / `222` / `333`.
 - **Seed-based daily endpoints are DETERMINISTIC per `(seed, date)` pair.** Same seed plus same date returns the same reading. This is by design for push-notification consistency. Do not describe it as "cached" or retry on stale responses.
-- **Timezone affects Western calculations more than Vedic.** Western natal charts must respect DST at time of birth. Vedic endpoints default to IST (`5.5`) which is DST-free. Use `utcOffset` from the Location API response as your `timezone` value, not the user's current clock.
+- **Timezone affects Western calculations more than Vedic.** Western natal charts must respect DST at the time of birth. Vedic endpoints default to IST (`5.5`) which is DST-free. Pass the IANA `timezone` string from the Location API response (`"America/New_York"`, `"Asia/Kolkata"`) directly to chart calls and the server resolves the DST-correct offset for the chart `date`. Decimal `utcOffset` (5.5, -5, ...) also works and produces an identical chart.
 
 ## MCP equivalents
 
@@ -249,7 +252,7 @@ Use the SDK for typed TypeScript apps. Use MCP for AI agents (Claude Desktop, Cu
 - **Do not use raw `fetch`.** The SDK handles auth, base URL, and typed responses.
 - **Do not expose API keys client-side.** Call Roxy from server code, API routes, or server components only.
 - **Date format is `YYYY-MM-DD`, time is `HH:MM:SS`.** Both are strings.
-- **Western `timezone` is required** (decimal hours, `-5` for EST, `5.5` for IST, `0` for UTC). Vedic endpoints accept an optional `timezone` that defaults to `5.5` (IST).
+- **Western `timezone` is required** and accepts either a decimal (`-5` for EST, `5.5` for IST, `0` for UTC) or an IANA string (`"America/New_York"`, `"Asia/Kolkata"`, `"UTC"`). IANA is resolved to the DST-correct offset for the request `date`. Vedic endpoints accept an optional `timezone` that defaults to `5.5` (IST).
 - **`data` and `error` are mutually exclusive.** If `error` is set, `data` is `undefined` and vice versa.
 - **Switch on `error.code`, not `error.error`.** The message may change; the code is stable.
 - **List endpoints may return paginated objects** (`{ items, total }`) instead of raw arrays. Check the type.

@@ -22,7 +22,7 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 
 ## Astrology (Western) — `roxy.astrology`
 
-Tropical zodiac, Placidus houses, NASA JPL DE405 validated positions.
+Tropical zodiac, Placidus houses, positions verified against NASA JPL Horizons.
 
 ### Horoscopes
 
@@ -671,13 +671,18 @@ Geocoding helper for birth chart coordinates.
 ```typescript
 // Search cities (autocomplete)
 const { data } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
-// Returns array: [{ name, country, latitude, longitude, timezone, ... }]
+// Returns envelope: { total, limit, offset, cities: [{ name, country, latitude, longitude, timezone, utcOffset, ... }, ...] }
+// `timezone` is the IANA string ("Asia/Kolkata"), `utcOffset` is the decimal fallback (5.5).
+// Pass `timezone` directly to any chart endpoint; the server resolves DST for the chart's `date`.
 
-// All 227 countries
-const { data } = await roxy.location.listCountries();
+const city = data.cities[0];
+const { latitude, longitude, timezone } = city;
+
+// All countries
+const { data: countries } = await roxy.location.listCountries();
 
 // Cities in a country
-const { data } = await roxy.location.getCitiesByCountry({ path: { iso2: 'IN' } });
+const { data: indianCities } = await roxy.location.getCitiesByCountry({ path: { iso2: 'IN' } });
 ```
 
 ---

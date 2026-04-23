@@ -5,9 +5,11 @@
 [![API Reference](https://img.shields.io/badge/api%20reference-roxyapi.com-blue)](https://roxyapi.com/api-reference)
 [![Pricing](https://img.shields.io/badge/pricing-roxyapi.com-blue)](https://roxyapi.com/pricing)
 
-The TypeScript SDK for [Roxy](https://roxyapi.com), the multi-domain spiritual intelligence API. One key, ten domains, fully typed. Western astrology API, Vedic astrology API, numerology API, tarot API, biorhythm API, I Ching API, crystals API, dream interpretation API, and angel numbers API behind a single subscription.
+TypeScript SDK for astrology, Vedic astrology, tarot, numerology, and more.
 
-Build a natal chart app, a kundli matching product, a daily horoscope feature, a tarot reading app, a numerology life path calculator, or a spiritual AI agent without writing a single calculation. Calculations are verified against NASA JPL Horizons; interpretations ship in eight languages.
+One API key. Fully typed. Verified against NASA JPL Horizons.
+
+The fastest way to add natal charts, kundli matching, daily horoscopes, tarot readings, and spiritual insights to Node.js apps, backends, and AI agents. Ten domains behind a single [Roxy](https://roxyapi.com) subscription, interpretations in eight languages.
 
 ## Install
 
@@ -16,6 +18,21 @@ npm install @roxyapi/sdk
 # or
 bun add @roxyapi/sdk
 ```
+
+## Start with one call
+
+Get real product value with a single typed call. No setup beyond your API key.
+
+```typescript
+import { createRoxy } from '@roxyapi/sdk';
+
+const roxy = createRoxy(process.env.ROXY_API_KEY!);
+
+const { data } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' } });
+console.log(data.overview, data.love, data.luckyNumber);
+```
+
+Then expand into charts, compatibility, tarot, numerology, and more.
 
 ## Quick start
 
@@ -31,7 +48,7 @@ const { data } = await roxy.location.searchCities({
 const { latitude, longitude, timezone } = data.cities[0];
 
 // Step 2: Western natal chart. `timezone` can be the IANA string from the
-// location response — the server resolves it to the DST-correct offset for
+// location response. The server resolves it to the DST-correct offset for
 // the chart's own date.
 const { data: chart } = await roxy.astrology.generateNatalChart({
   body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
@@ -53,7 +70,7 @@ Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibi
 const { data } = await roxy.location.searchCities({ query: { q: 'Tokyo' } });
 const { latitude, longitude, timezone } = data.cities[0];
 // `timezone` is the IANA string ("Asia/Tokyo"). Pass it straight into any
-// chart endpoint — the server resolves it to the DST-correct offset for the
+// chart endpoint and the server resolves it to the DST-correct offset for the
 // chart's date. If you prefer a decimal, `data.cities[0].utcOffset` also works.
 ```
 
@@ -264,6 +281,22 @@ const { data: angel } = await roxy.angelNumbers.getAngelNumber({ path: { number:
 const { data: anyNumber } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '4242' } });
 ```
 
+## Built for AI agents (Cursor, Claude Code, Copilot, Codex, Gemini CLI)
+
+This package ships with bundled documentation that AI coding agents read directly from `node_modules/`:
+
+- `AGENTS.md` for quick start, patterns, gotchas, common-tasks reference
+- `docs/llms-full.txt` for the complete method reference with examples per domain
+
+Agents supporting `AGENTS.md` (Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI) will pick it up automatically. For other tools, point your agent to `node_modules/@roxyapi/sdk/AGENTS.md`.
+
+Prefer MCP? Every domain has a [remote MCP server](https://roxyapi.com/docs/mcp) at `https://roxyapi.com/mcp/{domain}` (Streamable HTTP, no stdio, no self-hosting). One-line Claude Code setup:
+
+```bash
+claude mcp add-json --scope user roxy-astrology \
+  '{"type":"http","url":"https://roxyapi.com/mcp/astrology","headers":{"X-API-Key":"YOUR_KEY"}}'
+```
+
 ## Authentication
 
 Get your API key at [roxyapi.com/pricing](https://roxyapi.com/pricing). Instant delivery after checkout.
@@ -334,17 +367,6 @@ if (error) {
 ## TypeScript
 
 Every request and response is fully typed. IDE autocomplete shows available methods per domain and exact parameter shapes. No docs tab needed.
-
-## AI agents (Cursor, Claude Code, Copilot, Codex, Gemini CLI)
-
-This package ships with bundled documentation that AI coding agents read directly from `node_modules/`:
-
-- `AGENTS.md` - quick start, patterns, gotchas, common-tasks reference
-- `docs/llms-full.txt` - complete method reference with code examples for every domain
-
-Agents supporting `AGENTS.md` (Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI) will pick it up automatically. For other tools, point your agent to `node_modules/@roxyapi/sdk/AGENTS.md`.
-
-Also available: [remote MCP server](https://roxyapi.com/docs/mcp) per domain at `https://roxyapi.com/mcp/{domain}` (Streamable HTTP, no stdio / no self-hosting) for agents that speak the Model Context Protocol.
 
 ## Links
 
