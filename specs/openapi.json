@@ -488,34 +488,42 @@
             "type": "string",
             "format": "date",
             "example": "1990-07-15",
-            "description": "Birth date in YYYY-MM-DD format. This is the exact calendar date when the person was born, used to calculate planetary positions for that specific day. Format must be YYYY-MM-DD (e.g., 1990-07-15 for July 15, 1990)."
+            "description": "Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day."
           },
           "time": {
             "type": "string",
             "pattern": "^\\d{2}:\\d{2}:\\d{2}$",
             "example": "14:30:00",
-            "description": "Birth time in 24-hour HH:MM:SS format. This precise time determines the Ascendant (rising sign) and house cusps. Even small time differences (minutes) can change house placements. Use 12:00:00 if birth time is unknown (solar chart). Format: HH:MM:SS (e.g., 14:30:00 for 2:30 PM)."
+            "description": "Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown."
           },
           "latitude": {
             "type": "number",
             "minimum": -90,
             "maximum": 90,
             "example": 40.7128,
-            "description": "Birth location latitude in decimal degrees (-90 to 90). Positive values are North, negative are South. This affects house cusps and local horizon calculations. Example: 40.7128 for New York City. Use geocoding APIs or location services to convert addresses to coordinates."
+            "description": "Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South."
           },
           "longitude": {
             "type": "number",
             "minimum": -180,
             "maximum": 180,
             "example": -74.006,
-            "description": "Birth location longitude in decimal degrees (-180 to 180). Positive values are East, negative are West. This affects house cusps and local time. Example: -74.006 for New York City. Use geocoding APIs to convert addresses to coordinates."
+            "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
-            "example": -5,
-            "description": "Timezone offset from UTC in decimal hours (NOT minutes format). Negative for Western Hemisphere (west of UTC), positive for Eastern Hemisphere (east of UTC). Examples: New York EST = -5, Los Angeles PST = -8, London GMT = 0, Paris CET = 1, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format for half-hour zones (India = 5.5, not 5:30). This converts LOCAL birth time to UTC for astronomical calculations (e.g., 14:30 with timezone 5.5 → 09:00 UTC). Calculations are timezone-independent - server timezone does NOT affect results."
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
+            "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+            "example": -5
           },
           "houseSystem": {
             "type": "string",
@@ -527,7 +535,7 @@
             ],
             "default": "placidus",
             "example": "placidus",
-            "description": "House system for dividing the chart into 12 houses. Placidus (default) is most popular in Western astrology and time-sensitive. Whole Sign assigns one sign per house (simpler, ancient). Equal houses divide chart into 30° segments from Ascendant. Koch emphasizes houses in high latitudes. Choose based on astrological tradition or user preference."
+            "description": "House system for dividing the chart into 12 houses. Placidus (default) is most popular in Western astrology and time-sensitive. Whole Sign assigns one sign per house (simpler, ancient). Equal houses divide chart into 30° segments from Ascendant. Koch emphasizes houses in high latitudes."
           }
         },
         "required": [
@@ -911,11 +919,19 @@
             "description": "Time in HH:MM:SS format (24-hour)"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
-            "example": -5,
-            "description": "Timezone offset from UTC in decimal hours (NOT minutes format). Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format (5.5, not 5:30)."
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
+            "description": "Timezone offset from UTC in decimal hours (NOT minutes format). Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format (5.5, not 5:30).",
+            "example": -5
           },
           "planets": {
             "type": "array",
@@ -1174,12 +1190,20 @@
             "description": "Transit time in HH:MM:SS format (defaults to current time)"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 0,
-            "example": 0,
-            "description": "Timezone offset from UTC in hours (defaults to 0 = UTC)"
+            "description": "Transit timezone: decimal hours from UTC OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the transit date. Defaults to 0 (UTC).",
+            "example": 0
           },
           "natalChart": {
             "type": "object",
@@ -1207,9 +1231,18 @@
                 "example": -74.006
               },
               "timezone": {
-                "type": "number",
-                "minimum": -12,
-                "maximum": 14,
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": -14,
+                    "maximum": 14
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                  }
+                ],
+                "description": "Natal timezone: decimal hours OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the natal date.",
                 "example": -5
               }
             },
@@ -1423,12 +1456,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -1568,12 +1609,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -1746,12 +1795,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           },
           "division": {
             "type": "integer",
@@ -1918,12 +1975,20 @@
                 "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
               },
               "timezone": {
-                "type": "number",
-                "minimum": -12,
-                "maximum": 14,
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": -14,
+                    "maximum": 14
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                  }
+                ],
                 "default": 5.5,
-                "example": 5.5,
-                "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+                "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+                "example": 5.5
               }
             },
             "required": [
@@ -1964,12 +2029,20 @@
                 "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
               },
               "timezone": {
-                "type": "number",
-                "minimum": -12,
-                "maximum": 14,
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": -14,
+                    "maximum": 14
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                  }
+                ],
                 "default": 5.5,
-                "example": 5.5,
-                "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+                "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+                "example": 5.5
               }
             },
             "required": [
@@ -2178,12 +2251,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -2305,12 +2386,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -2439,12 +2528,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -2554,12 +2651,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -2738,12 +2843,20 @@
             "description": "Birth location longitude in decimal degrees"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology."
+            "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology.",
+            "example": 5.5
           },
           "ayanamsa": {
             "type": "string",
@@ -2906,12 +3019,20 @@
             "description": "Birth location longitude in decimal degrees"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology."
+            "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology.",
+            "example": 5.5
           },
           "ayanamsa": {
             "type": "string",
@@ -3452,12 +3573,20 @@
             "description": "Birth location longitude in decimal degrees"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology."
+            "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology.",
+            "example": 5.5
           },
           "ayanamsa": {
             "type": "string",
@@ -4178,12 +4307,20 @@
             "description": "End date for sublord change search (YYYY-MM-DD format)"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 0,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+            "description": "Decimal hours from UTC OR IANA name (e.g. \"Asia/Kolkata\"). IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).",
+            "example": 5.5
           },
           "ayanamsa": {
             "type": "string",
@@ -4319,12 +4456,20 @@
             "description": "End date for sign ingress search (YYYY-MM-DD format)"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 0,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+            "description": "Decimal hours from UTC OR IANA name (e.g. \"Asia/Kolkata\"). IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).",
+            "example": 5.5
           },
           "ayanamsa": {
             "type": "string",
@@ -4536,12 +4681,20 @@
             "description": "Observer longitude in decimal degrees (for future Lagna calculations)"
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 0,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Output times are also converted to this timezone. Defaults to 0 (UTC)."
+            "description": "Decimal hours from UTC OR IANA name (e.g. \"Asia/Kolkata\"). IANA resolved to the DST-correct offset for the startDatetime date. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Defaults to 0 (UTC).",
+            "example": 5.5
           },
           "ayanamsa": {
             "type": "string",
@@ -4989,12 +5142,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -5283,12 +5444,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -5433,12 +5602,20 @@
             "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
           },
           "timezone": {
-            "type": "number",
-            "minimum": -12,
-            "maximum": 14,
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -14,
+                "maximum": 14
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+              }
+            ],
             "default": 5.5,
-            "example": 5.5,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+            "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+            "example": 5.5
           }
         },
         "required": [
@@ -7940,11 +8117,19 @@
                     "description": "Observer longitude in decimal degrees (-180 to 180). Used for precise local time conversion. For basic planetary positions, this has minimal impact but ensures accuracy."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
-                    "example": -5,
-                    "description": "Timezone offset from UTC in decimal hours (NOT minutes format). Negative for west of UTC, positive for east of UTC. Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9, Nepal NPT = 5.75. IMPORTANT: Use decimal format (5.5, not 5:30)."
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
+                    "description": "Decimal hours from UTC (e.g. -5 for EST, 5.5 for IST, 9 for JST, 5.75 for NPT) OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the chart date.",
+                    "example": -5
                   }
                 },
                 "required": [
@@ -8355,16 +8540,27 @@
           },
           {
             "schema": {
-              "type": "number",
-              "nullable": true,
-              "minimum": -12,
-              "maximum": 14,
+              "anyOf": [
+                {
+                  "type": "number",
+                  "nullable": true,
+                  "minimum": -14,
+                  "maximum": 14
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                },
+                {
+                  "nullable": true
+                }
+              ],
               "default": 0,
               "example": 0,
-              "description": "Timezone offset from UTC in decimal hours. Defaults to 0 (UTC). Examples: New York = -5, India = 5.5, Tokyo = 9."
+              "description": "Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC)."
             },
             "required": false,
-            "description": "Timezone offset from UTC in decimal hours. Defaults to 0 (UTC). Examples: New York = -5, India = 5.5, Tokyo = 9.",
+            "description": "Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).",
             "name": "timezone",
             "in": "query"
           }
@@ -9402,11 +9598,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       },
                       "name": {
                         "type": "string",
@@ -9452,11 +9656,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       },
                       "name": {
                         "type": "string",
@@ -10063,9 +10275,19 @@
                     "description": "Birth location longitude in decimal degrees. Affects local time and horizon calculations for house cusps."
                   },
                   "timezone": {
-                    "type": "number",
-                    "example": -5,
-                    "description": "Timezone offset from UTC in decimal hours (NOT minutes format). Negative for west of UTC, positive for east. Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format (5.5, not 5:30)."
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
+                    "description": "Decimal hours from UTC (e.g. -5 for EST, 5.5 for IST, 9 for JST) OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the chart date.",
+                    "example": -5
                   },
                   "houseSystem": {
                     "anyOf": [
@@ -10923,11 +11145,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       }
                     },
                     "required": [
@@ -11754,9 +11984,19 @@
                     "description": "Longitude of the solar return location in decimal degrees. Affects house cusps and Ascendant of the return chart."
                   },
                   "timezone": {
-                    "type": "number",
-                    "example": -5,
-                    "description": "Timezone offset from UTC in decimal hours. Output datetime is adjusted to this timezone."
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
+                    "description": "Decimal hours from UTC OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the birthDate. Output datetime is adjusted to this timezone.",
+                    "example": -5
                   },
                   "houseSystem": {
                     "type": "string",
@@ -12478,9 +12718,19 @@
                     "description": "Longitude of the lunar return location in decimal degrees. Determines local sidereal time for house calculations."
                   },
                   "timezone": {
-                    "type": "number",
-                    "example": -5,
-                    "description": "Timezone offset from UTC in decimal hours. Output datetime is adjusted to this timezone."
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
+                    "description": "Decimal hours from UTC OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the birthDate. Output datetime is adjusted to this timezone.",
+                    "example": -5
                   },
                   "houseSystem": {
                     "type": "string",
@@ -13200,11 +13450,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       }
                     },
                     "required": [
@@ -13246,11 +13504,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       }
                     },
                     "required": [
@@ -14025,11 +14291,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       }
                     },
                     "required": [
@@ -14071,11 +14345,19 @@
                         "description": "Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West."
                       },
                       "timezone": {
-                        "type": "number",
-                        "minimum": -12,
-                        "maximum": 14,
-                        "example": -5,
-                        "description": "Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9."
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": -14,
+                            "maximum": 14
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                          }
+                        ],
+                        "description": "Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. \"America/New_York\", \"Asia/Kolkata\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.",
+                        "example": -5
                       }
                     },
                     "required": [
@@ -16167,9 +16449,19 @@
                     "description": "Longitude of the return location in decimal degrees."
                   },
                   "timezone": {
-                    "type": "number",
-                    "example": -5,
-                    "description": "Timezone offset from UTC in decimal hours. Output datetime is adjusted to this timezone."
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
+                    "description": "Decimal hours from UTC OR IANA name (e.g. \"America/New_York\"). IANA resolved to the DST-correct offset for the birthDate. Output datetime is adjusted to this timezone.",
+                    "example": -5
                   },
                   "houseSystem": {
                     "type": "string",
@@ -18519,12 +18811,20 @@
                     "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+                    "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -19158,12 +19458,20 @@
                     "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+                    "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -19614,12 +19922,20 @@
                     "description": "Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30)."
+                    "description": "Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -20059,12 +20375,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local time calculations for sunrise/sunset-dependent panchang elements."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -20543,12 +20867,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local time calculations for sunrise, sunset, and muhurta period boundaries."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Used for sunrise/sunset/moonrise/moonset search accuracy and output time formatting. Essential for correct results outside IST. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in decimal hours. Used for sunrise/sunset/moonrise/moonset search accuracy and output time formatting. Essential for correct results outside IST. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -21722,12 +22054,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local time calculations for sunrise, sunset, and muhurta period boundaries."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Used for accurate sunrise/sunset calculation and output time formatting. Essential for correct Choghadiya periods outside IST. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in decimal hours. Used for accurate sunrise/sunset calculation and output time formatting. Essential for correct Choghadiya periods outside IST. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -22117,12 +22457,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local time calculations for sunrise, sunset, and muhurta period boundaries."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. Used for accurate sunrise/sunset calculation and output time formatting. Essential for correct Hora periods outside IST. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in decimal hours. Used for accurate sunrise/sunset calculation and output time formatting. Essential for correct Hora periods outside IST. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -24783,12 +25131,20 @@
                     "description": "Observer longitude in decimal degrees"
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST)."
+                    "description": "Timezone: decimal hours from UTC OR IANA name (e.g. \"Asia/Kolkata\"). IANA resolved to the DST-correct offset based on birthDate or datetime. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   },
                   "datetime": {
                     "type": "string",
@@ -25099,12 +25455,20 @@
                     "description": "Observer longitude in decimal degrees"
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in decimal hours. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Output times are also converted to this timezone. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in decimal hours. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Output times are also converted to this timezone. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   },
                   "ayanamsa": {
                     "type": "string",
@@ -26127,12 +26491,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local sidereal time for positional calculations."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   },
                   "coordinateSystem": {
                     "type": "string",
@@ -26577,12 +26949,20 @@
                     "description": "Month number (1-12)."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 0,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).",
+                    "example": 5.5
                   },
                   "coordinateSystem": {
                     "type": "string",
@@ -26944,12 +27324,20 @@
                     "description": "Month number (1-12)."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 0,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).",
+                    "example": 5.5
                   },
                   "coordinateSystem": {
                     "type": "string",
@@ -27330,12 +27718,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local sidereal time for Lagna and house calculations."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   },
                   "coordinateSystem": {
                     "type": "string",
@@ -27769,12 +28165,20 @@
                     "description": "Month number (1-12) for transit analysis."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 0,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).",
+                    "example": 5.5
                   },
                   "coordinateSystem": {
                     "type": "string",
@@ -28160,12 +28564,20 @@
                     "description": "Observer longitude in decimal degrees. Affects local time context for declination calculations."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 5.5,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST)."
+                    "description": "Timezone offset from UTC in hours. Defaults to 5.5 (IST).",
+                    "example": 5.5
                   },
                   "orb": {
                     "type": "number",
@@ -28530,12 +28942,20 @@
                     "description": "Month number (1-12) for parallel analysis."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 0,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).",
+                    "example": 5.5
                   }
                 },
                 "required": [
@@ -28878,12 +29298,20 @@
                     "description": "Year to scan for ecliptic crossings (1900-2100)."
                   },
                   "timezone": {
-                    "type": "number",
-                    "minimum": -12,
-                    "maximum": 14,
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": -14,
+                        "maximum": 14
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+\\-]+){0,2}$"
+                      }
+                    ],
                     "default": 0,
-                    "example": 5.5,
-                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC)."
+                    "description": "Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).",
+                    "example": 5.5
                   },
                   "coordinateSystem": {
                     "type": "string",

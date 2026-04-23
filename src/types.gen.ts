@@ -238,27 +238,27 @@ export type NatalChartResponse = {
 
 export type NatalChartRequest = {
     /**
-     * Birth date in YYYY-MM-DD format. This is the exact calendar date when the person was born, used to calculate planetary positions for that specific day. Format must be YYYY-MM-DD (e.g., 1990-07-15 for July 15, 1990).
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. This precise time determines the Ascendant (rising sign) and house cusps. Even small time differences (minutes) can change house placements. Use 12:00:00 if birth time is unknown (solar chart). Format: HH:MM:SS (e.g., 14:30:00 for 2:30 PM).
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
      */
     time: string;
     /**
-     * Birth location latitude in decimal degrees (-90 to 90). Positive values are North, negative are South. This affects house cusps and local horizon calculations. Example: 40.7128 for New York City. Use geocoding APIs or location services to convert addresses to coordinates.
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
      */
     latitude: number;
     /**
-     * Birth location longitude in decimal degrees (-180 to 180). Positive values are East, negative are West. This affects house cusps and local time. Example: -74.006 for New York City. Use geocoding APIs to convert addresses to coordinates.
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours (NOT minutes format). Negative for Western Hemisphere (west of UTC), positive for Eastern Hemisphere (east of UTC). Examples: New York EST = -5, Los Angeles PST = -8, London GMT = 0, Paris CET = 1, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format for half-hour zones (India = 5.5, not 5:30). This converts LOCAL birth time to UTC for astronomical calculations (e.g., 14:30 with timezone 5.5 → 09:00 UTC). Calculations are timezone-independent - server timezone does NOT affect results.
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
-    timezone: number;
+    timezone: number | string;
     /**
-     * House system for dividing the chart into 12 houses. Placidus (default) is most popular in Western astrology and time-sensitive. Whole Sign assigns one sign per house (simpler, ancient). Equal houses divide chart into 30° segments from Ascendant. Koch emphasizes houses in high latitudes. Choose based on astrological tradition or user preference.
+     * House system for dividing the chart into 12 houses. Placidus (default) is most popular in Western astrology and time-sensitive. Whole Sign assigns one sign per house (simpler, ancient). Equal houses divide chart into 30° segments from Ascendant. Koch emphasizes houses in high latitudes.
      */
     houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
 };
@@ -483,7 +483,7 @@ export type AspectsRequest = {
     /**
      * Timezone offset from UTC in decimal hours (NOT minutes format). Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format (5.5, not 5:30).
      */
-    timezone: number;
+    timezone: number | string;
     /**
      * Optional: specific planets to calculate aspects for (defaults to all 10)
      */
@@ -635,9 +635,9 @@ export type TransitsRequest = {
      */
     time?: string;
     /**
-     * Timezone offset from UTC in hours (defaults to 0 = UTC)
+     * Transit timezone: decimal hours from UTC OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the transit date. Defaults to 0 (UTC).
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Optional natal chart data to compare transits against
      */
@@ -646,7 +646,10 @@ export type TransitsRequest = {
         time: string;
         latitude: number;
         longitude: number;
-        timezone: number;
+        /**
+         * Natal timezone: decimal hours OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the natal date.
+         */
+        timezone: number | string;
     };
 };
 
@@ -748,9 +751,9 @@ export type BirthChartRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type NavamsaResponse = {
@@ -828,9 +831,9 @@ export type NavamsaRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type DivisionalChartResponse = {
@@ -929,9 +932,9 @@ export type DivisionalChartRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Divisional chart number. Each division reveals a specific life area. Supported: 2 (Hora, wealth), 3 (Drekkana, siblings), 4 (Chaturthamsa, property), 7 (Saptamsa, children), 9 (Navamsa, marriage), 10 (Dasamsa, career), 12 (Dwadasamsa, parents), 16 (Shodasamsa, vehicles), 20 (Vimsamsa, spirituality), 24 (Chaturvimsamsa, education), 27 (Bhamsa, strength), 30 (Trimsamsa, misfortunes), 40 (Khavedamsa, merit), 45 (Akshavedamsa, character), 60 (Shashtiamsa, past life karma).
      */
@@ -1029,9 +1032,9 @@ export type CompatibilityRequest = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     /**
      * Birth data of the second person (typically the girl/bride in traditional Ashtakoot matching). Moon nakshatra compared against person 1 across all 8 kootas.
@@ -1054,9 +1057,9 @@ export type CompatibilityRequest = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
 };
 
@@ -1161,9 +1164,9 @@ export type PlanetaryPositionsRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type ManglikResponse = {
@@ -1228,9 +1231,9 @@ export type ManglikRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type KalsarpaResponse = {
@@ -1303,9 +1306,9 @@ export type KalsarpaRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type SadhesatiResponse = {
@@ -1364,9 +1367,9 @@ export type SadhesatiRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type KpAyanamsaResponse = {
@@ -1473,7 +1476,7 @@ export type KpPlanetsRequest = {
     /**
      * Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology.
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula (most common for KP). "kp-old" uses the Krishnamurti original table. "lahiri" uses Lahiri/Chitrapaksha ayanamsa matching most traditional Vedic software. "custom" allows providing your own value via ayanamsaValue. Defaults to "kp-newcomb".
      */
@@ -1565,7 +1568,7 @@ export type KpCuspsRequest = {
     /**
      * Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology.
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula (most common for KP). "kp-old" uses the Krishnamurti original table. "lahiri" uses Lahiri/Chitrapaksha ayanamsa matching most traditional Vedic software. "custom" allows providing your own value via ayanamsaValue. Defaults to "kp-newcomb".
      */
@@ -1899,7 +1902,7 @@ export type KpChartRequest = {
     /**
      * Timezone offset from UTC in hours. Defaults to 5.5 (IST) for Vedic astrology.
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula (most common for KP). "kp-old" uses the Krishnamurti original table. "lahiri" uses Lahiri/Chitrapaksha ayanamsa matching most traditional Vedic software. "custom" allows providing your own value via ayanamsaValue. Defaults to "kp-newcomb".
      */
@@ -2246,9 +2249,9 @@ export type KpSublordChangesRequest = {
      */
     endDate: string;
     /**
-     * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
+     * Decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula, the most common choice for KP astrology. "kp-old" uses the Krishnamurti original table from KP Reader-1 with constant precession rate. "lahiri" uses Lahiri/Chitrapaksha ayanamsa, matching most traditional Vedic software. Defaults to "kp-newcomb".
      */
@@ -2325,9 +2328,9 @@ export type KpRasiChangesRequest = {
      */
     endDate: string;
     /**
-     * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
+     * Decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula, the most common choice for KP astrology. "kp-old" uses the Krishnamurti original table from KP Reader-1 with constant precession rate. "lahiri" uses Lahiri/Chitrapaksha ayanamsa, matching most traditional Vedic software. Defaults to "kp-newcomb".
      */
@@ -2451,9 +2454,9 @@ export type KpPlanetsIntervalRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Output times are also converted to this timezone. Defaults to 0 (UTC).
+     * Decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for the startDatetime date. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Defaults to 0 (UTC).
      */
-    timezone?: number;
+    timezone?: number | string;
     /**
      * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula, the most common choice for KP astrology. "kp-old" uses the Krishnamurti original table from KP Reader-1 with constant precession rate. "lahiri" uses Lahiri/Chitrapaksha ayanamsa, matching most traditional Vedic software. Defaults to "kp-newcomb".
      */
@@ -2720,9 +2723,9 @@ export type UpagrahaRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 /**
@@ -2834,9 +2837,9 @@ export type AshtakavargaRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 /**
@@ -2924,9 +2927,9 @@ export type ShadbalaRequest = {
      */
     longitude: number;
     /**
-     * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
      */
-    timezone?: number;
+    timezone?: number | string;
 };
 
 export type BasicCard = {
@@ -4247,9 +4250,9 @@ export type PostAstrologyPlanetsData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours (NOT minutes format). Negative for west of UTC, positive for east of UTC. Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9, Nepal NPT = 5.75. IMPORTANT: Use decimal format (5.5, not 5:30).
+         * Decimal hours from UTC (e.g. -5 for EST, 5.5 for IST, 9 for JST, 5.75 for NPT) OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the chart date.
          */
-        timezone: number;
+        timezone: number | string;
     };
     path?: never;
     query?: {
@@ -4462,9 +4465,9 @@ export type GetAstrologyMoonPhaseCurrentData = {
          */
         time?: string;
         /**
-         * Timezone offset from UTC in decimal hours. Defaults to 0 (UTC). Examples: New York = -5, India = 5.5, Tokyo = 9.
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).
          */
-        timezone?: number;
+        timezone?: number | string | unknown;
     };
     url: '/astrology/moon-phase/current';
 };
@@ -4967,9 +4970,9 @@ export type PostAstrologySynastryData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
             /**
              * Optional display name for this person. Included in the response for easy identification.
              */
@@ -4993,9 +4996,9 @@ export type PostAstrologySynastryData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
             /**
              * Optional display name for this person. Included in the response for easy identification.
              */
@@ -5324,9 +5327,9 @@ export type PostAstrologyHousesData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours (NOT minutes format). Negative for west of UTC, positive for east. Examples: New York EST = -5, India IST = 5.5 (NOT 5:30), Tokyo JST = 9. IMPORTANT: Use decimal format (5.5, not 5:30).
+         * Decimal hours from UTC (e.g. -5 for EST, 5.5 for IST, 9 for JST) OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the chart date.
          */
-        timezone: number;
+        timezone: number | string;
         /**
          * House system for dividing ecliptic into 12 houses. Placidus (most popular) uses time, Whole Sign (ancient) uses signs, Equal divides from Ascendant. Use "all" to compare all 4 systems side-by-side for educational purposes.
          */
@@ -5728,9 +5731,9 @@ export type PostAstrologyTransitAspectsData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
         };
         /**
          * Transit date in YYYY-MM-DD format. Defaults to current date if omitted. Use future dates for predictive transit analysis.
@@ -6101,9 +6104,9 @@ export type PostAstrologySolarReturnData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Output datetime is adjusted to this timezone.
+         * Decimal hours from UTC OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the birthDate. Output datetime is adjusted to this timezone.
          */
-        timezone: number;
+        timezone: number | string;
         /**
          * House system for the solar return chart. Placidus (default) is most common in Western astrology. Whole Sign, Equal, and Koch also supported.
          */
@@ -6448,9 +6451,9 @@ export type PostAstrologyLunarReturnData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Output datetime is adjusted to this timezone.
+         * Decimal hours from UTC OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the birthDate. Output datetime is adjusted to this timezone.
          */
-        timezone: number;
+        timezone: number | string;
         /**
          * House system for the lunar return chart. Placidus (default), Whole Sign, Equal, or Koch.
          */
@@ -6791,9 +6794,9 @@ export type PostAstrologyCompositeChartData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
         };
         /**
          * Second person birth details (date, time, location, timezone).
@@ -6816,9 +6819,9 @@ export type PostAstrologyCompositeChartData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
         };
         /**
          * House system for the composite chart. Placidus (default), Whole Sign, Equal, or Koch.
@@ -7185,9 +7188,9 @@ export type PostAstrologyCompatibilityScoreData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
         };
         /**
          * Second person birth details. Compared against person1 to evaluate inter-chart aspects and compatibility.
@@ -7210,9 +7213,9 @@ export type PostAstrologyCompatibilityScoreData = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
-            timezone: number;
+            timezone: number | string;
         };
     };
     path?: never;
@@ -8292,9 +8295,9 @@ export type PostAstrologyPlanetaryReturnsData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Output datetime is adjusted to this timezone.
+         * Decimal hours from UTC OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the birthDate. Output datetime is adjusted to this timezone.
          */
-        timezone: number;
+        timezone: number | string;
         /**
          * House system for the return chart. Placidus (default), Whole Sign, Equal, or Koch.
          */
@@ -9426,9 +9429,9 @@ export type PostVedicAstrologyDashaCurrentData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: {
@@ -9735,9 +9738,9 @@ export type PostVedicAstrologyDashaMajorData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: {
@@ -9944,9 +9947,9 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST) for Vedic astrology. Examples: India IST = 5.5, Nepal NPT = 5.75, New York EST = -5. Use decimal format (5.5, not 5:30).
+         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path: {
         /**
@@ -10156,7 +10159,7 @@ export type PostVedicAstrologyPanchangBasicData = {
         /**
          * Timezone offset from UTC in decimal hours. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: {
@@ -10411,7 +10414,7 @@ export type PostVedicAstrologyPanchangDetailedData = {
         /**
          * Timezone offset from UTC in decimal hours. Used for sunrise/sunset/moonrise/moonset search accuracy and output time formatting. Essential for correct results outside IST. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: {
@@ -11087,7 +11090,7 @@ export type PostVedicAstrologyPanchangChoghadiyaData = {
         /**
          * Timezone offset from UTC in decimal hours. Used for accurate sunrise/sunset calculation and output time formatting. Essential for correct Choghadiya periods outside IST. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: never;
@@ -11276,7 +11279,7 @@ export type PostVedicAstrologyPanchangHoraData = {
         /**
          * Timezone offset from UTC in decimal hours. Used for accurate sunrise/sunset calculation and output time formatting. Essential for correct Hora periods outside IST. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: never;
@@ -12606,9 +12609,9 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in hours. Defaults to 5.5 (IST).
+         * Timezone: decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset based on birthDate or datetime. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * ISO 8601 datetime for ruling planets. Defaults to current time. Always interpreted as local time when a non-zero timezone is provided (Z suffix is ignored).
          */
@@ -12769,7 +12772,7 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
         /**
          * Timezone offset from UTC in decimal hours. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Output times are also converted to this timezone. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula, the most common choice for KP astrology. "kp-old" uses the Krishnamurti original table from KP Reader-1 with constant precession rate. "lahiri" uses Lahiri/Chitrapaksha ayanamsa, matching most traditional Vedic software. Defaults to "kp-newcomb".
          */
@@ -13278,7 +13281,7 @@ export type PostVedicAstrologyAspectsData = {
         /**
          * Timezone offset from UTC in hours. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
@@ -13505,7 +13508,7 @@ export type PostVedicAstrologyAspectsMonthlyData = {
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
@@ -13696,7 +13699,7 @@ export type PostVedicAstrologyAspectsLunarData = {
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
@@ -13899,7 +13902,7 @@ export type PostVedicAstrologyTransitData = {
         /**
          * Timezone offset from UTC in hours. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
@@ -14125,7 +14128,7 @@ export type PostVedicAstrologyTransitMonthlyData = {
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
@@ -14329,7 +14332,7 @@ export type PostVedicAstrologyParallelsData = {
         /**
          * Timezone offset from UTC in hours. Defaults to 5.5 (IST).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Orb in degrees for parallel/contraparallel detection. Defaults to 1.5°.
          */
@@ -14517,7 +14520,7 @@ export type PostVedicAstrologyParallelsMonthlyData = {
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
-        timezone?: number;
+        timezone?: number | string;
     };
     path?: never;
     query?: never;
@@ -14696,7 +14699,7 @@ export type PostVedicAstrologyEclipticCrossingsData = {
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
-        timezone?: number;
+        timezone?: number | string;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
