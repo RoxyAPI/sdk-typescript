@@ -3105,40 +3105,6 @@ export type DrawnCard = {
     imageUrl: string;
 };
 
-export type BasicDreamSymbol = {
-    /**
-     * Unique symbol identifier in kebab-case.
-     */
-    id: string;
-    /**
-     * Display name of the dream symbol.
-     */
-    name: string;
-    /**
-     * Starting letter for alphabetical filtering.
-     */
-    letter: string;
-};
-
-export type DreamSymbol = {
-    /**
-     * Unique symbol identifier in kebab-case. Use this to fetch full interpretation via /symbols/{id}.
-     */
-    id: string;
-    /**
-     * Display name of the dream symbol.
-     */
-    name: string;
-    /**
-     * Starting letter (a-z) for alphabetical dream dictionary navigation.
-     */
-    letter: string;
-    /**
-     * Full psychological dream interpretation explaining the subconscious symbolism, emotional significance, and waking-life connections of this dream symbol.
-     */
-    meaning: string;
-};
-
 export type BasicHexagram = {
     /**
      * Hexagram number in King Wen sequence (1-64).
@@ -3342,6 +3308,40 @@ export type Trigram = {
     quality: string;
     /**
      * Concise interpretation of the trigram covering its symbolic meaning, key associations, and guidance for understanding hexagrams containing this trigram.
+     */
+    meaning: string;
+};
+
+export type BasicDreamSymbol = {
+    /**
+     * Unique symbol identifier in kebab-case.
+     */
+    id: string;
+    /**
+     * Display name of the dream symbol.
+     */
+    name: string;
+    /**
+     * Starting letter for alphabetical filtering.
+     */
+    letter: string;
+};
+
+export type DreamSymbol = {
+    /**
+     * Unique symbol identifier in kebab-case. Use this to fetch full interpretation via /symbols/{id}.
+     */
+    id: string;
+    /**
+     * Display name of the dream symbol.
+     */
+    name: string;
+    /**
+     * Starting letter (a-z) for alphabetical dream dictionary navigation.
+     */
+    letter: string;
+    /**
+     * Full psychological dream interpretation explaining the subconscious symbolism, emotional significance, and waking-life connections of this dream symbol.
      */
     meaning: string;
 };
@@ -15754,1809 +15754,6 @@ export type PostVedicAstrologyShadbalaResponses = {
 
 export type PostVedicAstrologyShadbalaResponse = PostVedicAstrologyShadbalaResponses[keyof PostVedicAstrologyShadbalaResponses];
 
-export type GetTarotCardsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Maximum items to return per page. Range: 1-100, default 20.
-         */
-        limit?: number;
-        /**
-         * Number of items to skip for pagination. Default 0.
-         */
-        offset?: number;
-        /**
-         * Filter by arcana type. Major arcana (0-21) represents life lessons and spiritual themes. Minor arcana (Ace-King in 4 suits) represents daily situations and practical matters.
-         */
-        arcana?: 'major' | 'minor';
-        /**
-         * Filter minor arcana by suit. Cups=emotions/relationships, Wands=creativity/passion, Swords=intellect/conflict, Pentacles=material/finances. Only applies to minor arcana cards.
-         */
-        suit?: 'cups' | 'wands' | 'swords' | 'pentacles';
-        /**
-         * Filter by card number. Major Arcana: 0 (The Fool) through 21 (The World). Minor Arcana: 1 (Ace) through 14 (King). Combine with arcana or suit filters for precise results.
-         */
-        number?: number;
-    };
-    url: '/tarot/cards';
-};
-
-export type GetTarotCardsErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetTarotCardsError = GetTarotCardsErrors[keyof GetTarotCardsErrors];
-
-export type GetTarotCardsResponses = {
-    /**
-     * List of tarot cards with basic information. Use GET /cards/:id for full details.
-     */
-    200: {
-        /**
-         * Total number of tarot cards matching the applied filters. 78 for the full deck, 22 for Major Arcana, 56 for Minor Arcana, 14 per suit.
-         */
-        total: number;
-        /**
-         * Maximum items returned per page.
-         */
-        limit: number;
-        /**
-         * Number of items skipped from the start of the result set.
-         */
-        offset: number;
-        /**
-         * Array of tarot cards with basic metadata. Use GET /cards/:id for full upright and reversed interpretations.
-         */
-        cards: Array<BasicCard>;
-    };
-};
-
-export type GetTarotCardsResponse = GetTarotCardsResponses[keyof GetTarotCardsResponses];
-
-export type GetTarotCardsByIdData = {
-    body?: never;
-    path: {
-        /**
-         * Unique card identifier in kebab-case. Major arcana: "fool", "magician", "death", etc. Minor arcana: "ace-of-cups", "seven-of-wands", "queen-of-swords", "king-of-pentacles", etc.
-         */
-        id: string;
-    };
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/cards/{id}';
-};
-
-export type GetTarotCardsByIdErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Card not found
-     */
-    404: {
-        /**
-         * Human-readable error message. May change wording — do not parse programmatically.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetTarotCardsByIdError = GetTarotCardsByIdErrors[keyof GetTarotCardsByIdErrors];
-
-export type GetTarotCardsByIdResponses = {
-    /**
-     * Card details
-     */
-    200: Card;
-};
-
-export type GetTarotCardsByIdResponse = GetTarotCardsByIdResponses[keyof GetTarotCardsByIdResponses];
-
-export type PostTarotDrawData = {
-    body: {
-        /**
-         * Number of cards to draw (1-78). Common values: 1 for daily card, 3 for past-present-future, 5 for relationship spread, 10 for Celtic Cross. Drawing 78 returns the entire shuffled deck.
-         */
-        count: number;
-        /**
-         * Optional seed for reproducible results. Same seed = same cards in same order. Use format like "userId-date" for daily consistency, or "readingId" for shareable readings. Omit for true randomness.
-         */
-        seed?: string;
-        /**
-         * Whether cards can appear reversed (upside down). Reversed cards have different meanings. Set false for upright-only readings. Default: true (50% chance of reversal per card).
-         */
-        allowReversals?: boolean;
-        /**
-         * Whether same card can be drawn multiple times. Set false for traditional deck behavior (each card drawn only once). Set true for statistical analysis or oracle-style readings. Default: false.
-         */
-        allowDuplicates?: boolean;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/draw';
-};
-
-export type PostTarotDrawErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotDrawError = PostTarotDrawErrors[keyof PostTarotDrawErrors];
-
-export type PostTarotDrawResponses = {
-    /**
-     * Drawn cards
-     */
-    200: {
-        /**
-         * Seed used for this reading, if one was provided. Same seed reproduces identical draw results for consistent tarot readings.
-         */
-        seed?: string;
-        /**
-         * Array of drawn tarot cards in draw order, each with orientation, keywords, and full meaning for divination.
-         */
-        cards: Array<DrawnCard>;
-    };
-};
-
-export type PostTarotDrawResponse = PostTarotDrawResponses[keyof PostTarotDrawResponses];
-
-export type PostTarotDailyData = {
-    body?: {
-        /**
-         * Optional seed for reproducible readings. Same seed + same date = same card every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
-         */
-        seed?: string;
-        /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
-         */
-        date?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/daily';
-};
-
-export type PostTarotDailyErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Failed to draw card
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording — do not parse programmatically.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotDailyError = PostTarotDailyErrors[keyof PostTarotDailyErrors];
-
-export type PostTarotDailyResponses = {
-    /**
-     * Daily card reading
-     */
-    200: {
-        /**
-         * Date of the daily tarot reading in YYYY-MM-DD format (UTC). Determines which card is drawn for seeded readings.
-         */
-        date: string;
-        /**
-         * Seed used for this daily reading. Same seed on the same date always produces the identical card for reproducible daily divination.
-         */
-        seed: string;
-        card: {
-            /**
-             * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-             */
-            id: string;
-            /**
-             * Display name of the tarot card.
-             */
-            name: string;
-            /**
-             * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-             */
-            arcana: 'major' | 'minor';
-            /**
-             * Position index of the card in the draw sequence (1-based).
-             */
-            position: number;
-            /**
-             * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-             */
-            reversed: boolean;
-            /**
-             * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-             */
-            keywords: Array<string>;
-            /**
-             * Full interpretation of this card in its current orientation, providing daily guidance and reflection.
-             */
-            meaning: string;
-            /**
-             * URL to the tarot card artwork image.
-             */
-            imageUrl: string;
-        };
-        /**
-         * Concise daily tarot message summarizing the card, its orientation, key themes, and brief guidance for the day.
-         */
-        dailyMessage: string;
-    };
-};
-
-export type PostTarotDailyResponse = PostTarotDailyResponses[keyof PostTarotDailyResponses];
-
-export type PostTarotYesNoData = {
-    body: {
-        /**
-         * Your specific yes/no question. Be clear and focused. Good: "Should I move to a new city?" Bad: "What should I do about my life?" The more specific the question, the more useful the tarot guidance.
-         */
-        question?: string;
-        /**
-         * Optional seed for reproducible results. Same seed + same question = same answer. Useful for testing, sharing readings, or ensuring consistency. Omit for random draws each time.
-         */
-        seed?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/yes-no';
-};
-
-export type PostTarotYesNoErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Failed to draw card
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording — do not parse programmatically.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotYesNoError = PostTarotYesNoErrors[keyof PostTarotYesNoErrors];
-
-export type PostTarotYesNoResponses = {
-    /**
-     * Yes/No answer with interpretation
-     */
-    200: {
-        /**
-         * The querent question that was asked, if one was provided.
-         */
-        question?: string;
-        /**
-         * Tarot-derived answer. Yes = upright card supports a positive outcome. No = reversed card suggests obstacles. Maybe = inherently ambiguous card drawn (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) signaling pause, reflection, or shifting circumstances.
-         */
-        answer: 'Yes' | 'No' | 'Maybe';
-        /**
-         * Confidence level of the answer. Strong = Major Arcana card drawn (powerful, definitive cosmic energy). Qualified = Minor Arcana card drawn (nuanced, situational guidance).
-         */
-        strength: 'Strong' | 'Qualified';
-        card: {
-            /**
-             * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-             */
-            id: string;
-            /**
-             * Display name of the tarot card.
-             */
-            name: string;
-            /**
-             * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-             */
-            arcana: 'major' | 'minor';
-            /**
-             * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-             */
-            reversed: boolean;
-            /**
-             * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-             */
-            keywords: Array<string>;
-            /**
-             * URL to the tarot card artwork image.
-             */
-            imageUrl: string;
-        };
-        /**
-         * Contextual narrative explaining why this card answers the question with this result. Connects card meaning, orientation, and arcana strength into actionable guidance.
-         */
-        interpretation: string;
-    };
-};
-
-export type PostTarotYesNoResponse = PostTarotYesNoResponses[keyof PostTarotYesNoResponses];
-
-export type PostTarotSpreadsThreeCardData = {
-    body: {
-        /**
-         * Optional specific question to focus the reading. Examples: "What should I know about my relationship?", "How can I improve my finances?", "What is blocking my creative growth?" Leave empty for general guidance.
-         */
-        question?: string;
-        /**
-         * Optional seed for reproducible results. Same seed = same 3 cards in same positions. Useful for sharing readings, testing, or ensuring users get consistent results. Omit for random draws.
-         */
-        seed?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/spreads/three-card';
-};
-
-export type PostTarotSpreadsThreeCardErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotSpreadsThreeCardError = PostTarotSpreadsThreeCardErrors[keyof PostTarotSpreadsThreeCardErrors];
-
-export type PostTarotSpreadsThreeCardResponses = {
-    /**
-     * Three-card spread reading
-     */
-    200: {
-        /**
-         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
-         */
-        spread: string;
-        /**
-         * The querent question, if one was provided.
-         */
-        question?: string;
-        /**
-         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
-         */
-        seed?: string;
-        /**
-         * Array of spread positions, each containing a drawn card with position-specific tarot interpretation.
-         */
-        positions: Array<{
-            /**
-             * Position number in the spread layout (1-based).
-             */
-            position: number;
-            /**
-             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
-             */
-            name: string;
-            /**
-             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
-             */
-            interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
-        }>;
-        /**
-         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
-         */
-        summary?: string;
-    };
-};
-
-export type PostTarotSpreadsThreeCardResponse = PostTarotSpreadsThreeCardResponses[keyof PostTarotSpreadsThreeCardResponses];
-
-export type PostTarotSpreadsCelticCrossData = {
-    body: {
-        question?: string;
-        seed?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/spreads/celtic-cross';
-};
-
-export type PostTarotSpreadsCelticCrossErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotSpreadsCelticCrossError = PostTarotSpreadsCelticCrossErrors[keyof PostTarotSpreadsCelticCrossErrors];
-
-export type PostTarotSpreadsCelticCrossResponses = {
-    /**
-     * Celtic Cross spread reading
-     */
-    200: {
-        /**
-         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
-         */
-        spread: string;
-        /**
-         * The querent question, if one was provided.
-         */
-        question?: string;
-        /**
-         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
-         */
-        seed?: string;
-        /**
-         * Array of 10 spread positions forming the complete Celtic Cross layout, each with a drawn card and position-specific interpretation.
-         */
-        positions: Array<{
-            /**
-             * Position number in the spread layout (1-based).
-             */
-            position: number;
-            /**
-             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
-             */
-            name: string;
-            /**
-             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
-             */
-            interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
-        }>;
-        /**
-         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
-         */
-        summary?: string;
-    };
-};
-
-export type PostTarotSpreadsCelticCrossResponse = PostTarotSpreadsCelticCrossResponses[keyof PostTarotSpreadsCelticCrossResponses];
-
-export type PostTarotSpreadsLoveData = {
-    body: {
-        question?: string;
-        seed?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/spreads/love';
-};
-
-export type PostTarotSpreadsLoveErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotSpreadsLoveError = PostTarotSpreadsLoveErrors[keyof PostTarotSpreadsLoveErrors];
-
-export type PostTarotSpreadsLoveResponses = {
-    /**
-     * Love spread reading
-     */
-    200: {
-        /**
-         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
-         */
-        spread: string;
-        /**
-         * The querent question, if one was provided.
-         */
-        question?: string;
-        /**
-         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
-         */
-        seed?: string;
-        /**
-         * Array of 5 love spread positions exploring relationship dynamics, each with a drawn card and position-specific interpretation.
-         */
-        positions: Array<{
-            /**
-             * Position number in the spread layout (1-based).
-             */
-            position: number;
-            /**
-             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
-             */
-            name: string;
-            /**
-             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
-             */
-            interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
-        }>;
-        /**
-         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
-         */
-        summary?: string;
-    };
-};
-
-export type PostTarotSpreadsLoveResponse = PostTarotSpreadsLoveResponses[keyof PostTarotSpreadsLoveResponses];
-
-export type PostTarotSpreadsCareerData = {
-    body: {
-        question?: string;
-        seed?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/spreads/career';
-};
-
-export type PostTarotSpreadsCareerErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotSpreadsCareerError = PostTarotSpreadsCareerErrors[keyof PostTarotSpreadsCareerErrors];
-
-export type PostTarotSpreadsCareerResponses = {
-    /**
-     * Career spread reading
-     */
-    200: {
-        /**
-         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
-         */
-        spread: string;
-        /**
-         * The querent question, if one was provided.
-         */
-        question?: string;
-        /**
-         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
-         */
-        seed?: string;
-        /**
-         * Array of 7 career spread positions using SWOT framework, each with a drawn card and position-specific interpretation.
-         */
-        positions: Array<{
-            /**
-             * Position number in the spread layout (1-based).
-             */
-            position: number;
-            /**
-             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
-             */
-            name: string;
-            /**
-             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
-             */
-            interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
-        }>;
-        /**
-         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
-         */
-        summary?: string;
-    };
-};
-
-export type PostTarotSpreadsCareerResponse = PostTarotSpreadsCareerResponses[keyof PostTarotSpreadsCareerResponses];
-
-export type PostTarotSpreadsCustomData = {
-    body: {
-        /**
-         * Optional name for your custom tarot spread layout. Used as the spread identifier in the response.
-         */
-        spreadName?: string;
-        /**
-         * Array of 1-10 custom position definitions for your tarot spread. Each position gets one drawn card with a position-specific interpretation.
-         */
-        positions: Array<{
-            /**
-             * Name for this position in the spread (e.g. Core Issue, Hidden Factor, Best Action). Defines what aspect of the reading this card represents.
-             */
-            name: string;
-            /**
-             * Description of what this position reveals in the reading. Guides the tarot interpretation for the card drawn in this slot.
-             */
-            interpretation: string;
-        }>;
-        /**
-         * Optional querent question to focus the custom tarot reading. Provides context for position-specific interpretations.
-         */
-        question?: string;
-        /**
-         * Optional seed for reproducible results. Same seed with the same positions produces identical card draws for consistent divination.
-         */
-        seed?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/tarot/spreads/custom';
-};
-
-export type PostTarotSpreadsCustomErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostTarotSpreadsCustomError = PostTarotSpreadsCustomErrors[keyof PostTarotSpreadsCustomErrors];
-
-export type PostTarotSpreadsCustomResponses = {
-    /**
-     * Custom spread reading
-     */
-    200: {
-        /**
-         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
-         */
-        spread: string;
-        /**
-         * The querent question, if one was provided.
-         */
-        question?: string;
-        /**
-         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
-         */
-        seed?: string;
-        /**
-         * Array of custom spread positions matching your defined layout, each with a drawn card and position-specific interpretation.
-         */
-        positions: Array<{
-            /**
-             * Position number in the spread layout (1-based).
-             */
-            position: number;
-            /**
-             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
-             */
-            name: string;
-            /**
-             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
-             */
-            interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
-        }>;
-        /**
-         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
-         */
-        summary?: string;
-    };
-};
-
-export type PostTarotSpreadsCustomResponse = PostTarotSpreadsCustomResponses[keyof PostTarotSpreadsCustomResponses];
-
 export type PostNumerologyLifePathData = {
     body?: {
         /**
@@ -21419,717 +19616,7 @@ export type PostNumerologyDailyResponses = {
 
 export type PostNumerologyDailyResponse = PostNumerologyDailyResponses[keyof PostNumerologyDailyResponses];
 
-export type GetDreamsSymbolsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Search query to match against symbol names and meanings. Case-insensitive.
-         */
-        q?: string;
-        /**
-         * Filter symbols by starting letter (a-z). Case-insensitive.
-         */
-        letter?: string;
-        /**
-         * Maximum items to return per page. Range: 1-50, default 20.
-         */
-        limit?: number;
-        /**
-         * Number of items to skip for pagination. Default 0.
-         */
-        offset?: number;
-    };
-    url: '/dreams/symbols';
-};
-
-export type GetDreamsSymbolsErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetDreamsSymbolsError = GetDreamsSymbolsErrors[keyof GetDreamsSymbolsErrors];
-
-export type GetDreamsSymbolsResponses = {
-    /**
-     * Paginated list of dream symbols with basic information.
-     */
-    200: {
-        /**
-         * Total number of dream symbols matching your search or filter criteria.
-         */
-        total: number;
-        /**
-         * Page size used for this response.
-         */
-        limit: number;
-        /**
-         * Number of symbols skipped. Use with limit for pagination.
-         */
-        offset: number;
-        /**
-         * Dream symbols for the current page. Use /symbols/{id} to get full interpretation.
-         */
-        symbols: Array<BasicDreamSymbol>;
-    };
-};
-
-export type GetDreamsSymbolsResponse = GetDreamsSymbolsResponses[keyof GetDreamsSymbolsResponses];
-
-export type GetDreamsSymbolsRandomData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Number of random symbols to return (1-10). Default: 1.
-         */
-        count?: number;
-    };
-    url: '/dreams/symbols/random';
-};
-
-export type GetDreamsSymbolsRandomErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetDreamsSymbolsRandomError = GetDreamsSymbolsRandomErrors[keyof GetDreamsSymbolsRandomErrors];
-
-export type GetDreamsSymbolsRandomResponses = {
-    /**
-     * Random dream symbol(s) with full interpretations.
-     */
-    200: {
-        symbols: Array<DreamSymbol>;
-    };
-};
-
-export type GetDreamsSymbolsRandomResponse = GetDreamsSymbolsRandomResponses[keyof GetDreamsSymbolsRandomResponses];
-
-export type GetDreamsSymbolsLettersData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/dreams/symbols/letters';
-};
-
-export type GetDreamsSymbolsLettersErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetDreamsSymbolsLettersError = GetDreamsSymbolsLettersErrors[keyof GetDreamsSymbolsLettersErrors];
-
-export type GetDreamsSymbolsLettersResponses = {
-    /**
-     * Symbol counts organized by starting letter.
-     */
-    200: {
-        /**
-         * Map of starting letter to symbol count. Use to build A-Z dream dictionary navigation showing how many dream meanings exist per letter.
-         */
-        letters: {
-            [key: string]: number;
-        };
-        /**
-         * Total number of dream symbols in the complete dream interpretation database.
-         */
-        total: number;
-    };
-};
-
-export type GetDreamsSymbolsLettersResponse = GetDreamsSymbolsLettersResponses[keyof GetDreamsSymbolsLettersResponses];
-
-export type GetDreamsSymbolsByIdData = {
-    body?: never;
-    path: {
-        /**
-         * Unique symbol identifier in kebab-case (e.g., "snake", "being-chased", "teeth-falling-out").
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/dreams/symbols/{id}';
-};
-
-export type GetDreamsSymbolsByIdErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Symbol not found.
-     */
-    404: {
-        /**
-         * Human-readable error message. May change wording — do not parse programmatically.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetDreamsSymbolsByIdError = GetDreamsSymbolsByIdErrors[keyof GetDreamsSymbolsByIdErrors];
-
-export type GetDreamsSymbolsByIdResponses = {
-    /**
-     * Full dream symbol with interpretation.
-     */
-    200: DreamSymbol;
-};
-
-export type GetDreamsSymbolsByIdResponse = GetDreamsSymbolsByIdResponses[keyof GetDreamsSymbolsByIdResponses];
-
-export type PostDreamsDailyData = {
-    body?: {
-        /**
-         * Optional seed for reproducible readings. Same seed + same date = same symbol every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
-         */
-        seed?: string;
-        /**
-         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
-         */
-        date?: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/dreams/daily';
-};
-
-export type PostDreamsDailyErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostDreamsDailyError = PostDreamsDailyErrors[keyof PostDreamsDailyErrors];
-
-export type PostDreamsDailyResponses = {
-    /**
-     * Daily dream symbol with interpretation
-     */
-    200: {
-        /**
-         * Date of the daily dream symbol in YYYY-MM-DD format (UTC). Determines which symbol is selected for seeded readings.
-         */
-        date: string;
-        /**
-         * Seed used for this daily reading. Same seed on the same date always produces the identical symbol.
-         */
-        seed: string;
-        symbol: {
-            /**
-             * Unique symbol identifier in kebab-case. Use this to fetch full details via /symbols/{id}.
-             */
-            id: string;
-            /**
-             * Display name of the dream symbol.
-             */
-            name: string;
-            /**
-             * Starting letter (a-z) for alphabetical navigation.
-             */
-            letter: string;
-            /**
-             * Full psychological dream interpretation explaining the subconscious symbolism, emotional significance, and waking-life connections.
-             */
-            meaning: string;
-        };
-        /**
-         * Concise daily message summarizing the dream symbol and its key themes for quick reflection.
-         */
-        dailyMessage: string;
-    };
-};
-
-export type PostDreamsDailyResponse = PostDreamsDailyResponses[keyof PostDreamsDailyResponses];
-
-export type GetAngelNumbersNumbersData = {
+export type GetTarotCardsData = {
     body?: never;
     path?: never;
     query?: {
@@ -22138,7 +19625,7 @@ export type GetAngelNumbersNumbersData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum items to return per page. Range: 1-50, default 20.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**
@@ -22146,14 +19633,22 @@ export type GetAngelNumbersNumbersData = {
          */
         offset?: number;
         /**
-         * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome patterns like 1212. "master" returns 11, 22, 33. "root" returns single digits 0-9.
+         * Filter by arcana type. Major arcana (0-21) represents life lessons and spiritual themes. Minor arcana (Ace-King in 4 suits) represents daily situations and practical matters.
          */
-        type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root';
+        arcana?: 'major' | 'minor';
+        /**
+         * Filter minor arcana by suit. Cups=emotions/relationships, Wands=creativity/passion, Swords=intellect/conflict, Pentacles=material/finances. Only applies to minor arcana cards.
+         */
+        suit?: 'cups' | 'wands' | 'swords' | 'pentacles';
+        /**
+         * Filter by card number. Major Arcana: 0 (The Fool) through 21 (The World). Minor Arcana: 1 (Ace) through 14 (King). Combine with arcana or suit filters for precise results.
+         */
+        number?: number;
     };
-    url: '/angel-numbers/numbers';
+    url: '/tarot/cards';
 };
 
-export type GetAngelNumbersNumbersErrors = {
+export type GetTarotCardsErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -22255,15 +19750,15 @@ export type GetAngelNumbersNumbersErrors = {
     };
 };
 
-export type GetAngelNumbersNumbersError = GetAngelNumbersNumbersErrors[keyof GetAngelNumbersNumbersErrors];
+export type GetTarotCardsError = GetTarotCardsErrors[keyof GetTarotCardsErrors];
 
-export type GetAngelNumbersNumbersResponses = {
+export type GetTarotCardsResponses = {
     /**
-     * List of angel numbers with summary information
+     * List of tarot cards with basic information. Use GET /cards/:id for full details.
      */
     200: {
         /**
-         * Total number of angel numbers matching the applied filters. 43 for the full set, fewer when filtered by type.
+         * Total number of tarot cards matching the applied filters. 78 for the full deck, 22 for Major Arcana, 56 for Minor Arcana, 14 per suit.
          */
         total: number;
         /**
@@ -22275,50 +19770,21 @@ export type GetAngelNumbersNumbersResponses = {
          */
         offset: number;
         /**
-         * Array of angel number summaries for the current page.
+         * Array of tarot cards with basic metadata. Use GET /cards/:id for full upright and reversed interpretations.
          */
-        numbers: Array<{
-            /**
-             * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
-             */
-            number: string;
-            /**
-             * Short descriptive title capturing the core theme and spiritual significance of this angel number.
-             */
-            title: string;
-            /**
-             * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
-             */
-            coreMessage: string;
-            /**
-             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
-             */
-            type: string;
-            /**
-             * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
-             */
-            digitRoot: number;
-            /**
-             * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
-             */
-            keywords: Array<string>;
-            /**
-             * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
-             */
-            energy: string;
-        }>;
+        cards: Array<BasicCard>;
     };
 };
 
-export type GetAngelNumbersNumbersResponse = GetAngelNumbersNumbersResponses[keyof GetAngelNumbersNumbersResponses];
+export type GetTarotCardsResponse = GetTarotCardsResponses[keyof GetTarotCardsResponses];
 
-export type GetAngelNumbersNumbersByNumberData = {
+export type GetTarotCardsByIdData = {
     body?: never;
     path: {
         /**
-         * Angel number sequence to look up (e.g., "111", "444", "1212", "1234"). Must match an entry in the database.
+         * Unique card identifier in kebab-case. Major arcana: "fool", "magician", "death", etc. Minor arcana: "ace-of-cups", "seven-of-wands", "queen-of-swords", "king-of-pentacles", etc.
          */
-        number: string;
+        id: string;
     };
     query?: {
         /**
@@ -22326,10 +19792,10 @@ export type GetAngelNumbersNumbersByNumberData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/angel-numbers/numbers/{number}';
+    url: '/tarot/cards/{id}';
 };
 
-export type GetAngelNumbersNumbersByNumberErrors = {
+export type GetTarotCardsByIdErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -22389,7 +19855,7 @@ export type GetAngelNumbersNumbersByNumberErrors = {
         code: string;
     };
     /**
-     * Angel number not found in database
+     * Card not found
      */
     404: {
         /**
@@ -22444,89 +19910,47 @@ export type GetAngelNumbersNumbersByNumberErrors = {
     };
 };
 
-export type GetAngelNumbersNumbersByNumberError = GetAngelNumbersNumbersByNumberErrors[keyof GetAngelNumbersNumbersByNumberErrors];
+export type GetTarotCardsByIdError = GetTarotCardsByIdErrors[keyof GetTarotCardsByIdErrors];
 
-export type GetAngelNumbersNumbersByNumberResponses = {
+export type GetTarotCardsByIdResponses = {
     /**
-     * Complete angel number meaning with all interpretations
+     * Card details
      */
-    200: {
-        /**
-         * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
-         */
-        number: string;
-        /**
-         * Short descriptive title capturing the core theme and spiritual significance of this angel number.
-         */
-        title: string;
-        /**
-         * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
-         */
-        coreMessage: string;
-        /**
-         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
-         */
-        type: string;
-        /**
-         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
-         */
-        digitRoot: number;
-        /**
-         * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
-         */
-        keywords: Array<string>;
-        /**
-         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
-         */
-        energy: string;
-        meaning: {
-            /**
-             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of this angel number sequence.
-             */
-            spiritual: string;
-            /**
-             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
-             */
-            love: string;
-            /**
-             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life aligned with this angel number energy.
-             */
-            career: string;
-            /**
-             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
-             */
-            twinFlame: string;
-        };
-        /**
-         * Positive affirmation aligned with this angel number. Can be used for daily affirmation features, meditation guidance, or spiritual journal prompts.
-         */
-        affirmation: string;
-        /**
-         * Three to five specific, actionable steps to take when you see this angel number. Practical spiritual guidance for daily life.
-         */
-        actionSteps: Array<string>;
-    };
+    200: Card;
 };
 
-export type GetAngelNumbersNumbersByNumberResponse = GetAngelNumbersNumbersByNumberResponses[keyof GetAngelNumbersNumbersByNumberResponses];
+export type GetTarotCardsByIdResponse = GetTarotCardsByIdResponses[keyof GetTarotCardsByIdResponses];
 
-export type GetAngelNumbersLookupData = {
-    body?: never;
+export type PostTarotDrawData = {
+    body: {
+        /**
+         * Number of cards to draw (1-78). Common values: 1 for daily card, 3 for past-present-future, 5 for relationship spread, 10 for Celtic Cross. Drawing 78 returns the entire shuffled deck.
+         */
+        count: number;
+        /**
+         * Optional seed for reproducible results. Same seed = same cards in same order. Use format like "userId-date" for daily consistency, or "readingId" for shareable readings. Omit for true randomness.
+         */
+        seed?: string;
+        /**
+         * Whether cards can appear reversed (upside down). Reversed cards have different meanings. Set false for upright-only readings. Default: true (50% chance of reversal per card).
+         */
+        allowReversals?: boolean;
+        /**
+         * Whether same card can be drawn multiple times. Set false for traditional deck behavior (each card drawn only once). Set true for statistical analysis or oracle-style readings. Default: false.
+         */
+        allowDuplicates?: boolean;
+    };
     path?: never;
-    query: {
+    query?: {
         /**
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-        /**
-         * Number sequence to analyze (1-8 digits). Can be any number the user has encountered: clock times (1111), addresses (717), receipts (888), license plates (4444), or any repeating pattern.
-         */
-        number: string;
     };
-    url: '/angel-numbers/lookup';
+    url: '/tarot/draw';
 };
 
-export type GetAngelNumbersLookupErrors = {
+export type PostTarotDrawErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -22628,117 +20052,30 @@ export type GetAngelNumbersLookupErrors = {
     };
 };
 
-export type GetAngelNumbersLookupError = GetAngelNumbersLookupErrors[keyof GetAngelNumbersLookupErrors];
+export type PostTarotDrawError = PostTarotDrawErrors[keyof PostTarotDrawErrors];
 
-export type GetAngelNumbersLookupResponses = {
+export type PostTarotDrawResponses = {
     /**
-     * Complete analysis of the number sequence with pattern classification and meaning
+     * Drawn cards
      */
     200: {
         /**
-         * The number sequence that was analyzed.
+         * Seed used for this reading, if one was provided. Same seed reproduces identical draw results for consistent tarot readings.
          */
-        number: string;
+        seed?: string;
         /**
-         * Pattern classification detected for this number. "repeating" means all same digits. "sequential" means consecutive ascending or descending. "mirror" means palindrome or alternating pattern. "master" means numerology master number. "root" means single digit.
+         * Array of drawn tarot cards in draw order, each with orientation, keywords, and full meaning for divination.
          */
-        type: string;
-        /**
-         * Numerology digit root from summing and reducing all digits. Links to foundational single-digit meaning. Master numbers 11, 22, 33 are preserved.
-         */
-        digitRoot: number;
-        /**
-         * Total number of digits in the sequence.
-         */
-        digits: number;
-        /**
-         * Count of unique digits. A repeating number like 111 has 1 unique digit; 1234 has 4.
-         */
-        uniqueDigits: number;
-        /**
-         * Whether the number reads the same forwards and backwards (e.g., 1221, 1001).
-         */
-        isPalindrome: boolean;
-        /**
-         * Whether all digits are identical (e.g., 111, 4444, 777).
-         */
-        isRepeating: boolean;
-        /**
-         * Full angel number meaning if this number exists in the database (43 known numbers). Null if the number is not in the database, in which case use the analysis fields (type, digitRoot) for interpretation.
-         */
-        knownMeaning: {
-            /**
-             * Title of the matched angel number meaning.
-             */
-            title: string;
-            /**
-             * Core message summary.
-             */
-            coreMessage: string;
-            /**
-             * Energy classification (positive, neutral, cautionary).
-             */
-            energy: string;
-            /**
-             * Keywords for this angel number.
-             */
-            keywords: Array<string>;
-            /**
-             * Detailed interpretations across four life areas: spiritual, love, career, and twin flame.
-             */
-            meaning: {
-                /**
-                 * Spiritual interpretation covering divine guidance, higher purpose, and metaphysical significance.
-                 */
-                spiritual: string;
-                /**
-                 * Love and relationship interpretation for singles, couples, and those healing from past relationships.
-                 */
-                love: string;
-                /**
-                 * Career and financial guidance including professional opportunities and money mindset.
-                 */
-                career: string;
-                /**
-                 * Twin flame connection interpretation covering union, separation, and spiritual growth.
-                 */
-                twinFlame: string;
-            };
-            /**
-             * Positive affirmation for this number.
-             */
-            affirmation: string;
-            /**
-             * Actionable steps when you see this number.
-             */
-            actionSteps: Array<string>;
-        };
-        /**
-         * The foundational meaning of this number based on its digit root. Every number reduces to a root digit (0-9) or master number (11, 22, 33), which provides the base interpretation even for unknown sequences.
-         */
-        digitRootMeaning: {
-            /**
-             * Root digit number (0-9) or master number (11, 22, 33).
-             */
-            number: string;
-            /**
-             * Title of the root digit meaning in numerology.
-             */
-            title: string;
-            /**
-             * Core message of the foundational root digit.
-             */
-            coreMessage: string;
-        };
+        cards: Array<DrawnCard>;
     };
 };
 
-export type GetAngelNumbersLookupResponse = GetAngelNumbersLookupResponses[keyof GetAngelNumbersLookupResponses];
+export type PostTarotDrawResponse = PostTarotDrawResponses[keyof PostTarotDrawResponses];
 
-export type PostAngelNumbersDailyData = {
+export type PostTarotDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same card every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
          */
         seed?: string;
         /**
@@ -22753,10 +20090,368 @@ export type PostAngelNumbersDailyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/angel-numbers/daily';
+    url: '/tarot/daily';
 };
 
-export type PostAngelNumbersDailyErrors = {
+export type PostTarotDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Failed to draw card
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotDailyError = PostTarotDailyErrors[keyof PostTarotDailyErrors];
+
+export type PostTarotDailyResponses = {
+    /**
+     * Daily card reading
+     */
+    200: {
+        /**
+         * Date of the daily tarot reading in YYYY-MM-DD format (UTC). Determines which card is drawn for seeded readings.
+         */
+        date: string;
+        /**
+         * Seed used for this daily reading. Same seed on the same date always produces the identical card for reproducible daily divination.
+         */
+        seed: string;
+        card: {
+            /**
+             * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+             */
+            id: string;
+            /**
+             * Display name of the tarot card.
+             */
+            name: string;
+            /**
+             * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+             */
+            arcana: 'major' | 'minor';
+            /**
+             * Position index of the card in the draw sequence (1-based).
+             */
+            position: number;
+            /**
+             * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+             */
+            reversed: boolean;
+            /**
+             * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+             */
+            keywords: Array<string>;
+            /**
+             * Full interpretation of this card in its current orientation, providing daily guidance and reflection.
+             */
+            meaning: string;
+            /**
+             * URL to the tarot card artwork image.
+             */
+            imageUrl: string;
+        };
+        /**
+         * Concise daily tarot message summarizing the card, its orientation, key themes, and brief guidance for the day.
+         */
+        dailyMessage: string;
+    };
+};
+
+export type PostTarotDailyResponse = PostTarotDailyResponses[keyof PostTarotDailyResponses];
+
+export type PostTarotYesNoData = {
+    body: {
+        /**
+         * Your specific yes/no question. Be clear and focused. Good: "Should I move to a new city?" Bad: "What should I do about my life?" The more specific the question, the more useful the tarot guidance.
+         */
+        question?: string;
+        /**
+         * Optional seed for reproducible results. Same seed + same question = same answer. Useful for testing, sharing readings, or ensuring consistency. Omit for random draws each time.
+         */
+        seed?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/tarot/yes-no';
+};
+
+export type PostTarotYesNoErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Failed to draw card
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotYesNoError = PostTarotYesNoErrors[keyof PostTarotYesNoErrors];
+
+export type PostTarotYesNoResponses = {
+    /**
+     * Yes/No answer with interpretation
+     */
+    200: {
+        /**
+         * The querent question that was asked, if one was provided.
+         */
+        question?: string;
+        /**
+         * Tarot-derived answer. Yes = upright card supports a positive outcome. No = reversed card suggests obstacles. Maybe = inherently ambiguous card drawn (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) signaling pause, reflection, or shifting circumstances.
+         */
+        answer: 'Yes' | 'No' | 'Maybe';
+        /**
+         * Confidence level of the answer. Strong = Major Arcana card drawn (powerful, definitive cosmic energy). Qualified = Minor Arcana card drawn (nuanced, situational guidance).
+         */
+        strength: 'Strong' | 'Qualified';
+        card: {
+            /**
+             * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+             */
+            id: string;
+            /**
+             * Display name of the tarot card.
+             */
+            name: string;
+            /**
+             * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+             */
+            arcana: 'major' | 'minor';
+            /**
+             * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+             */
+            reversed: boolean;
+            /**
+             * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+             */
+            keywords: Array<string>;
+            /**
+             * URL to the tarot card artwork image.
+             */
+            imageUrl: string;
+        };
+        /**
+         * Contextual narrative explaining why this card answers the question with this result. Connects card meaning, orientation, and arcana strength into actionable guidance.
+         */
+        interpretation: string;
+    };
+};
+
+export type PostTarotYesNoResponse = PostTarotYesNoResponses[keyof PostTarotYesNoResponses];
+
+export type PostTarotSpreadsThreeCardData = {
+    body: {
+        /**
+         * Optional specific question to focus the reading. Examples: "What should I know about my relationship?", "How can I improve my finances?", "What is blocking my creative growth?" Leave empty for general guidance.
+         */
+        question?: string;
+        /**
+         * Optional seed for reproducible results. Same seed = same 3 cards in same positions. Useful for sharing readings, testing, or ensuring users get consistent results. Omit for random draws.
+         */
+        seed?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/tarot/spreads/three-card';
+};
+
+export type PostTarotSpreadsThreeCardErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -22858,82 +20553,2113 @@ export type PostAngelNumbersDailyErrors = {
     };
 };
 
-export type PostAngelNumbersDailyError = PostAngelNumbersDailyErrors[keyof PostAngelNumbersDailyErrors];
+export type PostTarotSpreadsThreeCardError = PostTarotSpreadsThreeCardErrors[keyof PostTarotSpreadsThreeCardErrors];
 
-export type PostAngelNumbersDailyResponses = {
+export type PostTarotSpreadsThreeCardResponses = {
     /**
-     * Daily angel number with complete interpretation
+     * Three-card spread reading
      */
     200: {
         /**
-         * The date used for angel number selection (UTC).
+         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
          */
-        date: string;
+        spread: string;
         /**
-         * Computed seed used for this reading. Same seed always produces the same angel number.
+         * The querent question, if one was provided.
          */
-        seed: string;
+        question?: string;
         /**
-         * Angel number sequence selected for today. Three or more digit repeating, sequential, or mirror pattern (e.g., 111, 444, 1212).
+         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
          */
-        number: string;
+        seed?: string;
         /**
-         * Short descriptive title capturing the core theme and spiritual significance of the daily angel number.
+         * Array of spread positions, each containing a drawn card with position-specific tarot interpretation.
          */
-        title: string;
-        /**
-         * One to two sentence summary of the divine message for today. Ideal for push notifications, daily guidance widgets, and quick reference.
-         */
-        coreMessage: string;
-        /**
-         * Pattern classification of the daily angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221).
-         */
-        type: string;
-        /**
-         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links the daily angel number to its foundational numerology meaning.
-         */
-        digitRoot: number;
-        /**
-         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy. "cautionary" indicates a gentle warning to rebalance or pay attention.
-         */
-        energy: string;
-        /**
-         * Detailed interpretations across four life areas for the daily angel number.
-         */
-        meaning: {
+        positions: Array<{
             /**
-             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of the angel number selected for this date.
+             * Position number in the spread layout (1-based).
              */
-            spiritual: string;
+            position: number;
             /**
-             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
+             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
              */
-            love: string;
+            name: string;
             /**
-             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life.
+             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
              */
-            career: string;
-            /**
-             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
-             */
-            twinFlame: string;
-        };
+            interpretation: string;
+            card: {
+                /**
+                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+                 */
+                id: string;
+                /**
+                 * Display name of the tarot card.
+                 */
+                name: string;
+                /**
+                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+                 */
+                arcana: 'major' | 'minor';
+                /**
+                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+                 */
+                reversed: boolean;
+                /**
+                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+                 */
+                keywords: Array<string>;
+                /**
+                 * Full interpretation of this card in its current orientation.
+                 */
+                meaning: string;
+                /**
+                 * URL to the tarot card artwork image.
+                 */
+                imageUrl: string;
+            };
+        }>;
         /**
-         * Five to eight keywords capturing the spiritual themes and energy of the daily angel number. Useful for search, filtering, and content generation.
+         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
          */
-        keywords: Array<string>;
-        /**
-         * Positive affirmation aligned with the daily angel number. Use for daily affirmation features, meditation guidance, or spiritual journal prompts.
-         */
-        affirmation: string;
-        /**
-         * Three to five specific, actionable steps to take today based on the angel number guidance. Practical spiritual advice for daily life.
-         */
-        actionSteps: Array<string>;
+        summary?: string;
     };
 };
 
-export type PostAngelNumbersDailyResponse = PostAngelNumbersDailyResponses[keyof PostAngelNumbersDailyResponses];
+export type PostTarotSpreadsThreeCardResponse = PostTarotSpreadsThreeCardResponses[keyof PostTarotSpreadsThreeCardResponses];
+
+export type PostTarotSpreadsCelticCrossData = {
+    body: {
+        question?: string;
+        seed?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/tarot/spreads/celtic-cross';
+};
+
+export type PostTarotSpreadsCelticCrossErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsCelticCrossError = PostTarotSpreadsCelticCrossErrors[keyof PostTarotSpreadsCelticCrossErrors];
+
+export type PostTarotSpreadsCelticCrossResponses = {
+    /**
+     * Celtic Cross spread reading
+     */
+    200: {
+        /**
+         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
+         */
+        spread: string;
+        /**
+         * The querent question, if one was provided.
+         */
+        question?: string;
+        /**
+         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
+         */
+        seed?: string;
+        /**
+         * Array of 10 spread positions forming the complete Celtic Cross layout, each with a drawn card and position-specific interpretation.
+         */
+        positions: Array<{
+            /**
+             * Position number in the spread layout (1-based).
+             */
+            position: number;
+            /**
+             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
+             */
+            name: string;
+            /**
+             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
+             */
+            interpretation: string;
+            card: {
+                /**
+                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+                 */
+                id: string;
+                /**
+                 * Display name of the tarot card.
+                 */
+                name: string;
+                /**
+                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+                 */
+                arcana: 'major' | 'minor';
+                /**
+                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+                 */
+                reversed: boolean;
+                /**
+                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+                 */
+                keywords: Array<string>;
+                /**
+                 * Full interpretation of this card in its current orientation.
+                 */
+                meaning: string;
+                /**
+                 * URL to the tarot card artwork image.
+                 */
+                imageUrl: string;
+            };
+        }>;
+        /**
+         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
+         */
+        summary?: string;
+    };
+};
+
+export type PostTarotSpreadsCelticCrossResponse = PostTarotSpreadsCelticCrossResponses[keyof PostTarotSpreadsCelticCrossResponses];
+
+export type PostTarotSpreadsLoveData = {
+    body: {
+        question?: string;
+        seed?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/tarot/spreads/love';
+};
+
+export type PostTarotSpreadsLoveErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsLoveError = PostTarotSpreadsLoveErrors[keyof PostTarotSpreadsLoveErrors];
+
+export type PostTarotSpreadsLoveResponses = {
+    /**
+     * Love spread reading
+     */
+    200: {
+        /**
+         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
+         */
+        spread: string;
+        /**
+         * The querent question, if one was provided.
+         */
+        question?: string;
+        /**
+         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
+         */
+        seed?: string;
+        /**
+         * Array of 5 love spread positions exploring relationship dynamics, each with a drawn card and position-specific interpretation.
+         */
+        positions: Array<{
+            /**
+             * Position number in the spread layout (1-based).
+             */
+            position: number;
+            /**
+             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
+             */
+            name: string;
+            /**
+             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
+             */
+            interpretation: string;
+            card: {
+                /**
+                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+                 */
+                id: string;
+                /**
+                 * Display name of the tarot card.
+                 */
+                name: string;
+                /**
+                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+                 */
+                arcana: 'major' | 'minor';
+                /**
+                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+                 */
+                reversed: boolean;
+                /**
+                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+                 */
+                keywords: Array<string>;
+                /**
+                 * Full interpretation of this card in its current orientation.
+                 */
+                meaning: string;
+                /**
+                 * URL to the tarot card artwork image.
+                 */
+                imageUrl: string;
+            };
+        }>;
+        /**
+         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
+         */
+        summary?: string;
+    };
+};
+
+export type PostTarotSpreadsLoveResponse = PostTarotSpreadsLoveResponses[keyof PostTarotSpreadsLoveResponses];
+
+export type PostTarotSpreadsCareerData = {
+    body: {
+        question?: string;
+        seed?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/tarot/spreads/career';
+};
+
+export type PostTarotSpreadsCareerErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsCareerError = PostTarotSpreadsCareerErrors[keyof PostTarotSpreadsCareerErrors];
+
+export type PostTarotSpreadsCareerResponses = {
+    /**
+     * Career spread reading
+     */
+    200: {
+        /**
+         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
+         */
+        spread: string;
+        /**
+         * The querent question, if one was provided.
+         */
+        question?: string;
+        /**
+         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
+         */
+        seed?: string;
+        /**
+         * Array of 7 career spread positions using SWOT framework, each with a drawn card and position-specific interpretation.
+         */
+        positions: Array<{
+            /**
+             * Position number in the spread layout (1-based).
+             */
+            position: number;
+            /**
+             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
+             */
+            name: string;
+            /**
+             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
+             */
+            interpretation: string;
+            card: {
+                /**
+                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+                 */
+                id: string;
+                /**
+                 * Display name of the tarot card.
+                 */
+                name: string;
+                /**
+                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+                 */
+                arcana: 'major' | 'minor';
+                /**
+                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+                 */
+                reversed: boolean;
+                /**
+                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+                 */
+                keywords: Array<string>;
+                /**
+                 * Full interpretation of this card in its current orientation.
+                 */
+                meaning: string;
+                /**
+                 * URL to the tarot card artwork image.
+                 */
+                imageUrl: string;
+            };
+        }>;
+        /**
+         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
+         */
+        summary?: string;
+    };
+};
+
+export type PostTarotSpreadsCareerResponse = PostTarotSpreadsCareerResponses[keyof PostTarotSpreadsCareerResponses];
+
+export type PostTarotSpreadsCustomData = {
+    body: {
+        /**
+         * Optional name for your custom tarot spread layout. Used as the spread identifier in the response.
+         */
+        spreadName?: string;
+        /**
+         * Array of 1-10 custom position definitions for your tarot spread. Each position gets one drawn card with a position-specific interpretation.
+         */
+        positions: Array<{
+            /**
+             * Name for this position in the spread (e.g. Core Issue, Hidden Factor, Best Action). Defines what aspect of the reading this card represents.
+             */
+            name: string;
+            /**
+             * Description of what this position reveals in the reading. Guides the tarot interpretation for the card drawn in this slot.
+             */
+            interpretation: string;
+        }>;
+        /**
+         * Optional querent question to focus the custom tarot reading. Provides context for position-specific interpretations.
+         */
+        question?: string;
+        /**
+         * Optional seed for reproducible results. Same seed with the same positions produces identical card draws for consistent divination.
+         */
+        seed?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/tarot/spreads/custom';
+};
+
+export type PostTarotSpreadsCustomErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostTarotSpreadsCustomError = PostTarotSpreadsCustomErrors[keyof PostTarotSpreadsCustomErrors];
+
+export type PostTarotSpreadsCustomResponses = {
+    /**
+     * Custom spread reading
+     */
+    200: {
+        /**
+         * Name of the tarot spread used (e.g. Three-Card, Celtic Cross, Career, Love).
+         */
+        spread: string;
+        /**
+         * The querent question, if one was provided.
+         */
+        question?: string;
+        /**
+         * Seed used for this reading, if one was provided. Same seed reproduces identical results.
+         */
+        seed?: string;
+        /**
+         * Array of custom spread positions matching your defined layout, each with a drawn card and position-specific interpretation.
+         */
+        positions: Array<{
+            /**
+             * Position number in the spread layout (1-based).
+             */
+            position: number;
+            /**
+             * Position name describing what this card reveals (e.g. Past, Present, Future, Challenge).
+             */
+            name: string;
+            /**
+             * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
+             */
+            interpretation: string;
+            card: {
+                /**
+                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
+                 */
+                id: string;
+                /**
+                 * Display name of the tarot card.
+                 */
+                name: string;
+                /**
+                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
+                 */
+                arcana: 'major' | 'minor';
+                /**
+                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
+                 */
+                reversed: boolean;
+                /**
+                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
+                 */
+                keywords: Array<string>;
+                /**
+                 * Full interpretation of this card in its current orientation.
+                 */
+                meaning: string;
+                /**
+                 * URL to the tarot card artwork image.
+                 */
+                imageUrl: string;
+            };
+        }>;
+        /**
+         * AI-generated narrative connecting all cards in the spread into a cohesive reading.
+         */
+        summary?: string;
+    };
+};
+
+export type PostTarotSpreadsCustomResponse = PostTarotSpreadsCustomResponses[keyof PostTarotSpreadsCustomResponses];
+
+export type PostBiorhythmReadingData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format. This is the anchor for all biorhythm cycle calculations.
+         */
+        birthDate: string;
+        /**
+         * Date to calculate the reading for in YYYY-MM-DD format. Defaults to today (UTC) if omitted.
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/reading';
+};
+
+export type PostBiorhythmReadingErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmReadingError = PostBiorhythmReadingErrors[keyof PostBiorhythmReadingErrors];
+
+export type PostBiorhythmReadingResponses = {
+    /**
+     * Complete biorhythm reading with all 10 cycles, energy rating, interpretation, and critical alerts
+     */
+    200: {
+        /**
+         * Birth date used for this calculation (YYYY-MM-DD).
+         */
+        birthDate: string;
+        /**
+         * Date this reading is for (YYYY-MM-DD).
+         */
+        targetDate: string;
+        /**
+         * Total days alive from birth date to target date. This is the basis for all cycle calculations.
+         */
+        daysSinceBirth: number;
+        /**
+         * All 10 biorhythm cycle readings. Keys: physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom.
+         */
+        cycles: {
+            [key: string]: {
+                /**
+                 * Percentage position in the cycle from -100 (trough) to 100 (peak). 0 represents a critical zero crossing.
+                 */
+                value: number;
+                /**
+                 * Raw sine wave value before percentage conversion, ranging from -1.0 to 1.0.
+                 */
+                rawValue: number;
+                /**
+                 * Current phase of the cycle. One of: peak, high, rising, critical_ascending, critical_descending, falling, low, trough.
+                 */
+                phase: string;
+                /**
+                 * Human-readable phase name for display in UIs, dashboards, and reports.
+                 */
+                phaseLabel: string;
+                /**
+                 * Current day position within the cycle (1-based). Ranges from 1 to the cycle period length.
+                 */
+                dayInCycle: number;
+                /**
+                 * Number of days until the next peak (100%) in this cycle.
+                 */
+                daysUntilPeak: number;
+                /**
+                 * Number of days until the next trough (-100%) in this cycle.
+                 */
+                daysUntilTrough: number;
+                /**
+                 * Number of days until the next zero crossing in this cycle.
+                 */
+                daysUntilCritical: number;
+                /**
+                 * Short-term direction of the cycle. One of: rising, falling, peaking, bottoming.
+                 */
+                trend: string;
+                /**
+                 * Editorial 2-3 sentence reading specific to this cycle at its current phase position.
+                 */
+                interpretation: string;
+            };
+        };
+        /**
+         * Overall energy score from 1 (deep recovery) to 10 (peak performance), derived from the three primary cycle positions.
+         */
+        energyRating: number;
+        /**
+         * Summary phase label. One of: high_energy, mixed, recovery, critical.
+         */
+        overallPhase: string;
+        /**
+         * Editorial 3-5 sentence reading combining all cycle states into a coherent daily assessment.
+         */
+        interpretation: string;
+        /**
+         * Actionable 1-2 sentence guidance for the day based on the combined cycle analysis.
+         */
+        advice: string;
+        /**
+         * Critical day alerts. Present only when one or more primary cycles are at or near zero crossing.
+         */
+        criticalAlerts: Array<{
+            /**
+             * Which cycle is at or near zero crossing.
+             */
+            cycle: string;
+            /**
+             * Alert type. zero_crossing when a cycle crosses zero, approaching_critical when within 1 day of zero.
+             */
+            type: string;
+            /**
+             * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
+             */
+            direction: string;
+            /**
+             * Specific advisory text for this critical alert.
+             */
+            advisory: string;
+        }>;
+    };
+};
+
+export type PostBiorhythmReadingResponse = PostBiorhythmReadingResponses[keyof PostBiorhythmReadingResponses];
+
+export type PostBiorhythmForecastData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format.
+         */
+        birthDate: string;
+        /**
+         * Start date of the forecast range in YYYY-MM-DD format. Defaults to today (UTC).
+         */
+        startDate?: string;
+        /**
+         * End date of the forecast range in YYYY-MM-DD format. Defaults to startDate + 30 days. Maximum range: 90 days.
+         */
+        endDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/forecast';
+};
+
+export type PostBiorhythmForecastErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmForecastError = PostBiorhythmForecastErrors[keyof PostBiorhythmForecastErrors];
+
+export type PostBiorhythmForecastResponses = {
+    /**
+     * Biorhythm forecast with daily readings, summary, and best/worst day identification
+     */
+    200: {
+        /**
+         * Birth date used for this calculation.
+         */
+        birthDate: string;
+        /**
+         * First day of the forecast range.
+         */
+        startDate: string;
+        /**
+         * Last day of the forecast range.
+         */
+        endDate: string;
+        /**
+         * Number of days in the forecast range.
+         */
+        totalDays: number;
+        summary: {
+            /**
+             * Date with the highest average primary cycle values in the range. Best day for demanding activities.
+             */
+            bestDay: string;
+            /**
+             * Date with the lowest average primary cycle values in the range. Best scheduled as a rest day.
+             */
+            worstDay: string;
+            /**
+             * Total number of days where at least one primary cycle crosses zero in the range.
+             */
+            criticalDayCount: number;
+            /**
+             * Average energy rating (1-10) across the entire forecast period.
+             */
+            averageEnergy: number;
+            /**
+             * Overview guidance for the entire forecast period based on average energy and cycle patterns.
+             */
+            periodAdvice: string;
+        };
+        /**
+         * Array of daily readings, one per day in the forecast range.
+         */
+        days: Array<{
+            /**
+             * Date of this daily reading (YYYY-MM-DD).
+             */
+            date: string;
+            /**
+             * Days from birth date to this date.
+             */
+            daysSinceBirth: number;
+            /**
+             * Physical cycle value (-100 to 100).
+             */
+            physical: number;
+            /**
+             * Emotional cycle value (-100 to 100).
+             */
+            emotional: number;
+            /**
+             * Intellectual cycle value (-100 to 100).
+             */
+            intellectual: number;
+            /**
+             * Intuitive cycle value (-100 to 100).
+             */
+            intuitive: number;
+            /**
+             * Energy rating for this day (1-10).
+             */
+            energyRating: number;
+            /**
+             * True if any primary cycle crosses zero on this day.
+             */
+            isCritical: boolean;
+            /**
+             * Which primary cycles are critical on this day. Empty array if none.
+             */
+            criticalCycles: Array<string>;
+        }>;
+    };
+};
+
+export type PostBiorhythmForecastResponse = PostBiorhythmForecastResponses[keyof PostBiorhythmForecastResponses];
+
+export type PostBiorhythmCriticalDaysData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format.
+         */
+        birthDate: string;
+        /**
+         * Start date of the search range in YYYY-MM-DD format. Defaults to today (UTC).
+         */
+        startDate?: string;
+        /**
+         * End date of the search range in YYYY-MM-DD format. Defaults to startDate + 90 days. Maximum range: 180 days.
+         */
+        endDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/critical-days';
+};
+
+export type PostBiorhythmCriticalDaysErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmCriticalDaysError = PostBiorhythmCriticalDaysErrors[keyof PostBiorhythmCriticalDaysErrors];
+
+export type PostBiorhythmCriticalDaysResponses = {
+    /**
+     * Critical days with zero crossing details, severity levels, and advisory text
+     */
+    200: {
+        /**
+         * Birth date used for this calculation.
+         */
+        birthDate: string;
+        /**
+         * Start of the search range.
+         */
+        startDate: string;
+        /**
+         * End of the search range.
+         */
+        endDate: string;
+        /**
+         * Total count of critical day events in the range. A double critical day counts as two events.
+         */
+        totalCriticalDays: number;
+        /**
+         * All critical day events in the range, sorted by date.
+         */
+        criticalDays: Array<{
+            /**
+             * Date of the zero crossing (YYYY-MM-DD).
+             */
+            date: string;
+            /**
+             * Which primary cycle crosses zero on this date.
+             */
+            cycle: string;
+            /**
+             * Cycle period in days.
+             */
+            period: number;
+            /**
+             * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
+             */
+            direction: string;
+            /**
+             * How many primary cycles are critical on this date. single, double, or triple.
+             */
+            severity: string;
+            /**
+             * Advisory text explaining the significance of this critical day and recommended precautions.
+             */
+            advisory: string;
+        }>;
+        /**
+         * Dates where 2 or more primary cycles cross zero simultaneously. These are particularly significant days requiring extra caution.
+         */
+        doubleCriticalDays: Array<string>;
+        /**
+         * Date where all 3 primary cycles cross zero simultaneously. Extremely rare event. Null if none found in range.
+         */
+        tripleCriticalDay: string;
+    };
+};
+
+export type PostBiorhythmCriticalDaysResponse = PostBiorhythmCriticalDaysResponses[keyof PostBiorhythmCriticalDaysResponses];
+
+export type PostBiorhythmCompatibilityData = {
+    body?: {
+        person1: {
+            /**
+             * Birth date of person 1 in YYYY-MM-DD format.
+             */
+            birthDate: string;
+        };
+        person2: {
+            /**
+             * Birth date of person 2 in YYYY-MM-DD format.
+             */
+            birthDate: string;
+        };
+        /**
+         * Date to evaluate compatibility on in YYYY-MM-DD format. Defaults to today (UTC). Compatibility varies by day since biorhythm cycles are continuous.
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/compatibility';
+};
+
+export type PostBiorhythmCompatibilityErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmCompatibilityError = PostBiorhythmCompatibilityErrors[keyof PostBiorhythmCompatibilityErrors];
+
+export type PostBiorhythmCompatibilityResponses = {
+    /**
+     * Biorhythm compatibility analysis with per-cycle alignment, overall score, and relationship guidance
+     */
+    200: {
+        person1: {
+            /**
+             * Birth date of person 1.
+             */
+            birthDate: string;
+        };
+        person2: {
+            /**
+             * Birth date of person 2.
+             */
+            birthDate: string;
+        };
+        /**
+         * Date this compatibility was calculated for.
+         */
+        targetDate: string;
+        /**
+         * Overall compatibility score from 0 (fully opposed) to 100 (perfectly synchronized).
+         */
+        overallScore: number;
+        /**
+         * Compatibility rating label. One of: Highly Aligned, Well Aligned, Moderately Aligned, Misaligned, Opposed.
+         */
+        rating: string;
+        /**
+         * Per-cycle compatibility analysis for physical, emotional, and intellectual cycles.
+         */
+        cycles: {
+            [key: string]: {
+                /**
+                 * Person 1 cycle value on the target date (-100 to 100).
+                 */
+                person1Value: number;
+                /**
+                 * Person 2 cycle value on the target date (-100 to 100).
+                 */
+                person2Value: number;
+                /**
+                 * Absolute difference between the two values (0-200). Lower values indicate better alignment.
+                 */
+                difference: number;
+                /**
+                 * Alignment score from 0 (perfectly opposed) to 100 (perfectly in sync).
+                 */
+                alignment: number;
+                /**
+                 * Alignment phase. One of: in_sync, complementary, neutral, opposing.
+                 */
+                phase: string;
+                /**
+                 * Human-readable description of how this cycle alignment affects the relationship.
+                 */
+                description: string;
+            };
+        };
+        /**
+         * Relationship strengths based on the compatibility profile.
+         */
+        strengths: Array<string>;
+        /**
+         * Potential relationship challenges to be aware of.
+         */
+        challenges: Array<string>;
+        /**
+         * Practical relationship guidance based on the combined cycle analysis.
+         */
+        advice: string;
+        dailySync: {
+            /**
+             * Absolute difference in physical cycle values (0-200). Lower = more aligned.
+             */
+            physicalDiff: number;
+            /**
+             * Absolute difference in emotional cycle values (0-200). Lower = more aligned.
+             */
+            emotionalDiff: number;
+            /**
+             * Absolute difference in intellectual cycle values (0-200). Lower = more aligned.
+             */
+            intellectualDiff: number;
+        };
+    };
+};
+
+export type PostBiorhythmCompatibilityResponse = PostBiorhythmCompatibilityResponses[keyof PostBiorhythmCompatibilityResponses];
+
+export type PostBiorhythmPhasesData = {
+    body?: {
+        /**
+         * Birth date of the person in YYYY-MM-DD format.
+         */
+        birthDate: string;
+        /**
+         * Date to get phase information for in YYYY-MM-DD format. Defaults to today (UTC).
+         */
+        targetDate?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/phases';
+};
+
+export type PostBiorhythmPhasesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmPhasesError = PostBiorhythmPhasesErrors[keyof PostBiorhythmPhasesErrors];
+
+export type PostBiorhythmPhasesResponses = {
+    /**
+     * Phase information for all 10 cycles with summary
+     */
+    200: {
+        /**
+         * Birth date used for this calculation.
+         */
+        birthDate: string;
+        /**
+         * Date this phase info is for.
+         */
+        targetDate: string;
+        /**
+         * Total days alive from birth date to target date.
+         */
+        daysSinceBirth: number;
+        /**
+         * Phase information for all 10 cycles keyed by cycle ID.
+         */
+        phases: {
+            [key: string]: {
+                /**
+                 * Cycle value from -100 to 100.
+                 */
+                value: number;
+                /**
+                 * Current phase identifier.
+                 */
+                phase: string;
+                /**
+                 * Human-readable phase label.
+                 */
+                phaseLabel: string;
+                /**
+                 * Current day position within the cycle.
+                 */
+                dayInCycle: number;
+                /**
+                 * Cycle period in days. 0 for composite cycles (passion, mastery, wisdom).
+                 */
+                totalDays: number;
+                /**
+                 * Days until next zero crossing.
+                 */
+                daysUntilCritical: number;
+                /**
+                 * Short-term direction: rising, falling, peaking, or bottoming.
+                 */
+                trend: string;
+            };
+        };
+        /**
+         * Quick overview string summarizing the current state of all cycles.
+         */
+        summary: string;
+    };
+};
+
+export type PostBiorhythmPhasesResponse = PostBiorhythmPhasesResponses[keyof PostBiorhythmPhasesResponses];
+
+export type PostBiorhythmDailyData = {
+    body?: {
+        /**
+         * Optional seed for reproducible readings. Same seed + same date = same reading every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         */
+        seed?: string;
+        /**
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
+         */
+        date?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/biorhythm/daily';
+};
+
+export type PostBiorhythmDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostBiorhythmDailyError = PostBiorhythmDailyErrors[keyof PostBiorhythmDailyErrors];
+
+export type PostBiorhythmDailyResponses = {
+    /**
+     * Daily biorhythm reading with spotlight cycle and actionable guidance
+     */
+    200: {
+        /**
+         * Date this daily reading is for (YYYY-MM-DD, UTC).
+         */
+        date: string;
+        /**
+         * Computed seed used for this reading. Same seed always produces the same reading.
+         */
+        seed: string;
+        /**
+         * Overall energy score from 1 to 10.
+         */
+        energyRating: number;
+        /**
+         * Summary phase. One of: high_energy, mixed, recovery, critical.
+         */
+        overallPhase: string;
+        spotlight: {
+            /**
+             * Which primary cycle is featured as the daily spotlight.
+             */
+            cycle: string;
+            /**
+             * Current value of the spotlight cycle (-100 to 100).
+             */
+            value: number;
+            /**
+             * Current phase of the spotlight cycle.
+             */
+            phase: string;
+            /**
+             * Personalized message about the spotlight cycle and what it means for today.
+             */
+            message: string;
+        };
+        quickRead: {
+            /**
+             * Physical cycle value (-100 to 100).
+             */
+            physical: number;
+            /**
+             * Emotional cycle value (-100 to 100).
+             */
+            emotional: number;
+            /**
+             * Intellectual cycle value (-100 to 100).
+             */
+            intellectual: number;
+        };
+        /**
+         * Concise daily biorhythm message combining energy rating and spotlight cycle.
+         */
+        dailyMessage: string;
+        /**
+         * Actionable 1-2 sentence guidance for the day.
+         */
+        advice: string;
+    };
+};
+
+export type PostBiorhythmDailyResponse = PostBiorhythmDailyResponses[keyof PostBiorhythmDailyResponses];
 
 export type PostIchingDailyData = {
     body?: {
@@ -26466,28 +26192,31 @@ export type GetCrystalsByIdResponses = {
 
 export type GetCrystalsByIdResponse = GetCrystalsByIdResponses[keyof GetCrystalsByIdResponses];
 
-export type PostBiorhythmReadingData = {
-    body?: {
-        /**
-         * Birth date of the person in YYYY-MM-DD format. This is the anchor for all biorhythm cycle calculations.
-         */
-        birthDate: string;
-        /**
-         * Date to calculate the reading for in YYYY-MM-DD format. Defaults to today (UTC) if omitted.
-         */
-        targetDate?: string;
-    };
+export type GetDreamsSymbolsData = {
+    body?: never;
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Search query to match against symbol names and meanings. Case-insensitive.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        q?: string;
+        /**
+         * Filter symbols by starting letter (a-z). Case-insensitive.
+         */
+        letter?: string;
+        /**
+         * Maximum items to return per page. Range: 1-50, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
     };
-    url: '/biorhythm/reading';
+    url: '/dreams/symbols';
 };
 
-export type PostBiorhythmReadingErrors = {
+export type GetDreamsSymbolsErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -26589,140 +26318,988 @@ export type PostBiorhythmReadingErrors = {
     };
 };
 
-export type PostBiorhythmReadingError = PostBiorhythmReadingErrors[keyof PostBiorhythmReadingErrors];
+export type GetDreamsSymbolsError = GetDreamsSymbolsErrors[keyof GetDreamsSymbolsErrors];
 
-export type PostBiorhythmReadingResponses = {
+export type GetDreamsSymbolsResponses = {
     /**
-     * Complete biorhythm reading with all 10 cycles, energy rating, interpretation, and critical alerts
+     * Paginated list of dream symbols with basic information.
      */
     200: {
         /**
-         * Birth date used for this calculation (YYYY-MM-DD).
+         * Total number of dream symbols matching your search or filter criteria.
          */
-        birthDate: string;
+        total: number;
         /**
-         * Date this reading is for (YYYY-MM-DD).
+         * Page size used for this response.
          */
-        targetDate: string;
+        limit: number;
         /**
-         * Total days alive from birth date to target date. This is the basis for all cycle calculations.
+         * Number of symbols skipped. Use with limit for pagination.
          */
-        daysSinceBirth: number;
+        offset: number;
         /**
-         * All 10 biorhythm cycle readings. Keys: physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom.
+         * Dream symbols for the current page. Use /symbols/{id} to get full interpretation.
          */
-        cycles: {
-            [key: string]: {
-                /**
-                 * Percentage position in the cycle from -100 (trough) to 100 (peak). 0 represents a critical zero crossing.
-                 */
-                value: number;
-                /**
-                 * Raw sine wave value before percentage conversion, ranging from -1.0 to 1.0.
-                 */
-                rawValue: number;
-                /**
-                 * Current phase of the cycle. One of: peak, high, rising, critical_ascending, critical_descending, falling, low, trough.
-                 */
-                phase: string;
-                /**
-                 * Human-readable phase name for display in UIs, dashboards, and reports.
-                 */
-                phaseLabel: string;
-                /**
-                 * Current day position within the cycle (1-based). Ranges from 1 to the cycle period length.
-                 */
-                dayInCycle: number;
-                /**
-                 * Number of days until the next peak (100%) in this cycle.
-                 */
-                daysUntilPeak: number;
-                /**
-                 * Number of days until the next trough (-100%) in this cycle.
-                 */
-                daysUntilTrough: number;
-                /**
-                 * Number of days until the next zero crossing in this cycle.
-                 */
-                daysUntilCritical: number;
-                /**
-                 * Short-term direction of the cycle. One of: rising, falling, peaking, bottoming.
-                 */
-                trend: string;
-                /**
-                 * Editorial 2-3 sentence reading specific to this cycle at its current phase position.
-                 */
-                interpretation: string;
-            };
+        symbols: Array<BasicDreamSymbol>;
+    };
+};
+
+export type GetDreamsSymbolsResponse = GetDreamsSymbolsResponses[keyof GetDreamsSymbolsResponses];
+
+export type GetDreamsSymbolsRandomData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of random symbols to return (1-10). Default: 1.
+         */
+        count?: number;
+    };
+    url: '/dreams/symbols/random';
+};
+
+export type GetDreamsSymbolsRandomErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetDreamsSymbolsRandomError = GetDreamsSymbolsRandomErrors[keyof GetDreamsSymbolsRandomErrors];
+
+export type GetDreamsSymbolsRandomResponses = {
+    /**
+     * Random dream symbol(s) with full interpretations.
+     */
+    200: {
+        symbols: Array<DreamSymbol>;
+    };
+};
+
+export type GetDreamsSymbolsRandomResponse = GetDreamsSymbolsRandomResponses[keyof GetDreamsSymbolsRandomResponses];
+
+export type GetDreamsSymbolsLettersData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/dreams/symbols/letters';
+};
+
+export type GetDreamsSymbolsLettersErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetDreamsSymbolsLettersError = GetDreamsSymbolsLettersErrors[keyof GetDreamsSymbolsLettersErrors];
+
+export type GetDreamsSymbolsLettersResponses = {
+    /**
+     * Symbol counts organized by starting letter.
+     */
+    200: {
+        /**
+         * Map of starting letter to symbol count. Use to build A-Z dream dictionary navigation showing how many dream meanings exist per letter.
+         */
+        letters: {
+            [key: string]: number;
         };
         /**
-         * Overall energy score from 1 (deep recovery) to 10 (peak performance), derived from the three primary cycle positions.
+         * Total number of dream symbols in the complete dream interpretation database.
          */
-        energyRating: number;
+        total: number;
+    };
+};
+
+export type GetDreamsSymbolsLettersResponse = GetDreamsSymbolsLettersResponses[keyof GetDreamsSymbolsLettersResponses];
+
+export type GetDreamsSymbolsByIdData = {
+    body?: never;
+    path: {
         /**
-         * Summary phase label. One of: high_energy, mixed, recovery, critical.
+         * Unique symbol identifier in kebab-case (e.g., "snake", "being-chased", "teeth-falling-out").
          */
-        overallPhase: string;
+        id: string;
+    };
+    query?: never;
+    url: '/dreams/symbols/{id}';
+};
+
+export type GetDreamsSymbolsByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
         /**
-         * Editorial 3-5 sentence reading combining all cycle states into a coherent daily assessment.
+         * First issue summary.
          */
-        interpretation: string;
+        error: string;
+        code: 'validation_error';
         /**
-         * Actionable 1-2 sentence guidance for the day based on the combined cycle analysis.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        advice: string;
-        /**
-         * Critical day alerts. Present only when one or more primary cycles are at or near zero crossing.
-         */
-        criticalAlerts: Array<{
+        issues: Array<{
             /**
-             * Which cycle is at or near zero crossing.
+             * Dot-separated field path, or "(root)" for top-level.
              */
-            cycle: string;
+            path: string;
+            message: string;
             /**
-             * Alert type. zero_crossing when a cycle crosses zero, approaching_critical when within 1 day of zero.
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Symbol not found.
+     */
+    404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetDreamsSymbolsByIdError = GetDreamsSymbolsByIdErrors[keyof GetDreamsSymbolsByIdErrors];
+
+export type GetDreamsSymbolsByIdResponses = {
+    /**
+     * Full dream symbol with interpretation.
+     */
+    200: DreamSymbol;
+};
+
+export type GetDreamsSymbolsByIdResponse = GetDreamsSymbolsByIdResponses[keyof GetDreamsSymbolsByIdResponses];
+
+export type PostDreamsDailyData = {
+    body?: {
+        /**
+         * Optional seed for reproducible readings. Same seed + same date = same symbol every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         */
+        seed?: string;
+        /**
+         * Date for the reading in YYYY-MM-DD format. Defaults to today (UTC). Useful for viewing past daily readings or pre-generating future ones.
+         */
+        date?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/dreams/daily';
+};
+
+export type PostDreamsDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostDreamsDailyError = PostDreamsDailyErrors[keyof PostDreamsDailyErrors];
+
+export type PostDreamsDailyResponses = {
+    /**
+     * Daily dream symbol with interpretation
+     */
+    200: {
+        /**
+         * Date of the daily dream symbol in YYYY-MM-DD format (UTC). Determines which symbol is selected for seeded readings.
+         */
+        date: string;
+        /**
+         * Seed used for this daily reading. Same seed on the same date always produces the identical symbol.
+         */
+        seed: string;
+        symbol: {
+            /**
+             * Unique symbol identifier in kebab-case. Use this to fetch full details via /symbols/{id}.
+             */
+            id: string;
+            /**
+             * Display name of the dream symbol.
+             */
+            name: string;
+            /**
+             * Starting letter (a-z) for alphabetical navigation.
+             */
+            letter: string;
+            /**
+             * Full psychological dream interpretation explaining the subconscious symbolism, emotional significance, and waking-life connections.
+             */
+            meaning: string;
+        };
+        /**
+         * Concise daily message summarizing the dream symbol and its key themes for quick reflection.
+         */
+        dailyMessage: string;
+    };
+};
+
+export type PostDreamsDailyResponse = PostDreamsDailyResponses[keyof PostDreamsDailyResponses];
+
+export type GetAngelNumbersNumbersData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Maximum items to return per page. Range: 1-50, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number;
+        /**
+         * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome patterns like 1212. "master" returns 11, 22, 33. "root" returns single digits 0-9.
+         */
+        type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root';
+    };
+    url: '/angel-numbers/numbers';
+};
+
+export type GetAngelNumbersNumbersErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersNumbersError = GetAngelNumbersNumbersErrors[keyof GetAngelNumbersNumbersErrors];
+
+export type GetAngelNumbersNumbersResponses = {
+    /**
+     * List of angel numbers with summary information
+     */
+    200: {
+        /**
+         * Total number of angel numbers matching the applied filters. 43 for the full set, fewer when filtered by type.
+         */
+        total: number;
+        /**
+         * Maximum items returned per page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped from the start of the result set.
+         */
+        offset: number;
+        /**
+         * Array of angel number summaries for the current page.
+         */
+        numbers: Array<{
+            /**
+             * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
+             */
+            number: string;
+            /**
+             * Short descriptive title capturing the core theme and spiritual significance of this angel number.
+             */
+            title: string;
+            /**
+             * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
+             */
+            coreMessage: string;
+            /**
+             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
              */
             type: string;
             /**
-             * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
+             * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
              */
-            direction: string;
+            digitRoot: number;
             /**
-             * Specific advisory text for this critical alert.
+             * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
              */
-            advisory: string;
+            keywords: Array<string>;
+            /**
+             * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
+             */
+            energy: string;
         }>;
     };
 };
 
-export type PostBiorhythmReadingResponse = PostBiorhythmReadingResponses[keyof PostBiorhythmReadingResponses];
+export type GetAngelNumbersNumbersResponse = GetAngelNumbersNumbersResponses[keyof GetAngelNumbersNumbersResponses];
 
-export type PostBiorhythmForecastData = {
-    body?: {
+export type GetAngelNumbersNumbersByNumberData = {
+    body?: never;
+    path: {
         /**
-         * Birth date of the person in YYYY-MM-DD format.
+         * Angel number sequence to look up (e.g., "111", "444", "1212", "1234"). Must match an entry in the database.
          */
-        birthDate: string;
-        /**
-         * Start date of the forecast range in YYYY-MM-DD format. Defaults to today (UTC).
-         */
-        startDate?: string;
-        /**
-         * End date of the forecast range in YYYY-MM-DD format. Defaults to startDate + 30 days. Maximum range: 90 days.
-         */
-        endDate?: string;
+        number: string;
     };
-    path?: never;
     query?: {
         /**
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/biorhythm/forecast';
+    url: '/angel-numbers/numbers/{number}';
 };
 
-export type PostBiorhythmForecastErrors = {
+export type GetAngelNumbersNumbersByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Angel number not found in database
+     */
+    404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAngelNumbersNumbersByNumberError = GetAngelNumbersNumbersByNumberErrors[keyof GetAngelNumbersNumbersByNumberErrors];
+
+export type GetAngelNumbersNumbersByNumberResponses = {
+    /**
+     * Complete angel number meaning with all interpretations
+     */
+    200: {
+        /**
+         * Angel number sequence as a string. Common patterns include triple repeating (111-999), quad repeating (1111-9999), master numbers (11, 22, 33), mirror patterns (1212), and sequential numbers (1234).
+         */
+        number: string;
+        /**
+         * Short descriptive title capturing the core theme and spiritual significance of this angel number.
+         */
+        title: string;
+        /**
+         * One to two sentence summary of the divine message. Ideal for push notifications, daily guidance widgets, and quick reference lookups.
+         */
+        coreMessage: string;
+        /**
+         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+         */
+        type: string;
+        /**
+         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links each angel number to foundational numerology meaning. Master numbers 11, 22, 33 are preserved without further reduction.
+         */
+        digitRoot: number;
+        /**
+         * Five to eight keywords capturing the spiritual themes and energy of this angel number. Useful for search, filtering, and content generation.
+         */
+        keywords: Array<string>;
+        /**
+         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy (neither purely positive nor cautionary). "cautionary" indicates a gentle warning to rebalance or pay attention.
+         */
+        energy: string;
+        meaning: {
+            /**
+             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of this angel number sequence.
+             */
+            spiritual: string;
+            /**
+             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
+             */
+            love: string;
+            /**
+             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life aligned with this angel number energy.
+             */
+            career: string;
+            /**
+             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
+             */
+            twinFlame: string;
+        };
+        /**
+         * Positive affirmation aligned with this angel number. Can be used for daily affirmation features, meditation guidance, or spiritual journal prompts.
+         */
+        affirmation: string;
+        /**
+         * Three to five specific, actionable steps to take when you see this angel number. Practical spiritual guidance for daily life.
+         */
+        actionSteps: Array<string>;
+    };
+};
+
+export type GetAngelNumbersNumbersByNumberResponse = GetAngelNumbersNumbersByNumberResponses[keyof GetAngelNumbersNumbersByNumberResponses];
+
+export type GetAngelNumbersLookupData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Number sequence to analyze (1-8 digits). Can be any number the user has encountered: clock times (1111), addresses (717), receipts (888), license plates (4444), or any repeating pattern.
+         */
+        number: string;
+    };
+    url: '/angel-numbers/lookup';
+};
+
+export type GetAngelNumbersLookupErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -26824,703 +27401,117 @@ export type PostBiorhythmForecastErrors = {
     };
 };
 
-export type PostBiorhythmForecastError = PostBiorhythmForecastErrors[keyof PostBiorhythmForecastErrors];
+export type GetAngelNumbersLookupError = GetAngelNumbersLookupErrors[keyof GetAngelNumbersLookupErrors];
 
-export type PostBiorhythmForecastResponses = {
+export type GetAngelNumbersLookupResponses = {
     /**
-     * Biorhythm forecast with daily readings, summary, and best/worst day identification
+     * Complete analysis of the number sequence with pattern classification and meaning
      */
     200: {
         /**
-         * Birth date used for this calculation.
+         * The number sequence that was analyzed.
          */
-        birthDate: string;
+        number: string;
         /**
-         * First day of the forecast range.
+         * Pattern classification detected for this number. "repeating" means all same digits. "sequential" means consecutive ascending or descending. "mirror" means palindrome or alternating pattern. "master" means numerology master number. "root" means single digit.
          */
-        startDate: string;
+        type: string;
         /**
-         * Last day of the forecast range.
+         * Numerology digit root from summing and reducing all digits. Links to foundational single-digit meaning. Master numbers 11, 22, 33 are preserved.
          */
-        endDate: string;
+        digitRoot: number;
         /**
-         * Number of days in the forecast range.
+         * Total number of digits in the sequence.
          */
-        totalDays: number;
-        summary: {
+        digits: number;
+        /**
+         * Count of unique digits. A repeating number like 111 has 1 unique digit; 1234 has 4.
+         */
+        uniqueDigits: number;
+        /**
+         * Whether the number reads the same forwards and backwards (e.g., 1221, 1001).
+         */
+        isPalindrome: boolean;
+        /**
+         * Whether all digits are identical (e.g., 111, 4444, 777).
+         */
+        isRepeating: boolean;
+        /**
+         * Full angel number meaning if this number exists in the database (43 known numbers). Null if the number is not in the database, in which case use the analysis fields (type, digitRoot) for interpretation.
+         */
+        knownMeaning: {
             /**
-             * Date with the highest average primary cycle values in the range. Best day for demanding activities.
+             * Title of the matched angel number meaning.
              */
-            bestDay: string;
+            title: string;
             /**
-             * Date with the lowest average primary cycle values in the range. Best scheduled as a rest day.
+             * Core message summary.
              */
-            worstDay: string;
+            coreMessage: string;
             /**
-             * Total number of days where at least one primary cycle crosses zero in the range.
+             * Energy classification (positive, neutral, cautionary).
              */
-            criticalDayCount: number;
+            energy: string;
             /**
-             * Average energy rating (1-10) across the entire forecast period.
+             * Keywords for this angel number.
              */
-            averageEnergy: number;
+            keywords: Array<string>;
             /**
-             * Overview guidance for the entire forecast period based on average energy and cycle patterns.
+             * Detailed interpretations across four life areas: spiritual, love, career, and twin flame.
              */
-            periodAdvice: string;
-        };
-        /**
-         * Array of daily readings, one per day in the forecast range.
-         */
-        days: Array<{
-            /**
-             * Date of this daily reading (YYYY-MM-DD).
-             */
-            date: string;
-            /**
-             * Days from birth date to this date.
-             */
-            daysSinceBirth: number;
-            /**
-             * Physical cycle value (-100 to 100).
-             */
-            physical: number;
-            /**
-             * Emotional cycle value (-100 to 100).
-             */
-            emotional: number;
-            /**
-             * Intellectual cycle value (-100 to 100).
-             */
-            intellectual: number;
-            /**
-             * Intuitive cycle value (-100 to 100).
-             */
-            intuitive: number;
-            /**
-             * Energy rating for this day (1-10).
-             */
-            energyRating: number;
-            /**
-             * True if any primary cycle crosses zero on this day.
-             */
-            isCritical: boolean;
-            /**
-             * Which primary cycles are critical on this day. Empty array if none.
-             */
-            criticalCycles: Array<string>;
-        }>;
-    };
-};
-
-export type PostBiorhythmForecastResponse = PostBiorhythmForecastResponses[keyof PostBiorhythmForecastResponses];
-
-export type PostBiorhythmCriticalDaysData = {
-    body?: {
-        /**
-         * Birth date of the person in YYYY-MM-DD format.
-         */
-        birthDate: string;
-        /**
-         * Start date of the search range in YYYY-MM-DD format. Defaults to today (UTC).
-         */
-        startDate?: string;
-        /**
-         * End date of the search range in YYYY-MM-DD format. Defaults to startDate + 90 days. Maximum range: 180 days.
-         */
-        endDate?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/biorhythm/critical-days';
-};
-
-export type PostBiorhythmCriticalDaysErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostBiorhythmCriticalDaysError = PostBiorhythmCriticalDaysErrors[keyof PostBiorhythmCriticalDaysErrors];
-
-export type PostBiorhythmCriticalDaysResponses = {
-    /**
-     * Critical days with zero crossing details, severity levels, and advisory text
-     */
-    200: {
-        /**
-         * Birth date used for this calculation.
-         */
-        birthDate: string;
-        /**
-         * Start of the search range.
-         */
-        startDate: string;
-        /**
-         * End of the search range.
-         */
-        endDate: string;
-        /**
-         * Total count of critical day events in the range. A double critical day counts as two events.
-         */
-        totalCriticalDays: number;
-        /**
-         * All critical day events in the range, sorted by date.
-         */
-        criticalDays: Array<{
-            /**
-             * Date of the zero crossing (YYYY-MM-DD).
-             */
-            date: string;
-            /**
-             * Which primary cycle crosses zero on this date.
-             */
-            cycle: string;
-            /**
-             * Cycle period in days.
-             */
-            period: number;
-            /**
-             * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
-             */
-            direction: string;
-            /**
-             * How many primary cycles are critical on this date. single, double, or triple.
-             */
-            severity: string;
-            /**
-             * Advisory text explaining the significance of this critical day and recommended precautions.
-             */
-            advisory: string;
-        }>;
-        /**
-         * Dates where 2 or more primary cycles cross zero simultaneously. These are particularly significant days requiring extra caution.
-         */
-        doubleCriticalDays: Array<string>;
-        /**
-         * Date where all 3 primary cycles cross zero simultaneously. Extremely rare event. Null if none found in range.
-         */
-        tripleCriticalDay: string;
-    };
-};
-
-export type PostBiorhythmCriticalDaysResponse = PostBiorhythmCriticalDaysResponses[keyof PostBiorhythmCriticalDaysResponses];
-
-export type PostBiorhythmCompatibilityData = {
-    body?: {
-        person1: {
-            /**
-             * Birth date of person 1 in YYYY-MM-DD format.
-             */
-            birthDate: string;
-        };
-        person2: {
-            /**
-             * Birth date of person 2 in YYYY-MM-DD format.
-             */
-            birthDate: string;
-        };
-        /**
-         * Date to evaluate compatibility on in YYYY-MM-DD format. Defaults to today (UTC). Compatibility varies by day since biorhythm cycles are continuous.
-         */
-        targetDate?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/biorhythm/compatibility';
-};
-
-export type PostBiorhythmCompatibilityErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostBiorhythmCompatibilityError = PostBiorhythmCompatibilityErrors[keyof PostBiorhythmCompatibilityErrors];
-
-export type PostBiorhythmCompatibilityResponses = {
-    /**
-     * Biorhythm compatibility analysis with per-cycle alignment, overall score, and relationship guidance
-     */
-    200: {
-        person1: {
-            /**
-             * Birth date of person 1.
-             */
-            birthDate: string;
-        };
-        person2: {
-            /**
-             * Birth date of person 2.
-             */
-            birthDate: string;
-        };
-        /**
-         * Date this compatibility was calculated for.
-         */
-        targetDate: string;
-        /**
-         * Overall compatibility score from 0 (fully opposed) to 100 (perfectly synchronized).
-         */
-        overallScore: number;
-        /**
-         * Compatibility rating label. One of: Highly Aligned, Well Aligned, Moderately Aligned, Misaligned, Opposed.
-         */
-        rating: string;
-        /**
-         * Per-cycle compatibility analysis for physical, emotional, and intellectual cycles.
-         */
-        cycles: {
-            [key: string]: {
+            meaning: {
                 /**
-                 * Person 1 cycle value on the target date (-100 to 100).
+                 * Spiritual interpretation covering divine guidance, higher purpose, and metaphysical significance.
                  */
-                person1Value: number;
+                spiritual: string;
                 /**
-                 * Person 2 cycle value on the target date (-100 to 100).
+                 * Love and relationship interpretation for singles, couples, and those healing from past relationships.
                  */
-                person2Value: number;
+                love: string;
                 /**
-                 * Absolute difference between the two values (0-200). Lower values indicate better alignment.
+                 * Career and financial guidance including professional opportunities and money mindset.
                  */
-                difference: number;
+                career: string;
                 /**
-                 * Alignment score from 0 (perfectly opposed) to 100 (perfectly in sync).
+                 * Twin flame connection interpretation covering union, separation, and spiritual growth.
                  */
-                alignment: number;
-                /**
-                 * Alignment phase. One of: in_sync, complementary, neutral, opposing.
-                 */
-                phase: string;
-                /**
-                 * Human-readable description of how this cycle alignment affects the relationship.
-                 */
-                description: string;
+                twinFlame: string;
             };
+            /**
+             * Positive affirmation for this number.
+             */
+            affirmation: string;
+            /**
+             * Actionable steps when you see this number.
+             */
+            actionSteps: Array<string>;
         };
         /**
-         * Relationship strengths based on the compatibility profile.
+         * The foundational meaning of this number based on its digit root. Every number reduces to a root digit (0-9) or master number (11, 22, 33), which provides the base interpretation even for unknown sequences.
          */
-        strengths: Array<string>;
-        /**
-         * Potential relationship challenges to be aware of.
-         */
-        challenges: Array<string>;
-        /**
-         * Practical relationship guidance based on the combined cycle analysis.
-         */
-        advice: string;
-        dailySync: {
+        digitRootMeaning: {
             /**
-             * Absolute difference in physical cycle values (0-200). Lower = more aligned.
+             * Root digit number (0-9) or master number (11, 22, 33).
              */
-            physicalDiff: number;
+            number: string;
             /**
-             * Absolute difference in emotional cycle values (0-200). Lower = more aligned.
+             * Title of the root digit meaning in numerology.
              */
-            emotionalDiff: number;
+            title: string;
             /**
-             * Absolute difference in intellectual cycle values (0-200). Lower = more aligned.
+             * Core message of the foundational root digit.
              */
-            intellectualDiff: number;
+            coreMessage: string;
         };
     };
 };
 
-export type PostBiorhythmCompatibilityResponse = PostBiorhythmCompatibilityResponses[keyof PostBiorhythmCompatibilityResponses];
+export type GetAngelNumbersLookupResponse = GetAngelNumbersLookupResponses[keyof GetAngelNumbersLookupResponses];
 
-export type PostBiorhythmPhasesData = {
+export type PostAngelNumbersDailyData = {
     body?: {
         /**
-         * Birth date of the person in YYYY-MM-DD format.
-         */
-        birthDate: string;
-        /**
-         * Date to get phase information for in YYYY-MM-DD format. Defaults to today (UTC).
-         */
-        targetDate?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/biorhythm/phases';
-};
-
-export type PostBiorhythmPhasesErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostBiorhythmPhasesError = PostBiorhythmPhasesErrors[keyof PostBiorhythmPhasesErrors];
-
-export type PostBiorhythmPhasesResponses = {
-    /**
-     * Phase information for all 10 cycles with summary
-     */
-    200: {
-        /**
-         * Birth date used for this calculation.
-         */
-        birthDate: string;
-        /**
-         * Date this phase info is for.
-         */
-        targetDate: string;
-        /**
-         * Total days alive from birth date to target date.
-         */
-        daysSinceBirth: number;
-        /**
-         * Phase information for all 10 cycles keyed by cycle ID.
-         */
-        phases: {
-            [key: string]: {
-                /**
-                 * Cycle value from -100 to 100.
-                 */
-                value: number;
-                /**
-                 * Current phase identifier.
-                 */
-                phase: string;
-                /**
-                 * Human-readable phase label.
-                 */
-                phaseLabel: string;
-                /**
-                 * Current day position within the cycle.
-                 */
-                dayInCycle: number;
-                /**
-                 * Cycle period in days. 0 for composite cycles (passion, mastery, wisdom).
-                 */
-                totalDays: number;
-                /**
-                 * Days until next zero crossing.
-                 */
-                daysUntilCritical: number;
-                /**
-                 * Short-term direction: rising, falling, peaking, or bottoming.
-                 */
-                trend: string;
-            };
-        };
-        /**
-         * Quick overview string summarizing the current state of all cycles.
-         */
-        summary: string;
-    };
-};
-
-export type PostBiorhythmPhasesResponse = PostBiorhythmPhasesResponses[keyof PostBiorhythmPhasesResponses];
-
-export type PostBiorhythmDailyData = {
-    body?: {
-        /**
-         * Optional seed for reproducible readings. Same seed + same date = same reading every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
          */
         seed?: string;
         /**
@@ -27535,10 +27526,10 @@ export type PostBiorhythmDailyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
     };
-    url: '/biorhythm/daily';
+    url: '/angel-numbers/daily';
 };
 
-export type PostBiorhythmDailyErrors = {
+export type PostAngelNumbersDailyErrors = {
     /**
      * Validation error. `issues[]` lists every failed field.
      */
@@ -27640,73 +27631,82 @@ export type PostBiorhythmDailyErrors = {
     };
 };
 
-export type PostBiorhythmDailyError = PostBiorhythmDailyErrors[keyof PostBiorhythmDailyErrors];
+export type PostAngelNumbersDailyError = PostAngelNumbersDailyErrors[keyof PostAngelNumbersDailyErrors];
 
-export type PostBiorhythmDailyResponses = {
+export type PostAngelNumbersDailyResponses = {
     /**
-     * Daily biorhythm reading with spotlight cycle and actionable guidance
+     * Daily angel number with complete interpretation
      */
     200: {
         /**
-         * Date this daily reading is for (YYYY-MM-DD, UTC).
+         * The date used for angel number selection (UTC).
          */
         date: string;
         /**
-         * Computed seed used for this reading. Same seed always produces the same reading.
+         * Computed seed used for this reading. Same seed always produces the same angel number.
          */
         seed: string;
         /**
-         * Overall energy score from 1 to 10.
+         * Angel number sequence selected for today. Three or more digit repeating, sequential, or mirror pattern (e.g., 111, 444, 1212).
          */
-        energyRating: number;
+        number: string;
         /**
-         * Summary phase. One of: high_energy, mixed, recovery, critical.
+         * Short descriptive title capturing the core theme and spiritual significance of the daily angel number.
          */
-        overallPhase: string;
-        spotlight: {
+        title: string;
+        /**
+         * One to two sentence summary of the divine message for today. Ideal for push notifications, daily guidance widgets, and quick reference.
+         */
+        coreMessage: string;
+        /**
+         * Pattern classification of the daily angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221).
+         */
+        type: string;
+        /**
+         * Numerology digit root calculated by summing all digits and reducing to a single digit. Links the daily angel number to its foundational numerology meaning.
+         */
+        digitRoot: number;
+        /**
+         * Overall energy classification. "positive" indicates encouraging, uplifting energy. "neutral" indicates transitional energy. "cautionary" indicates a gentle warning to rebalance or pay attention.
+         */
+        energy: string;
+        /**
+         * Detailed interpretations across four life areas for the daily angel number.
+         */
+        meaning: {
             /**
-             * Which primary cycle is featured as the daily spotlight.
+             * Two to three paragraph spiritual interpretation covering divine guidance, higher purpose, and the metaphysical significance of the angel number selected for this date.
              */
-            cycle: string;
+            spiritual: string;
             /**
-             * Current value of the spotlight cycle (-100 to 100).
+             * Love and relationship interpretation covering singles, couples, and those healing from past relationships. Includes romantic guidance and partnership advice.
              */
-            value: number;
+            love: string;
             /**
-             * Current phase of the spotlight cycle.
+             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life.
              */
-            phase: string;
+            career: string;
             /**
-             * Personalized message about the spotlight cycle and what it means for today.
+             * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
              */
-            message: string;
+            twinFlame: string;
         };
-        quickRead: {
-            /**
-             * Physical cycle value (-100 to 100).
-             */
-            physical: number;
-            /**
-             * Emotional cycle value (-100 to 100).
-             */
-            emotional: number;
-            /**
-             * Intellectual cycle value (-100 to 100).
-             */
-            intellectual: number;
-        };
         /**
-         * Concise daily biorhythm message combining energy rating and spotlight cycle.
+         * Five to eight keywords capturing the spiritual themes and energy of the daily angel number. Useful for search, filtering, and content generation.
          */
-        dailyMessage: string;
+        keywords: Array<string>;
         /**
-         * Actionable 1-2 sentence guidance for the day.
+         * Positive affirmation aligned with the daily angel number. Use for daily affirmation features, meditation guidance, or spiritual journal prompts.
          */
-        advice: string;
+        affirmation: string;
+        /**
+         * Three to five specific, actionable steps to take today based on the angel number guidance. Practical spiritual advice for daily life.
+         */
+        actionSteps: Array<string>;
     };
 };
 
-export type PostBiorhythmDailyResponse = PostBiorhythmDailyResponses[keyof PostBiorhythmDailyResponses];
+export type PostAngelNumbersDailyResponse = PostAngelNumbersDailyResponses[keyof PostAngelNumbersDailyResponses];
 
 export type GetLocationSearchData = {
     body?: never;

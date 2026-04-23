@@ -1070,170 +1070,6 @@ export class VedicAstrology extends HeyApiClient {
     }
 }
 
-export class Tarot extends HeyApiClient {
-    /**
-     * List all 78 tarot cards
-     *
-     * Retrieve the complete Rider-Waite-Smith tarot deck of 78 cards: 22 Major Arcana (numbered 0-21, representing life lessons, spiritual themes, and karmic influences like The Fool, Death, The Tower) plus 56 Minor Arcana (4 suits × 14 cards each for daily situations and practical matters). Filter by arcana type (major for spiritual guidance, minor for everyday concerns), suit (cups for emotions and relationships, wands for creativity and passion, swords for intellect and conflict, pentacles for material wealth and finances), or card number (Ace=1 for new beginnings, 2-10 for progression, Page=11 for messages, Knight=12 for action, Queen=13 for mastery, King=14 for authority). Returns lightweight basic card data - use GET /cards/:id for full upright and reversed interpretations with keywords. Perfect for building tarot reference libraries, card databases, learning applications, or browsing the complete traditional deck used by professional tarot readers worldwide.
-     */
-    public listCards<ThrowOnError extends boolean = false>(options?: Options<GetTarotCardsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetTarotCardsResponses, GetTarotCardsErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/cards',
-            ...options
-        });
-    }
-    
-    /**
-     * Get detailed tarot card information
-     *
-     * Retrieve comprehensive details for a specific tarot card from the traditional Rider-Waite-Smith deck including complete upright meanings (card drawn normally) and reversed meanings (inverted/upside down interpretations for nuanced guidance). Each card provides keywords for quick reference, full interpretations (400+ words each for upright and reversed orientations), and guidance across life domains: love and relationships, career and professional growth, finances and material success, health and wellbeing, spirituality and personal development. Major Arcana cards (0-21) reveal deep spiritual lessons and life-changing themes. Minor Arcana cards (Ace through King in Cups, Wands, Swords, Pentacles) address practical daily situations and specific challenges. Use card ID in kebab-case format: Major Arcana like "fool", "magician", "death", "tower", or Minor Arcana like "ace-of-cups", "seven-of-wands", "queen-of-swords", "king-of-pentacles". Essential for detailed tarot study, reading interpretations, divination apps, fortune-telling platforms, spiritual guidance tools, and professional tarot learning applications.
-     */
-    public getCard<ThrowOnError extends boolean = false>(options: Options<GetTarotCardsByIdData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetTarotCardsByIdResponses, GetTarotCardsByIdErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/cards/{id}',
-            ...options
-        });
-    }
-    
-    /**
-     * Draw random tarot cards with reproducible results
-     *
-     * Draw 1-78 tarot cards from the complete Rider-Waite-Smith deck with seeded reproducibility for consistent personalized readings. Provide an optional seed string (like "user123-2025-12-27" or "readingId") to ensure the same seed always returns identical cards in the exact same order - essential for daily tarot features, personalized user experiences, shareable readings, or reproducible testing. Omit seed for true random draws each time. Control card reversals (upright vs reversed/inverted orientations - reversed cards provide alternative meanings when drawn upside down) and duplicates (traditional deck draws each of 78 cards once, or oracle-style allows repeating same card). Each drawn card includes position number, reversal state (boolean), keywords for quick interpretation, full meaning text (400+ words), authentic Rider-Waite imagery, and card metadata. Perfect for custom spread builders, random card generators, automated tarot reading platforms, daily card features, meditation apps, journaling prompts, divination tools, and any application requiring reproducible or random tarot draws from the industry-standard 78-card deck (22 Major Arcana spiritual lessons + 56 Minor Arcana practical guidance across 4 suits).
-     */
-    public drawCards<ThrowOnError extends boolean = false>(options: Options<PostTarotDrawData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotDrawResponses, PostTarotDrawErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/draw',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Get daily tarot card reading
-     *
-     * Receive a single tarot card for daily guidance and reflection. This endpoint uses seeded randomness to ensure the same seed gets the same card on the same day - perfect for "Card of the Day" features. Provide a seed (userId, email hash, session token) for reproducible consistency, or omit for anonymous daily draws. Returns card with keywords, full meaning, and a daily message summary. Great for tarot apps, wellness platforms, morning ritual apps, and journaling tools.
-     */
-    public getDailyCard<ThrowOnError extends boolean = false>(options?: Options<PostTarotDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostTarotDailyResponses, PostTarotDailyErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/daily',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Get yes/no answer to your question
-     *
-     * Ask a specific question and receive a yes, no, or maybe answer based on a single tarot card draw. Upright cards indicate "Yes" with positive energy, reversed cards indicate "No" with caution, and certain inherently ambiguous cards (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) return "Maybe" regardless of orientation since their energy signals pause, reflection, or shifting circumstances. Major Arcana cards give strong definitive answers, Minor Arcana cards give qualified nuanced answers. Returns the answer, strength level, drawn card details, and a contextual interpretation explaining why. Perfect for decision-making apps, quick guidance tools, fortune-telling chatbots, and interactive tarot experiences. Optionally provide a seed for reproducible answers.
-     */
-    public castYesNo<ThrowOnError extends boolean = false>(options: Options<PostTarotYesNoData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotYesNoResponses, PostTarotYesNoErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/yes-no',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Three-Card Spread: Past, Present, Future
-     *
-     * Perform the classic three-card tarot spread revealing Past (what led to this situation), Present (current energy and circumstances), and Future (likely outcome if current path continues). The most popular beginner-friendly spread, perfect for quick insights, daily guidance, or exploring specific questions. Each position includes a drawn card with reversal state, keywords, full meaning, and position-specific interpretation. Returns a summary connecting all three cards. Ideal for tarot reading apps, decision-making tools, and personal growth platforms. Optionally provide a seed for reproducible readings.
-     */
-    public castThreeCard<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsThreeCardData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsThreeCardResponses, PostTarotSpreadsThreeCardErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/spreads/three-card',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Celtic Cross Spread (10 cards)
-     *
-     * Perform the legendary Celtic Cross spread - the most comprehensive and detailed tarot reading available, used by professional tarot readers worldwide for over a century. This 10-card layout reveals the complete picture of any situation through distinct positions: Present Situation (what is happening now), Challenge (obstacles crossing your path), Distant Past (root causes), Recent Past (recent influences), Best Outcome (potential positive result), Near Future (what is approaching in weeks ahead), Your Approach (your attitude and self-perception), External Influences (environment and other people impact), Hopes and Fears (your desires and anxieties), and Final Outcome (where everything is headed). Perfect for life-changing decisions, complex relationship questions, career transitions, spiritual guidance, and deep self-discovery. Ideal for professional tarot apps, life coaching platforms, spiritual wellness websites, and divination tools requiring authoritative comprehensive readings. Each card position provides layered insight combining traditional tarot wisdom with modern psychological interpretation for actionable guidance.
-     */
-    public castCelticCross<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCelticCrossData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCelticCrossErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/spreads/celtic-cross',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Love Spread (5 cards)
-     *
-     * Perform a specialized 5-card relationship tarot spread analyzing romantic connections, emotional dynamics, and partnership potential. This love-focused reading examines five crucial relationship aspects: You (your current emotional state, needs, and what you bring to the relationship), Partner/Other (their emotional perspective, desires, and energy), Relationship Dynamic (the current energy and connection between you both), Challenge (obstacles needing attention, healing, or communication), and Outcome (where this romantic connection is naturally heading). Perfect for dating apps, relationship counseling platforms, matchmaking services, wellness apps, and romantic guidance tools. Provides deep insight into new relationships, existing partnerships, potential connections, breakup recovery, or self-love journeys. Ideal for understanding compatibility, resolving conflicts, strengthening bonds, or deciding whether to pursue or continue a relationship. Each position reveals emotional truths combining traditional tarot relationship wisdom with modern relationship psychology. Use for individual readings or couples readings to gain perspective on romantic situations from singleness to marriage.
-     */
-    public castLoveSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsLoveData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsLoveResponses, PostTarotSpreadsLoveErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/spreads/love',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Career Spread (7 cards)
-     *
-     * Perform a comprehensive 7-card career tarot spread using SWOT analysis framework (Strengths, Weaknesses, Opportunities, Threats) for professional guidance, business decisions, and vocational clarity. This career-focused reading examines seven strategic business aspects: Current Situation (your present professional position and workplace energy), Strengths (your professional assets, talents, and competitive advantages), Weaknesses (areas needing development, skill gaps, or limiting beliefs), Opportunities (potential growth paths, new ventures, or doors opening), Threats (obstacles, competition, or external challenges), Advice (actionable guidance for navigating your career path), and Outcome (where your professional journey is heading if you follow the guidance). Perfect for career coaching platforms, professional development apps, business consulting tools, job search websites, entrepreneurship platforms, and executive coaching services. Use for career transitions, job offers evaluation, promotion decisions, starting a business, workplace conflicts, finding your calling, or strategic career planning. Combines traditional tarot wisdom with modern SWOT business analysis for practical professional insight. Ideal for employees, entrepreneurs, freelancers, career changers, and anyone seeking vocational direction.
-     */
-    public castCareerSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCareerData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsCareerResponses, PostTarotSpreadsCareerErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/spreads/career',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-    
-    /**
-     * Custom Spread Builder
-     *
-     * Build and perform your own custom tarot spread with personalized positions and interpretations (1-10 cards). This flexible endpoint lets you create unique spread layouts for any purpose - define your own position names, meanings, and card count to match your specific needs or therapeutic framework. Perfect for therapists using tarot in counseling, coaches creating signature spreads, app developers building custom reading features, spiritual practitioners with proprietary methods, or anyone wanting to design specialized layouts beyond traditional spreads. Create spreads for specific themes like chakra readings (7 cards), lunar phases (8 cards), elements (4 cards), goals setting (any count), shadow work, inner child healing, decision matrices, or creative problem-solving. Each position requires a name and interpretation - you define what each card position represents in your reading. The API draws the exact number of cards you specify and maps them to your custom positions. No pre-generated summary provided - you interpret the reading based on your framework. Ideal for innovative tarot apps, therapeutic tools, personal development platforms, spiritual coaching services, or experimental divination methods. Maximum 10 positions to maintain reading clarity and practical interpretation time.
-     */
-    public castCustomSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCustomData, ThrowOnError>) {
-        return (options.client ?? this.client).post<PostTarotSpreadsCustomResponses, PostTarotSpreadsCustomErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/tarot/spreads/custom',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            }
-        });
-    }
-}
-
 export class Numerology extends HeyApiClient {
     /**
      * Calculate Life Path number - Most important numerology calculation
@@ -1504,68 +1340,59 @@ export class Numerology extends HeyApiClient {
     }
 }
 
-export class Dreams extends HeyApiClient {
+export class Tarot extends HeyApiClient {
     /**
-     * List and search dream symbols
+     * List all 78 tarot cards
      *
-     * Browse and search our complete dream interpretation dictionary containing 2,000+ dream symbols with psychological meanings. Find dream meanings for animals (snake dreams, spider dreams, dog dreams), common scenarios (falling dreams, flying dreams, being chased, drowning), people (dreams about mother, father, baby, ex), objects (car, house, water, fire), emotions (fear, anxiety, love), body parts (teeth falling out, hair, eyes), colors, numbers, and abstract concepts. Filter by starting letter for A-Z navigation or search by keyword to find what your dreams mean.
+     * Retrieve the complete Rider-Waite-Smith tarot deck of 78 cards: 22 Major Arcana (numbered 0-21, representing life lessons, spiritual themes, and karmic influences like The Fool, Death, The Tower) plus 56 Minor Arcana (4 suits × 14 cards each for daily situations and practical matters). Filter by arcana type (major for spiritual guidance, minor for everyday concerns), suit (cups for emotions and relationships, wands for creativity and passion, swords for intellect and conflict, pentacles for material wealth and finances), or card number (Ace=1 for new beginnings, 2-10 for progression, Page=11 for messages, Knight=12 for action, Queen=13 for mastery, King=14 for authority). Returns lightweight basic card data - use GET /cards/:id for full upright and reversed interpretations with keywords. Perfect for building tarot reference libraries, card databases, learning applications, or browsing the complete traditional deck used by professional tarot readers worldwide.
      */
-    public searchDreamSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetDreamsSymbolsResponses, GetDreamsSymbolsErrors, ThrowOnError>({
+    public listCards<ThrowOnError extends boolean = false>(options?: Options<GetTarotCardsData, ThrowOnError>) {
+        return (options?.client ?? this.client).get<GetTarotCardsResponses, GetTarotCardsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/dreams/symbols',
+            url: '/tarot/cards',
             ...options
         });
     }
     
     /**
-     * Get random dream symbols
+     * Get detailed tarot card information
      *
-     * Discover random dream symbols and their interpretations for daily dream insights and exploration. Each request returns different symbols from the 2,000+ dream meaning database - perfect for dream of the day features, dream journaling prompts, meditation on subconscious themes, or exploring what different dreams mean. Get one or multiple random dream interpretations with full psychological meanings.
+     * Retrieve comprehensive details for a specific tarot card from the traditional Rider-Waite-Smith deck including complete upright meanings (card drawn normally) and reversed meanings (inverted/upside down interpretations for nuanced guidance). Each card provides keywords for quick reference, full interpretations (400+ words each for upright and reversed orientations), and guidance across life domains: love and relationships, career and professional growth, finances and material success, health and wellbeing, spirituality and personal development. Major Arcana cards (0-21) reveal deep spiritual lessons and life-changing themes. Minor Arcana cards (Ace through King in Cups, Wands, Swords, Pentacles) address practical daily situations and specific challenges. Use card ID in kebab-case format: Major Arcana like "fool", "magician", "death", "tower", or Minor Arcana like "ace-of-cups", "seven-of-wands", "queen-of-swords", "king-of-pentacles". Essential for detailed tarot study, reading interpretations, divination apps, fortune-telling platforms, spiritual guidance tools, and professional tarot learning applications.
      */
-    public getRandomSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsRandomData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetDreamsSymbolsRandomResponses, GetDreamsSymbolsRandomErrors, ThrowOnError>({
+    public getCard<ThrowOnError extends boolean = false>(options: Options<GetTarotCardsByIdData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetTarotCardsByIdResponses, GetTarotCardsByIdErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/dreams/symbols/random',
+            url: '/tarot/cards/{id}',
             ...options
         });
     }
     
     /**
-     * Get symbol counts by letter
+     * Draw random tarot cards with reproducible results
      *
-     * Get the count of dream symbols available for each letter A-Z. Build alphabetical dream dictionary navigation to help users browse dream interpretations by letter - from abandonment dreams to zodiac dreams. See how many dream meanings exist for each starting letter.
+     * Draw 1-78 tarot cards from the complete Rider-Waite-Smith deck with seeded reproducibility for consistent personalized readings. Provide an optional seed string (like "user123-2025-12-27" or "readingId") to ensure the same seed always returns identical cards in the exact same order - essential for daily tarot features, personalized user experiences, shareable readings, or reproducible testing. Omit seed for true random draws each time. Control card reversals (upright vs reversed/inverted orientations - reversed cards provide alternative meanings when drawn upside down) and duplicates (traditional deck draws each of 78 cards once, or oracle-style allows repeating same card). Each drawn card includes position number, reversal state (boolean), keywords for quick interpretation, full meaning text (400+ words), authentic Rider-Waite imagery, and card metadata. Perfect for custom spread builders, random card generators, automated tarot reading platforms, daily card features, meditation apps, journaling prompts, divination tools, and any application requiring reproducible or random tarot draws from the industry-standard 78-card deck (22 Major Arcana spiritual lessons + 56 Minor Arcana practical guidance across 4 suits).
      */
-    public getSymbolLetterCounts<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsLettersData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetDreamsSymbolsLettersResponses, GetDreamsSymbolsLettersErrors, ThrowOnError>({
+    public drawCards<ThrowOnError extends boolean = false>(options: Options<PostTarotDrawData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotDrawResponses, PostTarotDrawErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/dreams/symbols/letters',
-            ...options
+            url: '/tarot/draw',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
         });
     }
     
     /**
-     * Get dream symbol details
+     * Get daily tarot card reading
      *
-     * Get the complete dream interpretation for a specific symbol. Understand what your dream means with detailed psychological analysis covering subconscious symbolism, emotional significance, and connections to your waking life. Covers all major dream themes: snake dreams (hidden fears, transformation), falling dreams (loss of control, anxiety), water dreams (emotions, cleansing), death dreams (endings, transformation), teeth falling out (self-image, communication anxiety), being chased (avoidance, confronting fears), flying dreams (freedom, ambition), and thousands more dream meanings.
+     * Receive a single tarot card for daily guidance and reflection. This endpoint uses seeded randomness to ensure the same seed gets the same card on the same day - perfect for "Card of the Day" features. Provide a seed (userId, email hash, session token) for reproducible consistency, or omit for anonymous daily draws. Returns card with keywords, full meaning, and a daily message summary. Great for tarot apps, wellness platforms, morning ritual apps, and journaling tools.
      */
-    public getDreamSymbol<ThrowOnError extends boolean = false>(options: Options<GetDreamsSymbolsByIdData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetDreamsSymbolsByIdResponses, GetDreamsSymbolsByIdErrors, ThrowOnError>({
+    public getDailyCard<ThrowOnError extends boolean = false>(options?: Options<PostTarotDailyData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostTarotDailyResponses, PostTarotDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/dreams/symbols/{id}',
-            ...options
-        });
-    }
-    
-    /**
-     * Get daily dream symbol
-     *
-     * Receive a single dream symbol for daily reflection and subconscious exploration. Uses seeded randomness so the same seed gets the same symbol on the same day, perfect for "Dream Symbol of the Day" features. Provide a seed (userId, email hash, session token) for reproducible consistency, or omit for date-based daily symbols. Returns the symbol with full psychological interpretation. Great for dream journal apps, wellness platforms, morning ritual apps, and meditation tools.
-     */
-    public getDailyDreamSymbol<ThrowOnError extends boolean = false>(options?: Options<PostDreamsDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostDreamsDailyResponses, PostDreamsDailyErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/dreams/daily',
+            url: '/tarot/daily',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -1573,57 +1400,205 @@ export class Dreams extends HeyApiClient {
             }
         });
     }
+    
+    /**
+     * Get yes/no answer to your question
+     *
+     * Ask a specific question and receive a yes, no, or maybe answer based on a single tarot card draw. Upright cards indicate "Yes" with positive energy, reversed cards indicate "No" with caution, and certain inherently ambiguous cards (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) return "Maybe" regardless of orientation since their energy signals pause, reflection, or shifting circumstances. Major Arcana cards give strong definitive answers, Minor Arcana cards give qualified nuanced answers. Returns the answer, strength level, drawn card details, and a contextual interpretation explaining why. Perfect for decision-making apps, quick guidance tools, fortune-telling chatbots, and interactive tarot experiences. Optionally provide a seed for reproducible answers.
+     */
+    public castYesNo<ThrowOnError extends boolean = false>(options: Options<PostTarotYesNoData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotYesNoResponses, PostTarotYesNoErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/tarot/yes-no',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Three-Card Spread: Past, Present, Future
+     *
+     * Perform the classic three-card tarot spread revealing Past (what led to this situation), Present (current energy and circumstances), and Future (likely outcome if current path continues). The most popular beginner-friendly spread, perfect for quick insights, daily guidance, or exploring specific questions. Each position includes a drawn card with reversal state, keywords, full meaning, and position-specific interpretation. Returns a summary connecting all three cards. Ideal for tarot reading apps, decision-making tools, and personal growth platforms. Optionally provide a seed for reproducible readings.
+     */
+    public castThreeCard<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsThreeCardData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotSpreadsThreeCardResponses, PostTarotSpreadsThreeCardErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/tarot/spreads/three-card',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Celtic Cross Spread (10 cards)
+     *
+     * Perform the legendary Celtic Cross spread - the most comprehensive and detailed tarot reading available, used by professional tarot readers worldwide for over a century. This 10-card layout reveals the complete picture of any situation through distinct positions: Present Situation (what is happening now), Challenge (obstacles crossing your path), Distant Past (root causes), Recent Past (recent influences), Best Outcome (potential positive result), Near Future (what is approaching in weeks ahead), Your Approach (your attitude and self-perception), External Influences (environment and other people impact), Hopes and Fears (your desires and anxieties), and Final Outcome (where everything is headed). Perfect for life-changing decisions, complex relationship questions, career transitions, spiritual guidance, and deep self-discovery. Ideal for professional tarot apps, life coaching platforms, spiritual wellness websites, and divination tools requiring authoritative comprehensive readings. Each card position provides layered insight combining traditional tarot wisdom with modern psychological interpretation for actionable guidance.
+     */
+    public castCelticCross<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCelticCrossData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCelticCrossErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/tarot/spreads/celtic-cross',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Love Spread (5 cards)
+     *
+     * Perform a specialized 5-card relationship tarot spread analyzing romantic connections, emotional dynamics, and partnership potential. This love-focused reading examines five crucial relationship aspects: You (your current emotional state, needs, and what you bring to the relationship), Partner/Other (their emotional perspective, desires, and energy), Relationship Dynamic (the current energy and connection between you both), Challenge (obstacles needing attention, healing, or communication), and Outcome (where this romantic connection is naturally heading). Perfect for dating apps, relationship counseling platforms, matchmaking services, wellness apps, and romantic guidance tools. Provides deep insight into new relationships, existing partnerships, potential connections, breakup recovery, or self-love journeys. Ideal for understanding compatibility, resolving conflicts, strengthening bonds, or deciding whether to pursue or continue a relationship. Each position reveals emotional truths combining traditional tarot relationship wisdom with modern relationship psychology. Use for individual readings or couples readings to gain perspective on romantic situations from singleness to marriage.
+     */
+    public castLoveSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsLoveData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotSpreadsLoveResponses, PostTarotSpreadsLoveErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/tarot/spreads/love',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Career Spread (7 cards)
+     *
+     * Perform a comprehensive 7-card career tarot spread using SWOT analysis framework (Strengths, Weaknesses, Opportunities, Threats) for professional guidance, business decisions, and vocational clarity. This career-focused reading examines seven strategic business aspects: Current Situation (your present professional position and workplace energy), Strengths (your professional assets, talents, and competitive advantages), Weaknesses (areas needing development, skill gaps, or limiting beliefs), Opportunities (potential growth paths, new ventures, or doors opening), Threats (obstacles, competition, or external challenges), Advice (actionable guidance for navigating your career path), and Outcome (where your professional journey is heading if you follow the guidance). Perfect for career coaching platforms, professional development apps, business consulting tools, job search websites, entrepreneurship platforms, and executive coaching services. Use for career transitions, job offers evaluation, promotion decisions, starting a business, workplace conflicts, finding your calling, or strategic career planning. Combines traditional tarot wisdom with modern SWOT business analysis for practical professional insight. Ideal for employees, entrepreneurs, freelancers, career changers, and anyone seeking vocational direction.
+     */
+    public castCareerSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCareerData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotSpreadsCareerResponses, PostTarotSpreadsCareerErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/tarot/spreads/career',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Custom Spread Builder
+     *
+     * Build and perform your own custom tarot spread with personalized positions and interpretations (1-10 cards). This flexible endpoint lets you create unique spread layouts for any purpose - define your own position names, meanings, and card count to match your specific needs or therapeutic framework. Perfect for therapists using tarot in counseling, coaches creating signature spreads, app developers building custom reading features, spiritual practitioners with proprietary methods, or anyone wanting to design specialized layouts beyond traditional spreads. Create spreads for specific themes like chakra readings (7 cards), lunar phases (8 cards), elements (4 cards), goals setting (any count), shadow work, inner child healing, decision matrices, or creative problem-solving. Each position requires a name and interpretation - you define what each card position represents in your reading. The API draws the exact number of cards you specify and maps them to your custom positions. No pre-generated summary provided - you interpret the reading based on your framework. Ideal for innovative tarot apps, therapeutic tools, personal development platforms, spiritual coaching services, or experimental divination methods. Maximum 10 positions to maintain reading clarity and practical interpretation time.
+     */
+    public castCustomSpread<ThrowOnError extends boolean = false>(options: Options<PostTarotSpreadsCustomData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostTarotSpreadsCustomResponses, PostTarotSpreadsCustomErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/tarot/spreads/custom',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
 }
 
-export class AngelNumbers extends HeyApiClient {
+export class Biorhythm extends HeyApiClient {
     /**
-     * List All Angel Numbers
+     * Get biorhythm reading - Complete cycle analysis for any date
      *
-     * Retrieve the complete database of angel numbers with summary information. Returns all 43 angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), mirror patterns (1212), and sequential numbers (1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
+     * Calculate a complete biorhythm reading for a given birth date and target date. Returns all 10 cycle values (physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom), phase detection with 8 distinct states, energy rating (1-10), overall phase assessment, editorial-grade interpretation, actionable advice, and critical day alerts. Perfect for wellness apps, dating platforms, productivity tools, and AI chatbot integrations that need structured biorhythm data.
      */
-    public listAngelNumbers<ThrowOnError extends boolean = false>(options?: Options<GetAngelNumbersNumbersData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetAngelNumbersNumbersResponses, GetAngelNumbersNumbersErrors, ThrowOnError>({
+    public getReading<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmReadingData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostBiorhythmReadingResponses, PostBiorhythmReadingErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/angel-numbers/numbers',
-            ...options
+            url: '/biorhythm/reading',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
         });
     }
     
     /**
-     * Get Angel Number Meaning
+     * Get biorhythm forecast - Multi-day cycle predictions with best and worst days
      *
-     * Get the complete, authoritative meaning and interpretation for a specific angel number. Returns detailed spiritual, love, career, and twin flame interpretations along with keywords, affirmation, and actionable steps. Covers 43 angel numbers including 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, 1212, 1234, and more. Authoritative interpretations covering all major angel number patterns.
+     * Generate a biorhythm forecast for a date range up to 90 days. Returns daily cycle values for physical, emotional, intellectual, and intuitive cycles, daily energy ratings, critical day identification, and a summary with best day, worst day, average energy, and period-level guidance. Ideal for wellness apps, productivity planners, scheduling tools, and calendar integrations that need forward-looking biorhythm data.
      */
-    public getAngelNumber<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersNumbersByNumberData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersByNumberErrors, ThrowOnError>({
+    public getForecast<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmForecastData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostBiorhythmForecastResponses, PostBiorhythmForecastErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/angel-numbers/numbers/{number}',
-            ...options
+            url: '/biorhythm/forecast',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
         });
     }
     
     /**
-     * Analyze Any Number Sequence
+     * Find critical days - Zero crossing detection for any date range
      *
-     * Smart angel number analysis that works for ANY number sequence, not just known angel numbers. Automatically classifies the pattern type (repeating, sequential, mirror, master, root), calculates the numerology digit root, checks the database for a known meaning, and provides the foundational digit root interpretation as a fallback. Perfect for synchronicity tracking apps where users enter arbitrary number sequences they encounter.
+     * Find all critical days (zero crossings) within a date range up to 180 days. Returns each critical day with cycle name, period, direction (ascending or descending), severity (single, double, or triple), and advisory text. Highlights rare double critical days where two primary cycles cross zero simultaneously and extremely rare triple critical days where all three primary cycles cross zero on the same date. Ideal for calendar integrations, push notification systems, alert engines, and wellness scheduling tools.
      */
-    public analyzeNumberSequence<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersLookupData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetAngelNumbersLookupResponses, GetAngelNumbersLookupErrors, ThrowOnError>({
+    public getCriticalDays<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmCriticalDaysData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostBiorhythmCriticalDaysResponses, PostBiorhythmCriticalDaysErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/angel-numbers/lookup',
-            ...options
+            url: '/biorhythm/critical-days',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
         });
     }
     
     /**
-     * Daily Angel Number
+     * Calculate compatibility - Biorhythm alignment between two people
      *
-     * Get the angel number of the day with full meaning and interpretation. Returns a deterministic angel number based on the current date (or a provided seed date), ensuring all users see the same number for any given day. Includes complete spiritual, love, career, and twin flame interpretations. Perfect for daily guidance features, push notifications, content generation, and angel number widget integrations.
+     * Calculate biorhythm compatibility between two people by overlaying their cycle profiles on a target date. Returns per-cycle alignment scores (0-100) for physical, emotional, and intellectual cycles, an overall compatibility score, relationship rating, strengths, challenges, practical advice, and a daily sync snapshot showing the absolute difference in each primary cycle. Perfect for dating apps, relationship platforms, team-building tools, and couples coaching applications.
      */
-    public getDailyAngelNumber<ThrowOnError extends boolean = false>(options?: Options<PostAngelNumbersDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostAngelNumbersDailyResponses, PostAngelNumbersDailyErrors, ThrowOnError>({
+    public calculateBioCompatibility<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmCompatibilityData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostBiorhythmCompatibilityResponses, PostBiorhythmCompatibilityErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/angel-numbers/daily',
+            url: '/biorhythm/compatibility',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Get phase info - Lightweight cycle status for dashboards and widgets
+     *
+     * Get current phase information for all 10 biorhythm cycles without the full interpretation payload. Returns value, phase name, phase label, day position within cycle, cycle period, days until next critical crossing, and short-term trend for each cycle. Includes a compact summary string. Designed as a lightweight endpoint for dashboards, widgets, status bars, and quick-check interfaces that need biorhythm phase data without editorial text.
+     */
+    public getPhases<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmPhasesData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostBiorhythmPhasesResponses, PostBiorhythmPhasesErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/biorhythm/phases',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Get daily biorhythm - Seeded reading for daily check-in features
+     *
+     * Get a daily biorhythm reading with seeded randomness for consistent "biorhythm of the day" features. Same seed and same date always produce the same reading, perfect for daily push notifications, morning briefings, and wellness app check-ins. Returns energy rating, overall phase, a spotlight on one featured cycle, quick-read values for all three primary cycles, a daily message, and actionable advice. The spotlight cycle is deterministically selected by the seed, creating variety across users while maintaining consistency for each individual.
+     */
+    public getDailyBiorhythm<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmDailyData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostBiorhythmDailyResponses, PostBiorhythmDailyErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/biorhythm/daily',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -1922,16 +1897,68 @@ export class Crystals extends HeyApiClient {
     }
 }
 
-export class Biorhythm extends HeyApiClient {
+export class Dreams extends HeyApiClient {
     /**
-     * Get biorhythm reading - Complete cycle analysis for any date
+     * List and search dream symbols
      *
-     * Calculate a complete biorhythm reading for a given birth date and target date. Returns all 10 cycle values (physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom), phase detection with 8 distinct states, energy rating (1-10), overall phase assessment, editorial-grade interpretation, actionable advice, and critical day alerts. Perfect for wellness apps, dating platforms, productivity tools, and AI chatbot integrations that need structured biorhythm data.
+     * Browse and search our complete dream interpretation dictionary containing 2,000+ dream symbols with psychological meanings. Find dream meanings for animals (snake dreams, spider dreams, dog dreams), common scenarios (falling dreams, flying dreams, being chased, drowning), people (dreams about mother, father, baby, ex), objects (car, house, water, fire), emotions (fear, anxiety, love), body parts (teeth falling out, hair, eyes), colors, numbers, and abstract concepts. Filter by starting letter for A-Z navigation or search by keyword to find what your dreams mean.
      */
-    public getReading<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmReadingData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostBiorhythmReadingResponses, PostBiorhythmReadingErrors, ThrowOnError>({
+    public searchDreamSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsData, ThrowOnError>) {
+        return (options?.client ?? this.client).get<GetDreamsSymbolsResponses, GetDreamsSymbolsErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/biorhythm/reading',
+            url: '/dreams/symbols',
+            ...options
+        });
+    }
+    
+    /**
+     * Get random dream symbols
+     *
+     * Discover random dream symbols and their interpretations for daily dream insights and exploration. Each request returns different symbols from the 2,000+ dream meaning database - perfect for dream of the day features, dream journaling prompts, meditation on subconscious themes, or exploring what different dreams mean. Get one or multiple random dream interpretations with full psychological meanings.
+     */
+    public getRandomSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsRandomData, ThrowOnError>) {
+        return (options?.client ?? this.client).get<GetDreamsSymbolsRandomResponses, GetDreamsSymbolsRandomErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/dreams/symbols/random',
+            ...options
+        });
+    }
+    
+    /**
+     * Get symbol counts by letter
+     *
+     * Get the count of dream symbols available for each letter A-Z. Build alphabetical dream dictionary navigation to help users browse dream interpretations by letter - from abandonment dreams to zodiac dreams. See how many dream meanings exist for each starting letter.
+     */
+    public getSymbolLetterCounts<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsLettersData, ThrowOnError>) {
+        return (options?.client ?? this.client).get<GetDreamsSymbolsLettersResponses, GetDreamsSymbolsLettersErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/dreams/symbols/letters',
+            ...options
+        });
+    }
+    
+    /**
+     * Get dream symbol details
+     *
+     * Get the complete dream interpretation for a specific symbol. Understand what your dream means with detailed psychological analysis covering subconscious symbolism, emotional significance, and connections to your waking life. Covers all major dream themes: snake dreams (hidden fears, transformation), falling dreams (loss of control, anxiety), water dreams (emotions, cleansing), death dreams (endings, transformation), teeth falling out (self-image, communication anxiety), being chased (avoidance, confronting fears), flying dreams (freedom, ambition), and thousands more dream meanings.
+     */
+    public getDreamSymbol<ThrowOnError extends boolean = false>(options: Options<GetDreamsSymbolsByIdData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetDreamsSymbolsByIdResponses, GetDreamsSymbolsByIdErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/dreams/symbols/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Get daily dream symbol
+     *
+     * Receive a single dream symbol for daily reflection and subconscious exploration. Uses seeded randomness so the same seed gets the same symbol on the same day, perfect for "Dream Symbol of the Day" features. Provide a seed (userId, email hash, session token) for reproducible consistency, or omit for date-based daily symbols. Returns the symbol with full psychological interpretation. Great for dream journal apps, wellness platforms, morning ritual apps, and meditation tools.
+     */
+    public getDailyDreamSymbol<ThrowOnError extends boolean = false>(options?: Options<PostDreamsDailyData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostDreamsDailyResponses, PostDreamsDailyErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/dreams/daily',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -1939,84 +1966,57 @@ export class Biorhythm extends HeyApiClient {
             }
         });
     }
-    
+}
+
+export class AngelNumbers extends HeyApiClient {
     /**
-     * Get biorhythm forecast - Multi-day cycle predictions with best and worst days
+     * List All Angel Numbers
      *
-     * Generate a biorhythm forecast for a date range up to 90 days. Returns daily cycle values for physical, emotional, intellectual, and intuitive cycles, daily energy ratings, critical day identification, and a summary with best day, worst day, average energy, and period-level guidance. Ideal for wellness apps, productivity planners, scheduling tools, and calendar integrations that need forward-looking biorhythm data.
+     * Retrieve the complete database of angel numbers with summary information. Returns all 43 angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), mirror patterns (1212), and sequential numbers (1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
      */
-    public getForecast<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmForecastData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostBiorhythmForecastResponses, PostBiorhythmForecastErrors, ThrowOnError>({
+    public listAngelNumbers<ThrowOnError extends boolean = false>(options?: Options<GetAngelNumbersNumbersData, ThrowOnError>) {
+        return (options?.client ?? this.client).get<GetAngelNumbersNumbersResponses, GetAngelNumbersNumbersErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/biorhythm/forecast',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
+            url: '/angel-numbers/numbers',
+            ...options
         });
     }
     
     /**
-     * Find critical days - Zero crossing detection for any date range
+     * Get Angel Number Meaning
      *
-     * Find all critical days (zero crossings) within a date range up to 180 days. Returns each critical day with cycle name, period, direction (ascending or descending), severity (single, double, or triple), and advisory text. Highlights rare double critical days where two primary cycles cross zero simultaneously and extremely rare triple critical days where all three primary cycles cross zero on the same date. Ideal for calendar integrations, push notification systems, alert engines, and wellness scheduling tools.
+     * Get the complete, authoritative meaning and interpretation for a specific angel number. Returns detailed spiritual, love, career, and twin flame interpretations along with keywords, affirmation, and actionable steps. Covers 43 angel numbers including 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, 1212, 1234, and more. Authoritative interpretations covering all major angel number patterns.
      */
-    public getCriticalDays<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmCriticalDaysData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostBiorhythmCriticalDaysResponses, PostBiorhythmCriticalDaysErrors, ThrowOnError>({
+    public getAngelNumber<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersNumbersByNumberData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersByNumberErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/biorhythm/critical-days',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
+            url: '/angel-numbers/numbers/{number}',
+            ...options
         });
     }
     
     /**
-     * Calculate compatibility - Biorhythm alignment between two people
+     * Analyze Any Number Sequence
      *
-     * Calculate biorhythm compatibility between two people by overlaying their cycle profiles on a target date. Returns per-cycle alignment scores (0-100) for physical, emotional, and intellectual cycles, an overall compatibility score, relationship rating, strengths, challenges, practical advice, and a daily sync snapshot showing the absolute difference in each primary cycle. Perfect for dating apps, relationship platforms, team-building tools, and couples coaching applications.
+     * Smart angel number analysis that works for ANY number sequence, not just known angel numbers. Automatically classifies the pattern type (repeating, sequential, mirror, master, root), calculates the numerology digit root, checks the database for a known meaning, and provides the foundational digit root interpretation as a fallback. Perfect for synchronicity tracking apps where users enter arbitrary number sequences they encounter.
      */
-    public calculateBioCompatibility<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmCompatibilityData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostBiorhythmCompatibilityResponses, PostBiorhythmCompatibilityErrors, ThrowOnError>({
+    public analyzeNumberSequence<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersLookupData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetAngelNumbersLookupResponses, GetAngelNumbersLookupErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/biorhythm/compatibility',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
+            url: '/angel-numbers/lookup',
+            ...options
         });
     }
     
     /**
-     * Get phase info - Lightweight cycle status for dashboards and widgets
+     * Daily Angel Number
      *
-     * Get current phase information for all 10 biorhythm cycles without the full interpretation payload. Returns value, phase name, phase label, day position within cycle, cycle period, days until next critical crossing, and short-term trend for each cycle. Includes a compact summary string. Designed as a lightweight endpoint for dashboards, widgets, status bars, and quick-check interfaces that need biorhythm phase data without editorial text.
+     * Get the angel number of the day with full meaning and interpretation. Returns a deterministic angel number based on the current date (or a provided seed date), ensuring all users see the same number for any given day. Includes complete spiritual, love, career, and twin flame interpretations. Perfect for daily guidance features, push notifications, content generation, and angel number widget integrations.
      */
-    public getPhases<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmPhasesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostBiorhythmPhasesResponses, PostBiorhythmPhasesErrors, ThrowOnError>({
+    public getDailyAngelNumber<ThrowOnError extends boolean = false>(options?: Options<PostAngelNumbersDailyData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostAngelNumbersDailyResponses, PostAngelNumbersDailyErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/biorhythm/phases',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Get daily biorhythm - Seeded reading for daily check-in features
-     *
-     * Get a daily biorhythm reading with seeded randomness for consistent "biorhythm of the day" features. Same seed and same date always produce the same reading, perfect for daily push notifications, morning briefings, and wellness app check-ins. Returns energy rating, overall phase, a spotlight on one featured cycle, quick-read values for all three primary cycles, a daily message, and actionable advice. The spotlight cycle is deterministically selected by the seed, creating variety across users while maintaining consistency for each individual.
-     */
-    public getDailyBiorhythm<ThrowOnError extends boolean = false>(options?: Options<PostBiorhythmDailyData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostBiorhythmDailyResponses, PostBiorhythmDailyErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/biorhythm/daily',
+            url: '/angel-numbers/daily',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -2103,24 +2103,19 @@ export class Roxy extends HeyApiClient {
         return this._vedicAstrology ??= new VedicAstrology({ client: this.client });
     }
     
-    private _tarot?: Tarot;
-    get tarot(): Tarot {
-        return this._tarot ??= new Tarot({ client: this.client });
-    }
-    
     private _numerology?: Numerology;
     get numerology(): Numerology {
         return this._numerology ??= new Numerology({ client: this.client });
     }
     
-    private _dreams?: Dreams;
-    get dreams(): Dreams {
-        return this._dreams ??= new Dreams({ client: this.client });
+    private _tarot?: Tarot;
+    get tarot(): Tarot {
+        return this._tarot ??= new Tarot({ client: this.client });
     }
     
-    private _angelNumbers?: AngelNumbers;
-    get angelNumbers(): AngelNumbers {
-        return this._angelNumbers ??= new AngelNumbers({ client: this.client });
+    private _biorhythm?: Biorhythm;
+    get biorhythm(): Biorhythm {
+        return this._biorhythm ??= new Biorhythm({ client: this.client });
     }
     
     private _iching?: Iching;
@@ -2133,9 +2128,14 @@ export class Roxy extends HeyApiClient {
         return this._crystals ??= new Crystals({ client: this.client });
     }
     
-    private _biorhythm?: Biorhythm;
-    get biorhythm(): Biorhythm {
-        return this._biorhythm ??= new Biorhythm({ client: this.client });
+    private _dreams?: Dreams;
+    get dreams(): Dreams {
+        return this._dreams ??= new Dreams({ client: this.client });
+    }
+    
+    private _angelNumbers?: AngelNumbers;
+    get angelNumbers(): AngelNumbers {
+        return this._angelNumbers ??= new AngelNumbers({ client: this.client });
     }
     
     private _location?: Location;

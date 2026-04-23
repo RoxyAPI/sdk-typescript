@@ -64,13 +64,13 @@ const { latitude, longitude, timezone } = data.cities[0];
 |-----------|-----------|----------------|
 | `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases |
 | `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system |
-| `roxy.tarot` | 10 | 78-card readings: spreads, daily pulls, yes/no, Celtic Cross |
 | `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic lessons |
-| `roxy.dreams` | 5 | Dream symbol dictionary: 3,000+ interpretations |
-| `roxy.angelNumbers` | 4 | Angel number lookup, pattern analysis, daily guidance |
+| `roxy.tarot` | 10 | 78-card readings: spreads, daily pulls, yes/no, Celtic Cross |
+| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility |
 | `roxy.iching` | 9 | I Ching hexagrams, trigrams, daily readings |
 | `roxy.crystals` | 12 | Crystal meanings, healing properties, zodiac and chakra pairings |
-| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility |
+| `roxy.dreams` | 5 | Dream symbol dictionary: 3,000+ interpretations |
+| `roxy.angelNumbers` | 4 | Angel number lookup, pattern analysis, daily guidance |
 | `roxy.location` | 3 | City and country search for birth chart coordinates |
 | `roxy.usage` | 1 | API usage stats, rate limits, subscription info |
 <!-- END:DOMAINS -->

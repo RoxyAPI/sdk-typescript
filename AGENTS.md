@@ -38,13 +38,13 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 |-----------|-----------|----------------|
 | `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility |
 | `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas |
-| `roxy.tarot` | 10 | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
 | `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic analysis, compatibility |
-| `roxy.dreams` | 5 | Dream symbol dictionary and interpretations |
-| `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
+| `roxy.tarot` | 10 | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
+| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility, daily check-ins (wellness, dating, productivity) |
 | `roxy.iching` | 9 | I Ching: hexagrams, trigrams, coin casting, daily readings |
 | `roxy.crystals` | 12 | Crystal healing properties, zodiac/chakra pairings, birthstones, search |
-| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility, daily check-ins (wellness, dating, productivity) |
+| `roxy.dreams` | 5 | Dream symbol dictionary and interpretations |
+| `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
 | `roxy.location` | 3 | City geocoding for birth chart coordinates |
 | `roxy.usage` | 1 | API usage stats and subscription info |
 <!-- END:DOMAINS -->
