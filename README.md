@@ -57,16 +57,16 @@ const { latitude, longitude, timezone } = data[0];
 <!-- BEGIN:DOMAINS -->
 | Namespace | Endpoints | What it covers |
 |-----------|-----------|----------------|
-| `roxy.astrology` | 22 | Western astrology: natal charts, daily / weekly / monthly horoscopes, synastry, compatibility score, transits, moon phases |
-| `roxy.vedicAstrology` | 42 | Vedic / Jyotish: kundli, panchang, Vimshottari dasha, nakshatras, Mangal and Kaal Sarp and Sade Sati doshas, Guna Milan, navamsa, KP chart and ruling planets |
-| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, full chart, compatibility, karmic lessons |
-| `roxy.tarot` | 10 | Daily card, custom draws, three-card, Celtic Cross, yes / no, love spread, 78-card catalog |
-| `roxy.biorhythm` | 6 | Daily check-in, multi-day forecast, critical days, couples compatibility, phases |
-| `roxy.iching` | 9 | Daily hexagram, three-coin cast, 64 hexagrams, trigrams |
-| `roxy.crystals` | 12 | By zodiac, by chakra, birthstone, search, daily, pairings |
-| `roxy.dreams` | 5 | Dream symbol dictionary (3,000+ interpretations), daily prompt |
-| `roxy.angelNumbers` | 4 | Number meanings, universal digit-root lookup, daily |
-| `roxy.location` | 3 | City search with coordinates and timezone, countries |
+| `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases |
+| `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system |
+| `roxy.tarot` | 10 | 78-card readings: spreads, daily pulls, yes/no, Celtic Cross |
+| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic lessons |
+| `roxy.dreams` | 5 | Dream symbol dictionary: 3,000+ interpretations |
+| `roxy.angelNumbers` | 4 | Angel number lookup, pattern analysis, daily guidance |
+| `roxy.iching` | 9 | I Ching hexagrams, trigrams, daily readings |
+| `roxy.crystals` | 12 | Crystal meanings, healing properties, zodiac and chakra pairings |
+| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility |
+| `roxy.location` | 3 | City and country search for birth chart coordinates |
 | `roxy.usage` | 1 | API usage stats, rate limits, subscription info |
 <!-- END:DOMAINS -->
 

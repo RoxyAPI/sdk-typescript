@@ -34,16 +34,16 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 <!-- BEGIN:DOMAINS -->
 | Namespace | Endpoints | What it covers |
 |-----------|-----------|----------------|
-| `roxy.astrology` | 22 | Western astrology: natal charts, daily / weekly / monthly horoscopes, synastry, compatibility score, transits, moon phases |
-| `roxy.vedicAstrology` | 42 | Vedic / Jyotish: kundli, panchang, Vimshottari dasha, nakshatras, Mangal and Kaal Sarp and Sade Sati doshas, Guna Milan, navamsa, KP chart and ruling planets |
-| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, full chart, compatibility, karmic lessons |
-| `roxy.tarot` | 10 | Daily card, custom draws, three-card, Celtic Cross, yes / no, love spread, 78-card catalog |
-| `roxy.biorhythm` | 6 | Daily check-in, multi-day forecast, critical days, couples compatibility, phases |
-| `roxy.iching` | 9 | Daily hexagram, three-coin cast, 64 hexagrams, trigrams |
-| `roxy.crystals` | 12 | By zodiac, by chakra, birthstone, search, daily, pairings |
-| `roxy.dreams` | 5 | Dream symbol dictionary (3,000+ interpretations), daily prompt |
-| `roxy.angelNumbers` | 4 | Number meanings, universal digit-root lookup, daily |
-| `roxy.location` | 3 | City search with coordinates and timezone, countries |
+| `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility |
+| `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas |
+| `roxy.tarot` | 10 | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
+| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic analysis, compatibility |
+| `roxy.dreams` | 5 | Dream symbol dictionary and interpretations |
+| `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
+| `roxy.iching` | 9 | I Ching: hexagrams, trigrams, coin casting, daily readings |
+| `roxy.crystals` | 12 | Crystal healing properties, zodiac/chakra pairings, birthstones, search |
+| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility, daily check-ins (wellness, dating, productivity) |
+| `roxy.location` | 3 | City geocoding for birth chart coordinates |
 | `roxy.usage` | 1 | API usage stats and subscription info |
 <!-- END:DOMAINS -->
 
