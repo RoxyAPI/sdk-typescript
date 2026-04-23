@@ -1,6 +1,6 @@
 {
 	"name": "@roxyapi/sdk",
-	"version": "1.2.11",
+	"version": "1.2.12",
 	"description": "TypeScript SDK for Roxy — the multi-domain spiritual intelligence API",
 	"type": "module",
 	"exports": {
