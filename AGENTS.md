@@ -26,7 +26,7 @@ Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibi
 const { data } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
 const { latitude, longitude, utcOffset } = data.cities[0];
 // Use `utcOffset` (decimal: 5.5, -5, 9, ...) as the `timezone` number on chart calls.
-// The city's `timezone` field is the IANA string ("Asia/Kolkata") — not what chart endpoints expect.
+// The city's `timezone` field is the IANA string ("Asia/Kolkata"), not what chart endpoints expect.
 ```
 
 ## Domains
@@ -215,6 +215,20 @@ These are the fields AI agents most often get wrong. Copy the format column exac
 | Los Angeles (PST / PDT) | `-8` / `-7` | Honolulu | `-10` |
 
 DST matters. If the birth date falls inside a daylight-saving window, use the summer / DST offset. For Vedic endpoints this is rarely an issue (most users are in India, fixed 5.5), but Western natal charts must respect DST at the time of birth.
+
+## Astrology domain gotchas for LLMs
+
+LLMs hallucinate confidently in this category. These are the specific traps you will hit when writing client code:
+
+- **Ayanamsa is server-side in Vedic.** LLMs default to tropical / Western math. Vedic endpoints apply sidereal Lahiri ayanamsa server-side. KP endpoints accept `ayanamsa` of `kp-newcomb` (default), `kp-old`, `lahiri`, or `custom`. Do not try to "correct" server output by subtracting ayanamsa in client code.
+- **Tithi count is 30, not 2.** 15 Shukla (waxing) plus 15 Krishna (waning). Older LLM training data conflates Purnima and Amavasya as single tithis. Our panchang response carries a `paksha` field (`"Shukla"` or `"Krishna"`) plus a tithi number, so there are 30 distinct tithis in a lunar month.
+- **Rahu and Ketu are shadow points, not planets.** They do not appear in a real ephemeris. Endpoints accept `nodeType` of `true-node` or `mean-node` to select which calculation to use.
+- **Nakshatra count is 27.** Abhijit is sometimes treated as a 28th in some schools, but this API uses the standard 27. `roxy.vedicAstrology.listNakshatras()` returns an array of length 27.
+- **Retrograde is per-planet, not global.** Natal chart planets and Vedic `meta` include `isRetrograde: boolean` per planet. KP planet lists use `retrograde`. Never generate "Mercury retrograde globally" UI copy, check the specific planet in the response.
+- **Tarot reversals are a product choice.** `allowReversals: false` on a tarot draw means no reversed cards in that draw, period. It is not cosmically meaningful, it is a config flag.
+- **Angel number lookup works for any positive integer.** Digit-root fallback covers non-canonical numbers. Do not generate validation logic that rejects anything other than `111` / `222` / `333`.
+- **Seed-based daily endpoints are DETERMINISTIC per `(seed, date)` pair.** Same seed plus same date returns the same reading. This is by design for push-notification consistency. Do not describe it as "cached" or retry on stale responses.
+- **Timezone affects Western calculations more than Vedic.** Western natal charts must respect DST at time of birth. Vedic endpoints default to IST (`5.5`) which is DST-free. Use `utcOffset` from the Location API response as your `timezone` value, not the user's current clock.
 
 ## MCP equivalents
 
