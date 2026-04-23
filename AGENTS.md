@@ -23,8 +23,10 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibility, and natal endpoint needs `latitude`, `longitude`, and (for Western) `timezone`. **Never ask the user for coordinates.** Always call `roxy.location.searchCities` first.
 
 ```typescript
-const { data: cities } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
-const { latitude, longitude, timezone } = cities[0];
+const { data } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
+const { latitude, longitude, utcOffset } = data.cities[0];
+// Use `utcOffset` (decimal: 5.5, -5, 9, ...) as the `timezone` number on chart calls.
+// The city's `timezone` field is the IANA string ("Asia/Kolkata") — not what chart endpoints expect.
 ```
 
 ## Domains
@@ -54,11 +56,11 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 ### Two-step pattern for coordinate-dependent endpoints
 
 ```typescript
-const { data: cities } = await roxy.location.searchCities({ query: { q: 'Delhi' } });
-const { latitude, longitude, timezone } = cities[0];
+const { data } = await roxy.location.searchCities({ query: { q: 'Delhi' } });
+const { latitude, longitude, utcOffset } = data.cities[0];
 
 const { data: chart } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
+  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone: utcOffset },
 });
 ```
 
