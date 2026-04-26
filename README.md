@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://roxyapi.com">
+    <img src="https://raw.githubusercontent.com/RoxyAPI/sdk-typescript/main/assets/hero.png" alt="Roxy TypeScript SDK. Astrology, Vedic, tarot, numerology, and more behind one API key." width="100%">
+  </a>
+</p>
+
 # @roxyapi/sdk
 
 [![npm](https://img.shields.io/npm/v/@roxyapi/sdk)](https://www.npmjs.com/package/@roxyapi/sdk)
@@ -282,6 +288,10 @@ const { data: anyNumber } = await roxy.angelNumbers.analyzeNumberSequence({ quer
 ```
 
 ## Built for AI agents (Cursor, Claude Code, Copilot, Codex, Gemini CLI)
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/RoxyAPI/sdk-typescript/main/assets/agents.png" alt="Built for Cursor, Claude, Copilot, Codex. AGENTS.md ships in node_modules, remote MCP, no local setup." width="100%">
+</p>
 
 This package ships with bundled documentation that AI coding agents read directly from `node_modules/`:
 
