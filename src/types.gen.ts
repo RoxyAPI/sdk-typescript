@@ -3729,6 +3729,10 @@ export type GetAstrologySignsByIdResponses = {
          * Secret weapon or superpower of this sign.
          */
         weapon?: string;
+        /**
+         * Most compatible zodiac signs for this sign. Trine partners (same element, 120 degrees apart) listed first, followed by a sextile partner (complementary element, 60 degrees apart). Use for compatibility widgets, dating app onboarding, sign profile cards, and zodiac matchmaking.
+         */
+        compatibleSigns: Array<string>;
     };
 };
 
@@ -7868,7 +7872,7 @@ export type GetAstrologyHoroscopeBySignDailyResponses = {
          */
         luckyColor: string;
         /**
-         * Most compatible zodiac signs today. First sign is where Venus transits, second is the Moon sign, remainder from elemental harmony.
+         * Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element). Use for compatibility widgets, dating app onboarding, and horoscope cards.
          */
         compatibleSigns: Array<string>;
         /**
@@ -8059,7 +8063,7 @@ export type GetAstrologyHoroscopeBySignWeeklyResponses = {
          */
         luckyNumbers: Array<number>;
         /**
-         * Most compatible signs this week.
+         * Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element).
          */
         compatibleSigns: Array<string>;
     };
@@ -8260,7 +8264,7 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
          */
         luckyColor: string;
         /**
-         * Most compatible signs this month.
+         * Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element).
          */
         compatibleSigns: Array<string>;
     };

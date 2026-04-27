@@ -6812,6 +6812,18 @@
                     "weapon": {
                       "type": "string",
                       "description": "Secret weapon or superpower of this sign."
+                    },
+                    "compatibleSigns": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "Leo",
+                        "Sagittarius",
+                        "Gemini"
+                      ],
+                      "description": "Most compatible zodiac signs for this sign. Trine partners (same element, 120 degrees apart) listed first, followed by a sextile partner (complementary element, 60 degrees apart). Use for compatibility widgets, dating app onboarding, sign profile cards, and zodiac matchmaking."
                     }
                   },
                   "required": [
@@ -6823,7 +6835,8 @@
                     "rulingPlanet",
                     "dates",
                     "keywords",
-                    "description"
+                    "description",
+                    "compatibleSigns"
                   ]
                 }
               }
@@ -15336,7 +15349,7 @@
                         "Sagittarius",
                         "Gemini"
                       ],
-                      "description": "Most compatible zodiac signs today. First sign is where Venus transits, second is the Moon sign, remainder from elemental harmony."
+                      "description": "Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element). Use for compatibility widgets, dating app onboarding, and horoscope cards."
                     },
                     "activeTransits": {
                       "type": "array",
@@ -15734,7 +15747,7 @@
                         "Sagittarius",
                         "Gemini"
                       ],
-                      "description": "Most compatible signs this week."
+                      "description": "Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element)."
                     }
                   },
                   "required": [
@@ -16139,7 +16152,7 @@
                         "Sagittarius",
                         "Gemini"
                       ],
-                      "description": "Most compatible signs this month."
+                      "description": "Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element)."
                     }
                   },
                   "required": [
