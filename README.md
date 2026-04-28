@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://roxyapi.com">
-    <img src="https://raw.githubusercontent.com/RoxyAPI/sdk-typescript/main/assets/hero.png" alt="Roxy TypeScript SDK. Astrology, Vedic, tarot, numerology, and more behind one API key." width="100%">
+    <img src="https://raw.githubusercontent.com/RoxyAPI/sdk-typescript/main/assets/hero.png" alt="Roxy TypeScript SDK. Astrology, Vedic, numerology, tarot, and more behind one API key." width="100%">
   </a>
 </p>
 
@@ -11,7 +11,7 @@
 [![API Reference](https://img.shields.io/badge/api%20reference-roxyapi.com-blue)](https://roxyapi.com/api-reference)
 [![Pricing](https://img.shields.io/badge/pricing-roxyapi.com-blue)](https://roxyapi.com/pricing)
 
-TypeScript SDK for astrology, Vedic astrology, tarot, numerology, and more.
+TypeScript SDK for astrology, Vedic astrology, numerology, tarot, and more.
 
 One API key. Fully typed. Verified against NASA JPL Horizons.
 
@@ -38,7 +38,7 @@ const { data } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' 
 console.log(data.overview, data.love, data.luckyNumber);
 ```
 
-Then expand into charts, compatibility, tarot, numerology, and more.
+Then expand into charts, compatibility, numerology, tarot, and more.
 
 ## Quick start
 
