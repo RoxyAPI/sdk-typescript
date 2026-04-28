@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "RoxyAPI TypeScript SDK"
+abstract: "Official TypeScript SDK for RoxyAPI. 130+ endpoints across 10 spiritual intelligence domains behind one API key. MCP ready, fully typed."
+authors:
+  - name: "RoxyAPI"
+url: "https://github.com/RoxyAPI/sdk-typescript"
+repository-code: "https://github.com/RoxyAPI/sdk-typescript"
+license: MIT
+type: software
+keywords:
+  - astrology-api
+  - vedic-astrology-api
+  - tarot-api
+  - numerology-api
+  - mcp-server
+  - typescript-sdk
+  - openapi
