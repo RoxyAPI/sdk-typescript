@@ -24156,9 +24156,9 @@ export type GetCrystalsZodiacBySignData = {
     body?: never;
     path: {
         /**
-         * Zodiac sign name, case-insensitive (e.g., pisces, Pisces, PISCES all work). Valid: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.
+         * Zodiac sign name, case-insensitive (e.g., pisces, Pisces, PISCES all work). Valid: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces.
          */
-        sign: 'Aries' | 'Taurus' | 'Gemini' | 'Cancer' | 'Leo' | 'Virgo' | 'Libra' | 'Scorpio' | 'Sagittarius' | 'Capricorn' | 'Aquarius' | 'Pisces';
+        sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
     };
     query?: {
         /**
@@ -25796,15 +25796,15 @@ export type GetCrystalsData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Filter by chakra association. Valid values: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
+         * Filter by chakra association, case-insensitive. Valid values: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
          */
         chakra?: 'Root' | 'Sacral' | 'Solar Plexus' | 'Heart' | 'Throat' | 'Third Eye' | 'Crown';
         /**
-         * Filter by zodiac sign. Valid values: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces.
+         * Filter by zodiac sign, case-insensitive. Valid values: aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius, pisces.
          */
-        zodiac?: 'Aries' | 'Taurus' | 'Gemini' | 'Cancer' | 'Leo' | 'Virgo' | 'Libra' | 'Scorpio' | 'Sagittarius' | 'Capricorn' | 'Aquarius' | 'Pisces';
+        zodiac?: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
         /**
-         * Filter by elemental association. Valid values: Earth, Water, Fire, Air, Storm.
+         * Filter by elemental association, case-insensitive. Valid values: Earth, Water, Fire, Air, Storm.
          */
         element?: 'Earth' | 'Water' | 'Fire' | 'Air' | 'Storm';
         /**
