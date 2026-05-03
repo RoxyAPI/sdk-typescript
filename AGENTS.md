@@ -32,6 +32,8 @@ const { latitude, longitude, timezone } = data.cities[0];
 // (5.5, -5, 9, ...) also works and produces identical charts.
 ```
 
+`q` accepts bare city (`'Mumbai'`), city + country (`'Berlin Germany'`), or comma-qualified (`'Springfield, Illinois'`). Use the qualified form to disambiguate same-named cities.
+
 ## Domains
 
 Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every method in that domain.
