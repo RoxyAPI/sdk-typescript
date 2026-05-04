@@ -27720,7 +27720,7 @@ export type GetLocationSearchData = {
     path?: never;
     query: {
         /**
-         * City name to search for. Matches against city name, province/state, or combined "city country" queries. Case-insensitive with partial matching (e.g. "ber" matches Berlin, Bern, Bergen).
+         * City name to search for. Accepts bare city ("berlin"), city plus country ("berlin germany"), or comma-qualified ("berlin, germany", "springfield, illinois") for disambiguation. Matches against city name, province/state, or combined "city country" queries. Case-insensitive with partial matching (e.g. "ber" matches Berlin, Bern, Bergen).
          */
         q: string;
         /**
