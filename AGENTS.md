@@ -1,6 +1,6 @@
 # @roxyapi/sdk - Agent Guide
 
-TypeScript SDK for RoxyAPI. Eleven domains (Western astrology, Vedic astrology, numerology, tarot, biorhythm, I Ching, crystals, dreams, angel numbers, location, usage). One API key, fully typed, zero runtime dependencies.
+TypeScript SDK for RoxyAPI. Twelve domains (Western astrology, Vedic astrology, numerology, tarot, biorhythm, I Ching, crystals, dreams, angel numbers, location, usage, languages). One API key, fully typed, zero runtime dependencies.
 
 > Before writing any code with this SDK, read `docs/llms-full.txt` in this package for the complete method reference with examples.
 
@@ -54,7 +54,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.usage` | 1 | API usage stats and subscription info |
 <!-- END:DOMAINS -->
 
-**Total:** 130 endpoints across 10 product domains plus usage. Counts auto-sync from `specs/openapi.json` at release time.
+**Total:** 130 endpoints across 10 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.
 
 ## Critical patterns
 
@@ -107,7 +107,7 @@ await roxy.numerology.calculateLifePath({
 });
 ```
 
-Supported: `astrology`, `vedicAstrology`, `numerology`, `tarot`, `biorhythm`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`.
+Supported: `astrology`, `vedicAstrology`, `numerology`, `tarot`, `biorhythm`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`, `languages`. To list supported codes at runtime, call `roxy.languages.listLanguages()`.
 
 ### Error handling
 
@@ -138,7 +138,7 @@ console.log(data.sign, data.overview);
 
 ## Common tasks
 
-Ordered by domain priority (Western, Vedic, Numerology, Tarot, Biorhythm, I Ching, Crystals, Dreams, Angel Numbers, Location, Usage).
+Ordered by domain priority (Western, Vedic, Numerology, Tarot, Biorhythm, I Ching, Crystals, Dreams, Angel Numbers, Location, Usage, Languages).
 
 | Task | Code |
 |------|------|
@@ -177,6 +177,7 @@ Ordered by domain priority (Western, Vedic, Numerology, Tarot, Biorhythm, I Chin
 | Universal number lookup | `roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234' } })` |
 | Find city coordinates | `roxy.location.searchCities({ query: { q: 'Mumbai' } })` |
 | Check API usage | `roxy.usage.getUsageStats()` |
+| List supported languages | `roxy.languages.listLanguages()` |
 
 ## Field formats that trip agents
 

@@ -86,4 +86,9 @@ export const tagDescriptions: Record<string, TagEntry> = {
 		readmeDescription: 'API usage stats, rate limits, subscription info',
 		agentDescription: 'API usage stats and subscription info',
 	},
+	Languages: {
+		namespace: 'roxy.languages',
+		readmeDescription: 'List supported response languages for the lang query parameter',
+		agentDescription: 'Supported response languages for the lang query parameter (code, English name, native name)',
+	},
 };
