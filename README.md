@@ -96,6 +96,7 @@ const { latitude, longitude, timezone } = data.cities[0];
 | `roxy.angelNumbers` | 4 | Angel number lookup, pattern analysis, daily guidance |
 | `roxy.location` | 3 | City and country search for birth chart coordinates |
 | `roxy.usage` | 1 | API usage stats, rate limits, subscription info |
+| `roxy.languages` | 1 | List supported response languages for the lang query parameter |
 <!-- END:DOMAINS -->
 
 ## Most-used endpoints

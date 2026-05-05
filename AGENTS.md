@@ -52,6 +52,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
 | `roxy.location` | 3 | City geocoding for birth chart coordinates |
 | `roxy.usage` | 1 | API usage stats and subscription info |
+| `roxy.languages` | 1 | Supported response languages for the lang query parameter (code, English name, native name) |
 <!-- END:DOMAINS -->
 
 **Total:** 130 endpoints across 10 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.
