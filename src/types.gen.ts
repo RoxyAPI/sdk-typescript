@@ -27907,7 +27907,7 @@ export type GetLocationCountriesData = {
     path?: never;
     query?: {
         /**
-         * Maximum items to return per page. Range: 1-50, default 50.
+         * Maximum items to return per page. Range: 1-250, default 50.
          */
         limit?: number;
         /**
@@ -28024,7 +28024,7 @@ export type GetLocationCountriesError = GetLocationCountriesErrors[keyof GetLoca
 
 export type GetLocationCountriesResponses = {
     /**
-     * Alphabetically sorted list of all 227 countries with ISO codes and city counts
+     * Alphabetically sorted list of all countries with ISO codes and city counts
      */
     200: {
         /**
@@ -28075,7 +28075,7 @@ export type GetLocationCountriesByIso2Data = {
     };
     query?: {
         /**
-         * Maximum items to return per page. Range: 1-200, default 50.
+         * Maximum items to return per page. Range: 1-100, default 20.
          */
         limit?: number;
         /**

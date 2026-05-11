@@ -2030,7 +2030,7 @@ export class Location extends HeyApiClient {
     /**
      * Search cities worldwide - Geocoding autocomplete with coordinates and timezone
      *
-     * City autocomplete and geocoding search across 7,000+ locations in 227 countries. Returns geographic coordinates (latitude, longitude), IANA timezone, and DST-aware UTC offset for each match. Built for birth chart location pickers, horoscope apps, event scheduling, and any feature requiring place-to-coordinates resolution. Partial name matching with intelligent ranking: exact prefix matches first, then sorted by population for relevance. Covers all major cities in Europe, Americas, Asia, Africa, and Oceania.
+     * City autocomplete and geocoding search across 23,000+ locations in 240+ countries, including deep coverage of Indian tier-2 and tier-3 cities. Returns geographic coordinates (latitude, longitude), IANA timezone, and DST-aware UTC offset for each match. Built for birth chart location pickers, horoscope apps, event scheduling, and any feature requiring place-to-coordinates resolution. Partial name matching with intelligent ranking: exact prefix matches first, then sorted by population for relevance. Common alternate names like Bombay, Calcutta, Madras, and Banaras transparently resolve to their canonical entries.
      */
     public searchCities<ThrowOnError extends boolean = false>(options: Options<GetLocationSearchData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetLocationSearchResponses, GetLocationSearchErrors, ThrowOnError>({
@@ -2041,9 +2041,9 @@ export class Location extends HeyApiClient {
     }
     
     /**
-     * List all 227 countries - ISO codes and city coverage
+     * List all countries - ISO codes and city coverage
      *
-     * Returns all 227 countries with ISO 3166-1 alpha-2 and alpha-3 codes, plus the number of searchable cities per country. Use this endpoint to build country dropdown menus, regional filters, or to check city coverage before querying. Sorted alphabetically by country name. Covers Europe, Americas, Asia, Middle East, Africa, and Oceania.
+     * Returns every country with ISO 3166-1 alpha-2 and alpha-3 codes, plus the number of searchable cities per country. Use this endpoint to build country dropdown menus, regional filters, or to check city coverage before querying. Sorted alphabetically by country name. Covers Europe, Americas, Asia, Middle East, Africa, and Oceania.
      */
     public listCountries<ThrowOnError extends boolean = false>(options?: Options<GetLocationCountriesData, ThrowOnError>) {
         return (options?.client ?? this.client).get<GetLocationCountriesResponses, GetLocationCountriesErrors, ThrowOnError>({
