@@ -124,7 +124,7 @@ const { data: synastry } = await roxy.astrology.calculateSynastry({
     person2: { date: '1992-07-22', time: '09:00:00', latitude: 19.07, longitude: 72.87, timezone: 5.5 },
   },
 });
-// synastry.compatibilityScore, synastry.interAspects, synastry.strengths
+// synastry.compatibilityScore, synastry.interAspects, synastry.analysis.strengths
 
 // Moon phase. Viral for wellness, cycle-tracking, and meditation apps.
 const { data: moon } = await roxy.astrology.getCurrentMoonPhase({});
@@ -198,7 +198,7 @@ High search volume, evergreen. The tarot card database is the highest per-endpoi
 ```typescript
 // Daily card. Stickiest tarot feature. Seed per user for deterministic once-per-day behavior.
 const { data: card } = await roxy.tarot.getDailyCard({ body: { seed: 'user-42' } });
-// card.card.name, card.card.imageUrl, card.interpretation
+// card.card.name, card.card.imageUrl, card.dailyMessage
 
 // Celtic Cross. Professional-reader spread. Premium-tier, ten positions.
 const { data: cc } = await roxy.tarot.castCelticCross({
@@ -252,10 +252,10 @@ Crystal retail and metaphysical shops use these to build "crystals for [sign]" a
 ```typescript
 // By zodiac. Highest-search crystal query pattern.
 const { data: bySign } = await roxy.crystals.getCrystalsByZodiac({ path: { sign: 'scorpio' } });
-// bySign.crystals is a list of id, name, color, chakra, properties
+// bySign.crystals is a list of { id, name, imageUrl, colors }. Use /crystals/{id} for full properties.
 
 // By chakra. Second-highest crystal query pattern.
-const { data: byChakra } = await roxy.crystals.getCrystalsByChakra({ path: { chakra: 'heart' } });
+const { data: byChakra } = await roxy.crystals.getCrystalsByChakra({ path: { chakra: 'Heart' } });
 
 // Birthstone. Evergreen gift and jewelry SEO.
 const { data: birthstone } = await roxy.crystals.getBirthstones({ path: { month: 4 } });

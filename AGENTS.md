@@ -57,6 +57,16 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 
 **Total:** 130 endpoints across 10 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.
 
+## Quality guidelines for agents
+
+Five rules to follow when writing any call with this SDK. Get these right and the generated types do the rest.
+
+- **One options object, hey-api wrapped.** Every method takes a single object with `path`, `query`, and `body` keys. Path params go in `path`, query params in `query`, request body in `body`. Never flat named args. Right: `roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' } })`. Wrong: `roxy.astrology.getDailyHoroscope({ sign: 'aries' })`.
+- **Always `await`. Always destructure `{ data, error, response }`.** All methods are async. `data` is the typed success response (undefined on error). `error` is the typed API error (`{ error: string, code: string }`, undefined on success). `response` is the raw `fetch` Response. Switch on `error.code`, not on `error.error`.
+- **Method names match the OpenAPI `operationId` verbatim.** When in doubt, autocomplete `roxy.{domain}.` in your editor or `grep 'public ' node_modules/@roxyapi/sdk/dist/factory.d.ts`. Never invent a method from the URL path or a guess.
+- **Response field names come from the spec's response schema.** Field access is typed dot syntax (`data.cities[0].timezone`). TypeScript will catch any invented field at compile time via the generated types - if `tsc` complains, the field does not exist.
+- **Do not hand-roll requests.** No raw `fetch`, no axios. The SDK injects auth, base URL, retries, and typed responses. Use `createRoxy(key)` for the common case, or `new Roxy({ client })` with `createClient` from `@roxyapi/sdk/client` when you need a custom fetch or interceptors.
+
 ## Critical patterns
 
 ### Two-step pattern for coordinate-dependent endpoints
@@ -192,13 +202,14 @@ These are the fields AI agents most often get wrong. Copy the format column exac
 | `latitude` | Decimal degrees (number) | `28.6139` (Delhi), `-33.8688` (Sydney), `40.7128` (NYC) | `"28°36'N"`, `"28 36 50"`, strings |
 | `longitude` | Decimal degrees (number) | `77.209` (Delhi), `-74.006` (NYC), `139.6917` (Tokyo) | Same as latitude - no DMS strings |
 | `sign` (horoscope path) | Lowercase zodiac name | `aries`, `taurus`, `gemini`, ... `pisces` | `"Aries"`, `"♈"`, `"1"`, `"ARIES"` (case-insensitive but prefer lowercase) |
+| `chakra` (crystals path) | Title-case English name from the fixed enum | `"Root"`, `"Sacral"`, `"Solar Plexus"`, `"Heart"`, `"Throat"`, `"Third Eye"`, `"Crown"` | `"heart"`, `"third-eye"`, `"solar plexus"` - route is case-insensitive at runtime, but the generated TS enum is title-case; lowercase fails `tsc --strict`. |
 | `fullName` (numerology) | Birth-certificate name | `"John William Smith"`, `"Priya Rajesh Sharma"` | Nickname, married name, partial name - affects all letter-based calcs |
 | `seed` | Any string (deterministic) | `"user-42"`, `"session-abc-123"`, email hash | Numbers, objects - must be string |
 | `number` (angel numbers path) | String | `"1111"`, `"777"`, `"1234"` | `1111` (int) fails path validation |
 | `id` (nakshatra / dream / tarot) | Slug | `"ashwini"`, `"flying"`, `"the-fool"`, `"three-of-cups"` | Display names, uppercase, spaces |
 | `houseSystem` | Enum | `"placidus"` (default), `"whole-sign"`, `"equal"`, `"koch"` | `"Placidus"`, `"whole_sign"`, `"WS"` |
 | `ayanamsa` (KP) | Enum | `"kp-newcomb"` (default), `"kp-old"`, `"lahiri"`, `"custom"` | `"KP"`, `"New Comb"`, `"Lahiri"` |
-| `nodeType` | Enum | `"true-node"`, `"mean-node"` | `"true"`, `"mean"`, `"True Node"` |
+| `nodeType` (KP) | Enum | `"mean"` (default, traditional Vedic), `"true"` (osculating with perturbation corrections) | `"true-node"`, `"mean-node"`, `"True Node"` |
 | `count` (tarot draw) | Integer 1 to 78 | `3`, `10`, `78` | `0`, `79`, strings, floats |
 | `mahadasha` (path) | Planet name | `"Ketu"`, `"Venus"`, `"Sun"`, `"Moon"`, `"Mars"`, `"Rahu"`, `"Jupiter"`, `"Saturn"`, `"Mercury"` | `"KETU"` (works, case-insensitive), `"ke"`, `"Ke-tu"` |
 | `person1` / `person2` | Object with full birth data | `{ date, time, latitude, longitude, timezone }` (Western) or `{ date, time, latitude, longitude }` (Vedic) | Separate top-level fields, missing time, partial object |
@@ -229,7 +240,7 @@ LLMs hallucinate confidently in this category. These are the specific traps you 
 
 - **Ayanamsa is server-side in Vedic.** LLMs default to tropical / Western math. Vedic endpoints apply sidereal Lahiri ayanamsa server-side. KP endpoints accept `ayanamsa` of `kp-newcomb` (default), `kp-old`, `lahiri`, or `custom`. Do not try to "correct" server output by subtracting ayanamsa in client code.
 - **Tithi count is 30, not 2.** 15 Shukla (waxing) plus 15 Krishna (waning). Older LLM training data conflates Purnima and Amavasya as single tithis. Our panchang response carries a `paksha` field (`"Shukla"` or `"Krishna"`) plus a tithi number, so there are 30 distinct tithis in a lunar month.
-- **Rahu and Ketu are shadow points, not planets.** They do not appear in a real ephemeris. Endpoints accept `nodeType` of `true-node` or `mean-node` to select which calculation to use.
+- **Rahu and Ketu are shadow points, not planets.** They do not appear in a real ephemeris. Endpoints accept `nodeType` of `"mean"` (smooth mean node, traditional Vedic default) or `"true"` (osculating node with perturbation corrections) to select which calculation to use.
 - **Nakshatra count is 27.** Abhijit is sometimes treated as a 28th in some schools, but this API uses the standard 27. `roxy.vedicAstrology.listNakshatras()` returns an array of length 27.
 - **Retrograde is per-planet, not global.** Natal chart planets and Vedic `meta` include `isRetrograde: boolean` per planet. KP planet lists use `retrograde`. Never generate "Mercury retrograde globally" UI copy, check the specific planet in the response.
 - **Tarot reversals are a product choice.** `allowReversals: false` on a tarot draw means no reversed cards in that draw, period. It is not cosmically meaningful, it is a config flag.
