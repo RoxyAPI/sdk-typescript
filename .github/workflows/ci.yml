@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - name: Codegen drift check
+        run: |
+          bun run generate
+          git diff --exit-code -- specs/openapi.json src/client.gen.ts src/sdk.gen.ts src/types.gen.ts src/client src/core \
+            || { echo 'codegen drift: commit the regenerated files'; exit 1; }
+
+      - name: Lint
+        run: bunx biome ci .
+
+      - name: Typecheck
+        run: bun typecheck
+
+      - name: Docs drift check
+        run: |
+          bun run docs:sync
+          git diff --exit-code -- README.md AGENTS.md \
+            || { echo 'docs drift: commit the regenerated README.md/AGENTS.md'; exit 1; }
+
+      - name: Test
+        run: bun run test
