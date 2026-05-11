@@ -7,17 +7,24 @@
  * Run with: bun run docs:sync
  *
  * Fails loudly if:
- *   - A new OpenAPI tag lands that has no entry in `scripts/tag-descriptions.ts`.
- *   - An entry in `scripts/tag-descriptions.ts` refers to a tag that no
- *     longer exists in the spec.
- *   - A tag is missing a section in `docs/llms-full.txt`.
+ *   - An entry in NAMESPACE_ALIASES refers to a tag that no longer exists
+ *     in the spec (stale curated short-form).
+ *   - A tag's derived namespace is missing from `docs/llms-full.txt`.
  *   - README.md or AGENTS.md is missing the `<!-- BEGIN:DOMAINS -->` markers.
+ *
+ * New tags need no change here: the namespace is derived via camelCase and
+ * the summary is pulled from the spec's `tag.description`.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
-import { tagDescriptions } from './tag-descriptions';
+import {
+	NAMESPACE_ALIASES,
+	type OpenApiTag,
+	tagSummary,
+	tagToNamespace,
+} from './tag-descriptions';
 
 type OpenApiSpec = {
-	tags?: Array<{ name: string }>;
+	tags?: OpenApiTag[];
 	paths?: Record<string, Record<string, { tags?: string[] }>>;
 };
 
@@ -35,21 +42,19 @@ function fail(msg: string): never {
 
 const spec = JSON.parse(readFileSync(SPEC_PATH, 'utf-8')) as OpenApiSpec;
 
-const specTags = (spec.tags ?? []).map((t) => t.name);
+const specTagObjects = spec.tags ?? [];
+const specTags = specTagObjects.map((t) => t.name);
 if (specTags.length === 0)
 	fail(`${SPEC_PATH} has no .tags[] — spec is malformed?`);
 
-const unknown = specTags.filter((t) => !(t in tagDescriptions));
-if (unknown.length > 0) {
-	fail(
-		`Unknown tag(s) in spec: ${unknown.map((t) => `"${t}"`).join(', ')}. Add entries to scripts/tag-descriptions.ts before releasing.`,
-	);
-}
+const tagByName = new Map(specTagObjects.map((t) => [t.name, t]));
 
-const stale = Object.keys(tagDescriptions).filter((t) => !specTags.includes(t));
-if (stale.length > 0) {
+const staleAliases = Object.keys(NAMESPACE_ALIASES).filter(
+	(t) => !specTags.includes(t),
+);
+if (staleAliases.length > 0) {
 	fail(
-		`Stale tag(s) in scripts/tag-descriptions.ts (not in spec): ${stale.map((t) => `"${t}"`).join(', ')}. Remove them.`,
+		`Stale namespace alias(es) in scripts/tag-descriptions.ts (tag not in spec): ${staleAliases.map((t) => `"${t}"`).join(', ')}. Remove them.`,
 	);
 }
 
@@ -63,8 +68,8 @@ for (const methods of Object.values(spec.paths ?? {})) {
 
 const llms = readFileSync(LLMS_PATH, 'utf-8');
 const missingInLlms = specTags.filter((t) => {
-	const entry = tagDescriptions[t];
-	return entry && !llms.includes(entry.namespace);
+	const ns = `roxy.${tagToNamespace(t)}`;
+	return !llms.includes(ns);
 });
 if (missingInLlms.length > 0) {
 	fail(
@@ -72,14 +77,12 @@ if (missingInLlms.length > 0) {
 	);
 }
 
-function renderTable(kind: 'readme' | 'agent'): string {
+function renderTable(): string {
 	const rows = specTags.map((tag) => {
-		const entry = tagDescriptions[tag];
-		if (!entry) throw new Error(`unreachable: tag ${tag} missing after check`);
+		const ns = `roxy.${tagToNamespace(tag)}`;
 		const count = endpointCounts.get(tag) ?? 0;
-		const desc =
-			kind === 'readme' ? entry.readmeDescription : entry.agentDescription;
-		return `| \`${entry.namespace}\` | ${count} | ${desc} |`;
+		const summary = tagSummary(tagByName.get(tag) ?? { name: tag });
+		return `| \`${ns}\` | ${count} | ${summary} |`;
 	});
 	return [
 		BEGIN,
@@ -90,7 +93,7 @@ function renderTable(kind: 'readme' | 'agent'): string {
 	].join('\n');
 }
 
-function syncFile(path: string, kind: 'readme' | 'agent'): boolean {
+function syncFile(path: string): boolean {
 	const src = readFileSync(path, 'utf-8');
 	const beginIdx = src.indexOf(BEGIN);
 	const endIdx = src.indexOf(END);
@@ -99,14 +102,14 @@ function syncFile(path: string, kind: 'readme' | 'agent'): boolean {
 	}
 	const before = src.slice(0, beginIdx);
 	const after = src.slice(endIdx + END.length);
-	const next = `${before}${renderTable(kind)}${after}`;
+	const next = `${before}${renderTable()}${after}`;
 	if (next === src) return false;
 	writeFileSync(path, next);
 	return true;
 }
 
-const readmeChanged = syncFile(README_PATH, 'readme');
-const agentsChanged = syncFile(AGENTS_PATH, 'agent');
+const readmeChanged = syncFile(README_PATH);
+const agentsChanged = syncFile(AGENTS_PATH);
 
 const totalEndpoints = [...endpointCounts.values()].reduce((a, b) => a + b, 0);
 console.log(

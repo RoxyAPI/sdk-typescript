@@ -41,18 +41,18 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 <!-- BEGIN:DOMAINS -->
 | Namespace | Endpoints | What it covers |
 |-----------|-----------|----------------|
-| `roxy.astrology` | 22 | Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility |
-| `roxy.vedicAstrology` | 42 | Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas |
-| `roxy.numerology` | 16 | Life path, expression, soul urge, personal year, karmic analysis, compatibility |
-| `roxy.tarot` | 10 | Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts |
-| `roxy.biorhythm` | 6 | 10-cycle biorhythm readings, forecasts, critical days, compatibility, daily check-ins (wellness, dating, productivity) |
-| `roxy.iching` | 9 | I Ching: hexagrams, trigrams, coin casting, daily readings |
-| `roxy.crystals` | 12 | Crystal healing properties, zodiac/chakra pairings, birthstones, search |
-| `roxy.dreams` | 5 | Dream symbol dictionary and interpretations |
-| `roxy.angelNumbers` | 4 | Angel number meanings, pattern analysis, daily guidance |
-| `roxy.location` | 3 | City geocoding for birth chart coordinates |
-| `roxy.usage` | 1 | API usage stats and subscription info |
-| `roxy.languages` | 1 | Supported response languages for the lang query parameter (code, English name, native name) |
+| `roxy.astrology` | 22 | Production-ready Western astrology API + remote MCP for AI agents and developers |
+| `roxy.vedicAstrology` | 42 | Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers |
+| `roxy.numerology` | 16 | Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers |
+| `roxy.tarot` | 10 | Production-ready tarot card reading API + hosted MCP for AI agents and developers |
+| `roxy.biorhythm` | 6 | The most complete biorhythm API + remote MCP for AI agents and developers |
+| `roxy.iching` | 9 | I-Ching oracle API + hosted MCP for AI agents and developers |
+| `roxy.crystals` | 12 | Production-ready crystal healing API + hosted MCP for AI agents and developers |
+| `roxy.dreams` | 5 | Dream interpretation API + hosted MCP for AI agents and developers |
+| `roxy.angelNumbers` | 4 | Production-ready angel numbers API + hosted MCP for AI agents and developers |
+| `roxy.location` | 3 | City search and geocoding API + hosted MCP for AI agents and astrology apps |
+| `roxy.usage` | 1 | Monitor your API usage, check rate limits, and track request consumption |
+| `roxy.languages` | 1 | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
 **Total:** 130 endpoints across 10 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.

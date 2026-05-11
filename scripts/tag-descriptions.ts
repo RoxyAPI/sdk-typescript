@@ -1,94 +1,65 @@
 /**
- * Hand-written tag → namespace/description map used by `scripts/sync-docs.ts`
- * to regenerate the domain tables in README.md and AGENTS.md.
+ * Generator config for tag handling. The OpenAPI spec is the source of truth
+ * for everything *per tag* (existence, endpoints, descriptions) — this file
+ * only configures how tag names are mapped to public SDK namespaces.
  *
- * Keys are OpenAPI `info.tags[].name` values as they appear in
- * `specs/openapi.json`. When a new tag lands in the spec that isn't
- * in this file, sync-docs.ts fails loudly — add the entry here before
- * the release can proceed.
+ * Two cases:
+ *   1. Most tags derive their namespace automatically via camelCase: e.g.
+ *      "Vedic Astrology" -> vedicAstrology, "Numerology" -> numerology,
+ *      "Languages" -> languages. New tags need NO change here.
+ *   2. A handful of tags use a curated short-form for branding — the public
+ *      SDK exposes `roxy.astrology`, not `roxy.westernAstrology`. Those
+ *      overrides live in NAMESPACE_ALIASES below.
  *
- * `namespace` must match the camelCased accessor on the generated `Roxy`
- * class in `src/sdk.gen.ts` (e.g. `roxy.vedicAstrology`).
+ * Adding a brand-new tag with a non-default short-form (e.g. "Crystals and
+ * Healing Stones" -> `crystals`) is the only reason to touch this file.
+ * Otherwise codegen handles it.
  */
 
-export type TagEntry = {
-	namespace: string;
-	readmeDescription: string;
-	agentDescription: string;
+export type OpenApiTag = {
+	name: string;
+	description?: string;
+	[key: string]: unknown;
 };
 
-export const tagDescriptions: Record<string, TagEntry> = {
-	'Western Astrology': {
-		namespace: 'roxy.astrology',
-		readmeDescription:
-			'Western astrology: natal charts, horoscopes, synastry, moon phases',
-		agentDescription:
-			'Western astrology: natal charts, horoscopes, synastry, moon phases, transits, compatibility',
-	},
-	'Vedic Astrology': {
-		namespace: 'roxy.vedicAstrology',
-		readmeDescription:
-			'Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system',
-		agentDescription:
-			'Vedic/Jyotish: birth charts, dashas, nakshatras, panchang, KP system, doshas, yogas',
-	},
-	Tarot: {
-		namespace: 'roxy.tarot',
-		readmeDescription:
-			'78-card readings: spreads, daily pulls, yes/no, Celtic Cross',
-		agentDescription:
-			'Rider-Waite-Smith deck: spreads, daily pulls, yes/no, Celtic Cross, custom layouts',
-	},
-	Numerology: {
-		namespace: 'roxy.numerology',
-		readmeDescription:
-			'Life path, expression, soul urge, personal year, karmic lessons',
-		agentDescription:
-			'Life path, expression, soul urge, personal year, karmic analysis, compatibility',
-	},
-	Dreams: {
-		namespace: 'roxy.dreams',
-		readmeDescription: 'Dream symbol dictionary: 3,000+ interpretations',
-		agentDescription: 'Dream symbol dictionary and interpretations',
-	},
-	'Angel Numbers': {
-		namespace: 'roxy.angelNumbers',
-		readmeDescription: 'Angel number lookup, pattern analysis, daily guidance',
-		agentDescription: 'Angel number meanings, pattern analysis, daily guidance',
-	},
-	'I-Ching': {
-		namespace: 'roxy.iching',
-		readmeDescription: 'I Ching hexagrams, trigrams, daily readings',
-		agentDescription:
-			'I Ching: hexagrams, trigrams, coin casting, daily readings',
-	},
-	'Crystals and Healing Stones': {
-		namespace: 'roxy.crystals',
-		readmeDescription:
-			'Crystal meanings, healing properties, zodiac and chakra pairings',
-		agentDescription:
-			'Crystal healing properties, zodiac/chakra pairings, birthstones, search',
-	},
-	Biorhythm: {
-		namespace: 'roxy.biorhythm',
-		readmeDescription:
-			'10-cycle biorhythm readings, forecasts, critical days, compatibility',
-		agentDescription:
-			'10-cycle biorhythm readings, forecasts, critical days, compatibility, daily check-ins (wellness, dating, productivity)',
-	},
-	'Location and Timezone': {
-		namespace: 'roxy.location',
-		readmeDescription: 'City and country search for birth chart coordinates',
-		agentDescription: 'City geocoding for birth chart coordinates',
-	},
-	Usage: {
-		namespace: 'roxy.usage',
-		readmeDescription: 'API usage stats, rate limits, subscription info',
-		agentDescription: 'API usage stats and subscription info',
-	},
-	Languages: {
-		namespace: 'roxy.languages',
-		readmeDescription: 'List supported response languages for the lang query parameter',
-		agentDescription: 'Supported response languages for the lang query parameter (code, English name, native name)',
-	},
+export const NAMESPACE_ALIASES: Record<string, string> = {
+	'Western Astrology': 'astrology',
+	'Crystals and Healing Stones': 'crystals',
+	'Location and Timezone': 'location',
+	'I-Ching': 'iching',
 };
+
+function camelize(name: string): string {
+	const parts = String(name)
+		.split(/[^a-zA-Z0-9]+/)
+		.filter(Boolean);
+	if (parts.length === 0) return String(name).toLowerCase();
+	return (
+		parts[0].toLowerCase() +
+		parts
+			.slice(1)
+			.map((p) => p[0].toUpperCase() + p.slice(1).toLowerCase())
+			.join('')
+	);
+}
+
+export function tagToNamespace(name: string): string {
+	return NAMESPACE_ALIASES[name] ?? camelize(name);
+}
+
+/**
+ * Pull a short, dev-facing summary from the spec's tag.description.
+ * Strategy: take everything before the first "." followed by whitespace, cap
+ * at 120 chars. The spec's tag descriptions are marketing-leaning, so this is
+ * a best-effort extraction. When the server adds `x-sdk-summary` per tag,
+ * prefer it here.
+ */
+export function tagSummary(tag: OpenApiTag): string {
+	const ext = tag['x-sdk-summary'];
+	if (typeof ext === 'string' && ext.trim().length > 0) return ext.trim();
+	const desc = (tag.description ?? '').trim();
+	if (!desc) return tag.name ?? '';
+	const firstSentence = desc.split(/\.\s+/, 1)[0].trim();
+	const flat = firstSentence.replace(/\s+/g, ' ');
+	return flat.length > 120 ? `${flat.slice(0, 117).trim()}...` : flat;
+}
