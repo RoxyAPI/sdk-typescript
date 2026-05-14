@@ -31,11 +31,11 @@ export type NatalChartResponse = {
         timezone: number;
     };
     /**
-     * All 10 planetary positions with zodiac signs, house placements, and interpretations.
+     * All 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith) with zodiac signs, house placements, and interpretations.
      */
     planets: Array<{
         /**
-         * Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron).
+         * Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith).
          */
         name: string;
         /**
@@ -485,7 +485,7 @@ export type AspectsRequest = {
      */
     timezone: number | string;
     /**
-     * Optional: specific planets to calculate aspects for (defaults to all 10)
+     * Optional: specific bodies to calculate aspects for (defaults to all 14: the 10 classical planets, the lunar nodes, Chiron, and Black Moon Lilith)
      */
     planets?: Array<string>;
     /**
@@ -508,11 +508,11 @@ export type TransitsResponse = {
      */
     timezone: number;
     /**
-     * Current positions of all 10 planets in the tropical zodiac. Use for daily transit tracking, horoscope generation, and aspect monitoring.
+     * Current positions of all 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith) in the tropical zodiac. Use for daily transit tracking, horoscope generation, and aspect monitoring.
      */
     transitPlanets: Array<{
         /**
-         * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+         * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith).
          */
         name: string;
         /**
@@ -3856,7 +3856,7 @@ export type GetAstrologyPlanetMeaningsError = GetAstrologyPlanetMeaningsErrors[k
 
 export type GetAstrologyPlanetMeaningsResponses = {
     /**
-     * All 10 astrological planets with names, symbols, taglines, categories, and brief descriptions.
+     * All 14 astrological bodies with names, symbols, taglines, categories, and brief descriptions.
      */
     200: Array<{
         /**
@@ -3880,7 +3880,7 @@ export type GetAstrologyPlanetMeaningsResponses = {
          */
         category?: string;
         /**
-         * Zodiac sign this planet rules. The sign where the planet operates most naturally. Absent for nodes and Chiron.
+         * Zodiac sign this planet rules. The sign where the planet operates most naturally. Absent for the lunar nodes, Chiron, and Black Moon Lilith.
          */
         rulership?: string;
         /**
@@ -4064,19 +4064,19 @@ export type GetAstrologyPlanetMeaningsByIdResponses = {
          */
         retrograde?: boolean;
         /**
-         * Zodiac sign this planet rules (domicile). Where the planet operates most naturally. Absent for nodes and Chiron.
+         * Zodiac sign this planet rules (domicile). Where the planet operates most naturally. Absent for the lunar nodes, Chiron, and Black Moon Lilith.
          */
         rulership?: string;
         /**
-         * Sign of detriment. Opposite the rulership sign, where the planet struggles. Absent for nodes and Chiron.
+         * Sign of detriment. Opposite the rulership sign, where the planet struggles. Absent for the lunar nodes, Chiron, and Black Moon Lilith.
          */
         detriment?: string;
         /**
-         * Sign of exaltation. Where the planet is honored and amplified. Absent for nodes and Chiron.
+         * Sign of exaltation. Where the planet is honored and amplified. Absent for the lunar nodes, Chiron, and Black Moon Lilith.
          */
         exultation?: string;
         /**
-         * Sign of fall. Opposite the exaltation sign, where the planet is weakened. Absent for nodes and Chiron.
+         * Sign of fall. Opposite the exaltation sign, where the planet is weakened. Absent for the lunar nodes, Chiron, and Black Moon Lilith.
          */
         fall?: string;
         /**
@@ -4378,11 +4378,11 @@ export type PostAstrologyPlanetsResponses = {
      */
     200: {
         /**
-         * All 10 planetary positions with zodiac signs, speeds, retrograde status, meanings, and interpretations.
+         * All 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith) with zodiac signs, speeds, retrograde status, meanings, and interpretations.
          */
         planets: Array<{
             /**
-             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith).
              */
             name: string;
             /**
@@ -5750,7 +5750,7 @@ export type PostAstrologyTransitAspectsData = {
         /**
          * Filter to specific transiting planets. Omit to include all planets. Useful for focusing on slow-moving outer planet transits (Saturn, Jupiter, Pluto).
          */
-        planets?: Array<'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron'>;
+        planets?: Array<'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith'>;
         /**
          * Filter to specific aspect types (conjunction, opposition, trine, square, sextile, etc.). Omit to include all aspect types.
          */
@@ -5884,19 +5884,19 @@ export type PostAstrologyTransitAspectsResponses = {
          */
         transitDate: string;
         /**
-         * Current transiting planetary positions in the tropical zodiac. All 10 planets from Sun through Pluto.
+         * Current transiting positions in the tropical zodiac. All 14 celestial bodies: the 10 classical planets (Sun through Pluto), the lunar nodes, Chiron, and Black Moon Lilith.
          */
         transitPlanets: Array<{
             /**
-             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
              */
-            name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
              */
             longitude: number;
             /**
-             * Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto.
+             * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
              */
             latitude: number;
             /**
@@ -5925,15 +5925,15 @@ export type PostAstrologyTransitAspectsResponses = {
          */
         natalPlanets: Array<{
             /**
-             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
              */
-            name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
              */
             longitude: number;
             /**
-             * Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto.
+             * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
              */
             latitude: number;
             /**
@@ -5964,11 +5964,11 @@ export type PostAstrologyTransitAspectsResponses = {
             /**
              * First planet in the aspect pair.
              */
-            planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Second planet in the aspect pair.
              */
-            planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
              */
@@ -6043,11 +6043,11 @@ export type PostAstrologyTransitAspectsResponses = {
                 /**
                  * First planet in the aspect pair.
                  */
-                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Second planet in the aspect pair.
                  */
-                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
                  */
@@ -6265,7 +6265,7 @@ export type PostAstrologySolarReturnResponses = {
             timezone: number;
         };
         /**
-         * Full natal-style chart erected for the solar return moment. Contains all 10 planetary positions, 12 house cusps, aspects, Ascendant, and Midheaven in the tropical zodiac.
+         * Full natal-style chart erected for the solar return moment. Contains all 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith), 12 house cusps, aspects, Ascendant, and Midheaven in the tropical zodiac.
          */
         chart: {
             /**
@@ -6294,19 +6294,19 @@ export type PostAstrologySolarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 10 planetary positions (Sun through Pluto) in the tropical zodiac with house placements.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
                  */
-                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
                  */
                 longitude: number;
                 /**
-                 * Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto.
+                 * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
                  */
                 latitude: number;
                 /**
@@ -6362,11 +6362,11 @@ export type PostAstrologySolarReturnResponses = {
                 /**
                  * First planet in the aspect pair.
                  */
-                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Second planet in the aspect pair.
                  */
-                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
                  */
@@ -6637,19 +6637,19 @@ export type PostAstrologyLunarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 10 planetary positions (Sun through Pluto) in the tropical zodiac with house placements.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
                  */
-                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
                  */
                 longitude: number;
                 /**
-                 * Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto.
+                 * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
                  */
                 latitude: number;
                 /**
@@ -6705,11 +6705,11 @@ export type PostAstrologyLunarReturnResponses = {
                 /**
                  * First planet in the aspect pair.
                  */
-                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Second planet in the aspect pair.
                  */
-                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
                  */
@@ -7006,15 +7006,15 @@ export type PostAstrologyCompositeChartResponses = {
          */
         compositePlanets: Array<{
             /**
-             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
              */
-            name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
              */
             longitude: number;
             /**
-             * Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto.
+             * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
              */
             latitude: number;
             /**
@@ -7117,11 +7117,11 @@ export type PostAstrologyCompositeChartResponses = {
             /**
              * First planet in the aspect pair.
              */
-            planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Second planet in the aspect pair.
              */
-            planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+            planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
              * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
              */
@@ -8489,19 +8489,19 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                 timezone: number;
             };
             /**
-             * All 10 planetary positions (Sun through Pluto) in the tropical zodiac with house placements.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
                  */
-                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
                  */
                 longitude: number;
                 /**
-                 * Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto.
+                 * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
                  */
                 latitude: number;
                 /**
@@ -8557,11 +8557,11 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                 /**
                  * First planet in the aspect pair.
                  */
-                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Second planet in the aspect pair.
                  */
-                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron';
+                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
                  * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
                  */

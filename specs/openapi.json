@@ -137,7 +137,7 @@
                 "name": {
                   "type": "string",
                   "example": "Sun",
-                  "description": "Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron)."
+                  "description": "Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith)."
                 },
                 "longitude": {
                   "type": "number",
@@ -221,7 +221,7 @@
                 "isRetrograde"
               ]
             },
-            "description": "All 10 planetary positions with zodiac signs, house placements, and interpretations."
+            "description": "All 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith) with zodiac signs, house placements, and interpretations."
           },
           "houses": {
             "type": "array",
@@ -948,7 +948,7 @@
               "Venus",
               "Mars"
             ],
-            "description": "Optional: specific planets to calculate aspects for (defaults to all 10)"
+            "description": "Optional: specific bodies to calculate aspects for (defaults to all 14: the 10 classical planets, the lunar nodes, Chiron, and Black Moon Lilith)"
           },
           "aspectTypes": {
             "type": "array",
@@ -996,7 +996,7 @@
                 "name": {
                   "type": "string",
                   "example": "Sun",
-                  "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                  "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith)."
                 },
                 "longitude": {
                   "type": "number",
@@ -1039,7 +1039,7 @@
                 "isRetrograde"
               ]
             },
-            "description": "Current positions of all 10 planets in the tropical zodiac. Use for daily transit tracking, horoscope generation, and aspect monitoring."
+            "description": "Current positions of all 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith) in the tropical zodiac. Use for daily transit tracking, horoscope generation, and aspect monitoring."
           },
           "transitAspects": {
             "type": "array",
@@ -7086,7 +7086,7 @@
           "Western Astrology"
         ],
         "summary": "Get all planet meanings - Complete astrology planet interpretations list",
-        "description": "Returns all 10 astrological planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) with essential meanings: name, symbol, tagline, category (personal/social/generational), ruling sign, and short descriptions. Perfect for astrology reference apps, planet meaning widgets, birth chart interpretation tools, astrology learning platforms, planetary keywords reference, and zodiac planet guides. Use GET /planet-meanings/{id} for complete planet profiles with detailed interpretations, keywords, temperature, and dignities (rulership/detriment/exultation/fall).",
+        "description": "Returns all 14 astrological bodies (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith) with essential meanings: name, symbol, tagline, category (personal/social/generational), ruling sign, and short descriptions. Perfect for astrology reference apps, planet meaning widgets, birth chart interpretation tools, astrology learning platforms, planetary keywords reference, and zodiac planet guides. Use GET /planet-meanings/{id} for complete profiles with detailed interpretations, keywords, temperature, and dignities (rulership/detriment/exultation/fall).",
         "security": [
           {
             "apiKey": []
@@ -7118,7 +7118,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved all 10 planet meanings",
+            "description": "Successfully retrieved all 14 body meanings",
             "content": {
               "application/json": {
                 "schema": {
@@ -7154,7 +7154,7 @@
                       "rulership": {
                         "type": "string",
                         "example": "Leo",
-                        "description": "Zodiac sign this planet rules. The sign where the planet operates most naturally. Absent for nodes and Chiron."
+                        "description": "Zodiac sign this planet rules. The sign where the planet operates most naturally. Absent for the lunar nodes, Chiron, and Black Moon Lilith."
                       },
                       "description": {
                         "type": "string",
@@ -7169,7 +7169,7 @@
                       "description"
                     ]
                   },
-                  "description": "All 10 astrological planets with names, symbols, taglines, categories, and brief descriptions."
+                  "description": "All 14 astrological bodies with names, symbols, taglines, categories, and brief descriptions."
                 }
               }
             }
@@ -7480,22 +7480,22 @@
                     "rulership": {
                       "type": "string",
                       "example": "Leo",
-                      "description": "Zodiac sign this planet rules (domicile). Where the planet operates most naturally. Absent for nodes and Chiron."
+                      "description": "Zodiac sign this planet rules (domicile). Where the planet operates most naturally. Absent for the lunar nodes, Chiron, and Black Moon Lilith."
                     },
                     "detriment": {
                       "type": "string",
                       "example": "Aquarius",
-                      "description": "Sign of detriment. Opposite the rulership sign, where the planet struggles. Absent for nodes and Chiron."
+                      "description": "Sign of detriment. Opposite the rulership sign, where the planet struggles. Absent for the lunar nodes, Chiron, and Black Moon Lilith."
                     },
                     "exultation": {
                       "type": "string",
                       "example": "Aries",
-                      "description": "Sign of exaltation. Where the planet is honored and amplified. Absent for nodes and Chiron."
+                      "description": "Sign of exaltation. Where the planet is honored and amplified. Absent for the lunar nodes, Chiron, and Black Moon Lilith."
                     },
                     "fall": {
                       "type": "string",
                       "example": "Libra",
-                      "description": "Sign of fall. Opposite the exaltation sign, where the planet is weakened. Absent for nodes and Chiron."
+                      "description": "Sign of fall. Opposite the exaltation sign, where the planet is weakened. Absent for the lunar nodes, Chiron, and Black Moon Lilith."
                     },
                     "keywords": {
                       "type": "object",
@@ -7805,7 +7805,7 @@
           "Western Astrology"
         ],
         "summary": "Generate natal chart - Birth chart calculator API with houses and aspects",
-        "description": "Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 10 planetary positions (Sun through Pluto), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. Verified against NASA JPL Horizons.",
+        "description": "Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 14 celestial bodies (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. Verified against NASA JPL Horizons.",
         "security": [
           {
             "apiKey": []
@@ -8070,7 +8070,7 @@
           "Western Astrology"
         ],
         "summary": "Get planetary positions - Ephemeris calculator for all planets",
-        "description": "Calculate accurate tropical zodiac positions for all 10 planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. Verified against NASA JPL Horizons.",
+        "description": "Calculate accurate tropical zodiac positions for all 14 celestial bodies (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith) for any date, time, and location. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. Verified against NASA JPL Horizons.",
         "security": [
           {
             "apiKey": []
@@ -8175,7 +8175,7 @@
                           "name": {
                             "type": "string",
                             "example": "Sun",
-                            "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                            "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith)."
                           },
                           "longitude": {
                             "type": "number",
@@ -8275,7 +8275,7 @@
                           "isRetrograde"
                         ]
                       },
-                      "description": "All 10 planetary positions with zodiac signs, speeds, retrograde status, meanings, and interpretations."
+                      "description": "All 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith) with zodiac signs, speeds, retrograde status, meanings, and interpretations."
                     }
                   },
                   "required": [
@@ -10830,7 +10830,7 @@
           "Western Astrology"
         ],
         "summary": "Calculate planetary transits - Current transits with natal chart comparison",
-        "description": "Calculate current or future planetary transits (positions of all planets now). Optionally compare transits to natal chart to find transit-to-natal aspects. Returns all 10 planet positions with signs, degrees, and speeds. When natal chart provided, includes transit aspects (transiting Sun conjunct natal Mars, etc.) with orbs and applying/separating status. Perfect for daily transit forecasts, aspect alerts, and personalized transit reports.",
+        "description": "Calculate current or future planetary transits (positions of all bodies now). Optionally compare transits to natal chart to find transit-to-natal aspects. Returns all 14 celestial bodies (the 10 classical planets, the lunar nodes, Chiron, and Black Moon Lilith) with signs, degrees, and speeds. When natal chart provided, includes transit aspects (transiting Sun conjunct natal Mars, etc.) with orbs and applying/separating status. Perfect for daily transit forecasts, aspect alerts, and personalized transit reports.",
         "security": [
           {
             "apiKey": []
@@ -11212,7 +11212,8 @@
                         "Pluto",
                         "North Node",
                         "South Node",
-                        "Chiron"
+                        "Chiron",
+                        "Black Moon Lilith"
                       ]
                     },
                     "description": "Filter to specific transiting planets. Omit to include all planets. Useful for focusing on slow-moving outer planet transits (Saturn, Jupiter, Pluto)."
@@ -11283,10 +11284,11 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Sun",
-                            "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                            "description": "Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee)."
                           },
                           "longitude": {
                             "type": "number",
@@ -11298,7 +11300,7 @@
                           "latitude": {
                             "type": "number",
                             "example": 0.01,
-                            "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto."
+                            "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit)."
                           },
                           "sign": {
                             "type": "string",
@@ -11341,7 +11343,7 @@
                           "isRetrograde"
                         ]
                       },
-                      "description": "Current transiting planetary positions in the tropical zodiac. All 10 planets from Sun through Pluto."
+                      "description": "Current transiting positions in the tropical zodiac. All 14 celestial bodies: the 10 classical planets (Sun through Pluto), the lunar nodes, Chiron, and Black Moon Lilith."
                     },
                     "natalPlanets": {
                       "type": "array",
@@ -11363,10 +11365,11 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Sun",
-                            "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                            "description": "Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee)."
                           },
                           "longitude": {
                             "type": "number",
@@ -11378,7 +11381,7 @@
                           "latitude": {
                             "type": "number",
                             "example": 0.01,
-                            "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto."
+                            "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit)."
                           },
                           "sign": {
                             "type": "string",
@@ -11443,7 +11446,8 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Sun",
                             "description": "First planet in the aspect pair."
@@ -11463,7 +11467,8 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Moon",
                             "description": "Second planet in the aspect pair."
@@ -11607,7 +11612,8 @@
                                 "Pluto",
                                 "North Node",
                                 "South Node",
-                                "Chiron"
+                                "Chiron",
+                                "Black Moon Lilith"
                               ],
                               "example": "Sun",
                               "description": "First planet in the aspect pair."
@@ -11627,7 +11633,8 @@
                                 "Pluto",
                                 "North Node",
                                 "South Node",
-                                "Chiron"
+                                "Chiron",
+                                "Black Moon Lilith"
                               ],
                               "example": "Moon",
                               "description": "Second planet in the aspect pair."
@@ -12163,10 +12170,11 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Sun",
-                                "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                                "description": "Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee)."
                               },
                               "longitude": {
                                 "type": "number",
@@ -12178,7 +12186,7 @@
                               "latitude": {
                                 "type": "number",
                                 "example": 0.01,
-                                "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto."
+                                "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit)."
                               },
                               "sign": {
                                 "type": "string",
@@ -12221,7 +12229,7 @@
                               "isRetrograde"
                             ]
                           },
-                          "description": "All 10 planetary positions (Sun through Pluto) in the tropical zodiac with house placements."
+                          "description": "All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith."
                         },
                         "houses": {
                           "type": "array",
@@ -12295,7 +12303,8 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Sun",
                                 "description": "First planet in the aspect pair."
@@ -12315,7 +12324,8 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Moon",
                                 "description": "Second planet in the aspect pair."
@@ -12390,7 +12400,7 @@
                         "houseSystem",
                         "aspects"
                       ],
-                      "description": "Full natal-style chart erected for the solar return moment. Contains all 10 planetary positions, 12 house cusps, aspects, Ascendant, and Midheaven in the tropical zodiac."
+                      "description": "Full natal-style chart erected for the solar return moment. Contains all 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith), 12 house cusps, aspects, Ascendant, and Midheaven in the tropical zodiac."
                     },
                     "natalSunPosition": {
                       "type": "object",
@@ -12892,10 +12902,11 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Sun",
-                                "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                                "description": "Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee)."
                               },
                               "longitude": {
                                 "type": "number",
@@ -12907,7 +12918,7 @@
                               "latitude": {
                                 "type": "number",
                                 "example": 0.01,
-                                "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto."
+                                "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit)."
                               },
                               "sign": {
                                 "type": "string",
@@ -12950,7 +12961,7 @@
                               "isRetrograde"
                             ]
                           },
-                          "description": "All 10 planetary positions (Sun through Pluto) in the tropical zodiac with house placements."
+                          "description": "All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith."
                         },
                         "houses": {
                           "type": "array",
@@ -13024,7 +13035,8 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Sun",
                                 "description": "First planet in the aspect pair."
@@ -13044,7 +13056,8 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Moon",
                                 "description": "Second planet in the aspect pair."
@@ -13702,10 +13715,11 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Sun",
-                            "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                            "description": "Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee)."
                           },
                           "longitude": {
                             "type": "number",
@@ -13717,7 +13731,7 @@
                           "latitude": {
                             "type": "number",
                             "example": 0.01,
-                            "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto."
+                            "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit)."
                           },
                           "sign": {
                             "type": "string",
@@ -13895,7 +13909,8 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Sun",
                             "description": "First planet in the aspect pair."
@@ -13915,7 +13930,8 @@
                               "Pluto",
                               "North Node",
                               "South Node",
-                              "Chiron"
+                              "Chiron",
+                              "Black Moon Lilith"
                             ],
                             "example": "Moon",
                             "description": "Second planet in the aspect pair."
@@ -16635,10 +16651,11 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Sun",
-                                "description": "Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)."
+                                "description": "Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee)."
                               },
                               "longitude": {
                                 "type": "number",
@@ -16650,7 +16667,7 @@
                               "latitude": {
                                 "type": "number",
                                 "example": 0.01,
-                                "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for Moon and Pluto."
+                                "description": "Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit)."
                               },
                               "sign": {
                                 "type": "string",
@@ -16693,7 +16710,7 @@
                               "isRetrograde"
                             ]
                           },
-                          "description": "All 10 planetary positions (Sun through Pluto) in the tropical zodiac with house placements."
+                          "description": "All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith."
                         },
                         "houses": {
                           "type": "array",
@@ -16767,7 +16784,8 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Sun",
                                 "description": "First planet in the aspect pair."
@@ -16787,7 +16805,8 @@
                                   "Pluto",
                                   "North Node",
                                   "South Node",
-                                  "Chiron"
+                                  "Chiron",
+                                  "Black Moon Lilith"
                                 ],
                                 "example": "Moon",
                                 "description": "Second planet in the aspect pair."
