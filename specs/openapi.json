@@ -412,6 +412,76 @@
             ],
             "description": "Midheaven (MC). The highest point of the ecliptic at birth, representing career direction and public image."
           },
+          "partOfFortune": {
+            "type": "object",
+            "properties": {
+              "sign": {
+                "type": "string",
+                "example": "Aries",
+                "description": "Zodiac sign holding the Part of Fortune."
+              },
+              "degree": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 30,
+                "example": 27.24,
+                "description": "Degree within the Part of Fortune sign (0-29.999)."
+              },
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 360,
+                "example": 27.24,
+                "description": "Absolute ecliptic longitude of the Part of Fortune (0-360)."
+              },
+              "sect": {
+                "type": "string",
+                "enum": [
+                  "day",
+                  "night"
+                ],
+                "example": "night",
+                "description": "Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon."
+              }
+            },
+            "required": [
+              "sign",
+              "degree",
+              "longitude",
+              "sect"
+            ],
+            "description": "Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart."
+          },
+          "vertex": {
+            "type": "object",
+            "properties": {
+              "sign": {
+                "type": "string",
+                "example": "Virgo",
+                "description": "Zodiac sign holding the Vertex."
+              },
+              "degree": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 30,
+                "example": 12.9,
+                "description": "Degree within the Vertex sign (0-29.999)."
+              },
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 360,
+                "example": 162.9,
+                "description": "Absolute ecliptic longitude of the Vertex (0-360)."
+              }
+            },
+            "required": [
+              "sign",
+              "degree",
+              "longitude"
+            ],
+            "description": "Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex."
+          },
           "summary": {
             "type": "object",
             "properties": {
@@ -481,6 +551,8 @@
           "aspectsInterpretation",
           "ascendant",
           "midheaven",
+          "partOfFortune",
+          "vertex",
           "summary"
         ]
       },
@@ -1302,18 +1374,54 @@
                           "type": "number",
                           "example": 2,
                           "description": "Nakshatra index (1-27) in the zodiac sequence starting from Ashwini."
+                        },
+                        "lord": {
+                          "type": "string",
+                          "enum": [
+                            "Ketu",
+                            "Venus",
+                            "Sun",
+                            "Moon",
+                            "Mars",
+                            "Rahu",
+                            "Jupiter",
+                            "Saturn",
+                            "Mercury"
+                          ],
+                          "example": "Venus",
+                          "description": "Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities."
                         }
                       },
                       "required": [
                         "name",
                         "pada",
-                        "key"
+                        "key",
+                        "lord"
                       ]
                     },
                     "isRetrograde": {
                       "type": "boolean",
                       "example": false,
                       "description": "True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations."
+                    },
+                    "house": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 12,
+                      "example": 3,
+                      "description": "Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it."
+                    },
+                    "awastha": {
+                      "type": "string",
+                      "enum": [
+                        "Bala",
+                        "Kumara",
+                        "Yuva",
+                        "Vriddha",
+                        "Mrita"
+                      ],
+                      "example": "Yuva",
+                      "description": "Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only."
                     }
                   },
                   "required": [
@@ -1368,12 +1476,29 @@
                       "type": "number",
                       "example": 16,
                       "description": "Nakshatra sequence number (1-27) in zodiac order starting from Ashwini. Used for Tara Bala compatibility and dasha calculations."
+                    },
+                    "lord": {
+                      "type": "string",
+                      "enum": [
+                        "Ketu",
+                        "Venus",
+                        "Sun",
+                        "Moon",
+                        "Mars",
+                        "Rahu",
+                        "Jupiter",
+                        "Saturn",
+                        "Mercury"
+                      ],
+                      "example": "Jupiter",
+                      "description": "Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities."
                     }
                   },
                   "required": [
                     "name",
                     "pada",
-                    "key"
+                    "key",
+                    "lord"
                   ],
                   "description": "Nakshatra (lunar mansion) data for this planet. Nakshatras are the 27-fold division of the zodiac central to Vedic timing and compatibility systems."
                 },
@@ -1381,6 +1506,25 @@
                   "type": "boolean",
                   "example": false,
                   "description": "True if the planet is in retrograde motion (appears to move backward through the zodiac). Retrograde planets carry intensified or internalized significations in Vedic interpretation."
+                },
+                "house": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12,
+                  "example": 9,
+                  "description": "Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi; Lagna itself is house 1). Present on the D1 birth chart; divisional charts omit it."
+                },
+                "awastha": {
+                  "type": "string",
+                  "enum": [
+                    "Bala",
+                    "Kumara",
+                    "Yuva",
+                    "Vriddha",
+                    "Mrita"
+                  ],
+                  "example": "Yuva",
+                  "description": "Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only."
                 }
               },
               "required": [
@@ -1411,9 +1555,12 @@
               "nakshatra": {
                 "name": "Magha",
                 "pada": 2,
-                "key": 9
+                "key": 9,
+                "lord": "Ketu"
               },
-              "isRetrograde": false
+              "isRetrograde": false,
+              "house": 5,
+              "awastha": "Vriddha"
             },
             "Moon": {
               "graha": "Moon",
@@ -1422,9 +1569,12 @@
               "nakshatra": {
                 "name": "Punarvasu",
                 "pada": 4,
-                "key": 6
+                "key": 6,
+                "lord": "Jupiter"
               },
-              "isRetrograde": false
+              "isRetrograde": false,
+              "house": 4,
+              "awastha": "Yuva"
             }
           }
         }
@@ -1525,12 +1675,29 @@
                           "type": "number",
                           "example": 15,
                           "description": "Nakshatra sequence number (1-27) in zodiac order starting from Ashwini. Used for Tara Bala compatibility and dasha calculations."
+                        },
+                        "lord": {
+                          "type": "string",
+                          "enum": [
+                            "Ketu",
+                            "Venus",
+                            "Sun",
+                            "Moon",
+                            "Mars",
+                            "Rahu",
+                            "Jupiter",
+                            "Saturn",
+                            "Mercury"
+                          ],
+                          "example": "Rahu",
+                          "description": "Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Carried over from the D1 nakshatra."
                         }
                       },
                       "required": [
                         "name",
                         "pada",
-                        "key"
+                        "key",
+                        "lord"
                       ],
                       "description": "Nakshatra (lunar mansion) data for this planet. Nakshatras are the 27-fold division of the zodiac central to Vedic timing and compatibility systems."
                     },
@@ -1538,6 +1705,13 @@
                       "type": "boolean",
                       "example": false,
                       "description": "True if the planet is in retrograde motion (appears to move backward through the zodiac). Retrograde planets carry intensified or internalized significations in Vedic interpretation."
+                    },
+                    "house": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 12,
+                      "example": 7,
+                      "description": "Bhava (house) number 1-12 in the Navamsa chart, counted whole-sign from the D9 Lagna. This is the Navamsa-specific house and differs from the D1 birth-chart house."
                     }
                   },
                   "required": [
@@ -1549,10 +1723,105 @@
                   ]
                 },
                 "description": "Planet positions in the Navamsa (D9) chart keyed by planet name. Contains all 9 Navagraha plus Lagna."
+              },
+              "aries": {
+                "type": "object",
+                "properties": {
+                  "rashi": {
+                    "type": "string",
+                    "description": "Zodiac sign name in lowercase."
+                  },
+                  "signs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "graha": {
+                          "type": "string",
+                          "example": "Venus",
+                          "description": "Planet (graha) placed in this navamsa sign."
+                        },
+                        "longitude": {
+                          "type": "number",
+                          "example": 195.42,
+                          "description": "Original sidereal longitude in degrees (0-360), same as the D1 birth chart. Preserved for cross-chart reference."
+                        },
+                        "nakshatra": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Swati",
+                              "description": "Nakshatra (lunar mansion) the planet occupies."
+                            },
+                            "pada": {
+                              "type": "number",
+                              "example": 2,
+                              "description": "Nakshatra pada (quarter, 1-4)."
+                            },
+                            "key": {
+                              "type": "number",
+                              "example": 14,
+                              "description": "Nakshatra index in the zodiac sequence starting from Ashwini."
+                            },
+                            "lord": {
+                              "type": "string",
+                              "enum": [
+                                "Ketu",
+                                "Venus",
+                                "Sun",
+                                "Moon",
+                                "Mars",
+                                "Rahu",
+                                "Jupiter",
+                                "Saturn",
+                                "Mercury"
+                              ],
+                              "example": "Rahu",
+                              "description": "Vimshottari ruling planet of this nakshatra."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "pada",
+                            "key",
+                            "lord"
+                          ],
+                          "description": "Nakshatra (lunar mansion) data for this planet, carried over from the D1 chart."
+                        },
+                        "isRetrograde": {
+                          "type": "boolean",
+                          "example": false,
+                          "description": "True if the planet is in retrograde motion."
+                        },
+                        "house": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 12,
+                          "example": 7,
+                          "description": "Bhava (house) number 1-12 in the Navamsa chart, counted whole-sign from the D9 Lagna."
+                        }
+                      },
+                      "required": [
+                        "graha",
+                        "longitude",
+                        "nakshatra",
+                        "isRetrograde"
+                      ]
+                    },
+                    "description": "Planets placed in this navamsa sign."
+                  }
+                },
+                "required": [
+                  "rashi",
+                  "signs"
+                ],
+                "description": "One of the 12 navamsa rashi-house buckets (aries shown; taurus through pisces follow the identical shape). Each lists the planets placed in that sign."
               }
             },
             "required": [
-              "meta"
+              "meta",
+              "aries"
             ],
             "additionalProperties": {
               "nullable": true
@@ -1716,12 +1985,29 @@
                           "type": "number",
                           "example": 16,
                           "description": "Nakshatra sequence number (1-27) in zodiac order starting from Ashwini. Used for Tara Bala compatibility and dasha calculations."
+                        },
+                        "lord": {
+                          "type": "string",
+                          "enum": [
+                            "Ketu",
+                            "Venus",
+                            "Sun",
+                            "Moon",
+                            "Mars",
+                            "Rahu",
+                            "Jupiter",
+                            "Saturn",
+                            "Mercury"
+                          ],
+                          "example": "Jupiter",
+                          "description": "Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Carried over from the D1 nakshatra."
                         }
                       },
                       "required": [
                         "name",
                         "pada",
-                        "key"
+                        "key",
+                        "lord"
                       ],
                       "description": "Nakshatra (lunar mansion) data for this planet. Nakshatras are the 27-fold division of the zodiac central to Vedic timing and compatibility systems."
                     },
@@ -1729,6 +2015,13 @@
                       "type": "boolean",
                       "example": false,
                       "description": "True if the planet is in retrograde motion (appears to move backward through the zodiac). Retrograde planets carry intensified or internalized significations in Vedic interpretation."
+                    },
+                    "house": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 12,
+                      "example": 7,
+                      "description": "Bhava (house) number 1-12 in this divisional chart, counted whole-sign from the divisional Lagna. Specific to this varga and differs from the D1 birth-chart house."
                     }
                   },
                   "required": [
@@ -1740,10 +2033,105 @@
                   ]
                 },
                 "description": "Planet positions in the divisional chart keyed by planet name. Contains all 9 Navagraha plus Lagna."
+              },
+              "aries": {
+                "type": "object",
+                "properties": {
+                  "rashi": {
+                    "type": "string",
+                    "description": "Zodiac sign name in lowercase."
+                  },
+                  "signs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "graha": {
+                          "type": "string",
+                          "example": "Jupiter",
+                          "description": "Planet (graha) placed in this divisional sign."
+                        },
+                        "longitude": {
+                          "type": "number",
+                          "example": 248.73,
+                          "description": "Original sidereal longitude in degrees (0-360), same as the D1 birth chart. Preserved for cross-chart reference."
+                        },
+                        "nakshatra": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Vishakha",
+                              "description": "Nakshatra (lunar mansion) the planet occupies."
+                            },
+                            "pada": {
+                              "type": "number",
+                              "example": 3,
+                              "description": "Nakshatra pada (quarter, 1-4)."
+                            },
+                            "key": {
+                              "type": "number",
+                              "example": 16,
+                              "description": "Nakshatra index in the zodiac sequence starting from Ashwini."
+                            },
+                            "lord": {
+                              "type": "string",
+                              "enum": [
+                                "Ketu",
+                                "Venus",
+                                "Sun",
+                                "Moon",
+                                "Mars",
+                                "Rahu",
+                                "Jupiter",
+                                "Saturn",
+                                "Mercury"
+                              ],
+                              "example": "Jupiter",
+                              "description": "Vimshottari ruling planet of this nakshatra."
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "pada",
+                            "key",
+                            "lord"
+                          ],
+                          "description": "Nakshatra (lunar mansion) data for this planet, carried over from the D1 chart."
+                        },
+                        "isRetrograde": {
+                          "type": "boolean",
+                          "example": false,
+                          "description": "True if the planet is in retrograde motion."
+                        },
+                        "house": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 12,
+                          "example": 7,
+                          "description": "Bhava (house) number 1-12 in this divisional chart, counted whole-sign from the divisional Lagna."
+                        }
+                      },
+                      "required": [
+                        "graha",
+                        "longitude",
+                        "nakshatra",
+                        "isRetrograde"
+                      ]
+                    },
+                    "description": "Planets placed in this divisional sign."
+                  }
+                },
+                "required": [
+                  "rashi",
+                  "signs"
+                ],
+                "description": "One of the 12 divisional rashi-house buckets (aries shown; taurus through pisces follow the identical shape). Each lists the planets placed in that sign."
               }
             },
             "required": [
-              "meta"
+              "meta",
+              "aries"
             ],
             "additionalProperties": {
               "nullable": true
@@ -12391,6 +12779,76 @@
                             ]
                           },
                           "description": "All planetary aspects found in this chart with orbs, strength, and applying/separating status."
+                        },
+                        "partOfFortune": {
+                          "type": "object",
+                          "properties": {
+                            "sign": {
+                              "type": "string",
+                              "example": "Aries",
+                              "description": "Zodiac sign holding the Part of Fortune."
+                            },
+                            "degree": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 30,
+                              "example": 27.24,
+                              "description": "Degree within the Part of Fortune sign (0-29.999)."
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 360,
+                              "example": 27.24,
+                              "description": "Absolute ecliptic longitude of the Part of Fortune (0-360)."
+                            },
+                            "sect": {
+                              "type": "string",
+                              "enum": [
+                                "day",
+                                "night"
+                              ],
+                              "example": "night",
+                              "description": "Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon."
+                            }
+                          },
+                          "required": [
+                            "sign",
+                            "degree",
+                            "longitude",
+                            "sect"
+                          ],
+                          "description": "Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart."
+                        },
+                        "vertex": {
+                          "type": "object",
+                          "properties": {
+                            "sign": {
+                              "type": "string",
+                              "example": "Virgo",
+                              "description": "Zodiac sign holding the Vertex."
+                            },
+                            "degree": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 30,
+                              "example": 12.9,
+                              "description": "Degree within the Vertex sign (0-29.999)."
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 360,
+                              "example": 162.9,
+                              "description": "Absolute ecliptic longitude of the Vertex (0-360)."
+                            }
+                          },
+                          "required": [
+                            "sign",
+                            "degree",
+                            "longitude"
+                          ],
+                          "description": "Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex."
                         }
                       },
                       "required": [
@@ -12398,7 +12856,9 @@
                         "planets",
                         "houses",
                         "houseSystem",
-                        "aspects"
+                        "aspects",
+                        "partOfFortune",
+                        "vertex"
                       ],
                       "description": "Full natal-style chart erected for the solar return moment. Contains all 14 celestial bodies (10 classical planets, lunar nodes, Chiron, Black Moon Lilith), 12 house cusps, aspects, Ascendant, and Midheaven in the tropical zodiac."
                     },
@@ -13123,6 +13583,76 @@
                             ]
                           },
                           "description": "All planetary aspects found in this chart with orbs, strength, and applying/separating status."
+                        },
+                        "partOfFortune": {
+                          "type": "object",
+                          "properties": {
+                            "sign": {
+                              "type": "string",
+                              "example": "Aries",
+                              "description": "Zodiac sign holding the Part of Fortune."
+                            },
+                            "degree": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 30,
+                              "example": 27.24,
+                              "description": "Degree within the Part of Fortune sign (0-29.999)."
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 360,
+                              "example": 27.24,
+                              "description": "Absolute ecliptic longitude of the Part of Fortune (0-360)."
+                            },
+                            "sect": {
+                              "type": "string",
+                              "enum": [
+                                "day",
+                                "night"
+                              ],
+                              "example": "night",
+                              "description": "Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon."
+                            }
+                          },
+                          "required": [
+                            "sign",
+                            "degree",
+                            "longitude",
+                            "sect"
+                          ],
+                          "description": "Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart."
+                        },
+                        "vertex": {
+                          "type": "object",
+                          "properties": {
+                            "sign": {
+                              "type": "string",
+                              "example": "Virgo",
+                              "description": "Zodiac sign holding the Vertex."
+                            },
+                            "degree": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 30,
+                              "example": 12.9,
+                              "description": "Degree within the Vertex sign (0-29.999)."
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 360,
+                              "example": 162.9,
+                              "description": "Absolute ecliptic longitude of the Vertex (0-360)."
+                            }
+                          },
+                          "required": [
+                            "sign",
+                            "degree",
+                            "longitude"
+                          ],
+                          "description": "Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex."
                         }
                       },
                       "required": [
@@ -13130,7 +13660,9 @@
                         "planets",
                         "houses",
                         "houseSystem",
-                        "aspects"
+                        "aspects",
+                        "partOfFortune",
+                        "vertex"
                       ],
                       "description": "Full tropical zodiac chart erected for the lunar return moment. Contains planetary positions, house cusps, aspects, Ascendant, and Midheaven."
                     },
@@ -16872,6 +17404,76 @@
                             ]
                           },
                           "description": "All planetary aspects found in this chart with orbs, strength, and applying/separating status."
+                        },
+                        "partOfFortune": {
+                          "type": "object",
+                          "properties": {
+                            "sign": {
+                              "type": "string",
+                              "example": "Aries",
+                              "description": "Zodiac sign holding the Part of Fortune."
+                            },
+                            "degree": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 30,
+                              "example": 27.24,
+                              "description": "Degree within the Part of Fortune sign (0-29.999)."
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 360,
+                              "example": 27.24,
+                              "description": "Absolute ecliptic longitude of the Part of Fortune (0-360)."
+                            },
+                            "sect": {
+                              "type": "string",
+                              "enum": [
+                                "day",
+                                "night"
+                              ],
+                              "example": "night",
+                              "description": "Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon."
+                            }
+                          },
+                          "required": [
+                            "sign",
+                            "degree",
+                            "longitude",
+                            "sect"
+                          ],
+                          "description": "Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart."
+                        },
+                        "vertex": {
+                          "type": "object",
+                          "properties": {
+                            "sign": {
+                              "type": "string",
+                              "example": "Virgo",
+                              "description": "Zodiac sign holding the Vertex."
+                            },
+                            "degree": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 30,
+                              "example": 12.9,
+                              "description": "Degree within the Vertex sign (0-29.999)."
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 360,
+                              "example": 162.9,
+                              "description": "Absolute ecliptic longitude of the Vertex (0-360)."
+                            }
+                          },
+                          "required": [
+                            "sign",
+                            "degree",
+                            "longitude"
+                          ],
+                          "description": "Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex."
                         }
                       },
                       "required": [
@@ -16879,7 +17481,9 @@
                         "planets",
                         "houses",
                         "houseSystem",
-                        "aspects"
+                        "aspects",
+                        "partOfFortune",
+                        "vertex"
                       ],
                       "description": "Full tropical zodiac chart erected for the planetary return moment. Contains planetary positions, house cusps, aspects, Ascendant, and Midheaven."
                     },

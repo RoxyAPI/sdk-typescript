@@ -206,6 +206,44 @@ export type NatalChartResponse = {
         longitude: number;
     };
     /**
+     * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
+     */
+    partOfFortune: {
+        /**
+         * Zodiac sign holding the Part of Fortune.
+         */
+        sign: string;
+        /**
+         * Degree within the Part of Fortune sign (0-29.999).
+         */
+        degree: number;
+        /**
+         * Absolute ecliptic longitude of the Part of Fortune (0-360).
+         */
+        longitude: number;
+        /**
+         * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
+         */
+        sect: 'day' | 'night';
+    };
+    /**
+     * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
+     */
+    vertex: {
+        /**
+         * Zodiac sign holding the Vertex.
+         */
+        sign: string;
+        /**
+         * Degree within the Vertex sign (0-29.999).
+         */
+        degree: number;
+        /**
+         * Absolute ecliptic longitude of the Vertex (0-360).
+         */
+        longitude: number;
+    };
+    /**
      * Chart summary with dominant element, modality, retrograde planets, and distribution analysis.
      */
     summary: {
@@ -684,11 +722,23 @@ export type BirthChartResponse = {
                  * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
                  */
                 key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
             };
             /**
              * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
              */
             isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
         }>;
     };
     /**
@@ -724,11 +774,23 @@ export type BirthChartResponse = {
                  * Nakshatra sequence number (1-27) in zodiac order starting from Ashwini. Used for Tara Bala compatibility and dasha calculations.
                  */
                 key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
             };
             /**
              * True if the planet is in retrograde motion (appears to move backward through the zodiac). Retrograde planets carry intensified or internalized significations in Vedic interpretation.
              */
             isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi; Lagna itself is house 1). Present on the D1 birth chart; divisional charts omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
         };
     };
 };
@@ -794,12 +856,71 @@ export type NavamsaResponse = {
                      * Nakshatra sequence number (1-27) in zodiac order starting from Ashwini. Used for Tara Bala compatibility and dasha calculations.
                      */
                     key: number;
+                    /**
+                     * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Carried over from the D1 nakshatra.
+                     */
+                    lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
                 };
                 /**
                  * True if the planet is in retrograde motion (appears to move backward through the zodiac). Retrograde planets carry intensified or internalized significations in Vedic interpretation.
                  */
                 isRetrograde: boolean;
+                /**
+                 * Bhava (house) number 1-12 in the Navamsa chart, counted whole-sign from the D9 Lagna. This is the Navamsa-specific house and differs from the D1 birth-chart house.
+                 */
+                house?: number;
             };
+        };
+        /**
+         * One of the 12 navamsa rashi-house buckets (aries shown; taurus through pisces follow the identical shape). Each lists the planets placed in that sign.
+         */
+        aries: {
+            /**
+             * Zodiac sign name in lowercase.
+             */
+            rashi: string;
+            /**
+             * Planets placed in this navamsa sign.
+             */
+            signs: Array<{
+                /**
+                 * Planet (graha) placed in this navamsa sign.
+                 */
+                graha: string;
+                /**
+                 * Original sidereal longitude in degrees (0-360), same as the D1 birth chart. Preserved for cross-chart reference.
+                 */
+                longitude: number;
+                /**
+                 * Nakshatra (lunar mansion) data for this planet, carried over from the D1 chart.
+                 */
+                nakshatra: {
+                    /**
+                     * Nakshatra (lunar mansion) the planet occupies.
+                     */
+                    name: string;
+                    /**
+                     * Nakshatra pada (quarter, 1-4).
+                     */
+                    pada: number;
+                    /**
+                     * Nakshatra index in the zodiac sequence starting from Ashwini.
+                     */
+                    key: number;
+                    /**
+                     * Vimshottari ruling planet of this nakshatra.
+                     */
+                    lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+                };
+                /**
+                 * True if the planet is in retrograde motion.
+                 */
+                isRetrograde: boolean;
+                /**
+                 * Bhava (house) number 1-12 in the Navamsa chart, counted whole-sign from the D9 Lagna.
+                 */
+                house?: number;
+            }>;
         };
         [key: string]: unknown;
     };
@@ -899,12 +1020,71 @@ export type DivisionalChartResponse = {
                      * Nakshatra sequence number (1-27) in zodiac order starting from Ashwini. Used for Tara Bala compatibility and dasha calculations.
                      */
                     key: number;
+                    /**
+                     * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Carried over from the D1 nakshatra.
+                     */
+                    lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
                 };
                 /**
                  * True if the planet is in retrograde motion (appears to move backward through the zodiac). Retrograde planets carry intensified or internalized significations in Vedic interpretation.
                  */
                 isRetrograde: boolean;
+                /**
+                 * Bhava (house) number 1-12 in this divisional chart, counted whole-sign from the divisional Lagna. Specific to this varga and differs from the D1 birth-chart house.
+                 */
+                house?: number;
             };
+        };
+        /**
+         * One of the 12 divisional rashi-house buckets (aries shown; taurus through pisces follow the identical shape). Each lists the planets placed in that sign.
+         */
+        aries: {
+            /**
+             * Zodiac sign name in lowercase.
+             */
+            rashi: string;
+            /**
+             * Planets placed in this divisional sign.
+             */
+            signs: Array<{
+                /**
+                 * Planet (graha) placed in this divisional sign.
+                 */
+                graha: string;
+                /**
+                 * Original sidereal longitude in degrees (0-360), same as the D1 birth chart. Preserved for cross-chart reference.
+                 */
+                longitude: number;
+                /**
+                 * Nakshatra (lunar mansion) data for this planet, carried over from the D1 chart.
+                 */
+                nakshatra: {
+                    /**
+                     * Nakshatra (lunar mansion) the planet occupies.
+                     */
+                    name: string;
+                    /**
+                     * Nakshatra pada (quarter, 1-4).
+                     */
+                    pada: number;
+                    /**
+                     * Nakshatra index in the zodiac sequence starting from Ashwini.
+                     */
+                    key: number;
+                    /**
+                     * Vimshottari ruling planet of this nakshatra.
+                     */
+                    lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+                };
+                /**
+                 * True if the planet is in retrograde motion.
+                 */
+                isRetrograde: boolean;
+                /**
+                 * Bhava (house) number 1-12 in this divisional chart, counted whole-sign from the divisional Lagna.
+                 */
+                house?: number;
+            }>;
         };
         [key: string]: unknown;
     };
@@ -6392,6 +6572,44 @@ export type PostAstrologySolarReturnResponses = {
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
+            /**
+             * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
+             */
+            partOfFortune: {
+                /**
+                 * Zodiac sign holding the Part of Fortune.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Part of Fortune sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Part of Fortune (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
+                 */
+                sect: 'day' | 'night';
+            };
+            /**
+             * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
+             */
+            vertex: {
+                /**
+                 * Zodiac sign holding the Vertex.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Vertex sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Vertex (0-360).
+                 */
+                longitude: number;
+            };
         };
         /**
          * Original natal Sun position that the transiting Sun returns to. This conjunction defines the solar return moment.
@@ -6735,6 +6953,44 @@ export type PostAstrologyLunarReturnResponses = {
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
+            /**
+             * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
+             */
+            partOfFortune: {
+                /**
+                 * Zodiac sign holding the Part of Fortune.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Part of Fortune sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Part of Fortune (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
+                 */
+                sect: 'day' | 'night';
+            };
+            /**
+             * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
+             */
+            vertex: {
+                /**
+                 * Zodiac sign holding the Vertex.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Vertex sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Vertex (0-360).
+                 */
+                longitude: number;
+            };
         };
         /**
          * Original natal Moon position that the transiting Moon returns to. This conjunction defines the lunar return moment.
@@ -8587,6 +8843,44 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
+            /**
+             * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
+             */
+            partOfFortune: {
+                /**
+                 * Zodiac sign holding the Part of Fortune.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Part of Fortune sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Part of Fortune (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
+                 */
+                sect: 'day' | 'night';
+            };
+            /**
+             * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
+             */
+            vertex: {
+                /**
+                 * Zodiac sign holding the Vertex.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Vertex sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Vertex (0-360).
+                 */
+                longitude: number;
+            };
         };
         /**
          * Original natal planet position that defines the return. The transiting planet conjuncts this longitude to trigger the return.
