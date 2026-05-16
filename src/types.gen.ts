@@ -147,6 +147,57 @@ export type NatalChartResponse = {
         interpretation: string;
     }>;
     /**
+     * Detected multi-planet aspect configurations (Grand Trine, Kite, T-Square, Grand Cross, Yod, Mystic Rectangle, Stellium). Grand Cross suppresses contained T-Squares, Kite suppresses underlying Grand Trine.
+     */
+    patterns?: Array<{
+        /**
+         * Pattern kind identifier. GRAND_TRINE (3 trines, harmonious flow), KITE (Grand Trine with a focal outlet planet), T_SQUARE (opposition with squared apex, growth engine), GRAND_CROSS (4 planets in 2 oppositions and 4 squares, peak tension), YOD (Finger of Fate, fated adjustment), MYSTIC_RECTANGLE (oppositions softened by trines and sextiles), STELLIUM (3+ planets clustered in a sign or 10-degree arc).
+         */
+        kind: 'GRAND_TRINE' | 'KITE' | 'T_SQUARE' | 'GRAND_CROSS' | 'YOD' | 'MYSTIC_RECTANGLE' | 'STELLIUM';
+        /**
+         * Human-readable name of the configuration as used in astrological literature.
+         */
+        name: string;
+        /**
+         * Participating bodies in canonical order. For Kite, T-Square, and Yod the apex planet appears first.
+         */
+        planets: Array<string>;
+        /**
+         * Focal planet for Kite, T-Square, and Yod patterns. Receives the released energy of the configuration and is the recommended integration point.
+         */
+        apex?: string;
+        /**
+         * Dominant element when the pattern is element-coherent (Grand Trine, Kite). Reported lowercase. Absent for patterns whose meaning does not pivot on element.
+         */
+        element?: 'fire' | 'earth' | 'air' | 'water';
+        /**
+         * Dominant modality for tension-based patterns (T-Square, Grand Cross). Cardinal initiates, Fixed sustains, Mutable adapts.
+         */
+        modality?: 'cardinal' | 'fixed' | 'mutable';
+        /**
+         * True if the pattern is out-of-sign (one or more planets in a neighboring element or modality). Dissociate patterns are still valid but operate with weakened thematic coherence.
+         */
+        dissociate?: boolean;
+        /**
+         * Tightness score (0-100) derived from the average orb tightness across all defining aspects. Higher means closer to exact and stronger thematic expression.
+         */
+        tightness: number;
+        /**
+         * Concise one-line interpretation naming the participating planets and theme. Localized to the requested language via the lang query parameter (defaults to English).
+         */
+        interpretation: string;
+        /**
+         * Stable template identifier used to render the interpretation. Useful for clients that wish to swap in a custom narrative template while preserving the structured variables.
+         */
+        interpretationKey: string;
+        /**
+         * Variables that were interpolated into the interpretation template. Names already resolved to the requested language where appropriate.
+         */
+        interpretationVars: {
+            [key: string]: string;
+        };
+    }>;
+    /**
      * Aspect pattern analysis showing the balance of harmonious vs challenging energies in the chart.
      */
     aspectsInterpretation: {
@@ -481,6 +532,57 @@ export type AspectsResponse = {
         };
     }>;
     /**
+     * Detected multi-planet aspect configurations (Grand Trine, Kite, T-Square, Grand Cross, Yod, Mystic Rectangle, Stellium).
+     */
+    patterns?: Array<{
+        /**
+         * Pattern kind identifier. GRAND_TRINE (3 trines, harmonious flow), KITE (Grand Trine with a focal outlet planet), T_SQUARE (opposition with squared apex, growth engine), GRAND_CROSS (4 planets in 2 oppositions and 4 squares, peak tension), YOD (Finger of Fate, fated adjustment), MYSTIC_RECTANGLE (oppositions softened by trines and sextiles), STELLIUM (3+ planets clustered in a sign or 10-degree arc).
+         */
+        kind: 'GRAND_TRINE' | 'KITE' | 'T_SQUARE' | 'GRAND_CROSS' | 'YOD' | 'MYSTIC_RECTANGLE' | 'STELLIUM';
+        /**
+         * Human-readable name of the configuration as used in astrological literature.
+         */
+        name: string;
+        /**
+         * Participating bodies in canonical order. For Kite, T-Square, and Yod the apex planet appears first.
+         */
+        planets: Array<string>;
+        /**
+         * Focal planet for Kite, T-Square, and Yod patterns. Receives the released energy of the configuration and is the recommended integration point.
+         */
+        apex?: string;
+        /**
+         * Dominant element when the pattern is element-coherent (Grand Trine, Kite). Reported lowercase. Absent for patterns whose meaning does not pivot on element.
+         */
+        element?: 'fire' | 'earth' | 'air' | 'water';
+        /**
+         * Dominant modality for tension-based patterns (T-Square, Grand Cross). Cardinal initiates, Fixed sustains, Mutable adapts.
+         */
+        modality?: 'cardinal' | 'fixed' | 'mutable';
+        /**
+         * True if the pattern is out-of-sign (one or more planets in a neighboring element or modality). Dissociate patterns are still valid but operate with weakened thematic coherence.
+         */
+        dissociate?: boolean;
+        /**
+         * Tightness score (0-100) derived from the average orb tightness across all defining aspects. Higher means closer to exact and stronger thematic expression.
+         */
+        tightness: number;
+        /**
+         * Concise one-line interpretation naming the participating planets and theme. Localized to the requested language via the lang query parameter (defaults to English).
+         */
+        interpretation: string;
+        /**
+         * Stable template identifier used to render the interpretation. Useful for clients that wish to swap in a custom narrative template while preserving the structured variables.
+         */
+        interpretationKey: string;
+        /**
+         * Variables that were interpolated into the interpretation template. Names already resolved to the requested language where appropriate.
+         */
+        interpretationVars: {
+            [key: string]: string;
+        };
+    }>;
+    /**
      * Aspect summary with counts by nature and type.
      */
     summary: {
@@ -530,6 +632,100 @@ export type AspectsRequest = {
      * Optional: specific aspect types to find (defaults to all 9)
      */
     aspectTypes?: Array<string>;
+};
+
+export type AspectPatternsResponse = {
+    /**
+     * All aspect patterns detected in the chart, in detection order: Grand Cross first, then Kite, Grand Trine, T-Square, Yod, Mystic Rectangle, Stellium. Patterns absorbed by a higher-priority detection (T-Squares inside a Grand Cross, Grand Trines absorbed by a Kite) are not reported separately.
+     */
+    patterns: Array<{
+        /**
+         * Pattern kind identifier. GRAND_TRINE (3 trines, harmonious flow), KITE (Grand Trine with a focal outlet planet), T_SQUARE (opposition with squared apex, growth engine), GRAND_CROSS (4 planets in 2 oppositions and 4 squares, peak tension), YOD (Finger of Fate, fated adjustment), MYSTIC_RECTANGLE (oppositions softened by trines and sextiles), STELLIUM (3+ planets clustered in a sign or 10-degree arc).
+         */
+        kind: 'GRAND_TRINE' | 'KITE' | 'T_SQUARE' | 'GRAND_CROSS' | 'YOD' | 'MYSTIC_RECTANGLE' | 'STELLIUM';
+        /**
+         * Human-readable name of the configuration as used in astrological literature.
+         */
+        name: string;
+        /**
+         * Participating bodies in canonical order. For Kite, T-Square, and Yod the apex planet appears first.
+         */
+        planets: Array<string>;
+        /**
+         * Focal planet for Kite, T-Square, and Yod patterns. Receives the released energy of the configuration and is the recommended integration point.
+         */
+        apex?: string;
+        /**
+         * Dominant element when the pattern is element-coherent (Grand Trine, Kite). Reported lowercase. Absent for patterns whose meaning does not pivot on element.
+         */
+        element?: 'fire' | 'earth' | 'air' | 'water';
+        /**
+         * Dominant modality for tension-based patterns (T-Square, Grand Cross). Cardinal initiates, Fixed sustains, Mutable adapts.
+         */
+        modality?: 'cardinal' | 'fixed' | 'mutable';
+        /**
+         * True if the pattern is out-of-sign (one or more planets in a neighboring element or modality). Dissociate patterns are still valid but operate with weakened thematic coherence.
+         */
+        dissociate?: boolean;
+        /**
+         * Tightness score (0-100) derived from the average orb tightness across all defining aspects. Higher means closer to exact and stronger thematic expression.
+         */
+        tightness: number;
+        /**
+         * Concise one-line interpretation naming the participating planets and theme. Localized to the requested language via the lang query parameter (defaults to English).
+         */
+        interpretation: string;
+        /**
+         * Stable template identifier used to render the interpretation. Useful for clients that wish to swap in a custom narrative template while preserving the structured variables.
+         */
+        interpretationKey: string;
+        /**
+         * Variables that were interpolated into the interpretation template. Names already resolved to the requested language where appropriate.
+         */
+        interpretationVars: {
+            [key: string]: string;
+        };
+    }>;
+    /**
+     * Total number of detected aspect patterns in this chart.
+     */
+    total: number;
+    /**
+     * Echo of the options used for this detection run. Useful for reproducibility and for downstream UI display.
+     */
+    options: {
+        /**
+         * Whether the strict (Pontopia-style) orb budget was used. False uses industry-standard orbs (8 for major aspects, 9 for square, 6 for sextile, 3 for quincunx).
+         */
+        strictOrbs: boolean;
+        /**
+         * Optional bodies included beyond the default Sun-Pluto set. Empty means classical 10-planet detection only.
+         */
+        include: Array<'chiron' | 'northNode'>;
+    };
+};
+
+export type AspectPatternsRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     */
+    timezone: number | string;
 };
 
 export type TransitsResponse = {
@@ -741,6 +937,39 @@ export type BirthChartResponse = {
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
         }>;
     };
+    /**
+     * Twelve classical yogas detected against this chart: Gajakesari (three-rule parashara definition), Sunapha, Anapha, Dhurdhura, Kemadruma, Chandra Mangala, Budha-Aditya, and the five Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Sasa). Each entry carries an `id` (matches `GET /yoga/{id}` for full glossary lookup), a `present` boolean, and classical-text `evidence` for the rule that triggered or failed.
+     */
+    yogas?: Array<{
+        /**
+         * Glossary id (lowercase, kebab-case) matching an entry in the 300-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
+         */
+        id: string;
+        /**
+         * Classical Sanskrit name of the yoga as referenced in BPHS (Brihat Parashara Hora Shastra), Phaladeepika, and B.V. Raman *Three Hundred Important Combinations*.
+         */
+        name: string;
+        /**
+         * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, or aspect pattern required for the yoga to form.
+         */
+        description: string;
+        /**
+         * Classical phala (life-effect) description of the yoga when present, sourced from the parashari and phaladeepika tradition.
+         */
+        result: string;
+        /**
+         * Overall nature. Auspicious yogas (Pancha Mahapurusha, Gajakesari) bestow benefits; inauspicious yogas (Kemadruma) indicate challenges; Both denotes context-dependent effects.
+         */
+        quality: 'Positive' | 'Negative' | 'Both';
+        /**
+         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not.
+         */
+        present: boolean;
+        /**
+         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendrādhipati status, lordship, or malefic drishti.
+         */
+        evidence?: string;
+    }>;
     /**
      * Quick lookup of all planet positions keyed by planet name. Contains Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu, and Lagna (Ascendant).
      */
@@ -1530,6 +1759,79 @@ export type SadhesatiResponse = {
 };
 
 export type SadhesatiRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     */
+    timezone?: number | string;
+};
+
+export type YogaDetectResponse = {
+    /**
+     * Array of 12 detected yogas. Every entry carries a present boolean; filter on present === true for active yogas. Evidence text names the rule that triggered or failed.
+     */
+    yogas: Array<{
+        /**
+         * Glossary id (lowercase, kebab-case) matching an entry in the 300-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
+         */
+        id: string;
+        /**
+         * Classical Sanskrit name of the yoga as referenced in BPHS (Brihat Parashara Hora Shastra), Phaladeepika, and B.V. Raman *Three Hundred Important Combinations*.
+         */
+        name: string;
+        /**
+         * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, or aspect pattern required for the yoga to form.
+         */
+        description: string;
+        /**
+         * Classical phala (life-effect) description of the yoga when present, sourced from the parashari and phaladeepika tradition.
+         */
+        result: string;
+        /**
+         * Overall nature. Auspicious yogas (Pancha Mahapurusha, Gajakesari) bestow benefits; inauspicious yogas (Kemadruma) indicate challenges; Both denotes context-dependent effects.
+         */
+        quality: 'Positive' | 'Negative' | 'Both';
+        /**
+         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not.
+         */
+        present: boolean;
+        /**
+         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendrādhipati status, lordship, or malefic drishti.
+         */
+        evidence?: string;
+    }>;
+    /**
+     * Count of yogas where present === true in this chart. Range 0-12.
+     */
+    total: number;
+    /**
+     * Echo of the resolved birth data used for detection. Timezone is the numeric offset that the chart engine consumed (IANA names are resolved upstream).
+     */
+    birthDetails: {
+        date: string;
+        time: string;
+        latitude: number;
+        longitude: number;
+        timezone: number;
+    };
+};
+
+export type YogaDetectRequest = {
     /**
      * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
      */
@@ -5766,6 +6068,139 @@ export type PostAstrologyAspectsResponses = {
 };
 
 export type PostAstrologyAspectsResponse = PostAstrologyAspectsResponses[keyof PostAstrologyAspectsResponses];
+
+export type PostAstrologyAspectPatternsData = {
+    body?: AspectPatternsRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Use tighter orbs (Pontopia "optimal" recommendations). Truthy values (true, 1, yes, on; case-insensitive) narrow trine to 5, square to 5, sextile to 4, quincunx to 2. Defaults to false (industry-standard orbs).
+         */
+        strictOrbs?: string;
+        /**
+         * Comma-separated list of optional bodies to include beyond the classical 10 planets. Valid tokens (case-insensitive): chiron, northNode (also accepts north_node, north-node, northnode). Empty by default.
+         */
+        include?: string;
+    };
+    url: '/astrology/aspect-patterns';
+};
+
+export type PostAstrologyAspectPatternsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyAspectPatternsError = PostAstrologyAspectPatternsErrors[keyof PostAstrologyAspectPatternsErrors];
+
+export type PostAstrologyAspectPatternsResponses = {
+    /**
+     * Aspect patterns detected successfully
+     */
+    200: AspectPatternsResponse;
+};
+
+export type PostAstrologyAspectPatternsResponse = PostAstrologyAspectPatternsResponses[keyof PostAstrologyAspectPatternsResponses];
 
 export type PostAstrologyTransitsData = {
     body?: TransitsRequest;
@@ -12410,6 +12845,131 @@ export type GetVedicAstrologyYogaByIdResponses = {
 };
 
 export type GetVedicAstrologyYogaByIdResponse = GetVedicAstrologyYogaByIdResponses[keyof GetVedicAstrologyYogaByIdResponses];
+
+export type PostVedicAstrologyYogaDetectData = {
+    body?: YogaDetectRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/yoga/detect';
+};
+
+export type PostVedicAstrologyYogaDetectErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyYogaDetectError = PostVedicAstrologyYogaDetectErrors[keyof PostVedicAstrologyYogaDetectErrors];
+
+export type PostVedicAstrologyYogaDetectResponses = {
+    /**
+     * List of 12 classical yogas with present/absent verdicts and classical-text evidence.
+     */
+    200: YogaDetectResponse;
+};
+
+export type PostVedicAstrologyYogaDetectResponse = PostVedicAstrologyYogaDetectResponses[keyof PostVedicAstrologyYogaDetectResponses];
 
 export type GetVedicAstrologyKpAyanamsaData = {
     body?: never;

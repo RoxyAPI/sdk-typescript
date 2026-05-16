@@ -85,8 +85,8 @@ const { latitude, longitude, timezone } = data.cities[0];
 <!-- BEGIN:DOMAINS -->
 | Namespace | Endpoints | What it covers |
 |-----------|-----------|----------------|
-| `roxy.astrology` | 22 | Production-ready Western astrology API + remote MCP for AI agents and developers |
-| `roxy.vedicAstrology` | 42 | Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers |
+| `roxy.astrology` | 23 | Production-ready Western astrology API + remote MCP for AI agents and developers |
+| `roxy.vedicAstrology` | 43 | Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers |
 | `roxy.numerology` | 16 | Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers |
 | `roxy.tarot` | 10 | Production-ready tarot card reading API + hosted MCP for AI agents and developers |
 | `roxy.biorhythm` | 6 | The most complete biorhythm API + remote MCP for AI agents and developers |
