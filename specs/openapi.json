@@ -6887,11 +6887,11 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups, queen-of-swords)."
+            "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
           },
           "name": {
             "type": "string",
-            "description": "Display name of the tarot card as it appears in the Rider-Waite-Smith tradition."
+            "description": "Display name of the tarot card."
           },
           "arcana": {
             "type": "string",
@@ -6933,6 +6933,26 @@
           "meaning": {
             "type": "string",
             "description": "Full interpretation of this card in its current orientation, providing detailed divination guidance."
+          },
+          "love": {
+            "type": "string",
+            "description": "Love and relationship interpretation for the drawn orientation. Covers romantic partnerships, dating, emotional connections, and matters of the heart."
+          },
+          "career": {
+            "type": "string",
+            "description": "Career and professional interpretation for the drawn orientation. Covers workplace dynamics, job transitions, ambition, and vocational purpose."
+          },
+          "finances": {
+            "type": "string",
+            "description": "Financial interpretation for the drawn orientation. Covers money management, investments, material prosperity, and abundance mindset."
+          },
+          "health": {
+            "type": "string",
+            "description": "Health and wellbeing interpretation for the drawn orientation. Covers physical vitality, mental health, energy levels, and self-care guidance."
+          },
+          "spirituality": {
+            "type": "string",
+            "description": "Spiritual interpretation for the drawn orientation. Covers personal growth, inner wisdom, soul purpose, and metaphysical development."
           },
           "imageUrl": {
             "type": "string",
@@ -41873,58 +41893,7 @@
                       "description": "Seed used for this daily reading. Same seed on the same date always produces the identical card for reproducible daily divination."
                     },
                     "card": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
-                        },
-                        "name": {
-                          "type": "string",
-                          "description": "Display name of the tarot card."
-                        },
-                        "arcana": {
-                          "type": "string",
-                          "enum": [
-                            "major",
-                            "minor"
-                          ],
-                          "description": "Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations)."
-                        },
-                        "position": {
-                          "type": "number",
-                          "description": "Position index of the card in the draw sequence (1-based)."
-                        },
-                        "reversed": {
-                          "type": "boolean",
-                          "description": "True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position."
-                        },
-                        "keywords": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          },
-                          "description": "Key themes and concepts associated with this card in its current orientation (upright or reversed)."
-                        },
-                        "meaning": {
-                          "type": "string",
-                          "description": "Full interpretation of this card in its current orientation, providing daily guidance and reflection."
-                        },
-                        "imageUrl": {
-                          "type": "string",
-                          "description": "URL to the tarot card artwork image."
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "name",
-                        "arcana",
-                        "position",
-                        "reversed",
-                        "keywords",
-                        "meaning",
-                        "imageUrl"
-                      ]
+                      "$ref": "#/components/schemas/DrawnCard"
                     },
                     "dailyMessage": {
                       "type": "string",
@@ -42605,53 +42574,7 @@
                             "description": "Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position."
                           },
                           "card": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Display name of the tarot card."
-                              },
-                              "arcana": {
-                                "type": "string",
-                                "enum": [
-                                  "major",
-                                  "minor"
-                                ],
-                                "description": "Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations)."
-                              },
-                              "reversed": {
-                                "type": "boolean",
-                                "description": "True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position."
-                              },
-                              "keywords": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "Key themes and concepts associated with this card in its current orientation (upright or reversed)."
-                              },
-                              "meaning": {
-                                "type": "string",
-                                "description": "Full interpretation of this card in its current orientation."
-                              },
-                              "imageUrl": {
-                                "type": "string",
-                                "description": "URL to the tarot card artwork image."
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "arcana",
-                              "reversed",
-                              "keywords",
-                              "meaning",
-                              "imageUrl"
-                            ]
+                            "$ref": "#/components/schemas/DrawnCard"
                           }
                         },
                         "required": [
@@ -42979,53 +42902,7 @@
                             "description": "Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position."
                           },
                           "card": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Display name of the tarot card."
-                              },
-                              "arcana": {
-                                "type": "string",
-                                "enum": [
-                                  "major",
-                                  "minor"
-                                ],
-                                "description": "Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations)."
-                              },
-                              "reversed": {
-                                "type": "boolean",
-                                "description": "True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position."
-                              },
-                              "keywords": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "Key themes and concepts associated with this card in its current orientation (upright or reversed)."
-                              },
-                              "meaning": {
-                                "type": "string",
-                                "description": "Full interpretation of this card in its current orientation."
-                              },
-                              "imageUrl": {
-                                "type": "string",
-                                "description": "URL to the tarot card artwork image."
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "arcana",
-                              "reversed",
-                              "keywords",
-                              "meaning",
-                              "imageUrl"
-                            ]
+                            "$ref": "#/components/schemas/DrawnCard"
                           }
                         },
                         "required": [
@@ -43353,53 +43230,7 @@
                             "description": "Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position."
                           },
                           "card": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Display name of the tarot card."
-                              },
-                              "arcana": {
-                                "type": "string",
-                                "enum": [
-                                  "major",
-                                  "minor"
-                                ],
-                                "description": "Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations)."
-                              },
-                              "reversed": {
-                                "type": "boolean",
-                                "description": "True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position."
-                              },
-                              "keywords": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "Key themes and concepts associated with this card in its current orientation (upright or reversed)."
-                              },
-                              "meaning": {
-                                "type": "string",
-                                "description": "Full interpretation of this card in its current orientation."
-                              },
-                              "imageUrl": {
-                                "type": "string",
-                                "description": "URL to the tarot card artwork image."
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "arcana",
-                              "reversed",
-                              "keywords",
-                              "meaning",
-                              "imageUrl"
-                            ]
+                            "$ref": "#/components/schemas/DrawnCard"
                           }
                         },
                         "required": [
@@ -43727,53 +43558,7 @@
                             "description": "Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position."
                           },
                           "card": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Display name of the tarot card."
-                              },
-                              "arcana": {
-                                "type": "string",
-                                "enum": [
-                                  "major",
-                                  "minor"
-                                ],
-                                "description": "Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations)."
-                              },
-                              "reversed": {
-                                "type": "boolean",
-                                "description": "True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position."
-                              },
-                              "keywords": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "Key themes and concepts associated with this card in its current orientation (upright or reversed)."
-                              },
-                              "meaning": {
-                                "type": "string",
-                                "description": "Full interpretation of this card in its current orientation."
-                              },
-                              "imageUrl": {
-                                "type": "string",
-                                "description": "URL to the tarot card artwork image."
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "arcana",
-                              "reversed",
-                              "keywords",
-                              "meaning",
-                              "imageUrl"
-                            ]
+                            "$ref": "#/components/schemas/DrawnCard"
                           }
                         },
                         "required": [
@@ -44150,53 +43935,7 @@
                             "description": "Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position."
                           },
                           "card": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups)."
-                              },
-                              "name": {
-                                "type": "string",
-                                "description": "Display name of the tarot card."
-                              },
-                              "arcana": {
-                                "type": "string",
-                                "enum": [
-                                  "major",
-                                  "minor"
-                                ],
-                                "description": "Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations)."
-                              },
-                              "reversed": {
-                                "type": "boolean",
-                                "description": "True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position."
-                              },
-                              "keywords": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                },
-                                "description": "Key themes and concepts associated with this card in its current orientation (upright or reversed)."
-                              },
-                              "meaning": {
-                                "type": "string",
-                                "description": "Full interpretation of this card in its current orientation."
-                              },
-                              "imageUrl": {
-                                "type": "string",
-                                "description": "URL to the tarot card artwork image."
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "arcana",
-                              "reversed",
-                              "keywords",
-                              "meaning",
-                              "imageUrl"
-                            ]
+                            "$ref": "#/components/schemas/DrawnCard"
                           }
                         },
                         "required": [

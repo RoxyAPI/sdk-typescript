@@ -3549,11 +3549,11 @@ export type Card = {
 
 export type DrawnCard = {
     /**
-     * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups, queen-of-swords).
+     * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
      */
     id: string;
     /**
-     * Display name of the tarot card as it appears in the Rider-Waite-Smith tradition.
+     * Display name of the tarot card.
      */
     name: string;
     /**
@@ -3584,6 +3584,26 @@ export type DrawnCard = {
      * Full interpretation of this card in its current orientation, providing detailed divination guidance.
      */
     meaning: string;
+    /**
+     * Love and relationship interpretation for the drawn orientation. Covers romantic partnerships, dating, emotional connections, and matters of the heart.
+     */
+    love?: string;
+    /**
+     * Career and professional interpretation for the drawn orientation. Covers workplace dynamics, job transitions, ambition, and vocational purpose.
+     */
+    career?: string;
+    /**
+     * Financial interpretation for the drawn orientation. Covers money management, investments, material prosperity, and abundance mindset.
+     */
+    finances?: string;
+    /**
+     * Health and wellbeing interpretation for the drawn orientation. Covers physical vitality, mental health, energy levels, and self-care guidance.
+     */
+    health?: string;
+    /**
+     * Spiritual interpretation for the drawn orientation. Covers personal growth, inner wisdom, soul purpose, and metaphysical development.
+     */
+    spirituality?: string;
     /**
      * URL to the tarot card artwork image.
      */
@@ -21071,40 +21091,7 @@ export type PostTarotDailyResponses = {
          * Seed used for this daily reading. Same seed on the same date always produces the identical card for reproducible daily divination.
          */
         seed: string;
-        card: {
-            /**
-             * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-             */
-            id: string;
-            /**
-             * Display name of the tarot card.
-             */
-            name: string;
-            /**
-             * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-             */
-            arcana: 'major' | 'minor';
-            /**
-             * Position index of the card in the draw sequence (1-based).
-             */
-            position: number;
-            /**
-             * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-             */
-            reversed: boolean;
-            /**
-             * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-             */
-            keywords: Array<string>;
-            /**
-             * Full interpretation of this card in its current orientation, providing daily guidance and reflection.
-             */
-            meaning: string;
-            /**
-             * URL to the tarot card artwork image.
-             */
-            imageUrl: string;
-        };
+        card: DrawnCard;
         /**
          * Concise daily tarot message summarizing the card, its orientation, key themes, and brief guidance for the day.
          */
@@ -21449,36 +21436,7 @@ export type PostTarotSpreadsThreeCardResponses = {
              * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
              */
             interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
+            card: DrawnCard;
         }>;
         /**
          * AI-generated narrative connecting all cards in the spread into a cohesive reading.
@@ -21641,36 +21599,7 @@ export type PostTarotSpreadsCelticCrossResponses = {
              * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
              */
             interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
+            card: DrawnCard;
         }>;
         /**
          * AI-generated narrative connecting all cards in the spread into a cohesive reading.
@@ -21833,36 +21762,7 @@ export type PostTarotSpreadsLoveResponses = {
              * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
              */
             interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
+            card: DrawnCard;
         }>;
         /**
          * AI-generated narrative connecting all cards in the spread into a cohesive reading.
@@ -22025,36 +21925,7 @@ export type PostTarotSpreadsCareerResponses = {
              * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
              */
             interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
+            card: DrawnCard;
         }>;
         /**
          * AI-generated narrative connecting all cards in the spread into a cohesive reading.
@@ -22240,36 +22111,7 @@ export type PostTarotSpreadsCustomResponses = {
              * Position-specific interpretation of the drawn card, explaining how this card meaning applies to this particular spread position.
              */
             interpretation: string;
-            card: {
-                /**
-                 * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).
-                 */
-                id: string;
-                /**
-                 * Display name of the tarot card.
-                 */
-                name: string;
-                /**
-                 * Whether this card belongs to the Major Arcana (22 trump cards, major life themes) or Minor Arcana (56 suit cards, daily situations).
-                 */
-                arcana: 'major' | 'minor';
-                /**
-                 * True if the card was drawn reversed (upside down). Reversed cards carry modified or blocked energy compared to upright position.
-                 */
-                reversed: boolean;
-                /**
-                 * Key themes and concepts associated with this card in its current orientation (upright or reversed).
-                 */
-                keywords: Array<string>;
-                /**
-                 * Full interpretation of this card in its current orientation.
-                 */
-                meaning: string;
-                /**
-                 * URL to the tarot card artwork image.
-                 */
-                imageUrl: string;
-            };
+            card: DrawnCard;
         }>;
         /**
          * AI-generated narrative connecting all cards in the spread into a cohesive reading.
