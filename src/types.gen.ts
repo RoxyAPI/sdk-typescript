@@ -876,7 +876,13 @@ export type TransitsRequest = {
      * Optional natal chart data to compare transits against
      */
     natalChart?: {
+        /**
+         * Date in YYYY-MM-DD format.
+         */
         date: string;
+        /**
+         * Time in 24-hour HH:MM:SS format.
+         */
         time: string;
         latitude: number;
         longitude: number;
@@ -911,7 +917,7 @@ export type BirthChartResponse = {
                  */
                 name: string;
                 /**
-                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3°20 each.
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
                  */
                 pada: number;
                 /**
@@ -936,6 +942,615 @@ export type BirthChartResponse = {
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
         }>;
+    };
+    taurus: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    gemini: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    cancer: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    leo: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    virgo: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    libra: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    scorpio: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    sagittarius: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    capricorn: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    aquarius: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    pisces: {
+        /**
+         * Zodiac sign name in lowercase.
+         */
+        rashi: string;
+        /**
+         * Planets placed in this zodiac sign.
+         */
+        signs: Array<{
+            /**
+             * Planet (graha) placed in this sign.
+             */
+            graha: string;
+            /**
+             * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa.
+             */
+            longitude: number;
+            nakshatra: {
+                /**
+                 * Nakshatra (lunar mansion, 1 of 27) the planet occupies.
+                 */
+                name: string;
+                /**
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra has 4 padas of 3 degrees 20 each.
+                 */
+                pada: number;
+                /**
+                 * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
+                 */
+                key: number;
+                /**
+                 * Vimshottari ruling planet of this nakshatra. One of the nine grahas (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury). Drives the dasha sequence and the nakshatra qualities.
+                 */
+                lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            };
+            /**
+             * True if planet is in retrograde motion (appears to move backward). Retrograde planets have altered significations.
+             */
+            isRetrograde: boolean;
+            /**
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi). Present on the D1 birth chart; divisional charts (navamsa, varga) omit it.
+             */
+            house?: number;
+            /**
+             * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
+             */
+            awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+        }>;
+    };
+    /**
+     * The twelve bhavas (houses) in order, each with its classical name and significations. Houses are counted whole-sign from the Lagna.
+     */
+    houses: Array<{
+        /**
+         * Bhava (house) number 1-12. House 1 is the Lagna (Ascendant), house 7 the partnership axis, house 10 the career axis.
+         */
+        number: number;
+        /**
+         * Classical name of the bhava (house). Present when an interpretation entry exists for this house.
+         */
+        name?: string;
+        /**
+         * Significations of the bhava (house). Present when an interpretation entry exists for this house.
+         */
+        description?: string;
+    }>;
+    /**
+     * Combust planets (astangata graha): grahas within their combustion orb of the Sun. Combustion weakens a planet significations. Empty when no planet is combust.
+     */
+    combustion: Array<{
+        /**
+         * Graha that is combust (too close to the Sun, astangata).
+         */
+        planet: string;
+        /**
+         * Angular separation from the Sun in degrees.
+         */
+        distanceFromSun: number;
+        /**
+         * Combustion orb in degrees applied for this graha. A planet within this orb of the Sun is treated as combust, weakening its results.
+         */
+        orb: number;
+    }>;
+    /**
+     * Planetary wars (graha yuddha): pairs of visible planets within 1 degree of each other. Empty when no two planets are in war.
+     */
+    planetaryWar: Array<{
+        /**
+         * First graha in the planetary war (graha yuddha) pair.
+         */
+        planet1: string;
+        /**
+         * Second graha in the planetary war (graha yuddha) pair.
+         */
+        planet2: string;
+        /**
+         * Angular separation between the two grahas in degrees.
+         */
+        distance: number;
+        /**
+         * Graha that wins the planetary war, the one with the more northerly ecliptic latitude. The winner keeps its strength, the loser is weakened.
+         */
+        winner: string;
+    }>;
+    /**
+     * Planet-in-rashi and planet-in-nakshatra interpretation summaries, keyed by planet name. Translated when a supported lang is requested.
+     */
+    interpretations: {
+        [key: string]: {
+            /**
+             * Interpretation of the planet placement in its rashi (sign).
+             */
+            rashi: string;
+            /**
+             * Interpretation of the planet placement in its nakshatra.
+             */
+            nakshatra: string;
+        };
     };
     /**
      * Twelve classical yogas detected against this chart: Gajakesari (three-rule parashara definition), Sunapha, Anapha, Dhurdhura, Kemadruma, Chandra Mangala, Budha-Aditya, and the five Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Sasa). Each entry carries an `id` (matches `GET /yoga/{id}` for full glossary lookup), a `present` boolean, and classical-text `evidence` for the rule that triggered or failed.
@@ -1030,7 +1645,7 @@ export type BirthChartRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1169,7 +1784,7 @@ export type NavamsaRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1329,7 +1944,7 @@ export type DivisionalChartRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1429,7 +2044,7 @@ export type CompatibilityRequest = {
          */
         date: string;
         /**
-         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
          */
         time: string;
         /**
@@ -1454,7 +2069,7 @@ export type CompatibilityRequest = {
          */
         date: string;
         /**
-         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
          */
         time: string;
         /**
@@ -1486,6 +2101,10 @@ export type PlanetaryPositionsResponse = {
          * Sidereal longitude in degrees (0-360) using Lahiri ayanamsa. Precise planetary position for chart calculations.
          */
         longitude: number;
+        /**
+         * Ecliptic latitude in degrees, the angular distance north (positive) or south (negative) of the ecliptic. Used in planetary war (graha yuddha) winner resolution and latitude-sensitive analysis. Omitted for the Lagna (Ascendant).
+         */
+        latitude?: number;
         /**
          * House number (1-12) the planet occupies using Whole Sign house system. House 1 is the Lagna (Ascendant) sign. Essential for bhava analysis and house-level predictions.
          */
@@ -1552,6 +2171,10 @@ export type PlanetaryPositionsResponse = {
          * Angular distance from the Sun in degrees (0-180). Smaller values indicate closer proximity. Null for Sun, Rahu, Ketu, and Lagna. Useful for gauging combustion severity and planetary strength analysis.
          */
         combustionDistance?: number;
+        /**
+         * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs.
+         */
+        awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
     };
 };
 
@@ -1561,7 +2184,7 @@ export type PlanetaryPositionsRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1628,7 +2251,7 @@ export type ManglikRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1703,7 +2326,7 @@ export type KalsarpaRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1764,7 +2387,7 @@ export type SadhesatiRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -1837,7 +2460,7 @@ export type YogaDetectRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -3193,7 +3816,7 @@ export type UpagrahaRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -3307,7 +3930,7 @@ export type AshtakavargaRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -3397,7 +4020,7 @@ export type ShadbalaRequest = {
      */
     date: string;
     /**
-     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
      */
     time: string;
     /**
@@ -4575,6 +5198,10 @@ export type GetAstrologyPlanetMeaningsByIdResponses = {
         detriment?: string;
         /**
          * Sign of exaltation. Where the planet is honored and amplified. Absent for the lunar nodes, Chiron, and Black Moon Lilith.
+         */
+        exaltation?: string;
+        /**
+         * Deprecated: use exaltation. Retained for backward compatibility, scheduled for removal in v3. Sign of exaltation, carrying the same value as the exaltation field.
          */
         exultation?: string;
         /**
@@ -5825,11 +6452,11 @@ export type PostAstrologyHousesData = {
          */
         time: string;
         /**
-         * Birth location latitude in decimal degrees. Location determines the local horizon and meridian, which are fundamental to house division. Higher latitudes cause more distortion in time-based systems like Placidus.
+         * Birth location latitude in decimal degrees (-90 to 90). Location determines the local horizon and meridian, which are fundamental to house division. Higher latitudes cause more distortion in time-based systems like Placidus.
          */
         latitude: number;
         /**
-         * Birth location longitude in decimal degrees. Affects local time and horizon calculations for house cusps.
+         * Birth location longitude in decimal degrees (-180 to 180). Affects local time and horizon calculations for house cusps.
          */
         longitude: number;
         /**
@@ -6735,11 +7362,11 @@ export type PostAstrologySolarReturnData = {
          */
         returnYear: number;
         /**
-         * Latitude of the solar return location in decimal degrees. Use current residence or travel location at time of birthday — solar return charts are location-sensitive.
+         * Latitude of the solar return location in decimal degrees (-90 to 90). Use current residence or travel location at time of birthday. Solar return charts are location-sensitive.
          */
         latitude: number;
         /**
-         * Longitude of the solar return location in decimal degrees. Affects house cusps and Ascendant of the return chart.
+         * Longitude of the solar return location in decimal degrees (-180 to 180). Affects house cusps and Ascendant of the return chart.
          */
         longitude: number;
         /**
@@ -6875,7 +7502,7 @@ export type PostAstrologySolarReturnResponses = {
          */
         birthDate: string;
         /**
-         * Exact solar return moment — when the transiting Sun conjuncts the natal Sun longitude. Adjusted to requested timezone. This is your astrological birthday for the year.
+         * Exact solar return moment, when the transiting Sun conjuncts the natal Sun longitude. Adjusted to requested timezone. This is your astrological birthday for the year.
          */
         solarReturnDate: string;
         /**
@@ -6883,7 +7510,7 @@ export type PostAstrologySolarReturnResponses = {
          */
         solarReturnYear: number;
         /**
-         * Location used for the solar return chart. The Ascendant and house cusps change based on where you are at your birthday — a key technique in relocated solar returns.
+         * Location used for the solar return chart. The Ascendant and house cusps change based on where you are at your birthday, a key technique in relocated solar returns.
          */
         location: {
             /**
@@ -7120,11 +7747,11 @@ export type PostAstrologyLunarReturnData = {
          */
         returnDate: string;
         /**
-         * Latitude of the lunar return location in decimal degrees. Affects the Ascendant and house cusps of the return chart.
+         * Latitude of the lunar return location in decimal degrees (-90 to 90). Affects the Ascendant and house cusps of the return chart.
          */
         latitude: number;
         /**
-         * Longitude of the lunar return location in decimal degrees. Determines local sidereal time for house calculations.
+         * Longitude of the lunar return location in decimal degrees (-180 to 180). Determines local sidereal time for house calculations.
          */
         longitude: number;
         /**
@@ -7260,7 +7887,7 @@ export type PostAstrologyLunarReturnResponses = {
          */
         birthDate: string;
         /**
-         * Exact lunar return moment — when the transiting Moon conjuncts the natal Moon longitude. Adjusted to requested timezone. Occurs approximately every 27.3 days (one sidereal month).
+         * Exact lunar return moment, when the transiting Moon conjuncts the natal Moon longitude. Adjusted to requested timezone. Occurs approximately every 27.3 days (one sidereal month).
          */
         lunarReturnDate: string;
         /**
@@ -8998,15 +9625,15 @@ export type PostAstrologyPlanetaryReturnsData = {
          */
         planet: 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn';
         /**
-         * Approximate date near the expected planetary return (YYYY-MM-DD). Provide a date within the expected return window — the algorithm searches from this starting point.
+         * Approximate date near the expected planetary return (YYYY-MM-DD). Provide a date within the expected return window. The algorithm searches from this starting point.
          */
         approximateDate: string;
         /**
-         * Latitude of the return location in decimal degrees. Affects house cusps and Ascendant of the return chart.
+         * Latitude of the return location in decimal degrees (-90 to 90). Affects house cusps and Ascendant of the return chart.
          */
         latitude: number;
         /**
-         * Longitude of the return location in decimal degrees.
+         * Longitude of the return location in decimal degrees (-180 to 180).
          */
         longitude: number;
         /**
@@ -9146,7 +9773,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
          */
         planet: string;
         /**
-         * Exact planetary return moment — when the transiting planet conjuncts its natal longitude. Adjusted to requested timezone. Marks the beginning of a new cycle for that planet in your life.
+         * Exact planetary return moment, when the transiting planet conjuncts its natal longitude. Adjusted to requested timezone. Marks the beginning of a new cycle for that planet in your life.
          */
         returnDate: string;
         /**
@@ -10170,7 +10797,7 @@ export type PostVedicAstrologyDashaCurrentData = {
          */
         date: string;
         /**
-         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
          */
         time: string;
         /**
@@ -10479,7 +11106,7 @@ export type PostVedicAstrologyDashaMajorData = {
          */
         date: string;
         /**
-         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
          */
         time: string;
         /**
@@ -10688,7 +11315,7 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          */
         date: string;
         /**
-         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions - changes every ~2 hours. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
          */
         time: string;
         /**
@@ -12708,7 +13335,7 @@ export type GetVedicAstrologyYogaByIdData = {
         /**
          * Yoga identifier (lowercase, hyphenated)
          */
-        id: string;
+        id: 'gajakesari' | 'sunapha' | 'anapha' | 'dhurdhura' | 'kemadruma' | 'chandramangala' | 'adhi' | 'chatussagara' | 'vasumathi' | 'rajalakshana' | 'vanchanachorabheethi' | 'sakata' | 'amala' | 'parvata' | 'kahala' | 'vesi' | 'vasi' | 'obhayachari' | 'hamsa' | 'malavya' | 'sasa' | 'ruchaka' | 'bhadra' | 'budhaaditya' | 'mahabhagya' | 'pushkala' | 'lakshmi' | 'gauri' | 'bharathi' | 'chapa' | 'sreenatha' | 'lagnamalika' | 'dhanamalika' | 'vikramamalika' | 'sukhamalika' | 'putramalika' | 'satrumalika' | 'kalatramalika' | 'randhramalika' | 'bhagyamalika' | 'karmamalika' | 'labhamalika' | 'vrayamalika' | 'sankha' | 'bheri' | 'mridanga' | 'parijatha' | 'gaja' | 'kalanidhi' | 'amsavatara' | 'hariharabrahma' | 'kusuma' | 'matsya' | 'kurma' | 'devendra' | 'makuta' | 'chandika' | 'jaya' | 'vidyut' | 'gandharva' | 'siva' | 'vishnu' | 'brahma' | 'indra' | 'ravi' | 'garuda' | 'go' | 'gola' | 'thrilochana' | 'kulavardhana' | 'yupa' | 'ishu' | 'sakti' | 'danda' | 'nav' | 'kuta' | 'chhatra' | 'chapa-2' | 'ardhachandra' | 'chandra' | 'gada' | 'sakata-2' | 'vihaga' | 'vajra' | 'yava' | 'sringhataka' | 'hala' | 'kamala' | 'vapee' | 'samudra' | 'vallaki' | 'damni' | 'pasa' | 'kedara' | 'sula' | 'yuga' | 'gola-2' | 'rajju' | 'musala' | 'nala' | 'srik' | 'sarpa' | 'duryoga' | 'daridra' | 'harsha' | 'sarala' | 'vimala' | 'sareerasoukhya' | 'dehapushti' | 'dehakashta' | 'rogagrastha' | 'krisanga' | 'krisanga-2' | 'dehasthoulya' | 'dehasthoulya-2' | 'dehasthoulya-3' | 'sadasanchara' | 'dhana' | 'dhana-2' | 'dhana-3' | 'dhana-4' | 'dhana-5' | 'dhana-6' | 'dhana-7' | 'dhana-8' | 'dhana-9' | 'dhana-10' | 'dhana-11' | 'bahudravyarjana' | 'swaveeryaddhana' | 'swaveeryaddhana-2' | 'swaveeryaddhana-3' | 'madhyavayasidhana' | 'anthyavayasidhana' | 'balyadhana' | 'bhratrumooladdhanaprapti' | 'bhratrumooladdhanaprapti-2' | 'matrumooladdhana' | 'putramooladdhana' | 'satrumooladdhana' | 'kalatramooladdhana' | 'amarananthadhana' | 'ayatnadhanalabha' | 'daridra-2' | 'daridra-3' | 'daridra-4' | 'daridra-5' | 'daridra-6' | 'daridra-7' | 'daridra-8' | 'daridra-9' | 'daridra-10' | 'daridra-11' | 'yukthisamanwithavagmi' | 'yukthisamanwithavagmi-2' | 'parihasaka' | 'asatyavadi' | 'jada' | 'bhaskara' | 'marud' | 'saraswathi' | 'budha' | 'mooka' | 'netranasa' | 'andha' | 'sumukha' | 'sumukha-2' | 'durmukha' | 'durmukha-2' | 'bhojanasoukhya' | 'annadana' | 'parannabhojana' | 'sraddhannabhuktha' | 'sarpaganda' | 'vakchalana' | 'vishaprayoga' | 'bhratruvriddhi' | 'sodaranasa' | 'ekabhagini' | 'dwadasasahodara' | 'sapthasankhyasahodara' | 'parakrama' | 'yuddhapraveena' | 'yuddhatpoorvadridhachitta' | 'yuddhatpaschaddrudha' | 'satkathadisravana' | 'uttamagriha' | 'vichitrasaudhaprakara' | 'ayatnagrihaprapta' | 'ayatnagrihaprapta-2' | 'grihanasa' | 'grihanasa-2' | 'bandhupujya' | 'bandhupujya-2' | 'bandhubhisthyaktha' | 'matrudeerghayur' | 'matrudeerghayur-2' | 'matrunasa' | 'matrunasa-2' | 'matrugami' | 'sahodareesangama' | 'kapata' | 'kapata-2' | 'kapata-3' | 'nishkapata' | 'nishkapata-2' | 'matrusatrutwa' | 'matrusneha' | 'vahana' | 'vahana-2' | 'anapathya' | 'sarpasapa' | 'sarpasapa-2' | 'sarpasapa-3' | 'sarpasapa-4' | 'pitrusapasutakshaya' | 'matrusapasutakshaya' | 'bhratrusapasutakshaya' | 'pretasapa' | 'bahuputra' | 'bahuputra-2' | 'dattaputra' | 'dattaputra-2' | 'aputra' | 'ekaputra' | 'suputra' | 'kalanirdesatputra' | 'kalanirdesatputra-2' | 'kalanirdesatputranasa' | 'kalanirdesatputranasa-2' | 'buddhimaturya' | 'theevrabuddhi' | 'buddhijada' | 'thrikalagnana' | 'putrasukha' | 'jara' | 'jarajaputra' | 'bahustree' | 'satkalatra' | 'bhagachumbana' | 'bhagya' | 'jananatpurvampitrumarana' | 'dhatrutwa' | 'apakeerti' | 'raja' | 'raja-2' | 'raja-3' | 'raja-4' | 'raja-5' | 'raja-6' | 'raja-7' | 'raja-8' | 'raja-9' | 'raja-10' | 'raja-11' | 'raja-12' | 'raja-13' | 'raja-14' | 'raja-15' | 'raja-16' | 'raja-17' | 'raja-18' | 'raja-19' | 'galakarna' | 'vrana' | 'sisnavyadhi' | 'kalatrashanda' | 'kushtaroga' | 'kushtaroga-2' | 'kshayaroga' | 'bandhana' | 'karascheda' | 'sirachcheda' | 'durmarana' | 'yuddhemarana' | 'sanghatakamarana' | 'sanghatakamarana-2' | 'peenasaroga' | 'pittaroga' | 'vikalangapatni' | 'putrakalatraheena' | 'bharyasahavyabhichara' | 'vamsacheda' | 'guhyaroga' | 'angaheena' | 'swetakushta' | 'pisachagrastha' | 'andha-2' | 'andha-3' | 'vatharoga' | 'matibhramana' | 'matibhramana-2' | 'matibhramana-3' | 'matibhramana-4' | 'khalwata' | 'nishturabhashi' | 'rajabhrashta' | 'raja-20' | 'raja-21' | 'gohanta';
     };
     query?: {
         /**
@@ -12996,7 +13623,7 @@ export type GetVedicAstrologyKpAyanamsaData = {
     path?: never;
     query?: {
         /**
-         * Date for ayanamsa calculation in YYYY-MM-DD format. Defaults to today if not provided. Ayanamsa changes by ~0.01° per month due to Earth's precession.
+         * Date for ayanamsa calculation in YYYY-MM-DD format. Defaults to today if not provided. Ayanamsa changes by ~0.01 degrees per month due to the precession of Earth.
          */
         date?: string;
     };
@@ -14515,6 +15142,10 @@ export type PostVedicAstrologyAspectsMonthlyResponses = {
          */
         month: number;
         /**
+         * Timezone offset from UTC in hours that the event dates and times are reported in. Echoes the requested timezone.
+         */
+        timezone: number;
+        /**
          * All planetary aspect events detected during the month, sorted chronologically by closest approach date.
          */
         events: Array<{
@@ -14705,6 +15336,10 @@ export type PostVedicAstrologyAspectsLunarResponses = {
          * Month of the lunar aspect analysis.
          */
         month: number;
+        /**
+         * Timezone offset from UTC in hours that the event dates and times are reported in. Echoes the requested timezone.
+         */
+        timezone: number;
         /**
          * All Moon aspect events during the month, sorted chronologically. Moon completes one full cycle in approximately 27 days.
          */
@@ -15702,6 +16337,10 @@ export type PostVedicAstrologyEclipticCrossingsResponses = {
          */
         year: number;
         /**
+         * Timezone offset from UTC in hours that the event dates and times are reported in. Echoes the requested timezone.
+         */
+        timezone: number;
+        /**
          * All ecliptic crossing events for visible planets during the year, sorted chronologically.
          */
         events: Array<{
@@ -15870,7 +16509,7 @@ export type GetVedicAstrologyRashisByIdData = {
         /**
          * Rashi ID slug. One of: mesha, vrishabha, mithun, karka, simha, kanya, tula, vrischika, dhanu, makar, kumbha, meen.
          */
-        id: string;
+        id: 'mesha' | 'vrishabha' | 'mithun' | 'karka' | 'simha' | 'kanya' | 'tula' | 'vrischika' | 'dhanu' | 'makar' | 'kumbha' | 'meen';
     };
     query?: {
         /**
@@ -16138,7 +16777,7 @@ export type GetVedicAstrologyNakshatrasByIdData = {
         /**
          * Nakshatra ID slug. Examples: ashwini, bharani, krittika, rohini, mrigashira, ardra, punarvasu, pushya, ashlesha, magha, etc.
          */
-        id: string;
+        id: 'ashwini' | 'bharani' | 'krittika' | 'rohini' | 'mrigashira' | 'ardra' | 'punarvasu' | 'pushya' | 'ashlesha' | 'magha' | 'purva-phalguni' | 'uttara-phalguni' | 'hasta' | 'chitra' | 'swati' | 'vishakha' | 'anuradha' | 'jyeshtha' | 'moola' | 'purva-ashadha' | 'uttara-ashadha' | 'shravana' | 'dhanishta' | 'shatabhisha' | 'purva-bhadrapada' | 'uttara-bhadrapada' | 'revati';
     };
     query?: {
         /**
@@ -23863,7 +24502,7 @@ export type GetIchingHexagramsData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Maximum items to return per page. Range: 1-20, default 20.
+         * Maximum items to return per page. Range: 1-64, default 20.
          */
         limit?: number;
         /**

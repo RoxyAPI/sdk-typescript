@@ -76,7 +76,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Get all planet meanings - Complete astrology planet interpretations list
      *
-     * Returns all 14 astrological bodies (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith) with essential meanings: name, symbol, tagline, category (personal/social/generational), ruling sign, and short descriptions. Perfect for astrology reference apps, planet meaning widgets, birth chart interpretation tools, astrology learning platforms, planetary keywords reference, and zodiac planet guides. Use GET /planet-meanings/{id} for complete profiles with detailed interpretations, keywords, temperature, and dignities (rulership/detriment/exultation/fall).
+     * Returns all 14 astrological bodies (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith) with essential meanings: name, symbol, tagline, category (personal/social/generational), ruling sign, and short descriptions. Perfect for astrology reference apps, planet meaning widgets, birth chart interpretation tools, astrology learning platforms, planetary keywords reference, and zodiac planet guides. Use GET /planet-meanings/{id} for complete profiles with detailed interpretations, keywords, temperature, and dignities (rulership/detriment/exaltation/fall).
      */
     public listPlanetMeanings<ThrowOnError extends boolean = false>(options?: Options<GetAstrologyPlanetMeaningsData, ThrowOnError>) {
         return (options?.client ?? this.client).get<GetAstrologyPlanetMeaningsResponses, GetAstrologyPlanetMeaningsErrors, ThrowOnError>({
@@ -89,7 +89,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Get planet meaning details - Complete astrology planet interpretation
      *
-     * Retrieve comprehensive planet interpretation for any astrological planet using lowercase ID (e.g., "sun", "moon") or case-insensitive name (e.g., "Sun", "MOON"). Returns complete astrology meaning including: symbol, tagline, category (personal/social/generational), temperature, orbital period, retrograde status, dignities (rulership/detriment/exultation/fall), positive and negative keywords, and short/long descriptions. Perfect for birth chart readings, planet meaning lookups, astrology education, natal chart interpretation, transit meanings, planetary symbolism reference, and keyword-based interpretations.
+     * Retrieve comprehensive planet interpretation for any astrological planet using lowercase ID (e.g., "sun", "moon") or case-insensitive name (e.g., "Sun", "MOON"). Returns complete astrology meaning including: symbol, tagline, category (personal/social/generational), temperature, orbital period, retrograde status, dignities (rulership/detriment/exaltation/fall), positive and negative keywords, and short/long descriptions. Perfect for birth chart readings, planet meaning lookups, astrology education, natal chart interpretation, transit meanings, planetary symbolism reference, and keyword-based interpretations.
      */
     public getPlanetMeaning<ThrowOnError extends boolean = false>(options: Options<GetAstrologyPlanetMeaningsByIdData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetAstrologyPlanetMeaningsByIdResponses, GetAstrologyPlanetMeaningsByIdErrors, ThrowOnError>({
@@ -277,7 +277,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Solar Return Chart - Annual birthday forecast with relocated chart
      *
-     * Generate a solar return chart for any year — the foundational technique for annual astrological forecasting. The chart is cast for the exact moment the transiting Sun returns to its natal ecliptic longitude (your astrological birthday). Returns full tropical zodiac chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Location-sensitive: relocating your solar return chart to a different city changes the houses and Ascendant. Solar return chart API, annual horoscope forecast, birthday chart calculator, yearly astrology prediction, relocated solar return.
+     * Generate a solar return chart for any year, the foundational technique for annual astrological forecasting. The chart is cast for the exact moment the transiting Sun returns to its natal ecliptic longitude (your astrological birthday). Returns full tropical zodiac chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Location-sensitive: relocating your solar return chart to a different city changes the houses and Ascendant. Solar return chart API, annual horoscope forecast, birthday chart calculator, yearly astrology prediction, relocated solar return.
      */
     public generateSolarReturn<ThrowOnError extends boolean = false>(options?: Options<PostAstrologySolarReturnData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostAstrologySolarReturnResponses, PostAstrologySolarReturnErrors, ThrowOnError>({
@@ -294,7 +294,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Lunar Return Chart - Monthly emotional forecast with Moon cycle chart
      *
-     * Generate a lunar return chart for any month — cast for the exact moment the transiting Moon returns to its natal ecliptic longitude. The Moon completes one sidereal orbit every ~27.3 days, making this the primary technique for monthly astrological forecasting. Returns full tropical zodiac chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Reveals emotional patterns, domestic focus, and intuitive themes for the coming month. Lunar return chart API, monthly horoscope forecast, Moon cycle chart, emotional astrology prediction.
+     * Generate a lunar return chart for any month, cast for the exact moment the transiting Moon returns to its natal ecliptic longitude. The Moon completes one sidereal orbit every ~27.3 days, making this the primary technique for monthly astrological forecasting. Returns full tropical zodiac chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Reveals emotional patterns, domestic focus, and intuitive themes for the coming month. Lunar return chart API, monthly horoscope forecast, Moon cycle chart, emotional astrology prediction.
      */
     public generateLunarReturn<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyLunarReturnData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostAstrologyLunarReturnResponses, PostAstrologyLunarReturnErrors, ThrowOnError>({
