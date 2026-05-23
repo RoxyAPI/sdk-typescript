@@ -37,8 +37,8 @@ jobs:
       - name: Docs drift check
         run: |
           bun run docs:sync
-          git diff --exit-code -- README.md AGENTS.md \
-            || { echo 'docs drift: commit the regenerated README.md/AGENTS.md'; exit 1; }
+          git diff --exit-code -- README.md AGENTS.md docs/llms-full.txt \
+            || { echo 'docs drift: commit the regenerated README.md/AGENTS.md/llms-full.txt'; exit 1; }
 
       - name: Test
         run: bun run test

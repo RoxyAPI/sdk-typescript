@@ -45,6 +45,8 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.vedicAstrology` | 43 | Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers |
 | `roxy.numerology` | 16 | Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers |
 | `roxy.tarot` | 10 | Production-ready tarot card reading API + hosted MCP for AI agents and developers |
+| `roxy.humanDesign` | 10 | Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i... |
+| `roxy.forecast` | 3 | Merge upcoming transit aspects, sign ingresses, retrograde stations, Vimshottari dasha changes, and biorhythm critica... |
 | `roxy.biorhythm` | 6 | The most complete biorhythm API + remote MCP for AI agents and developers |
 | `roxy.iching` | 9 | I-Ching oracle API + hosted MCP for AI agents and developers |
 | `roxy.crystals` | 12 | Production-ready crystal healing API + hosted MCP for AI agents and developers |

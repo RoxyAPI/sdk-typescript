@@ -9,7 +9,9 @@ import { createRoxy } from '@roxyapi/sdk';
 const roxy = createRoxy(process.env.ROXY_API_KEY!);
 ```
 
-**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `fr`, `hi`, `pt`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, tarot, numerology, crystals, iching, angelNumbers, biorhythm. English-only: dreams, location, usage. Languages without translations yet fall back to English.
+<!-- BEGIN:LANGS -->
+**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, numerology, tarot, humanDesign, forecast, biorhythm, iching, crystals, angelNumbers. English-only: dreams, location, usage, languages. Languages without translations yet fall back to English.
+<!-- END:LANGS -->
 
 ```typescript
 const { data } = await roxy.astrology.getDailyHoroscope({
@@ -20,417 +22,660 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 
 ---
 
-## Astrology (Western) — `roxy.astrology`
+<!-- Method sections below are generated from the OpenAPI spec by scripts/sync-docs.ts. Do not hand-edit between the BEGIN/END:METHODS markers; edit the spec instead. The intro above and the Error Handling / Advanced / Links sections below are curated. -->
+<!-- BEGIN:METHODS -->
 
-Tropical zodiac, Placidus houses, positions verified against NASA JPL Horizons.
+## Western Astrology — `roxy.astrology`
 
-### Horoscopes
-
-```typescript
-// Daily horoscope for one sign
-const { data } = await roxy.astrology.getDailyHoroscope({
-  path: { sign: 'aries' },
-});
-// Returns: { sign, date, overview, love, career, health, finance, advice, luckyNumber, luckyColor, compatibleSigns }
-
-// All 12 daily horoscopes
-const { data } = await roxy.astrology.getAllDailyHoroscopes();
-
-// Weekly horoscope
-const { data } = await roxy.astrology.getWeeklyHoroscope({ path: { sign: 'aries' } });
-
-// Monthly horoscope
-const { data } = await roxy.astrology.getMonthlyHoroscope({ path: { sign: 'aries' } });
-```
-
-Valid signs: `aries`, `taurus`, `gemini`, `cancer`, `leo`, `virgo`, `libra`, `scorpio`, `sagittarius`, `capricorn`, `aquarius`, `pisces`
-
-### Zodiac Signs and Planets
+Production-ready Western astrology API + remote MCP for AI agents and developers
 
 ```typescript
-// All 12 zodiac signs
+// Get all zodiac signs - Complete zodiac signs list with dates and elements
 const { data } = await roxy.astrology.listZodiacSigns();
 
-// Single sign details (personality, compatibility, traits)
-const { data } = await roxy.astrology.getZodiacSign({ path: { identifier: 'aries' } });
+// Get zodiac sign details - Complete astrology sign profile with personality traits
+const { data } = await roxy.astrology.getZodiacSign({ path: { id: 'aries' } });
 
-// All 10 planet meanings
+// Get all planet meanings - Complete astrology planet interpretations list
 const { data } = await roxy.astrology.listPlanetMeanings();
 
-// Single planet details
-const { data } = await roxy.astrology.getPlanetMeaning({ path: { identifier: 'venus' } });
-```
+// Get planet meaning details - Complete astrology planet interpretation
+const { data } = await roxy.astrology.getPlanetMeaning({ path: { id: 'sun' } });
 
-### Birth Charts and Calculations
-
-All POST. Body requires: `date` (YYYY-MM-DD), `time` (HH:MM:SS), `latitude`, `longitude`. Optional: `timezone` (IANA, e.g. "America/New_York").
-
-```typescript
-// Natal chart — 10 planets, 12 houses, aspects
+// Generate natal chart - Birth chart calculator API with houses and aspects
 const { data } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Planetary positions (ephemeris)
-const { data } = await roxy.astrology.getPlanetaryPositions({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// House cusps (Placidus, Whole Sign, Equal, Koch)
-const { data } = await roxy.astrology.calculateHouses({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209, houseSystem: 'placidus' },
-});
-
-// Planetary aspects
-const { data } = await roxy.astrology.calculateAspects({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Transits (current planets vs natal)
-const { data } = await roxy.astrology.calculateTransits({
-  body: { date: '2026-03-27', time: '12:00:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Transit aspects with interpretations
-const { data } = await roxy.astrology.calculateTransitAspects({
-  body: { date: '2026-03-27', time: '12:00:00', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
-### Compatibility and Returns
-
-```typescript
-// Compatibility score (0-100 with category breakdown)
-const { data } = await roxy.astrology.calculateCompatibility({
   body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
-    person2: { date: '1992-06-20', time: '09:00:00', latitude: 19.07, longitude: 72.87 },
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
   },
 });
 
-// Synastry (relationship aspects between two charts)
+// Get planetary positions - Ephemeris calculator for all planets
+const { data } = await roxy.astrology.getPlanetaryPositions({
+  body: {
+    date: '2025-12-18',
+    time: '12:00:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+  },
+});
+
+// Get current moon phase - Lunar phase calculator with zodiac sign
+const { data } = await roxy.astrology.getCurrentMoonPhase({
+  query: { date: '2025-12-18', time: '12:00:00', timezone: 0 },
+});
+
+// Get upcoming moon phases - Next new moon, full moon, quarters
+const { data } = await roxy.astrology.getUpcomingMoonPhases({ query: { startDate: '2025-12-18', count: 8 } });
+
+// Get lunar calendar - Moon phases for entire month
+const { data } = await roxy.astrology.getMoonCalendar({ path: { year: 2026, month: 3 } });
+
+// Calculate synastry - Relationship compatibility analysis API
 const { data } = await roxy.astrology.calculateSynastry({
   body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
-    person2: { date: '1992-06-20', time: '09:00:00', latitude: 19.07, longitude: 72.87 },
+    person1: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+      name: 'Alex',
+    },
+    person2: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+      name: 'Alex',
+    },
+    houseSystem: 'placidus',
   },
 });
 
-// Composite chart (midpoint relationship chart)
+// Calculate house cusps - House system calculator with comparison
+const { data } = await roxy.astrology.calculateHouses({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
+});
+
+// Calculate planetary aspects - Aspect finder for any date and time
+const { data } = await roxy.astrology.calculateAspects({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    timezone: -5,
+    planets: ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'],
+    aspectTypes: ['CONJUNCTION', 'OPPOSITION', 'TRINE', 'SQUARE'],
+  },
+});
+
+// Detect aspect patterns - Grand Trine, Kite, T-Square, Grand Cross, Yod, Mystic Rectangle, Stellium
+const { data } = await roxy.astrology.detectAspectPatterns({
+  query: { strictOrbs: 'false', include: '' },
+  body: {
+    date: '1955-02-24',
+    time: '19:15:00',
+    latitude: 37.77,
+    longitude: -122.42,
+    timezone: -8,
+  },
+});
+
+// Calculate planetary transits - Current transits with natal chart comparison
+const { data } = await roxy.astrology.calculateTransits({
+  body: { date: '2025-12-19', time: '12:00:00', timezone: 0 },
+});
+
+// Transit Aspects - Detailed transit-to-natal aspect analysis with interpretations
+const { data } = await roxy.astrology.calculateTransitAspects({
+  body: {
+    natalChart: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+    },
+    transitDate: '2026-02-03',
+    transitTime: '12:00:00',
+    minStrength: 50,
+  },
+});
+
+// Solar Return Chart - Annual birthday forecast with relocated chart
+const { data } = await roxy.astrology.generateSolarReturn({
+  body: {
+    birthDate: '1990-07-15',
+    birthTime: '14:30:00',
+    returnYear: 2026,
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
+});
+
+// Lunar Return Chart - Monthly emotional forecast with Moon cycle chart
+const { data } = await roxy.astrology.generateLunarReturn({
+  body: {
+    birthDate: '1990-07-15',
+    birthTime: '14:30:00',
+    returnDate: '2026-02-12',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
+});
+
+// Composite Chart - Midpoint relationship chart with interpretations
 const { data } = await roxy.astrology.generateCompositeChart({
   body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
-    person2: { date: '1992-06-20', time: '09:00:00', latitude: 19.07, longitude: 72.87 },
+    person1: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+    },
+    person2: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+    },
+    houseSystem: 'placidus',
   },
 });
 
-// Solar return (annual birthday chart)
-const { data } = await roxy.astrology.generateSolarReturn({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
+// Compatibility Score. Relationship compatibility analysis with category breakdown
+const { data } = await roxy.astrology.calculateCompatibility({
+  body: {
+    person1: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+    },
+    person2: {
+      date: '1990-07-15',
+      time: '14:30:00',
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -5,
+    },
+  },
 });
 
-// Lunar return (monthly emotional forecast)
-const { data } = await roxy.astrology.generateLunarReturn({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
-});
+// Daily horoscope by zodiac sign - Transit-based forecast with house activations
+const { data } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' }, query: { date: '2026-04-03' } });
 
-// Planetary return (Mercury, Venus, Mars, Jupiter, Saturn)
+// Weekly horoscope by zodiac sign - 7-day transit forecast
+const { data } = await roxy.astrology.getWeeklyHoroscope({ path: { sign: 'aries' } });
+
+// Monthly horoscope by zodiac sign - 30-day transit forecast with key dates
+const { data } = await roxy.astrology.getMonthlyHoroscope({ path: { sign: 'aries' } });
+
+// Planetary Return Chart - Saturn return, Jupiter return, and inner planet cycles
 const { data } = await roxy.astrology.generatePlanetaryReturn({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
+  body: {
+    birthDate: '1990-07-15',
+    birthTime: '14:30:00',
+    planet: 'Jupiter',
+    approximateDate: '2026-08-15',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
 });
-```
-
-### Moon Phases
-
-```typescript
-// Current moon phase
-const { data } = await roxy.astrology.getCurrentMoonPhase();
-// Returns: { date, phase, illumination, age, sign, degree, distance, meaning }
-
-// Upcoming phase transitions
-const { data } = await roxy.astrology.getUpcomingMoonPhases();
-
-// Monthly moon calendar
-const { data } = await roxy.astrology.getMoonCalendar({ path: { year: 2026, month: 3 } });
 ```
 
 ---
 
 ## Vedic Astrology — `roxy.vedicAstrology`
 
-Sidereal zodiac (Lahiri ayanamsa), Placidus houses, KP system support.
-
-### Birth Charts
+Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers
 
 ```typescript
-// Rashi chart (D1)
+// Get birth chart (D1 Rashi chart) - Kundli Calculator API
 const { data } = await roxy.vedicAstrology.generateBirthChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Navamsa (D9 — marriage compatibility)
-const { data } = await roxy.vedicAstrology.generateNavamsa({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Any divisional chart (D2-D60)
-const { data } = await roxy.vedicAstrology.generateDivisionalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209, division: 9 },
-});
-```
-
-### Planetary Positions
-
-```typescript
-// Sidereal positions (9 planets + Lagna)
-const { data } = await roxy.vedicAstrology.getPlanetPositions({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Monthly ephemeris (daily positions for a month)
-const { data } = await roxy.vedicAstrology.getMonthlyEphemeris({
-  body: { date: '2026-03-01', time: '00:00:00', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
-### Dasha System
-
-```typescript
-// Current Mahadasha/Antardasha/Pratyantardasha
-const { data } = await roxy.vedicAstrology.getCurrentDasha({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// All 9 Mahadasha periods (120-year Vimshottari cycle)
-const { data } = await roxy.vedicAstrology.getMajorDashas({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Sub-dashas within a Mahadasha
-const { data } = await roxy.vedicAstrology.getSubDashas({
-  path: { mahadasha: 'Venus' },
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
-### Panchang
-
-```typescript
-// Basic (Tithi, Nakshatra, Yoga, Karana)
-const { data } = await roxy.vedicAstrology.getBasicPanchang({
-  body: { date: '2026-03-27', time: '06:00:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Detailed (all 5 limbs + sunrise/sunset/moonrise)
-const { data } = await roxy.vedicAstrology.getDetailedPanchang({
-  body: { date: '2026-03-27', time: '06:00:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Choghadiya muhurta
-const { data } = await roxy.vedicAstrology.getChoghadiya({
-  body: { date: '2026-03-27', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Hora (planetary hours)
-const { data } = await roxy.vedicAstrology.getHora({
-  body: { date: '2026-03-27', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
-### Doshas
-
-```typescript
-// Manglik dosha
-const { data } = await roxy.vedicAstrology.checkManglikDosha({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Kalsarpa dosha
-const { data } = await roxy.vedicAstrology.checkKalsarpaDosha({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-
-// Sadhesati (Saturn transit)
-const { data } = await roxy.vedicAstrology.checkSadhesati({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
-### Compatibility
-
-```typescript
-// Gun Milan (Ashtakoot matching)
-const { data } = await roxy.vedicAstrology.calculateGunMilan({
   body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
-    person2: { date: '1992-06-20', time: '09:00:00', latitude: 19.07, longitude: 72.87 },
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
   },
 });
-```
 
-### KP (Krishnamurti Paddhati) System
-
-```typescript
-// KP Ayanamsa value
-const { data } = await roxy.vedicAstrology.getKpAyanamsa();
-
-// KP planet positions with star/sub lords
-const { data } = await roxy.vedicAstrology.getKpPlanets({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Get Navamsa chart (D9) - Marriage Compatibility Calculator
+const { data } = await roxy.vedicAstrology.generateNavamsa({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// KP house cusps with ruling lords
-const { data } = await roxy.vedicAstrology.getKpCusps({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Get divisional chart (Varga) - D2 to D60 Calculator
+const { data } = await roxy.vedicAstrology.generateDivisionalChart({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    division: 10,
+  },
 });
 
-// Complete KP chart
-const { data } = await roxy.vedicAstrology.generateKpChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Calculate compatibility score - Gun Milan API (Ashtakoot Matching)
+const { data } = await roxy.vedicAstrology.calculateGunMilan({
+  body: {
+    person1: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+    person2: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+  },
 });
 
-// KP ruling planets (horary)
-const { data } = await roxy.vedicAstrology.getKpRulingPlanets({
-  body: { date: '2026-03-27', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Get planetary positions - Graha Positions API
+const { data } = await roxy.vedicAstrology.getPlanetPositions({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// KP ruling planets at intervals
-const { data } = await roxy.vedicAstrology.getKpRulingInterval({
-  body: { date: '2026-03-27', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Monthly Ephemeris - Daily sidereal planetary positions for a month
+const { data } = await roxy.vedicAstrology.getMonthlyEphemeris({
+  body: { year: 2026, month: 2, coordinateSystem: 'sidereal' },
 });
 
-// KP sublord boundary changes
-const { data } = await roxy.vedicAstrology.getKpSublordChanges({
-  body: { date: '2026-03-27', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Get current Mahadasha, Antardasha, Pratyantardasha - Dasha Calculator API
+const { data } = await roxy.vedicAstrology.getCurrentDasha({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// KP rasi (sign) changes
-const { data } = await roxy.vedicAstrology.getKpRasiChanges({
-  body: { date: '2026-03-27', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Get all 9 Mahadasha periods (120-year cycle)
+const { data } = await roxy.vedicAstrology.getMajorDashas({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// KP planets at time intervals
-const { data } = await roxy.vedicAstrology.getKpPlanetsInterval({
-  body: { date: '2026-03-27', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
-### Aspects, Transits, Parallels
-
-```typescript
-// Planetary aspects (Drishti)
-const { data } = await roxy.vedicAstrology.calculateDrishti({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Get all Antardashas (sub-periods) for a specific Mahadasha
+const { data } = await roxy.vedicAstrology.getSubDashas({
+  path: { mahadasha: 'Jupiter' },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Monthly aspect events
-const { data } = await roxy.vedicAstrology.getMonthlyAspects({
-  body: { date: '2026-03-01', time: '00:00:00', latitude: 28.6139, longitude: 77.209 },
+// Get basic Panchang - Tithi Nakshatra Yoga Karana Calculator
+const { data } = await roxy.vedicAstrology.getBasicPanchang({
+  body: {
+    date: '2025-12-17',
+    time: '12:00:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Lunar aspects for a month
-const { data } = await roxy.vedicAstrology.getLunarAspects({
-  body: { date: '2026-03-01', time: '00:00:00', latitude: 28.6139, longitude: 77.209 },
+// Get detailed Panchang with Rahu Kaal, Yamaganda, Gulika
+const { data } = await roxy.vedicAstrology.getDetailedPanchang({
+  body: {
+    date: '2026-02-03',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Transit (Gochar) vs natal
-const { data } = await roxy.vedicAstrology.calculateTransit({
-  body: { date: '2026-03-27', time: '12:00:00', latitude: 28.6139, longitude: 77.209 },
+// Get Choghadiya - 8 Muhurta divisions of day and night
+const { data } = await roxy.vedicAstrology.getChoghadiya({
+  body: {
+    date: '2026-02-03',
+    latitude: 17.385044,
+    longitude: 78.486671,
+    timezone: 5.5,
+  },
 });
 
-// Monthly sign changes
-const { data } = await roxy.vedicAstrology.getMonthlyTransits({
-  body: { date: '2026-03-01', time: '00:00:00', latitude: 28.6139, longitude: 77.209 },
+// Get Hora - 24 Planetary Hours (12 day + 12 night)
+const { data } = await roxy.vedicAstrology.getHora({
+  body: {
+    date: '2026-02-03',
+    latitude: 17.385044,
+    longitude: 78.486671,
+    timezone: 5.5,
+  },
 });
 
-// Declination parallels
-const { data } = await roxy.vedicAstrology.calculateParallels({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+// Check Manglik Dosha - Mangal Dosha Calculator API
+const { data } = await roxy.vedicAstrology.checkManglikDosha({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Monthly parallels
-const { data } = await roxy.vedicAstrology.getMonthlyParallels({
-  body: { date: '2026-03-01', time: '00:00:00', latitude: 28.6139, longitude: 77.209 },
+// Check Kalsarpa Dosha - Kalsarpa Yoga Calculator API
+const { data } = await roxy.vedicAstrology.checkKalsarpaDosha({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Ecliptic crossings
-const { data } = await roxy.vedicAstrology.getEclipticCrossings({
-  body: { date: '2026-03-01', time: '00:00:00', latitude: 28.6139, longitude: 77.209 },
+// Check Sadhesati - Sade Sati Calculator API (Saturn Transit)
+const { data } = await roxy.vedicAstrology.checkSadhesati({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
-```
 
-### Reference Data
-
-```typescript
-// All 12 rashis (Vedic signs)
-const { data } = await roxy.vedicAstrology.listRashis();
-const { data } = await roxy.vedicAstrology.getRashi({ path: { id: 1 } });
-
-// All 27 nakshatras
-const { data } = await roxy.vedicAstrology.listNakshatras();
-const { data } = await roxy.vedicAstrology.getNakshatra({ path: { id: 1 } });
-
-// 300+ yogas
+// List all planetary yogas - 300+ Vedic Yoga Glossary
 const { data } = await roxy.vedicAstrology.listYogas();
-const { data } = await roxy.vedicAstrology.getYoga({ path: { id: 1 } });
-```
 
-### Strength Analysis
+// Get yoga details by ID - Vedic Yoga Glossary Entry
+const { data } = await roxy.vedicAstrology.getYoga({ path: { id: 'gajakesari' } });
 
-```typescript
-// Upagraha (sub-planet) positions
+// Detect classical Vedic yogas in a birth chart
+const { data } = await roxy.vedicAstrology.detectYogas({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
+});
+
+// Get KP-Newcomb ayanamsa - Dynamic daily calculation
+const { data } = await roxy.vedicAstrology.getKpAyanamsa({ query: { date: '2025-12-26' } });
+
+// Get KP planetary positions with sub-lords
+const { data } = await roxy.vedicAstrology.getKpPlanets({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    ayanamsaValue: 24,
+    nodeType: 'mean',
+  },
+});
+
+// Get KP Placidus house cusps with sub-lords
+const { data } = await roxy.vedicAstrology.getKpCusps({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    ayanamsaValue: 24,
+  },
+});
+
+// Generate complete KP birth chart
+const { data } = await roxy.vedicAstrology.generateKpChart({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    ayanamsaValue: 24,
+    nodeType: 'mean',
+  },
+});
+
+// Get KP ruling planets with optional significators
+const { data } = await roxy.vedicAstrology.getKpRulingPlanets({
+  body: {
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    datetime: '2025-01-15T10:30:00Z',
+    birthDate: '1990-07-04',
+    birthTime: '10:12:00',
+    nodeType: 'mean',
+  },
+});
+
+// Get KP ruling planets with significators at intervals
+const { data } = await roxy.vedicAstrology.getKpRulingInterval({
+  body: {
+    startDatetime: '2026-02-03T00:00:00Z',
+    endDatetime: '2026-02-03T01:00:00Z',
+    intervalMinutes: 5,
+    latitude: 17.385044,
+    longitude: 78.486671,
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    nodeType: 'mean',
+  },
+});
+
+// Find KP sublord changes
+const { data } = await roxy.vedicAstrology.getKpSublordChanges({
+  body: {
+    planet: 'Moon',
+    startDate: '2025-01-01',
+    endDate: '2025-01-31',
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    nodeType: 'mean',
+  },
+});
+
+// Find KP rasi ingress times
+const { data } = await roxy.vedicAstrology.getKpRasiChanges({
+  body: {
+    planet: 'Sun',
+    startDate: '2025-01-01',
+    endDate: '2025-12-31',
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    nodeType: 'mean',
+  },
+});
+
+// Get KP planets at time intervals
+const { data } = await roxy.vedicAstrology.getKpPlanetsInterval({
+  body: {
+    startDatetime: '2025-01-15T00:00:00Z',
+    endDatetime: '2025-01-15T23:59:00Z',
+    intervalMinutes: 60,
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    nodeType: 'mean',
+  },
+});
+
+// Get planetary aspects (Drishti) - Mutual aspects between all planets
+const { data } = await roxy.vedicAstrology.calculateDrishti({
+  body: {
+    date: '2026-02-03',
+    time: '12:00:00',
+    latitude: 17.385044,
+    longitude: 78.486671,
+    timezone: 5.5,
+    coordinateSystem: 'sidereal',
+  },
+});
+
+// Monthly Planetary Aspects - Major and minor aspect events for a month
+const { data } = await roxy.vedicAstrology.getMonthlyAspects({
+  body: {
+    year: 2026,
+    month: 2,
+    timezone: 5.5,
+    coordinateSystem: 'sidereal',
+  },
+});
+
+// Monthly Lunar Aspects - Moon aspect events with all planets for a month
+const { data } = await roxy.vedicAstrology.getLunarAspects({
+  body: {
+    year: 2026,
+    month: 2,
+    timezone: 5.5,
+    coordinateSystem: 'sidereal',
+  },
+});
+
+// Transit Analysis - Compare current planets to natal chart (Gochar)
+const { data } = await roxy.vedicAstrology.calculateTransit({
+  body: {
+    birthDate: '1990-07-04',
+    birthTime: '10:12:00',
+    transitDate: '2026-02-03',
+    transitTime: '12:00:00',
+    latitude: 17.385044,
+    longitude: 78.486671,
+    timezone: 5.5,
+    coordinateSystem: 'sidereal',
+  },
+});
+
+// Monthly Transit - Planetary sign changes for an entire month
+const { data } = await roxy.vedicAstrology.getMonthlyTransits({
+  body: {
+    year: 2026,
+    month: 2,
+    timezone: 5.5,
+    coordinateSystem: 'sidereal',
+  },
+});
+
+// Declination Parallels - Planets at same or opposite declination
+const { data } = await roxy.vedicAstrology.calculateParallels({
+  body: {
+    date: '2026-02-03',
+    time: '12:00:00',
+    latitude: 17.385044,
+    longitude: 78.486671,
+    timezone: 5.5,
+    orb: 1.5,
+  },
+});
+
+// Monthly Declination Parallels - Parallel and contraparallel events for a month
+const { data } = await roxy.vedicAstrology.getMonthlyParallels({ body: { year: 2026, month: 2, timezone: 5.5 } });
+
+// Ecliptic Crossings - When planets cross the ecliptic plane
+const { data } = await roxy.vedicAstrology.getEclipticCrossings({
+  body: { year: 2026, timezone: 5.5, coordinateSystem: 'sidereal' },
+});
+
+// List all 12 Rashis - Vedic Zodiac Signs Reference
+const { data } = await roxy.vedicAstrology.listRashis();
+
+// Get Rashi by ID - Vedic Zodiac Sign Detail
+const { data } = await roxy.vedicAstrology.getRashi({ path: { id: 'mesha' } });
+
+// List all 27 Nakshatras - Lunar Mansions Reference
+const { data } = await roxy.vedicAstrology.listNakshatras();
+
+// Get Nakshatra by ID - Lunar Mansion Detail
+const { data } = await roxy.vedicAstrology.getNakshatra({ path: { id: 'ashwini' } });
+
+// Get upagraha (sub-planet) positions - Upagraha Calculator API
 const { data } = await roxy.vedicAstrology.getUpagrahaPositions({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Ashtakavarga (8-fold strength)
+// Get Ashtakavarga (planetary strength) analysis - Ashtakavarga Calculator API
 const { data } = await roxy.vedicAstrology.calculateAshtakavarga({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 
-// Shadbala (6-fold strength per BPHS)
+// Get Shadbala (six-fold planetary strength) analysis - Shadbala Calculator API
 const { data } = await roxy.vedicAstrology.calculateShadbala({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209 },
-});
-```
-
----
-
-## Tarot — `roxy.tarot`
-
-78-card Rider-Waite-Smith deck (22 Major Arcana, 56 Minor Arcana).
-
-```typescript
-// List all 78 cards
-const { data } = await roxy.tarot.listCards();
-
-// Single card details
-const { data } = await roxy.tarot.getCard({ path: { id: 0 } }); // 0 = The Fool
-
-// Draw random cards (1-78)
-const { data } = await roxy.tarot.drawCards({ body: { count: 3 } });
-
-// Daily guidance card
-const { data } = await roxy.tarot.getDailyCard({ body: { date: '2026-03-27' } });
-
-// Yes/No answer
-const { data } = await roxy.tarot.castYesNo({ body: { question: 'Should I take this job?' } });
-
-// Three-card spread (Past, Present, Future)
-const { data } = await roxy.tarot.castThreeCard({ body: { question: 'My career path' } });
-
-// Celtic Cross (10 cards, comprehensive)
-const { data } = await roxy.tarot.castCelticCross({ body: { question: 'What should I focus on?' } });
-
-// Love spread (5 cards)
-const { data } = await roxy.tarot.castLoveSpread({ body: { question: 'My relationship' } });
-
-// Career spread (7 cards, SWOT analysis)
-const { data } = await roxy.tarot.castCareerSpread({ body: { question: 'My career' } });
-
-// Custom spread (1-10 cards with named positions)
-const { data } = await roxy.tarot.castCustomSpread({
-  body: { positions: ['Current energy', 'Challenge', 'Outcome'] },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
 });
 ```
 
@@ -438,274 +683,607 @@ const { data } = await roxy.tarot.castCustomSpread({
 
 ## Numerology — `roxy.numerology`
 
-Pythagorean system.
+Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers
 
 ```typescript
-// Life Path number
-const { data } = await roxy.numerology.calculateLifePath({
-  body: { year: 1990, month: 1, day: 15 },
-});
-// Returns: { number, calculation, type, hasKarmicDebt, meaning }
+// Calculate Life Path number - Most important numerology calculation
+const { data } = await roxy.numerology.calculateLifePath({ body: { year: 1990, month: 7, day: 15 } });
 
-// Expression (Destiny) number
-const { data } = await roxy.numerology.calculateExpression({ body: { name: 'John Smith' } });
+// Calculate Expression number - Natural talents and life goals
+const { data } = await roxy.numerology.calculateExpression({ body: { fullName: 'John William Smith' } });
 
-// Soul Urge (Heart's Desire) number
-const { data } = await roxy.numerology.calculateSoulUrge({ body: { name: 'John Smith' } });
-
-// Personality number
-const { data } = await roxy.numerology.calculatePersonality({ body: { name: 'John Smith' } });
-
-// Birth Day number
-const { data } = await roxy.numerology.calculateBirthDay({ body: { day: 15 } });
-
-// Maturity number (Life Path + Expression)
-const { data } = await roxy.numerology.calculateMaturity({
-  body: { date: '1990-01-15', name: 'John Smith' },
-});
-
-// Karmic lessons (missing numbers)
-const { data } = await roxy.numerology.analyzeKarmicLessons({ body: { name: 'John Smith' } });
-
-// Karmic debt check (13, 14, 16, 19)
-const { data } = await roxy.numerology.checkKarmicDebt({
-  body: { date: '1990-01-15', name: 'John Smith' },
-});
-
-// Personal year cycle
-const { data } = await roxy.numerology.calculatePersonalYear({
-  body: { date: '1990-01-15', currentYear: 2026 },
-});
-
-// Compatibility between two people
-const { data } = await roxy.numerology.calculateNumCompatibility({
+// Calculate Bridge Numbers - Harmonize different aspects of personality
+const { data } = await roxy.numerology.calculateBridgeNumbers({
   body: {
-    person1Date: '1990-01-15', person1Name: 'John Smith',
-    person2Date: '1992-06-20', person2Name: 'Jane Doe',
+    fullName: 'John William Smith',
+    year: 1990,
+    month: 7,
+    day: 15,
   },
 });
 
-// Full numerology chart (all numbers combined)
-const { data } = await roxy.numerology.generateNumerologyChart({
-  body: { date: '1990-01-15', name: 'John Smith' },
+// Calculate Soul Urge number - Inner motivations and desires
+const { data } = await roxy.numerology.calculateSoulUrge({ body: { fullName: 'John William Smith' } });
+
+// Calculate Personality number - How others perceive you
+const { data } = await roxy.numerology.calculatePersonality({ body: { fullName: 'John William Smith' } });
+
+// Calculate Birth Day number - Special talents from day of birth
+const { data } = await roxy.numerology.calculateBirthDay({ body: { day: 23 } });
+
+// Calculate Maturity number - Who you become in later life
+const { data } = await roxy.numerology.calculateMaturity({
+  body: {
+    lifePath: 5,
+    expression: 7,
+    fullName: 'John William Smith',
+    year: 1990,
+    month: 7,
+    day: 15,
+  },
 });
 
-// Number meaning (1-9, 11, 22, 33)
-const { data } = await roxy.numerology.getNumberMeaning({ path: { number: 7 } });
+// Analyze Karmic Lessons - Life lessons from missing numbers
+const { data } = await roxy.numerology.analyzeKarmicLessons({ body: { fullName: 'John William Smith' } });
 
-// Daily numerology number
-const { data } = await roxy.numerology.getDailyNumber({ body: { date: '2026-03-27' } });
+// Detect Karmic Debt numbers - Past life challenges (13, 14, 16, 19)
+const { data } = await roxy.numerology.checkKarmicDebt({
+  body: {
+    year: 1990,
+    month: 7,
+    day: 15,
+    fullName: 'John William Smith',
+  },
+});
+
+// Calculate Personal Day - Daily personalized numerology forecast
+const { data } = await roxy.numerology.calculatePersonalDay({ body: { month: 7, day: 18, targetDate: '2026-04-04' } });
+
+// Calculate Personal Month - Monthly numerology forecast
+const { data } = await roxy.numerology.calculatePersonalMonth({ body: { month: 7, day: 18, year: 2026, targetMonth: 4 } });
+
+// Calculate Personal Year - Annual cycle and forecast for current year
+const { data } = await roxy.numerology.calculatePersonalYear({ body: { month: 7, day: 15, year: 2025 } });
+
+// Calculate Compatibility - Relationship dynamics between two people
+const { data } = await roxy.numerology.calculateNumCompatibility({
+  body: {
+    person1: {
+      lifePath: 5,
+      expression: 7,
+      soulUrge: 6,
+      fullName: 'John William Smith',
+      year: 1990,
+      month: 7,
+      day: 15,
+    },
+    person2: {
+      lifePath: 3,
+      expression: 9,
+      soulUrge: 2,
+      fullName: 'Jane Marie Doe',
+      year: 1992,
+      month: 3,
+      day: 22,
+    },
+  },
+});
+
+// Generate Complete Numerology Chart - Full profile analysis
+const { data } = await roxy.numerology.generateNumerologyChart({
+  body: {
+    fullName: 'John William Smith',
+    year: 1990,
+    month: 7,
+    day: 15,
+    currentYear: 2025,
+  },
+});
+
+// Get Number Meaning - Interpretation for any number 1-9, 11, 22, 33
+const { data } = await roxy.numerology.getNumberMeaning({ path: { number: '5' } });
+
+// Get daily numerology number - Number of the Day with interpretation
+const { data } = await roxy.numerology.getDailyNumber({ body: { seed: 'user123', date: '2026-03-06' } });
 ```
 
 ---
 
-## Crystals — `roxy.crystals`
+## Tarot — `roxy.tarot`
 
-Healing properties, zodiac/chakra associations, birthstones.
+Production-ready tarot card reading API + hosted MCP for AI agents and developers
 
 ```typescript
-// All crystals (paginated)
-const { data } = await roxy.crystals.listCrystals();
+// List all 78 tarot cards
+const { data } = await roxy.tarot.listCards({
+  query: {
+    limit: 20,
+    offset: 0,
+    arcana: 'major',
+    suit: 'cups',
+    number: 1,
+  },
+});
 
-// Single crystal details
-const { data } = await roxy.crystals.getCrystal({ path: { slug: 'amethyst' } });
+// Get detailed tarot card information
+const { data } = await roxy.tarot.getCard({ path: { id: 'fool' } });
 
-// Search by keyword
-const { data } = await roxy.crystals.searchCrystals({ query: { q: 'love' } });
+// Draw random tarot cards with reproducible results
+const { data } = await roxy.tarot.drawCards({
+  body: {
+    count: 3,
+    seed: 'user123-2025-12-27',
+    allowReversals: true,
+    allowDuplicates: false,
+  },
+});
 
-// By zodiac sign
-const { data } = await roxy.crystals.getCrystalsByZodiac({ path: { sign: 'pisces' } });
+// Get daily tarot card reading
+const { data } = await roxy.tarot.getDailyCard({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// By chakra
-const { data } = await roxy.crystals.getCrystalsByChakra({ path: { chakra: 'heart' } });
+// Get yes/no answer to your question
+const { data } = await roxy.tarot.castYesNo({
+  body: {
+    question: 'Should I accept the job offer?',
+    seed: 'optional-seed',
+  },
+});
 
-// By element
-const { data } = await roxy.crystals.getCrystalsByElement({ path: { element: 'water' } });
+// Three-Card Spread: Past, Present, Future
+const { data } = await roxy.tarot.castThreeCard({
+  body: {
+    question: 'What do I need to know about my career?',
+    seed: 'optional-seed',
+  },
+});
 
-// Birthstones by month
-const { data } = await roxy.crystals.getBirthstones({ path: { month: 3 } });
+// Celtic Cross Spread (10 cards)
+const { data } = await roxy.tarot.castCelticCross({
+  body: {
+    question: 'What should I know about this situation?',
+    seed: 'optional-seed',
+  },
+});
 
-// Crystal pairings
-const { data } = await roxy.crystals.getCrystalPairings({ path: { slug: 'amethyst' } });
+// Love Spread (5 cards)
+const { data } = await roxy.tarot.castLoveSpread({
+  body: {
+    question: 'What do I need to know about my relationship?',
+    seed: 'optional-seed',
+  },
+});
 
-// Daily crystal
-const { data } = await roxy.crystals.getDailyCrystal();
+// Career Spread (7 cards)
+const { data } = await roxy.tarot.castCareerSpread({
+  body: {
+    question: 'What do I need to know about my career path?',
+    seed: 'optional-seed',
+  },
+});
 
-// Random crystal
-const { data } = await roxy.crystals.getRandomCrystal();
-
-// All crystal colors
-const { data } = await roxy.crystals.listCrystalColors();
-
-// All planetary associations
-const { data } = await roxy.crystals.listCrystalPlanets();
+// Custom Spread Builder
+const { data } = await roxy.tarot.castCustomSpread({
+  body: {
+    spreadName: 'My Custom Spread',
+    positions: [
+      {
+        name: 'Core Issue',
+        interpretation: 'What is really going on',
+      },
+      {
+        name: 'Hidden Factor',
+        interpretation: 'What you cannot see',
+      },
+      { name: 'Best Action', interpretation: 'What to do next' },
+    ],
+    question: 'Optional question',
+    seed: 'optional-seed',
+  },
+});
 ```
 
 ---
 
-## I Ching — `roxy.iching`
+## Human Design — `roxy.humanDesign`
 
-64 hexagrams, 8 trigrams, traditional coin casting.
+Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i...
 
 ```typescript
-// Cast a reading (3-coin method)
-const { data } = await roxy.iching.castReading();
-// Returns: { hexagram, lines, changingLinePositions, resultingHexagram }
+// Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
+const { data } = await roxy.humanDesign.generateBodygraph({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 
-// Daily hexagram
-const { data } = await roxy.iching.getDailyHexagram({ body: { date: '2026-03-27' } });
+// Calculate Human Design connection chart - Two-person composite bodygraph compatibility
+const { data } = await roxy.humanDesign.calculateConnection({
+  body: {
+    personA: {
+      date: '1990-07-15',
+      time: '13:00:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+    personB: {
+      date: '1990-07-15',
+      time: '13:00:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+  },
+});
 
-// Daily reading with changing lines
-const { data } = await roxy.iching.castDailyReading({ body: { date: '2026-03-27' } });
+// Generate Human Design transit overlay - Current planetary activations on a natal bodygraph
+const { data } = await roxy.humanDesign.generateTransit({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:00:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+    date: '2026-05-23',
+    time: '12:00:00',
+  },
+});
 
-// All 64 hexagrams
-const { data } = await roxy.iching.listHexagrams();
+// Calculate Human Design type, authority and profile
+const { data } = await roxy.humanDesign.calculateType({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 
-// Single hexagram by King Wen number (1-64)
-const { data } = await roxy.iching.getHexagram({ path: { number: 1 } });
+// Calculate the 26 Human Design gate activations
+const { data } = await roxy.humanDesign.calculateGates({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 
-// Random hexagram
-const { data } = await roxy.iching.getRandomHexagram();
+// Look up a Human Design gate by number
+const { data } = await roxy.humanDesign.getGate({ path: { number: 34 } });
 
-// Lookup by binary line pattern
-const { data } = await roxy.iching.lookupHexagram({ query: { lines: '111111' } });
+// Calculate the defined Human Design channels
+const { data } = await roxy.humanDesign.calculateChannels({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 
-// All 8 trigrams
-const { data } = await roxy.iching.listTrigrams();
+// Calculate the nine Human Design centers
+const { data } = await roxy.humanDesign.calculateCenters({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 
-// Single trigram
-const { data } = await roxy.iching.getTrigram({ path: { identifier: 'heaven' } });
+// Look up a Human Design center by id
+const { data } = await roxy.humanDesign.getCenter({ path: { id: 'sacral' } });
+
+// Calculate the Human Design profile and line keynotes
+const { data } = await roxy.humanDesign.calculateProfile({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 ```
 
 ---
 
-## Angel Numbers — `roxy.angelNumbers`
+## Forecast — `roxy.forecast`
 
-Angel numbers with spiritual meanings and pattern analysis.
-
-```typescript
-// All angel numbers
-const { data } = await roxy.angelNumbers.listAngelNumbers();
-
-// Single angel number meaning
-const { data } = await roxy.angelNumbers.getAngelNumber({ path: { number: '1111' } });
-
-// Analyze any number sequence
-const { data } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234' } });
-
-// Daily angel number
-const { data } = await roxy.angelNumbers.getDailyAngelNumber();
-```
-
----
-
-## Dreams — `roxy.dreams`
-
-Dream symbol dictionary and interpretations.
+Merge upcoming transit aspects, sign ingresses, retrograde stations, Vimshottari dasha changes, and biorhythm critica...
 
 ```typescript
-// Search symbols
-const { data } = await roxy.dreams.searchDreamSymbols({ query: { q: 'flying' } });
+// Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
+const { data } = await roxy.forecast.generateTimeline({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-08-30',
+    domains: ['western', 'vedic', 'biorhythm'],
+    minSignificance: 0,
+  },
+});
 
-// Random symbols
-const { data } = await roxy.dreams.getRandomSymbols();
+// Western transit forecast - Transit aspects, sign ingresses, retrograde stations
+const { data } = await roxy.forecast.forecastTransits({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-08-30',
+    minSignificance: 0,
+  },
+});
 
-// Letter counts (A-Z index)
-const { data } = await roxy.dreams.getSymbolLetterCounts();
-
-// Single symbol interpretation
-const { data } = await roxy.dreams.getDreamSymbol({ path: { id: 'flying' } });
-
-// Daily dream symbol
-const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { date: '2026-03-27' } });
+// Significant dates - High-significance cross-domain forecast highlights
+const { data } = await roxy.forecast.findSignificantDates({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-08-30',
+    domains: ['western', 'vedic', 'biorhythm'],
+    minSignificance: 70,
+  },
+});
 ```
 
 ---
 
 ## Biorhythm — `roxy.biorhythm`
 
-10-cycle biorhythm calculations (physical, emotional, intellectual, intuitive, aesthetic, awareness, spiritual, passion, mastery, wisdom). All methods are POST. Only `birthDate` (`YYYY-MM-DD`) is required; dates default to today (UTC) when omitted. Every method accepts an optional `query: { lang }` (`en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`).
+The most complete biorhythm API + remote MCP for AI agents and developers
 
 ```typescript
-// Complete reading for a target date — all 10 cycles, phase detection, energy rating, interpretation, advice, critical day alerts
+// Get biorhythm reading - Complete cycle analysis for any date
 const { data } = await roxy.biorhythm.getReading({
-  body: { birthDate: '1990-01-15', targetDate: '2026-04-14' },
+  body: { birthDate: '1990-07-15', targetDate: '2026-04-10' },
 });
 
-// Multi-day forecast (max 90-day range). Returns daily cycle values, energy ratings, critical days, best/worst day summary
+// Get biorhythm forecast - Multi-day cycle predictions with best and worst days
 const { data } = await roxy.biorhythm.getForecast({
-  body: { birthDate: '1990-01-15', startDate: '2026-04-14', endDate: '2026-05-14' },
-});
-
-// Critical days (zero crossings) in a range (max 180 days). Flags rare double and triple critical days
-const { data } = await roxy.biorhythm.getCriticalDays({
-  body: { birthDate: '1990-01-15', startDate: '2026-04-14', endDate: '2026-07-14' },
-});
-
-// Compatibility between two people on a target date (per-cycle scores, overall rating, strengths, challenges, advice)
-const { data } = await roxy.biorhythm.calculateBioCompatibility({
   body: {
-    person1: { birthDate: '1990-01-15' },
-    person2: { birthDate: '1988-06-22' },
-    targetDate: '2026-04-14',
+    birthDate: '1990-07-15',
+    startDate: '2026-04-01',
+    endDate: '2026-04-30',
   },
 });
 
-// Lightweight phase info for dashboards and widgets — no editorial text
-const { data } = await roxy.biorhythm.getPhases({
-  body: { birthDate: '1990-01-15' },
+// Find critical days - Zero crossing detection for any date range
+const { data } = await roxy.biorhythm.getCriticalDays({
+  body: {
+    birthDate: '1990-07-15',
+    startDate: '2026-04-01',
+    endDate: '2026-06-30',
+  },
 });
 
-// Daily check-in with seeded randomness — same seed + same date = same reading (perfect for push notifications)
-const { data } = await roxy.biorhythm.getDailyBiorhythm({
-  body: { birthDate: '1990-01-15', seed: 'user-123' },
+// Calculate compatibility - Biorhythm alignment between two people
+const { data } = await roxy.biorhythm.calculateBioCompatibility({
+  body: {
+    person1: { birthDate: '1990-07-15' },
+    person2: { birthDate: '1992-03-22' },
+    targetDate: '2026-04-10',
+  },
 });
+
+// Get phase info - Lightweight cycle status for dashboards and widgets
+const { data } = await roxy.biorhythm.getPhases({
+  body: { birthDate: '1990-07-15', targetDate: '2026-04-10' },
+});
+
+// Get daily biorhythm - Seeded reading for daily check-in features
+const { data } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user123', date: '2026-03-06' } });
 ```
 
 ---
 
-## Location — `roxy.location`
+## I-Ching — `roxy.iching`
 
-Geocoding helper for birth chart coordinates.
+I-Ching oracle API + hosted MCP for AI agents and developers
 
 ```typescript
-// Search cities (autocomplete)
-const { data } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
-// Returns envelope: { total, limit, offset, cities: [{ name, country, latitude, longitude, timezone, utcOffset, ... }, ...] }
-// `timezone` is the IANA string ("Asia/Kolkata"), `utcOffset` is the decimal fallback (5.5).
-// Pass `timezone` directly to any chart endpoint; the server resolves DST for the chart's `date`.
+// Get daily I-Ching hexagram
+const { data } = await roxy.iching.getDailyHexagram({ body: { seed: 'user123', date: '2026-03-06' } });
 
-const city = data.cities[0];
-const { latitude, longitude, timezone } = city;
+// Cast daily I-Ching reading with changing lines
+const { data } = await roxy.iching.castDailyReading({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// All countries
-const { data: countries } = await roxy.location.listCountries();
+// List all 64 hexagrams
+const { data } = await roxy.iching.listHexagrams({ query: { limit: 20, offset: 0 } });
 
-// Cities in a country
-const { data: indianCities } = await roxy.location.getCitiesByCountry({ path: { iso2: 'IN' } });
+// Get a random hexagram
+const { data } = await roxy.iching.getRandomHexagram();
+
+// Lookup hexagram by line pattern
+const { data } = await roxy.iching.lookupHexagram({ query: { lines: '111111' } });
+
+// Get hexagram by number
+const { data } = await roxy.iching.getHexagram({ path: { number: 1 } });
+
+// Cast an I-Ching reading
+const { data } = await roxy.iching.castReading({ query: { seed: 'user123-question1' } });
+
+// List all 8 trigrams
+const { data } = await roxy.iching.listTrigrams();
+
+// Get trigram by number or name
+const { data } = await roxy.iching.getTrigram({ path: { id: 'Heaven' } });
+```
+
+---
+
+## Crystals and Healing Stones — `roxy.crystals`
+
+Production-ready crystal healing API + hosted MCP for AI agents and developers
+
+```typescript
+// Crystals by Zodiac Sign
+const { data } = await roxy.crystals.getCrystalsByZodiac({
+  path: { sign: 'pisces' },
+  query: { limit: 20, offset: 0 },
+});
+
+// Crystals by Chakra
+const { data } = await roxy.crystals.getCrystalsByChakra({
+  path: { chakra: 'Heart' },
+  query: { limit: 20, offset: 0 },
+});
+
+// Crystals by Element
+const { data } = await roxy.crystals.getCrystalsByElement({
+  path: { element: 'Water' },
+  query: { limit: 20, offset: 0 },
+});
+
+// Birthstone Crystals by Month
+const { data } = await roxy.crystals.getBirthstones({ path: { month: 2 } });
+
+// Search Crystals
+const { data } = await roxy.crystals.searchCrystals({ query: { q: 'love', limit: 20, offset: 0 } });
+
+// Crystal Pairings
+const { data } = await roxy.crystals.getCrystalPairings({ path: { id: 'amethyst' } });
+
+// Daily Crystal
+const { data } = await roxy.crystals.getDailyCrystal({ body: { seed: 'user123', date: '2026-03-06' } });
+
+// Random Crystal
+const { data } = await roxy.crystals.getRandomCrystal();
+
+// List Crystal Colors
+const { data } = await roxy.crystals.listCrystalColors();
+
+// List Crystal Planets
+const { data } = await roxy.crystals.listCrystalPlanets();
+
+// List All Crystals
+const { data } = await roxy.crystals.listCrystals({
+  query: {
+    chakra: 'Heart',
+    zodiac: 'pisces',
+    element: 'Water',
+    color: 'pink',
+    planet: 'Venus',
+    limit: 20,
+    offset: 0,
+  },
+});
+
+// Get Crystal Healing Properties
+const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
+```
+
+---
+
+## Dreams — `roxy.dreams`
+
+Dream interpretation API + hosted MCP for AI agents and developers
+
+```typescript
+// List and search dream symbols
+const { data } = await roxy.dreams.searchDreamSymbols({ query: { q: 'water', letter: 'a', limit: 20, offset: 0 } });
+
+// Get random dream symbols
+const { data } = await roxy.dreams.getRandomSymbols({ query: { count: 1 } });
+
+// Get symbol counts by letter
+const { data } = await roxy.dreams.getSymbolLetterCounts();
+
+// Get dream symbol details
+const { data } = await roxy.dreams.getDreamSymbol({ path: { id: 'snake' } });
+
+// Get daily dream symbol
+const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { seed: 'user123', date: '2026-03-06' } });
+```
+
+---
+
+## Angel Numbers — `roxy.angelNumbers`
+
+Production-ready angel numbers API + hosted MCP for AI agents and developers
+
+```typescript
+// List All Angel Numbers
+const { data } = await roxy.angelNumbers.listAngelNumbers({ query: { limit: 20, offset: 0, type: 'repeating' } });
+
+// Get Angel Number Meaning
+const { data } = await roxy.angelNumbers.getAngelNumber({ path: { number: '444' } });
+
+// Analyze Any Number Sequence
+const { data } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234' } });
+
+// Daily Angel Number
+const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'user123', date: '2026-03-06' } });
+```
+
+---
+
+## Location and Timezone — `roxy.location`
+
+City search and geocoding API + hosted MCP for AI agents and astrology apps
+
+```typescript
+// Search cities worldwide - Geocoding autocomplete with coordinates and timezone
+const { data } = await roxy.location.searchCities({ query: { q: 'berlin', limit: 10, offset: 0 } });
+
+// List all countries - ISO codes and city coverage
+const { data } = await roxy.location.listCountries({ query: { limit: 50, offset: 0 } });
+
+// Get cities in a country - Geocoding directory sorted by population
+const { data } = await roxy.location.getCitiesByCountry({ path: { iso2: 'DE' }, query: { limit: 20, offset: 0 } });
 ```
 
 ---
 
 ## Usage — `roxy.usage`
 
-Check your API usage and subscription.
+Monitor your API usage, check rate limits, and track request consumption
 
 ```typescript
+// Get API usage statistics
 const { data } = await roxy.usage.getUsageStats();
-// Returns: { plan, usedThisMonth, requestsPerMonth, remainingThisMonth, email, status, endDate }
 ```
 
 ---
 
 ## Languages — `roxy.languages`
 
-List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint. Use to populate language pickers, validate user input before calling chart or reading endpoints, or auto-detect available locales in agent integrations.
+List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint
 
 ```typescript
+// List supported response languages
 const { data } = await roxy.languages.listLanguages();
-// Returns: { languages: [{ code: 'en', name: 'English', nativeName: 'English' }, ...] }
 ```
+
+<!-- END:METHODS -->
 
 ---
 

@@ -15560,7 +15560,7 @@ export type PostVedicAstrologyTransitResponses = {
              */
             sign: string;
             /**
-             * House number (1-12) in the natal chart based on Placidus cusps.
+             * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi).
              */
             house: number;
         }>;
@@ -15581,7 +15581,7 @@ export type PostVedicAstrologyTransitResponses = {
              */
             sign: string;
             /**
-             * Which natal house this planet is currently transiting through. Key for Gochar predictions.
+             * Which natal house (whole-sign bhava from the Lagna) this planet is currently transiting through. Key for Gochar predictions.
              */
             natalHouse: number;
             /**
@@ -20812,17 +20812,49 @@ export type GetNumerologyMeaningsByNumberData = {
 
 export type GetNumerologyMeaningsByNumberErrors = {
     /**
-     * Invalid number (must be 1-9, 11, 22, or 33)
+     * Validation error. `issues[]` lists every failed field.
      */
     400: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * First issue summary.
          */
         error: string;
+        code: 'validation_error';
         /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
+         * Every validation failure. Use this to rebuild a valid request.
          */
-        code: string;
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
     };
     /**
      * Invalid or missing API key
@@ -22760,6 +22792,2850 @@ export type PostTarotSpreadsCustomResponses = {
 };
 
 export type PostTarotSpreadsCustomResponse = PostTarotSpreadsCustomResponses[keyof PostTarotSpreadsCustomResponses];
+
+export type PostHumanDesignBodygraphData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/bodygraph';
+};
+
+export type PostHumanDesignBodygraphErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignBodygraphError = PostHumanDesignBodygraphErrors[keyof PostHumanDesignBodygraphErrors];
+
+export type PostHumanDesignBodygraphResponses = {
+    /**
+     * Complete bodygraph with type, authority, profile, centers, channels, and gates
+     */
+    200: {
+        /**
+         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
+         */
+        type: string;
+        /**
+         * The aura strategy for engaging life correctly for this type.
+         */
+        strategy: string;
+        /**
+         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
+         */
+        authority: string;
+        /**
+         * The signature feeling of living in alignment with the type.
+         */
+        signature: string;
+        /**
+         * The not-self theme, the recurring feeling that signals being out of alignment.
+         */
+        notSelf: string;
+        /**
+         * Profile in conscious/unconscious form from the Personality Sun line over the Design Sun line.
+         */
+        profile: string;
+        /**
+         * Definition type from the number of connected components among defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
+         */
+        definition: string;
+        /**
+         * The incarnation cross built from the four cardinal gates and the profile angle.
+         */
+        incarnationCross: {
+            /**
+             * The four cardinal gates of the cross: Personality Sun, Personality Earth, Design Sun, Design Earth.
+             */
+            gates: Array<number>;
+            /**
+             * Cross angle. One of Right Angle, Juxtaposition, Left Angle.
+             */
+            angle: string;
+            /**
+             * Short code for the angle. One of RAX, JXT, LAX.
+             */
+            angleCode: string;
+            /**
+             * Composed name of the incarnation cross from the angle and the four gates.
+             */
+            name: string;
+        };
+        /**
+         * All nine centers with their defined state and active gates.
+         */
+        centers: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
+             */
+            defined: boolean;
+            /**
+             * Whether this is a motor center (energy source). The four motors are Heart, Sacral, Solar Plexus, and Root.
+             */
+            motor: boolean;
+            /**
+             * Whether this is an awareness center. The three awareness centers are Ajna, Solar Plexus, and Spleen.
+             */
+            awareness: boolean;
+            /**
+             * Theme text describing the center in its current defined or undefined state.
+             */
+            theme: string;
+            /**
+             * Active gate numbers that sit in this center.
+             */
+            gates: Array<number>;
+        }>;
+        /**
+         * The defined channels where both gates are activated.
+         */
+        channels: Array<{
+            /**
+             * First gate of the channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the channel.
+             */
+            gateB: number;
+            /**
+             * Name of the defined channel.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects and defines.
+             */
+            centers: Array<string>;
+        }>;
+        /**
+         * All 26 activations, 13 Personality and 13 Design.
+         */
+        gates: Array<{
+            /**
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            planet: string;
+            /**
+             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
+             */
+            side: string;
+            /**
+             * Human Design gate number from 1 to 64 that this activation falls in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate, describing its bodygraph function.
+             */
+            gateName: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+    };
+};
+
+export type PostHumanDesignBodygraphResponse = PostHumanDesignBodygraphResponses[keyof PostHumanDesignBodygraphResponses];
+
+export type PostHumanDesignConnectionData = {
+    body?: {
+        /**
+         * Birth moment of the first person in the connection.
+         */
+        personA: {
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * Birth moment of the second person in the connection.
+         */
+        personB: {
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+        };
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/connection';
+};
+
+export type PostHumanDesignConnectionErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignConnectionError = PostHumanDesignConnectionErrors[keyof PostHumanDesignConnectionErrors];
+
+export type PostHumanDesignConnectionResponses = {
+    /**
+     * Connection chart with per-channel dynamics, combined centers, definition, and a dynamic count
+     */
+    200: {
+        /**
+         * Total number of connected channels between the two people. Equals the length of channels and the sum of the summary counts.
+         */
+        totalChannels: number;
+        /**
+         * Every connected channel between the two people with its dynamic. A channel is connected when the two people together hold both of its gates.
+         */
+        channels: Array<{
+            /**
+             * First gate of the channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the channel.
+             */
+            gateB: number;
+            /**
+             * Name of the channel whose connection dynamic is reported.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects in the bodygraph.
+             */
+            centers: Array<string>;
+            /**
+             * Connection dynamic for this channel. Electromagnetic means each person holds one of the two gates and the channel completes only together, the classic point of attraction. Dominance means one person holds both gates and the other holds neither, a one-way conditioning. Compromise means one person holds both gates and the other holds a single hanging gate. Companionship means both people independently hold both gates, a shared and familiar frequency.
+             */
+            dynamic: string;
+            /**
+             * Which of the channel two gates person A holds, from one to both.
+             */
+            personAGates: Array<number>;
+            /**
+             * Which of the channel two gates person B holds, from one to both.
+             */
+            personBGates: Array<number>;
+        }>;
+        /**
+         * All nine centers with their defined state in the combined connection bodygraph and which person defines each.
+         */
+        centers: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Whether the center is defined in the combined connection bodygraph, where a channel counts as defined when the two people together hold both of its gates.
+             */
+            defined: boolean;
+            /**
+             * Who defines this center in their own chart. A, B, both, or empty when the center is open in both individual charts.
+             */
+            definedBy: Array<string>;
+        }>;
+        /**
+         * Definition of the combined connection bodygraph from connected components among its defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
+         */
+        combinedDefinition: string;
+        /**
+         * Count of each connection dynamic across all connected channels.
+         */
+        summary: {
+            /**
+             * Count of electromagnetic channels, the points of mutual attraction.
+             */
+            electromagnetic: number;
+            /**
+             * Count of dominance channels, where one person conditions the other one way.
+             */
+            dominance: number;
+            /**
+             * Count of compromise channels, a full channel meeting a single hanging gate.
+             */
+            compromise: number;
+            /**
+             * Count of companionship channels, where both people share the whole channel.
+             */
+            companionship: number;
+        };
+    };
+};
+
+export type PostHumanDesignConnectionResponse = PostHumanDesignConnectionResponses[keyof PostHumanDesignConnectionResponses];
+
+export type PostHumanDesignTransitData = {
+    body?: {
+        /**
+         * Birth moment whose natal bodygraph the transit is overlaid on.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * Transit date in YYYY-MM-DD UTC. Optional. Defaults to today in UTC when omitted, giving the just-now transit.
+         */
+        date?: string;
+        /**
+         * Transit time in HH:MM:SS UTC. Optional. Defaults to the current UTC time when omitted. Precision matters: the Moon moves through a gate in roughly half a day.
+         */
+        time?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/transit';
+};
+
+export type PostHumanDesignTransitErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignTransitError = PostHumanDesignTransitErrors[keyof PostHumanDesignTransitErrors];
+
+export type PostHumanDesignTransitResponses = {
+    /**
+     * Transit overlay with transiting activations, completed channels, temporary centers, and a summary
+     */
+    200: {
+        /**
+         * Date the transit overlay was computed for, in YYYY-MM-DD UTC.
+         */
+        date: string;
+        /**
+         * Time the transit overlay was computed for, in HH:MM:SS UTC.
+         */
+        time: string;
+        /**
+         * UTC offset of the transit moment. Always 0, since the transit is computed in UTC.
+         */
+        timezone: number;
+        /**
+         * The 13 transiting bodies at this moment with the gate and line each currently activates. A transit is a single instant, so there is no Design side, only current positions.
+         */
+        activations: Array<{
+            /**
+             * Transiting body whose current position lands on this gate. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            body: string;
+            /**
+             * Human Design gate number from 1 to 64 this transiting body currently sits in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote of the transit.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate the transiting body activates.
+             */
+            gateName: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+        /**
+         * Channels the transit temporarily completes that the natal chart did not already define, each labelled personal or educational with the side that supplied each gate.
+         */
+        completedChannels: Array<{
+            /**
+             * First gate of the completed channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the completed channel.
+             */
+            gateB: number;
+            /**
+             * Name of the channel the transit temporarily completes.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects and temporarily defines.
+             */
+            centers: Array<string>;
+            /**
+             * How the transit completes the channel. personal means the natal chart already holds one gate and the transit supplies the other, the classic electromagnetic completion. educational means both gates are open in the natal chart and the transit supplies both at once.
+             */
+            kind: string;
+            /**
+             * Gate or gates of this channel the natal chart already holds. Empty for an educational channel.
+             */
+            natalGates: Array<number>;
+            /**
+             * Gate or gates of this channel supplied by the transit. One gate for a personal channel, both gates for an educational channel.
+             */
+            transitGates: Array<number>;
+        }>;
+        /**
+         * Centers that are open in the natal chart and temporarily defined by a transit-completed channel.
+         */
+        temporaryCenters: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Always true. The center is open in the natal chart and temporarily defined by a transit-completed channel for the duration of the transit.
+             */
+            temporarilyDefined: boolean;
+        }>;
+        /**
+         * Short factual summary of the overlay with channel and center counts only.
+         */
+        summary: string;
+    };
+};
+
+export type PostHumanDesignTransitResponse = PostHumanDesignTransitResponses[keyof PostHumanDesignTransitResponses];
+
+export type PostHumanDesignTypeData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/type';
+};
+
+export type PostHumanDesignTypeErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignTypeError = PostHumanDesignTypeErrors[keyof PostHumanDesignTypeErrors];
+
+export type PostHumanDesignTypeResponses = {
+    /**
+     * Type, strategy, authority, signature, not-self theme, and profile
+     */
+    200: {
+        /**
+         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
+         */
+        type: string;
+        /**
+         * The aura strategy for engaging life correctly for this type.
+         */
+        strategy: string;
+        /**
+         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
+         */
+        authority: string;
+        /**
+         * The signature feeling of living in alignment.
+         */
+        signature: string;
+        /**
+         * The not-self theme that signals being out of alignment.
+         */
+        notSelf: string;
+        /**
+         * Profile from the Personality Sun line over the Design Sun line.
+         */
+        profile: string;
+    };
+};
+
+export type PostHumanDesignTypeResponse = PostHumanDesignTypeResponses[keyof PostHumanDesignTypeResponses];
+
+export type PostHumanDesignGatesData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/gates';
+};
+
+export type PostHumanDesignGatesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignGatesError = PostHumanDesignGatesErrors[keyof PostHumanDesignGatesErrors];
+
+export type PostHumanDesignGatesResponses = {
+    /**
+     * Personality and Design activation lists, 13 each
+     */
+    200: {
+        /**
+         * The 13 conscious Personality activations computed at the exact birth moment, in black on a standard chart.
+         */
+        personality: Array<{
+            /**
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            planet: string;
+            /**
+             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
+             */
+            side: string;
+            /**
+             * Human Design gate number from 1 to 64 that this activation falls in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate, describing its bodygraph function.
+             */
+            gateName: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+        /**
+         * The 13 unconscious Design activations computed 88 degrees of solar arc before birth, in red on a standard chart.
+         */
+        design: Array<{
+            /**
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            planet: string;
+            /**
+             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
+             */
+            side: string;
+            /**
+             * Human Design gate number from 1 to 64 that this activation falls in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate, describing its bodygraph function.
+             */
+            gateName: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+    };
+};
+
+export type PostHumanDesignGatesResponse = PostHumanDesignGatesResponses[keyof PostHumanDesignGatesResponses];
+
+export type GetHumanDesignGatesByNumberData = {
+    body?: never;
+    path?: {
+        /**
+         * Gate number from 1 to 64.
+         */
+        number?: number;
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/gates/{number}';
+};
+
+export type GetHumanDesignGatesByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Gate number is outside the range 1 to 64
+     */
+    404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetHumanDesignGatesByNumberError = GetHumanDesignGatesByNumberErrors[keyof GetHumanDesignGatesByNumberErrors];
+
+export type GetHumanDesignGatesByNumberResponses = {
+    /**
+     * Gate reference data with center, hexagram, and channel partners
+     */
+    200: {
+        /**
+         * Gate number from 1 to 64.
+         */
+        number: number;
+        /**
+         * Human Design keynote name of the gate.
+         */
+        name: string;
+        /**
+         * Center the gate sits in.
+         */
+        center: string;
+        /**
+         * Display name of the center.
+         */
+        centerName: string;
+        /**
+         * The I-Ching hexagram that shares this gate number.
+         */
+        ichingHexagram: {
+            /**
+             * I-Ching hexagram number.
+             */
+            number: number;
+            /**
+             * Hexagram name.
+             */
+            english: string;
+        };
+        /**
+         * Gates that form a channel with this gate, with the channel name for each.
+         */
+        channelPartners: Array<{
+            /**
+             * Partner gate number.
+             */
+            gate: number;
+            /**
+             * Name of the shared channel.
+             */
+            channel: string;
+        }>;
+    };
+};
+
+export type GetHumanDesignGatesByNumberResponse = GetHumanDesignGatesByNumberResponses[keyof GetHumanDesignGatesByNumberResponses];
+
+export type PostHumanDesignChannelsData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/channels';
+};
+
+export type PostHumanDesignChannelsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignChannelsError = PostHumanDesignChannelsErrors[keyof PostHumanDesignChannelsErrors];
+
+export type PostHumanDesignChannelsResponses = {
+    /**
+     * Defined channels with circuits and the centers they define
+     */
+    200: {
+        /**
+         * The defined channels, where both gates are activated.
+         */
+        channels: Array<{
+            /**
+             * First gate of the channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the channel.
+             */
+            gateB: number;
+            /**
+             * Name of the defined channel.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects and defines.
+             */
+            centers: Array<string>;
+        }>;
+        /**
+         * Number of defined channels in the bodygraph.
+         */
+        total: number;
+        /**
+         * The centers defined by these channels.
+         */
+        definedCenters: Array<string>;
+    };
+};
+
+export type PostHumanDesignChannelsResponse = PostHumanDesignChannelsResponses[keyof PostHumanDesignChannelsResponses];
+
+export type PostHumanDesignCentersData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/centers';
+};
+
+export type PostHumanDesignCentersErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignCentersError = PostHumanDesignCentersErrors[keyof PostHumanDesignCentersErrors];
+
+export type PostHumanDesignCentersResponses = {
+    /**
+     * All nine centers with defined state, flags, theme, and active gates
+     */
+    200: {
+        /**
+         * All nine centers with their defined state and active gates.
+         */
+        centers: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
+             */
+            defined: boolean;
+            /**
+             * Whether this is a motor center (energy source). The four motors are Heart, Sacral, Solar Plexus, and Root.
+             */
+            motor: boolean;
+            /**
+             * Whether this is an awareness center. The three awareness centers are Ajna, Solar Plexus, and Spleen.
+             */
+            awareness: boolean;
+            /**
+             * Theme text describing the center in its current defined or undefined state.
+             */
+            theme: string;
+            /**
+             * Active gate numbers that sit in this center.
+             */
+            gates: Array<number>;
+        }>;
+        /**
+         * How many of the nine centers are defined.
+         */
+        definedCount: number;
+    };
+};
+
+export type PostHumanDesignCentersResponse = PostHumanDesignCentersResponses[keyof PostHumanDesignCentersResponses];
+
+export type GetHumanDesignCentersByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Center id. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+         */
+        id: 'head' | 'ajna' | 'throat' | 'g' | 'heart' | 'sacral' | 'solar-plexus' | 'spleen' | 'root';
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/centers/{id}';
+};
+
+export type GetHumanDesignCentersByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetHumanDesignCentersByIdError = GetHumanDesignCentersByIdErrors[keyof GetHumanDesignCentersByIdErrors];
+
+export type GetHumanDesignCentersByIdResponses = {
+    /**
+     * Center reference data with defined and undefined meanings
+     */
+    200: {
+        /**
+         * Center identifier.
+         */
+        id: string;
+        /**
+         * Display name of the center.
+         */
+        name: string;
+        /**
+         * Whether this is a motor center.
+         */
+        motor: boolean;
+        /**
+         * Whether this is an awareness center.
+         */
+        awareness: boolean;
+        /**
+         * What this center means when defined: a consistent, reliable energy or awareness.
+         */
+        definedMeaning: string;
+        /**
+         * What this center means when undefined and open: a place of conditioning and learning.
+         */
+        undefinedMeaning: string;
+    };
+};
+
+export type GetHumanDesignCentersByIdResponse = GetHumanDesignCentersByIdResponses[keyof GetHumanDesignCentersByIdResponses];
+
+export type PostHumanDesignProfileData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/profile';
+};
+
+export type PostHumanDesignProfileErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignProfileError = PostHumanDesignProfileErrors[keyof PostHumanDesignProfileErrors];
+
+export type PostHumanDesignProfileResponses = {
+    /**
+     * Profile string, the two line numbers, and line keynotes
+     */
+    200: {
+        /**
+         * Profile in conscious/unconscious form, the Personality Sun line over the Design Sun line.
+         */
+        profile: string;
+        /**
+         * Line number from 1 to 6 of the conscious Personality Sun.
+         */
+        personalityLine: number;
+        /**
+         * Line number from 1 to 6 of the unconscious Design Sun.
+         */
+        designLine: number;
+        /**
+         * Keynote of the Personality line, the conscious half of the profile.
+         */
+        personalityKeynote: string;
+        /**
+         * Keynote of the Design line, the unconscious half of the profile.
+         */
+        designKeynote: string;
+    };
+};
+
+export type PostHumanDesignProfileResponse = PostHumanDesignProfileResponses[keyof PostHumanDesignProfileResponses];
+
+export type PostForecastTimelineData = {
+    body?: {
+        /**
+         * The single birth subject this forecast is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the forecast window in YYYY-MM-DD format. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Last day of the forecast window in YYYY-MM-DD format. Defaults to startDate plus 30 days. The window is clamped to a maximum of 90 days from startDate.
+         */
+        endDate?: string;
+        /**
+         * Which forecast domains to include. Defaults to all three. Pass a subset to scope the timeline to one or two engines.
+         */
+        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
+        /**
+         * Drop events scoring below this significance threshold from 0 to 100. Defaults to 0, keeping all events.
+         */
+        minSignificance?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/timeline';
+};
+
+export type PostForecastTimelineErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastTimelineError = PostForecastTimelineErrors[keyof PostForecastTimelineErrors];
+
+export type PostForecastTimelineResponses = {
+    /**
+     * Merged forecast timeline with time-ordered events across the requested domains
+     */
+    200: {
+        /**
+         * Echo of the birth subject this forecast was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the resolved forecast window.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved forecast window after the horizon clamp.
+         */
+        endDate: string;
+        /**
+         * Number of events in the timeline after deduplication, filtering, and the event cap.
+         */
+        count: number;
+        /**
+         * The merged, time-ordered forecast events across the requested domains.
+         */
+        events: Array<{
+            /**
+             * Calendar date of the event in YYYY-MM-DD (UTC).
+             */
+            date: string;
+            /**
+             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             */
+            datetime: string;
+            /**
+             * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            domain: 'western' | 'vedic' | 'biorhythm';
+            /**
+             * Event kind. transit-aspect, sign-ingress, and retrograde-station are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'dasha-change' | 'critical-day';
+            /**
+             * Primary subject of the event. A transiting planet for western events, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             */
+            body: string;
+            /**
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+             */
+            target?: string;
+            /**
+             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+             */
+            aspect?: string;
+            /**
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             */
+            orb?: number;
+            /**
+             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+             */
+            station?: 'retrograde' | 'direct';
+            /**
+             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             */
+            description: string;
+            /**
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower.
+             */
+            significance: number;
+        }>;
+    };
+};
+
+export type PostForecastTimelineResponse = PostForecastTimelineResponses[keyof PostForecastTimelineResponses];
+
+export type PostForecastTransitsData = {
+    body?: {
+        /**
+         * The single birth subject this transit forecast is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the transit window in YYYY-MM-DD format. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Last day of the transit window in YYYY-MM-DD format. Defaults to startDate plus 30 days. Clamped to a maximum of 90 days from startDate.
+         */
+        endDate?: string;
+        /**
+         * Drop transit events scoring below this significance threshold from 0 to 100. Defaults to 0.
+         */
+        minSignificance?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/transits';
+};
+
+export type PostForecastTransitsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastTransitsError = PostForecastTransitsErrors[keyof PostForecastTransitsErrors];
+
+export type PostForecastTransitsResponses = {
+    /**
+     * Time-ordered western transit events: aspects, ingresses, and stations
+     */
+    200: {
+        /**
+         * Echo of the birth subject this forecast was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the resolved forecast window.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved forecast window after the horizon clamp.
+         */
+        endDate: string;
+        /**
+         * Number of events in the timeline after deduplication, filtering, and the event cap.
+         */
+        count: number;
+        /**
+         * The merged, time-ordered forecast events across the requested domains.
+         */
+        events: Array<{
+            /**
+             * Calendar date of the event in YYYY-MM-DD (UTC).
+             */
+            date: string;
+            /**
+             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             */
+            datetime: string;
+            /**
+             * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            domain: 'western' | 'vedic' | 'biorhythm';
+            /**
+             * Event kind. transit-aspect, sign-ingress, and retrograde-station are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'dasha-change' | 'critical-day';
+            /**
+             * Primary subject of the event. A transiting planet for western events, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             */
+            body: string;
+            /**
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+             */
+            target?: string;
+            /**
+             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+             */
+            aspect?: string;
+            /**
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             */
+            orb?: number;
+            /**
+             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+             */
+            station?: 'retrograde' | 'direct';
+            /**
+             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             */
+            description: string;
+            /**
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower.
+             */
+            significance: number;
+        }>;
+    };
+};
+
+export type PostForecastTransitsResponse = PostForecastTransitsResponses[keyof PostForecastTransitsResponses];
+
+export type PostForecastSignificantDatesData = {
+    body?: {
+        /**
+         * The single birth subject this forecast is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the window in YYYY-MM-DD format. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Last day of the window in YYYY-MM-DD format. Defaults to startDate plus 30 days. Clamped to a maximum of 90 days from startDate.
+         */
+        endDate?: string;
+        /**
+         * Which forecast domains to consider before filtering by significance. Defaults to all three.
+         */
+        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
+        /**
+         * Significance floor from 0 to 100 for what counts as a significant date. Defaults to 70.
+         */
+        minSignificance?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/significant-dates';
+};
+
+export type PostForecastSignificantDatesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastSignificantDatesError = PostForecastSignificantDatesErrors[keyof PostForecastSignificantDatesErrors];
+
+export type PostForecastSignificantDatesResponses = {
+    /**
+     * High-significance forecast events across the requested domains
+     */
+    200: {
+        /**
+         * Echo of the birth subject this forecast was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the resolved forecast window.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved forecast window after the horizon clamp.
+         */
+        endDate: string;
+        /**
+         * Number of events in the timeline after deduplication, filtering, and the event cap.
+         */
+        count: number;
+        /**
+         * The merged, time-ordered forecast events across the requested domains.
+         */
+        events: Array<{
+            /**
+             * Calendar date of the event in YYYY-MM-DD (UTC).
+             */
+            date: string;
+            /**
+             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             */
+            datetime: string;
+            /**
+             * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            domain: 'western' | 'vedic' | 'biorhythm';
+            /**
+             * Event kind. transit-aspect, sign-ingress, and retrograde-station are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'dasha-change' | 'critical-day';
+            /**
+             * Primary subject of the event. A transiting planet for western events, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             */
+            body: string;
+            /**
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+             */
+            target?: string;
+            /**
+             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+             */
+            aspect?: string;
+            /**
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             */
+            orb?: number;
+            /**
+             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+             */
+            station?: 'retrograde' | 'direct';
+            /**
+             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             */
+            description: string;
+            /**
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower.
+             */
+            significance: number;
+        }>;
+    };
+};
+
+export type PostForecastSignificantDatesResponse = PostForecastSignificantDatesResponses[keyof PostForecastSignificantDatesResponses];
 
 export type PostBiorhythmReadingData = {
     body?: {
