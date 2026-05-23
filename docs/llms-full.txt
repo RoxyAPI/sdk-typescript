@@ -920,6 +920,21 @@ const { data } = await roxy.humanDesign.calculateConnection({
   },
 });
 
+// Calculate Human Design Penta - Small-group BG5 operating system for three to five people
+const { data } = await roxy.humanDesign.calculatePenta({
+  body: {
+    members: [
+      {
+        date: '1990-07-15',
+        time: '13:00:00',
+        timezone: 5.5,
+        latitude: 0,
+        longitude: 0,
+      },
+    ],
+  },
+});
+
 // Generate Human Design transit overlay - Current planetary activations on a natal bodygraph
 const { data } = await roxy.humanDesign.generateTransit({
   body: {
@@ -995,6 +1010,17 @@ const { data } = await roxy.humanDesign.calculateProfile({
     longitude: 0,
   },
 });
+
+// Calculate Human Design Variables - The four arrows and Color, Tone, Base substructure
+const { data } = await roxy.humanDesign.calculateVariables({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 5.5,
+    latitude: 0,
+    longitude: 0,
+  },
+});
 ```
 
 ---
@@ -1018,6 +1044,7 @@ const { data } = await roxy.forecast.generateTimeline({
     endDate: '2026-08-30',
     domains: ['western', 'vedic', 'biorhythm'],
     minSignificance: 0,
+    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
   },
 });
 
@@ -1051,6 +1078,38 @@ const { data } = await roxy.forecast.findSignificantDates({
     endDate: '2026-08-30',
     domains: ['western', 'vedic', 'biorhythm'],
     minSignificance: 70,
+    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
+  },
+});
+
+// Forecast digest - Pre-summarized next 24h, 7d, 30d, and 90d rollups
+const { data } = await roxy.forecast.generateDigest({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 5.5,
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    domains: ['western', 'vedic', 'biorhythm'],
+    minSignificance: 0,
+    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
+    top: 3,
+  },
+});
+
+// Solar return chart - Annual birthday forecast chart for a single subject
+const { data } = await roxy.forecast.forecastSolarReturn({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    year: 2026,
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: 5.5,
+    houseSystem: 'placidus',
   },
 });
 ```
