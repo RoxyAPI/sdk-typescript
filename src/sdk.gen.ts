@@ -1810,7 +1810,7 @@ export class Forecast extends HeyApiClient {
      *
      * Cast the solar return chart for one subject and year: the chart erected for the exact moment the transiting Sun returns to its natal ecliptic longitude, the foundational technique for annual astrological forecasting. Returns the full tropical chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Location-sensitive: pass the birthplace to anchor the chart to natal geography, or the current city for a relocated solar return where the houses and Ascendant shift to where you are on your birthday. Built for year-ahead forecast tools, birthday charts, and annual horoscope features.
      */
-    public generateSolarReturn<ThrowOnError extends boolean = false>(options?: Options<PostForecastSolarReturnData, ThrowOnError>) {
+    public forecastSolarReturn<ThrowOnError extends boolean = false>(options?: Options<PostForecastSolarReturnData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostForecastSolarReturnResponses, PostForecastSolarReturnErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/forecast/solar-return',
