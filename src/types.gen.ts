@@ -22980,7 +22980,7 @@ export type PostHumanDesignBodygraphResponses = {
              */
             angleCode: string;
             /**
-             * Composed name of the incarnation cross from the angle and the four gates.
+             * Canonical published name of the incarnation cross, determined by the Personality Sun gate and the angle. Falls back to a name composed from the angle and the four gates if no canonical name exists.
              */
             name: string;
         };
@@ -23348,6 +23348,245 @@ export type PostHumanDesignConnectionResponses = {
 };
 
 export type PostHumanDesignConnectionResponse = PostHumanDesignConnectionResponses[keyof PostHumanDesignConnectionResponses];
+
+export type PostHumanDesignPentaData = {
+    body?: {
+        /**
+         * Birth moments of the three to five people in the group. Below three no Penta forms; above five a second Penta emerges.
+         */
+        members: Array<{
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+        }>;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/penta';
+};
+
+export type PostHumanDesignPentaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignPentaError = PostHumanDesignPentaErrors[keyof PostHumanDesignPentaErrors];
+
+export type PostHumanDesignPentaResponses = {
+    /**
+     * Penta chart with per-channel Strengths, per-gate fill state, and a group summary
+     */
+    200: {
+        /**
+         * Number of people in the group, always between 3 and 5.
+         */
+        memberCount: number;
+        /**
+         * The six channels of the Penta with their defined Strength state and which members supply each gate. Three upper channels run G to Throat (The Alpha, Inspiration, The Prodigal); three lower channels run G to Sacral (Rhythm, The Beat, Discovery).
+         */
+        channels: Array<{
+            /**
+             * First gate of the Penta channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the Penta channel.
+             */
+            gateB: number;
+            /**
+             * Name of the Penta channel. One of The Alpha, Inspiration, The Prodigal, Rhythm, The Beat, Discovery.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * Position of the channel in the Penta. upper channels run from the G Center to the Throat and carry the leadership and how-the-group-presents roles. lower channels run from the G Center to the Sacral and carry the managed, generative, resource roles.
+             */
+            position: string;
+            /**
+             * Whether this is the 2/14 Channel of the Beat, the material core of the Penta vortex: gate 2 the direction for resources, gate 14 the resources themselves.
+             */
+            isCore: boolean;
+            /**
+             * Whether the channel is a defined Strength: both of its gates are present somewhere in the group, so the function it governs has no gap.
+             */
+            defined: boolean;
+            /**
+             * Zero-based indices of the members whose chart holds gate A, in member order.
+             */
+            gateAHeldBy: Array<number>;
+            /**
+             * Zero-based indices of the members whose chart holds gate B, in member order.
+             */
+            gateBHeldBy: Array<number>;
+        }>;
+        /**
+         * The twelve Penta gates with their filled state and which members hold each.
+         */
+        gates: Array<{
+            /**
+             * Penta gate number. One of 1, 2, 5, 7, 8, 13, 14, 15, 29, 31, 33, 46.
+             */
+            gate: number;
+            /**
+             * Human Design keynote name of the gate, describing the role it brings to the group.
+             */
+            gateName: string;
+            /**
+             * Whether at least one member holds this gate. A gate held by nobody is a gap that conditions the group to compensate for the missing role.
+             */
+            filled: boolean;
+            /**
+             * Zero-based indices of the members whose chart holds this gate. Empty when the gate is a gap.
+             */
+            heldBy: Array<number>;
+        }>;
+        /**
+         * Group-level rollup of the Penta channels and gates.
+         */
+        summary: {
+            /**
+             * Count of the six Penta channels that are defined Strengths in the group.
+             */
+            definedChannels: number;
+            /**
+             * Count of the twelve Penta gates filled by at least one member.
+             */
+            filledGates: number;
+            /**
+             * Penta gates held by no member. A non-empty list flags the functional gaps in the group.
+             */
+            gapGates: Array<number>;
+            /**
+             * Whether the 2/14 Channel of the Beat, the material core of the Penta, is defined across the group.
+             */
+            coreDefined: boolean;
+        };
+    };
+};
+
+export type PostHumanDesignPentaResponse = PostHumanDesignPentaResponses[keyof PostHumanDesignPentaResponses];
 
 export type PostHumanDesignTransitData = {
     body?: {
@@ -24879,6 +25118,223 @@ export type PostHumanDesignProfileResponses = {
 
 export type PostHumanDesignProfileResponse = PostHumanDesignProfileResponses[keyof PostHumanDesignProfileResponses];
 
+export type PostHumanDesignVariablesData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/variables';
+};
+
+export type PostHumanDesignVariablesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignVariablesError = PostHumanDesignVariablesErrors[keyof PostHumanDesignVariablesErrors];
+
+export type PostHumanDesignVariablesResponses = {
+    /**
+     * The four Variable arrows with substructure numbers, labels, and confidence flags
+     */
+    200: {
+        /**
+         * The four Variable arrows: Determination and Environment from the design side, Perspective and Motivation from the personality side. Together they form the Rave Variables / Primary Health System layer that sits beneath Type, Strategy, Authority, and Profile.
+         */
+        arrows: Array<{
+            /**
+             * Stable arrow identifier. One of determination, environment, perspective, motivation.
+             */
+            key: string;
+            /**
+             * Arrow name. Determination is the top-left arrow governing the Primary Health System and digestion, Environment the bottom-left arrow, Perspective the bottom-right arrow also called View, and Motivation the top-right arrow.
+             */
+            name: string;
+            /**
+             * Which half of the advanced layer the arrow belongs to. Primary Health System covers the body-side Determination and Environment arrows, Rave Psychology covers the mind-side Perspective and Motivation arrows.
+             */
+            layer: string;
+            /**
+             * Position of the arrow at the head of the bodygraph. One of Top left, Bottom left, Top right, Bottom right.
+             */
+            position: string;
+            /**
+             * The single activation, body and chart side, that this arrow is derived from.
+             */
+            activation: {
+                /**
+                 * Activating body whose substructure feeds this arrow. Determination and Motivation come from the Sun, Environment and Perspective from the North Node.
+                 */
+                planet: string;
+                /**
+                 * Chart side of the activation. Determination and Environment come from the design side, Perspective and Motivation from the personality side.
+                 */
+                side: string;
+            };
+            /**
+             * Color number from 1 to 6, the substructure level one octave finer than the line. Color selects the arrow theme, for example the determination family or the motivation.
+             */
+            color: number;
+            /**
+             * Tone number from 1 to 6, the substructure level beneath Color. Tone sets the arrow direction: tones 1 to 3 face left, tones 4 to 6 face right.
+             */
+            tone: number;
+            /**
+             * Base number from 1 to 5, the finest published subdivision of the wheel. Returned for completeness but treated as informational, since it is finer than most birth times can resolve.
+             */
+            base: number;
+            /**
+             * Arrow direction derived from the Tone. left for tones 1 to 3, right for tones 4 to 6.
+             */
+            direction: string;
+            /**
+             * Name of the Color theme for this arrow, for example a determination family such as Touch, an environment such as Mountains, a perspective such as Personal, or a motivation such as Hope.
+             */
+            colorLabel: string;
+            /**
+             * Keynote of the arrow direction for this arrow, for example Active or Passive for Determination, Focused or Peripheral for Perspective.
+             */
+            directionLabel: string;
+            /**
+             * Whether this arrow is far enough from a Color or Tone boundary to be reliable. When false the activation sits on a knife edge where the Color label or the arrow direction could flip with a more precise birth time, and the arrow should not be presented as fact.
+             */
+            confident: boolean;
+        }>;
+        /**
+         * True only when all four arrows are confident. A single knife-edge arrow makes the whole configuration uncertain.
+         */
+        confident: boolean;
+        /**
+         * Boundary margin in degrees of ecliptic longitude used for the per-arrow confidence flag, the solar arc over a few minutes of clock time. An activation within this distance of a Color or Tone boundary is flagged low-confidence.
+         */
+        confidenceMarginDeg: number;
+    };
+};
+
+export type PostHumanDesignVariablesResponse = PostHumanDesignVariablesResponses[keyof PostHumanDesignVariablesResponses];
+
 export type PostForecastTimelineData = {
     body?: {
         /**
@@ -24922,6 +25378,23 @@ export type PostForecastTimelineData = {
          * Drop events scoring below this significance threshold from 0 to 100. Defaults to 0, keeping all events.
          */
         minSignificance?: number;
+        /**
+         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
+         */
+        domainWeights?: {
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            western?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            vedic?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            biorhythm?: number;
+        };
     };
     path?: never;
     query?: {
@@ -25096,11 +25569,11 @@ export type PostForecastTimelineResponses = {
              */
             domain: 'western' | 'vedic' | 'biorhythm';
             /**
-             * Event kind. transit-aspect, sign-ingress, and retrograde-station are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
              */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'dasha-change' | 'critical-day';
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
              */
             body: string;
             /**
@@ -25120,11 +25593,19 @@ export type PostForecastTimelineResponses = {
              */
             station?: 'retrograde' | 'direct';
             /**
+             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+             */
+            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+            /**
+             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+             */
+            obscuration?: number;
+            /**
              * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
             description: string;
             /**
-             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower.
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
              */
             significance: number;
         }>;
@@ -25346,11 +25827,11 @@ export type PostForecastTransitsResponses = {
              */
             domain: 'western' | 'vedic' | 'biorhythm';
             /**
-             * Event kind. transit-aspect, sign-ingress, and retrograde-station are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
              */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'dasha-change' | 'critical-day';
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
              */
             body: string;
             /**
@@ -25370,11 +25851,19 @@ export type PostForecastTransitsResponses = {
              */
             station?: 'retrograde' | 'direct';
             /**
+             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+             */
+            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+            /**
+             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+             */
+            obscuration?: number;
+            /**
              * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
             description: string;
             /**
-             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower.
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
              */
             significance: number;
         }>;
@@ -25426,6 +25915,23 @@ export type PostForecastSignificantDatesData = {
          * Significance floor from 0 to 100 for what counts as a significant date. Defaults to 70.
          */
         minSignificance?: number;
+        /**
+         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
+         */
+        domainWeights?: {
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            western?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            vedic?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            biorhythm?: number;
+        };
     };
     path?: never;
     query?: {
@@ -25600,11 +26106,11 @@ export type PostForecastSignificantDatesResponses = {
              */
             domain: 'western' | 'vedic' | 'biorhythm';
             /**
-             * Event kind. transit-aspect, sign-ingress, and retrograde-station are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
              */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'dasha-change' | 'critical-day';
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
              */
             body: string;
             /**
@@ -25624,11 +26130,19 @@ export type PostForecastSignificantDatesResponses = {
              */
             station?: 'retrograde' | 'direct';
             /**
+             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+             */
+            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+            /**
+             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+             */
+            obscuration?: number;
+            /**
              * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
             description: string;
             /**
-             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower.
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
              */
             significance: number;
         }>;
@@ -25636,6 +26150,689 @@ export type PostForecastSignificantDatesResponses = {
 };
 
 export type PostForecastSignificantDatesResponse = PostForecastSignificantDatesResponses[keyof PostForecastSignificantDatesResponses];
+
+export type PostForecastDigestData = {
+    body?: {
+        /**
+         * The single birth subject this digest is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * Start anchor for every window in YYYY-MM-DD format. The next 24h, 7d, 30d, and 90d windows are measured forward from this date at 00:00:00 UTC. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Which forecast domains to include before rolling up the windows. Defaults to all three.
+         */
+        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
+        /**
+         * Drop events scoring below this significance threshold from 0 to 100 before the rollup. Defaults to 0.
+         */
+        minSignificance?: number;
+        /**
+         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
+         */
+        domainWeights?: {
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            western?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            vedic?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            biorhythm?: number;
+        };
+        /**
+         * Number of highest-significance events to surface per window. Defaults to 3, capped at 20.
+         */
+        top?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/digest';
+};
+
+export type PostForecastDigestErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastDigestError = PostForecastDigestErrors[keyof PostForecastDigestErrors];
+
+export type PostForecastDigestResponses = {
+    /**
+     * Pre-summarized forecast windows: next 24h, 7d, 30d, and 90d rollups
+     */
+    200: {
+        /**
+         * Echo of the birth subject this digest was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * Start anchor every window is measured from.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved 90 day horizon the timeline was built over before slicing.
+         */
+        endDate: string;
+        /**
+         * The four rollups in ascending window length: next 24h, 7d, 30d, and 90d from the start anchor.
+         */
+        windows: Array<{
+            /**
+             * Length of this window in days forward from the start anchor. One of 1, 7, 30, 90.
+             */
+            days: number;
+            /**
+             * Inclusive lower bound of the window as an ISO-8601 UTC datetime, the start anchor.
+             */
+            from: string;
+            /**
+             * Exclusive upper bound of the window as an ISO-8601 UTC datetime, the start anchor plus the window length.
+             */
+            to: string;
+            /**
+             * Number of events whose datetime falls inside this window.
+             */
+            count: number;
+            /**
+             * Count of events in this window broken down by domain. Only domains with at least one event in the window are present. The values sum to count.
+             */
+            byDomain: {
+                western?: number;
+                vedic?: number;
+                biorhythm?: number;
+            };
+            /**
+             * Count of events in this window broken down by event type. Only types with at least one event in the window are present. The values sum to count.
+             */
+            byType: {
+                'transit-aspect'?: number;
+                'sign-ingress'?: number;
+                'retrograde-station'?: number;
+                eclipse?: number;
+                'dasha-change'?: number;
+                'critical-day'?: number;
+            };
+            /**
+             * The highest-significance events in this window, most significant first, up to the requested top count. The same TimelineEvent shape as the timeline endpoints.
+             */
+            top: Array<{
+                /**
+                 * Calendar date of the event in YYYY-MM-DD (UTC).
+                 */
+                date: string;
+                /**
+                 * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+                 */
+                datetime: string;
+                /**
+                 * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+                 */
+                domain: 'western' | 'vedic' | 'biorhythm';
+                /**
+                 * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+                 */
+                type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
+                /**
+                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+                 */
+                body: string;
+                /**
+                 * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+                 */
+                target?: string;
+                /**
+                 * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+                 */
+                aspect?: string;
+                /**
+                 * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+                 */
+                orb?: number;
+                /**
+                 * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+                 */
+                station?: 'retrograde' | 'direct';
+                /**
+                 * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+                 */
+                kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+                /**
+                 * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+                 */
+                obscuration?: number;
+                /**
+                 * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+                 */
+                description: string;
+                /**
+                 * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
+                 */
+                significance: number;
+            }>;
+        }>;
+    };
+};
+
+export type PostForecastDigestResponse = PostForecastDigestResponses[keyof PostForecastDigestResponses];
+
+export type PostForecastSolarReturnData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Anchors the natal Sun longitude the transiting Sun returns to each year.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Pins the exact natal Sun position that defines the solar return moment.
+         */
+        time: string;
+        /**
+         * Year to cast the solar return for. The chart is erected for the moment in this year when the transiting Sun returns to the natal Sun longitude, on or within a day of the birthday.
+         */
+        year: number;
+        /**
+         * Latitude of the solar return location in decimal degrees. The solar return is location-sensitive: use the birthplace to anchor the chart to natal geography, or the current city for a relocated solar return.
+         */
+        latitude: number;
+        /**
+         * Longitude of the solar return location in decimal degrees. Sets the local sidereal time, so it drives the Ascendant, Midheaven, and house cusps of the return chart.
+         */
+        longitude: number;
+        /**
+         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * House system for the return chart. placidus is the Western default. whole-sign, equal, and koch are also supported.
+         */
+        houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/solar-return';
+};
+
+export type PostForecastSolarReturnErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastSolarReturnError = PostForecastSolarReturnErrors[keyof PostForecastSolarReturnErrors];
+
+export type PostForecastSolarReturnResponses = {
+    /**
+     * Solar return chart cast for the requested year and location
+     */
+    200: {
+        /**
+         * Echo of the birth date used to find the natal Sun longitude.
+         */
+        birthDate: string;
+        /**
+         * Exact solar return moment, when the transiting Sun returns to the natal Sun longitude, formatted in the requested timezone. The astrological birthday for the year.
+         */
+        solarReturnDate: string;
+        /**
+         * Year of this solar return. The chart covers the period to the next birthday.
+         */
+        solarReturnYear: number;
+        /**
+         * Location the return chart was cast for. The Ascendant and house cusps change with this location, the basis of the relocated solar return technique.
+         */
+        location: {
+            /**
+             * Latitude used for the return chart house cusps and Ascendant.
+             */
+            latitude: number;
+            /**
+             * Longitude used for local sidereal time and the Midheaven.
+             */
+            longitude: number;
+            /**
+             * Decimal timezone offset applied to the output datetime.
+             */
+            timezone: number;
+        };
+        /**
+         * The natal Sun position whose annual return defines this chart.
+         */
+        natalSunPosition: {
+            /**
+             * Natal Sun ecliptic longitude in degrees from 0 to 360 that the Sun returns to.
+             */
+            longitude: number;
+            /**
+             * Tropical zodiac sign of the natal Sun.
+             */
+            sign: string;
+            /**
+             * Degree within the sign from 0 to 29.999 that the Sun returns to.
+             */
+            degree: number;
+        };
+        /**
+         * Full chart erected for the solar return moment: all bodies with house placements, the 12 house cusps, aspects, Part of Fortune, and Vertex in the tropical zodiac.
+         */
+        chart: {
+            /**
+             * Birth details used to generate this chart.
+             */
+            birthDetails: {
+                /**
+                 * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+                 */
+                date: string;
+                /**
+                 * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+                 */
+                time: string;
+                /**
+                 * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+                 */
+                latitude: number;
+                /**
+                 * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+                 */
+                longitude: number;
+                /**
+                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+                 */
+                timezone: number;
+            };
+            /**
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
+             */
+            planets: Array<{
+                /**
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+                 */
+                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
+                /**
+                 * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
+                 */
+                longitude: number;
+                /**
+                 * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
+                 */
+                latitude: number;
+                /**
+                 * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
+                 */
+                sign: string;
+                /**
+                 * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
+                 */
+                degree: number;
+                /**
+                 * House placement (1-12). Determined by the selected house system and birth location.
+                 */
+                house: number;
+                /**
+                 * Daily motion in degrees per day. Negative values indicate retrograde motion.
+                 */
+                speed: number;
+                /**
+                 * Whether the planet appears to move backward from Earth perspective. Retrograde periods signal review and introspection.
+                 */
+                isRetrograde: boolean;
+            }>;
+            /**
+             * All 12 house cusps calculated using the selected house system.
+             */
+            houses: Array<{
+                /**
+                 * House number (1-12). Each house governs specific life themes in Western astrology.
+                 */
+                number: number;
+                /**
+                 * Ecliptic longitude of this house cusp in degrees (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Zodiac sign on this house cusp. Colors the themes of this life area.
+                 */
+                sign: string;
+                /**
+                 * Degree within the zodiac sign on this cusp (0-29.999).
+                 */
+                degree: number;
+            }>;
+            /**
+             * House system used for this chart (placidus, whole-sign, equal, or koch).
+             */
+            houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+            /**
+             * All planetary aspects found in this chart with orbs, strength, and applying/separating status.
+             */
+            aspects: Array<{
+                /**
+                 * First planet in the aspect pair.
+                 */
+                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
+                /**
+                 * Second planet in the aspect pair.
+                 */
+                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
+                /**
+                 * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
+                 */
+                type: 'CONJUNCTION' | 'OPPOSITION' | 'TRINE' | 'SQUARE' | 'SEXTILE' | 'SEMI_SEXTILE' | 'QUINCUNX' | 'SEMI_SQUARE' | 'SESQUIQUADRATE';
+                /**
+                 * Exact angular separation that defines this aspect type in degrees.
+                 */
+                angle: number;
+                /**
+                 * Deviation from exact aspect in degrees. Tighter orb means stronger influence.
+                 */
+                orb: number;
+                /**
+                 * Whether the aspect is applying (planets moving toward exact) or separating (moving apart). Applying aspects grow stronger.
+                 */
+                isApplying: boolean;
+                /**
+                 * Aspect strength percentage (0-100). Based on orb tightness relative to the allowed maximum.
+                 */
+                strength: number;
+                /**
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 */
+                interpretation: 'harmonious' | 'challenging' | 'neutral';
+            }>;
+            /**
+             * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
+             */
+            partOfFortune: {
+                /**
+                 * Zodiac sign holding the Part of Fortune.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Part of Fortune sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Part of Fortune (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
+                 */
+                sect: 'day' | 'night';
+            };
+            /**
+             * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
+             */
+            vertex: {
+                /**
+                 * Zodiac sign holding the Vertex.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Vertex sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Vertex (0-360).
+                 */
+                longitude: number;
+            };
+        };
+    };
+};
+
+export type PostForecastSolarReturnResponse = PostForecastSolarReturnResponses[keyof PostForecastSolarReturnResponses];
 
 export type PostBiorhythmReadingData = {
     body?: {
