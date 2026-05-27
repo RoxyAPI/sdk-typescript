@@ -5,6 +5,10 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Wait 3 days before opening a bump PR so freshly published versions get
+    # a chance to be flagged for supply-chain issues before they land.
+    cooldown:
+      default-days: 3
     groups:
       dev-dependencies:
         dependency-type: development
