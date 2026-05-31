@@ -217,7 +217,49 @@ const { data: answer } = await roxy.tarot.castYesNo({ body: { question: 'Should 
 // answer.answer ("Yes" | "No" | "Maybe"), answer.strength
 ```
 
-### 5. Biorhythm API (daily check-in, forecast, compatibility)
+### 5. Human Design API (bodygraph in one call)
+
+The breakout 2026 self-discovery category. One call returns the full bodygraph from a birth moment: energy type, strategy, authority, profile, definition, incarnation cross, the 9 centers, defined channels, and all 26 gate activations. The Design side is solved on the exact 88-degree solar arc, not approximated as calendar days. No coordinates needed beyond the birth instant, so there is no location setup step.
+
+```typescript
+// Full bodygraph. Type, strategy, profile, and definition are always populated.
+const { data: hd } = await roxy.humanDesign.generateBodygraph({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
+});
+// hd.type, hd.strategy, hd.profile, hd.definition
+// hd.centers, hd.channels, hd.gates, hd.incarnationCross
+```
+
+### 6. Forecast API (cross-domain timeline)
+
+The first cross-domain, stateless forecast in the catalog. One call merges Western transit-to-natal aspects, sign ingresses, retrograde stations, Vedic Vimshottari dasha boundaries, and biorhythm critical days into a single significance-scored, time-ordered timeline. The window is clamped to a 90-day horizon. Forecast feeds, transit alerts, and timing tools are the buyers.
+
+```typescript
+// Merged timeline. Each event carries date, domain, type, description, and significance.
+const { data: timeline } = await roxy.forecast.generateTimeline({
+  body: {
+    birthData: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-06-30',
+  },
+});
+// timeline.count, timeline.events
+// timeline.events[0].date, timeline.events[0].domain, timeline.events[0].description, timeline.events[0].significance
+```
+
+### 7. Biorhythm API (daily check-in, forecast, compatibility)
 
 Zero competition domain. Steady search volume with the top Google result being a static calculator page. Pure land-grab for wellness, productivity, sports, and couples apps.
 
@@ -233,7 +275,7 @@ const { data: forecast } = await roxy.biorhythm.getForecast({
 });
 ```
 
-### 6. I Ching API (daily hexagram, coin cast, 64-hexagram catalog)
+### 8. I Ching API (daily hexagram, coin cast, 64-hexagram catalog)
 
 Meditation apps, decision-making tools, and wisdom chatbots. `i ching API` and `hexagram API` are the keywords.
 
@@ -247,7 +289,7 @@ const { data: hexagrams } = await roxy.iching.listHexagrams({});
 // hexagrams.hexagrams has 64 entries
 ```
 
-### 7. Crystals API (by zodiac, by chakra, birthstone)
+### 9. Crystals API (by zodiac, by chakra, birthstone)
 
 Crystal retail and metaphysical shops use these to build "crystals for [sign]" and "[chakra] chakra stones" pages.
 
@@ -263,7 +305,7 @@ const { data: byChakra } = await roxy.crystals.getCrystalsByChakra({ path: { cha
 const { data: birthstone } = await roxy.crystals.getBirthstones({ path: { month: 4 } });
 ```
 
-### 8. Dream interpretation API (symbol dictionary, search)
+### 10. Dream interpretation API (symbol dictionary, search)
 
 Thousands of dream symbols. `dream meaning` is among the highest-volume spiritual searches on Google. Journal apps, AI therapy chatbots, and self-discovery products are the buyers.
 
@@ -277,7 +319,7 @@ const { data: results } = await roxy.dreams.searchDreamSymbols({ query: { q: 'fl
 // results.symbols is an array of matching symbols
 ```
 
-### 9. Angel Numbers API (1111, 222, 333 meanings plus universal lookup)
+### 11. Angel Numbers API (1111, 222, 333 meanings plus universal lookup)
 
 Gen Z spiritual-tok fuel. `111 meaning`, `222 meaning`, `333 angel number` are evergreen viral queries with massive shareability.
 

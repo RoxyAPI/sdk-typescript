@@ -57,7 +57,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.languages` | 1 | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
-**Total:** 130 endpoints across 10 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.
+**Total:** 148 endpoints across 12 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.
 
 ## Quality guidelines for agents
 
@@ -177,6 +177,8 @@ Ordered by domain priority (Western, Vedic, Numerology, Tarot, Biorhythm, I Chin
 | Three-card spread | `roxy.tarot.castThreeCard({ body: { question } })` |
 | Celtic Cross | `roxy.tarot.castCelticCross({ body: { question } })` |
 | Yes / no tarot | `roxy.tarot.castYesNo({ body: { question } })` |
+| Human Design bodygraph | `roxy.humanDesign.generateBodygraph({ body: { date, time, latitude, longitude, timezone } })` |
+| Forecast timeline | `roxy.forecast.generateTimeline({ body: { birthData, startDate, endDate } })` |
 | Daily biorhythm | `roxy.biorhythm.getDailyBiorhythm({ body: { seed } })` |
 | Biorhythm forecast | `roxy.biorhythm.getForecast({ body: { birthDate } })` |
 | Biorhythm compatibility | `roxy.biorhythm.calculateBioCompatibility({ body: { person1, person2 } })` |
