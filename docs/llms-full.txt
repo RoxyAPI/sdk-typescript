@@ -1027,7 +1027,7 @@ const { data } = await roxy.humanDesign.calculateVariables({
 
 ## Forecast — `roxy.forecast`
 
-Merge upcoming transit aspects, sign ingresses, retrograde stations, Vimshottari dasha changes, and biorhythm critica...
+Merge upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm critical days, and...
 
 ```typescript
 // Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
@@ -1048,7 +1048,7 @@ const { data } = await roxy.forecast.generateTimeline({
   },
 });
 
-// Western transit forecast - Transit aspects, sign ingresses, retrograde stations
+// Western astrology forecast - aspects, ingresses, stations, eclipses, moon phases
 const { data } = await roxy.forecast.forecastTransits({
   body: {
     birthData: {

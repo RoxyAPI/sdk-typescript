@@ -25565,19 +25565,19 @@ export type PostForecastTimelineResponses = {
              */
             datetime: string;
             /**
-             * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
              */
             domain: 'western' | 'vedic' | 'biorhythm';
             /**
-             * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
              */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
              */
             body: string;
             /**
-             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
              */
             target?: string;
             /**
@@ -25600,6 +25600,10 @@ export type PostForecastTimelineResponses = {
              * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
              */
             obscuration?: number;
+            /**
+             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+             */
+            phase?: 'new-moon' | 'full-moon';
             /**
              * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
@@ -25770,7 +25774,7 @@ export type PostForecastTransitsError = PostForecastTransitsErrors[keyof PostFor
 
 export type PostForecastTransitsResponses = {
     /**
-     * Time-ordered western transit events: aspects, ingresses, and stations
+     * Time-ordered western forecast events: aspects, ingresses, stations, eclipses, and moon phases
      */
     200: {
         /**
@@ -25823,19 +25827,19 @@ export type PostForecastTransitsResponses = {
              */
             datetime: string;
             /**
-             * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
              */
             domain: 'western' | 'vedic' | 'biorhythm';
             /**
-             * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
              */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
              */
             body: string;
             /**
-             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
              */
             target?: string;
             /**
@@ -25858,6 +25862,10 @@ export type PostForecastTransitsResponses = {
              * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
              */
             obscuration?: number;
+            /**
+             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+             */
+            phase?: 'new-moon' | 'full-moon';
             /**
              * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
@@ -26102,19 +26110,19 @@ export type PostForecastSignificantDatesResponses = {
              */
             datetime: string;
             /**
-             * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
              */
             domain: 'western' | 'vedic' | 'biorhythm';
             /**
-             * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
              */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
              */
             body: string;
             /**
-             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
              */
             target?: string;
             /**
@@ -26137,6 +26145,10 @@ export type PostForecastSignificantDatesResponses = {
              * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
              */
             obscuration?: number;
+            /**
+             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+             */
+            phase?: 'new-moon' | 'full-moon';
             /**
              * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
@@ -26400,6 +26412,7 @@ export type PostForecastDigestResponses = {
                 'sign-ingress'?: number;
                 'retrograde-station'?: number;
                 eclipse?: number;
+                'lunar-phase'?: number;
                 'dasha-change'?: number;
                 'critical-day'?: number;
             };
@@ -26416,19 +26429,19 @@ export type PostForecastDigestResponses = {
                  */
                 datetime: string;
                 /**
-                 * Forecast domain. western covers transit aspects, sign ingresses, and retrograde stations. vedic covers Vimshottari mahadasha and antardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+                 * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
                  */
                 domain: 'western' | 'vedic' | 'biorhythm';
                 /**
-                 * Event kind. transit-aspect, sign-ingress, retrograde-station, and eclipse are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+                 * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
                  */
-                type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'dasha-change' | 'critical-day';
+                type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
                 /**
-                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse or Moon for a lunar eclipse, a mahadasha or antardasha label for dasha changes, or the critical cycle for biorhythm days.
+                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
                  */
                 body: string;
                 /**
-                 * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered. Absent for other event types.
+                 * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
                  */
                 target?: string;
                 /**
@@ -26451,6 +26464,10 @@ export type PostForecastDigestResponses = {
                  * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
                  */
                 obscuration?: number;
+                /**
+                 * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+                 */
+                phase?: 'new-moon' | 'full-moon';
                 /**
                  * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
                  */

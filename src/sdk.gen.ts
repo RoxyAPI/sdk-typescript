@@ -1740,7 +1740,7 @@ export class Forecast extends HeyApiClient {
     /**
      * Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
      *
-     * Build one time-ordered forecast for a single birth subject by merging upcoming events across three domains: western transit-to-natal aspects, sign ingresses, and retrograde stations; vedic Vimshottari mahadasha and antardasha boundaries; and biorhythm critical days. The window is clamped to 90 days and events are capped and scored by significance. Built for what-is-coming dashboards, daily and weekly forecast feeds, and timing tools.
+     * Build one time-ordered forecast for a single birth subject by merging upcoming events across three domains: western transit-to-natal aspects, sign ingresses, retrograde stations, eclipses, and new and full moons; biorhythm critical days; and vedic Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. The window is clamped to 90 days and events are capped and scored by significance. Built for what-is-coming dashboards, daily and weekly forecast feeds, and timing tools.
      */
     public generateTimeline<ThrowOnError extends boolean = false>(options?: Options<PostForecastTimelineData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostForecastTimelineResponses, PostForecastTimelineErrors, ThrowOnError>({
@@ -1755,9 +1755,9 @@ export class Forecast extends HeyApiClient {
     }
     
     /**
-     * Western transit forecast - Transit aspects, sign ingresses, retrograde stations
+     * Western astrology forecast - aspects, ingresses, stations, eclipses, moon phases
      *
-     * Forecast the western astrology events for a single birth chart over a window up to 90 days: every transit-to-natal major aspect refined to its exact instant, every transiting planet sign ingress, and every retrograde or direct station. Returns a time-ordered, significance-scored timeline. Built for astrology forecast feeds, transit alerts, and timing tools.
+     * Forecast the western astrology events for a single birth chart over a window up to 90 days: every transit-to-natal major aspect refined to its exact instant, every transiting planet sign ingress, every retrograde or direct station, every solar and lunar eclipse, and every New and Full Moon. Returns a time-ordered, significance-scored timeline. Built for astrology forecast feeds, transit alerts, and timing tools.
      */
     public forecastTransits<ThrowOnError extends boolean = false>(options?: Options<PostForecastTransitsData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostForecastTransitsResponses, PostForecastTransitsErrors, ThrowOnError>({
