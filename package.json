@@ -69,7 +69,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.9",
 		"@hey-api/client-fetch": "0.13.1",
-		"@hey-api/openapi-ts": "0.97.3",
+		"@hey-api/openapi-ts": "0.98.1",
 		"@types/node": "^25.5.0",
 		"lefthook": "^2.1.4",
 		"tsup": "^8.5.1",
