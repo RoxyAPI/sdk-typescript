@@ -1297,7 +1297,7 @@ const { data } = await roxy.angelNumbers.listAngelNumbers({ query: { limit: 20, 
 const { data } = await roxy.angelNumbers.getAngelNumber({ path: { number: '444' } });
 
 // Analyze Any Number Sequence
-const { data } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234' } });
+const { data } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234', context: 'clock' } });
 
 // Daily Angel Number
 const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'user123', date: '2026-03-06' } });

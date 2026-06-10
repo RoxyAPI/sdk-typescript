@@ -2291,7 +2291,7 @@ export class AngelNumbers extends HeyApiClient {
     /**
      * List All Angel Numbers
      *
-     * Retrieve the complete database of angel numbers with summary information. Returns all 43 angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), mirror patterns (1212), and sequential numbers (1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
+     * Retrieve the complete database of angel numbers with summary information. Returns 75+ angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), the mirror families (X0X like 101-909, X1X, four-digit mirrors like 1212-2121), palindromes (1221, 1331), compound sequences (911, 1122), and sequential numbers (123, 1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
      */
     public listAngelNumbers<ThrowOnError extends boolean = false>(options?: Options<GetAngelNumbersNumbersData, ThrowOnError>) {
         return (options?.client ?? this.client).get<GetAngelNumbersNumbersResponses, GetAngelNumbersNumbersErrors, ThrowOnError>({
@@ -2304,7 +2304,7 @@ export class AngelNumbers extends HeyApiClient {
     /**
      * Get Angel Number Meaning
      *
-     * Get the complete, authoritative meaning and interpretation for a specific angel number. Returns detailed spiritual, love, career, and twin flame interpretations along with keywords, affirmation, and actionable steps. Covers 43 angel numbers including 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, 1212, 1234, and more. Authoritative interpretations covering all major angel number patterns.
+     * Get the complete, authoritative meaning and interpretation for a specific angel number. Returns detailed spiritual, love, career, money, and twin flame interpretations, plus a biblical perspective and a shadow reading, along with keywords, affirmation, and actionable steps. Covers 75+ angel numbers including 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, 1212, 1234, and more. Authoritative interpretations covering all major angel number patterns.
      */
     public getAngelNumber<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersNumbersByNumberData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersByNumberErrors, ThrowOnError>({
@@ -2317,7 +2317,7 @@ export class AngelNumbers extends HeyApiClient {
     /**
      * Analyze Any Number Sequence
      *
-     * Smart angel number analysis that works for ANY number sequence, not just known angel numbers. Automatically classifies the pattern type (repeating, sequential, mirror, master, root), calculates the numerology digit root, checks the database for a known meaning, and provides the foundational digit root interpretation as a fallback. Perfect for synchronicity tracking apps where users enter arbitrary number sequences they encounter.
+     * Smart angel number analysis that works for ANY number sequence, not just known angel numbers. Automatically classifies the pattern type (repeating, sequential, mirror, master, root, compound), calculates the numerology digit root, checks the database for a known meaning, and provides the foundational digit root interpretation (with full spiritual, love, career, money, and twin flame guidance) as a fallback. An optional context parameter adds a note tailored to where the number was seen. Perfect for synchronicity tracking apps where users enter arbitrary number sequences they encounter.
      */
     public analyzeNumberSequence<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersLookupData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetAngelNumbersLookupResponses, GetAngelNumbersLookupErrors, ThrowOnError>({
@@ -2330,7 +2330,7 @@ export class AngelNumbers extends HeyApiClient {
     /**
      * Daily Angel Number
      *
-     * Get the angel number of the day with full meaning and interpretation. Returns a deterministic angel number based on the current date (or a provided seed date), ensuring all users see the same number for any given day. Includes complete spiritual, love, career, and twin flame interpretations. Perfect for daily guidance features, push notifications, content generation, and angel number widget integrations.
+     * Get the angel number of the day with full meaning and interpretation. Returns a deterministic angel number based on the current date (or a provided seed date), ensuring all users see the same number for any given day. Includes complete spiritual, love, career, money, and twin flame interpretations plus a biblical perspective and a shadow reading. Perfect for daily guidance features, push notifications, content generation, and angel number widget integrations.
      */
     public getDailyAngelNumber<ThrowOnError extends boolean = false>(options?: Options<PostAngelNumbersDailyData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostAngelNumbersDailyResponses, PostAngelNumbersDailyErrors, ThrowOnError>({

@@ -32351,9 +32351,9 @@ export type GetAngelNumbersNumbersData = {
          */
         offset?: number;
         /**
-         * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome patterns like 1212. "master" returns 11, 22, 33. "root" returns single digits 0-9.
+         * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome or alternating patterns like 1212, 717. "master" returns 11, 22, 33. "root" returns single digits 0-9. "compound" returns mixed sequences with no pure pattern like 911, 1122.
          */
-        type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root';
+        type?: 'repeating' | 'sequential' | 'mirror' | 'master' | 'root' | 'compound';
     };
     url: '/angel-numbers/numbers';
 };
@@ -32468,7 +32468,7 @@ export type GetAngelNumbersNumbersResponses = {
      */
     200: {
         /**
-         * Total number of angel numbers matching the applied filters. 43 for the full set, fewer when filtered by type.
+         * Total number of angel numbers matching the applied filters. The full catalog size when unfiltered, fewer when filtered by type.
          */
         total: number;
         /**
@@ -32496,7 +32496,7 @@ export type GetAngelNumbersNumbersResponses = {
              */
             coreMessage: string;
             /**
-             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+             * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9). "compound" means a mixed sequence with no pure pattern (911, 1122).
              */
             type: string;
             /**
@@ -32669,7 +32669,7 @@ export type GetAngelNumbersNumbersByNumberResponses = {
          */
         coreMessage: string;
         /**
-         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9).
+         * Pattern classification of the angel number. "repeating" means all digits are the same (111, 4444). "sequential" means consecutive digits (1234). "mirror" means palindrome or alternating pattern (1212, 1221). "master" means numerology master number (11, 22, 33). "root" means single digit (0-9). "compound" means a mixed sequence with no pure pattern (911, 1122).
          */
         type: string;
         /**
@@ -32694,14 +32694,26 @@ export type GetAngelNumbersNumbersByNumberResponses = {
              */
             love: string;
             /**
-             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life aligned with this angel number energy.
+             * Career and vocation guidance: professional opportunities, calling, and practical work advice aligned with this angel number energy. Money and finances are returned separately in the money field.
              */
             career: string;
+            /**
+             * Money, finances, and material abundance guidance, kept distinct from career and vocation. Covers income, spending, debt, and prosperity mindset for this angel number.
+             */
+            money: string;
             /**
              * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
              */
             twinFlame: string;
         };
+        /**
+         * Biblical and religious perspective on the sequence, framed honestly. States plainly when a number is not a scriptural concept rather than inventing scripture.
+         */
+        biblical: string;
+        /**
+         * Shadow or cautionary reading: the misuse, over-reliance, or imbalance this sequence can signal. Complements the energy classification.
+         */
+        shadow: string;
         /**
          * Positive affirmation aligned with this angel number. Can be used for daily affirmation features, meditation guidance, or spiritual journal prompts.
          */
@@ -32727,6 +32739,10 @@ export type GetAngelNumbersLookupData = {
          * Number sequence to analyze (1-8 digits). Can be any number the user has encountered: clock times (1111), addresses (717), receipts (888), license plates (4444), or any repeating pattern.
          */
         number: string;
+        /**
+         * Where the number was seen. When supplied, the response adds a contextNote tailoring the reading to the sighting: clock (a glanced time), receipt (a purchase), license-plate (in transit), phone (a call or notification), address (a home or place), price (a total or amount).
+         */
+        context?: 'clock' | 'receipt' | 'license-plate' | 'phone' | 'address' | 'price';
     };
     url: '/angel-numbers/lookup';
 };
@@ -32845,7 +32861,7 @@ export type GetAngelNumbersLookupResponses = {
          */
         number: string;
         /**
-         * Pattern classification detected for this number. "repeating" means all same digits. "sequential" means consecutive ascending or descending. "mirror" means palindrome or alternating pattern. "master" means numerology master number. "root" means single digit.
+         * Pattern classification detected for this number. "repeating" means all same digits. "sequential" means consecutive ascending or descending. "mirror" means palindrome or alternating pattern. "master" means numerology master number. "root" means single digit. "compound" means a multi-digit sequence with no pure pattern (e.g. 911, 1122).
          */
         type: string;
         /**
@@ -32869,7 +32885,7 @@ export type GetAngelNumbersLookupResponses = {
          */
         isRepeating: boolean;
         /**
-         * Full angel number meaning if this number exists in the database (43 known numbers). Null if the number is not in the database, in which case use the analysis fields (type, digitRoot) for interpretation.
+         * Full angel number meaning if this number exists in the curated database (75+ known sequences). Null if the number is not in the database, in which case use the analysis fields (type, digitRoot) and the digitRootMeaning fallback for interpretation.
          */
         knownMeaning: {
             /**
@@ -32889,7 +32905,7 @@ export type GetAngelNumbersLookupResponses = {
              */
             keywords: Array<string>;
             /**
-             * Detailed interpretations across four life areas: spiritual, love, career, and twin flame.
+             * Detailed interpretations across life areas.
              */
             meaning: {
                 /**
@@ -32901,14 +32917,26 @@ export type GetAngelNumbersLookupResponses = {
                  */
                 love: string;
                 /**
-                 * Career and financial guidance including professional opportunities and money mindset.
+                 * Career and vocation guidance. Money and finances are returned separately in the money field.
                  */
                 career: string;
+                /**
+                 * Money, finances, and material abundance guidance, distinct from career.
+                 */
+                money: string;
                 /**
                  * Twin flame connection interpretation covering union, separation, and spiritual growth.
                  */
                 twinFlame: string;
             };
+            /**
+             * Biblical and religious perspective, framed honestly.
+             */
+            biblical: string;
+            /**
+             * Shadow or cautionary reading for this number.
+             */
+            shadow: string;
             /**
              * Positive affirmation for this number.
              */
@@ -32934,7 +32962,29 @@ export type GetAngelNumbersLookupResponses = {
              * Core message of the foundational root digit.
              */
             coreMessage: string;
+            /**
+             * Full life-area interpretation of the underlying root digit. For an unknown sequence this is the substantive reading to display, so a synchronicity app never dead-ends on an arbitrary number.
+             */
+            meaning: {
+                spiritual: string;
+                love: string;
+                career: string;
+                money: string;
+                twinFlame: string;
+            };
+            /**
+             * Keywords for the root digit.
+             */
+            keywords: Array<string>;
+            /**
+             * Affirmation for the root digit.
+             */
+            affirmation: string;
         };
+        /**
+         * Present only when the context query parameter is supplied. A short reading layered on top of the meaning that accounts for WHERE the number was seen (clock, receipt, license plate, phone, address, price), since the place of a sighting shifts its emphasis.
+         */
+        contextNote?: string;
     };
 };
 
@@ -33103,7 +33153,7 @@ export type PostAngelNumbersDailyResponses = {
          */
         energy: string;
         /**
-         * Detailed interpretations across four life areas for the daily angel number.
+         * Detailed interpretations across life areas for the daily angel number.
          */
         meaning: {
             /**
@@ -33115,14 +33165,26 @@ export type PostAngelNumbersDailyResponses = {
              */
             love: string;
             /**
-             * Career and financial guidance including professional opportunities, money mindset, and practical advice for work life.
+             * Career and vocation guidance: professional opportunities, calling, and practical work advice. Money and finances are returned separately in the money field.
              */
             career: string;
+            /**
+             * Money, finances, and material abundance guidance, kept distinct from career and vocation.
+             */
+            money: string;
             /**
              * Twin flame connection interpretation covering union, separation, and spiritual growth within the twin flame journey.
              */
             twinFlame: string;
         };
+        /**
+         * Biblical and religious perspective on the daily sequence, framed honestly.
+         */
+        biblical: string;
+        /**
+         * Shadow or cautionary reading for the daily sequence. Complements the energy classification.
+         */
+        shadow: string;
         /**
          * Five to eight keywords capturing the spiritual themes and energy of the daily angel number. Useful for search, filtering, and content generation.
          */
