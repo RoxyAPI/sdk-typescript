@@ -10127,7 +10127,12 @@ export type PostVedicAstrologyBirthChartResponse = PostVedicAstrologyBirthChartR
 export type PostVedicAstrologyNavamsaData = {
     body?: NavamsaRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/navamsa';
 };
 
@@ -10247,7 +10252,12 @@ export type PostVedicAstrologyNavamsaResponse = PostVedicAstrologyNavamsaRespons
 export type PostVedicAstrologyDivisionalChartData = {
     body?: DivisionalChartRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/divisional-chart';
 };
 
@@ -13986,7 +13996,12 @@ export type PostVedicAstrologyKpCuspsResponse = PostVedicAstrologyKpCuspsRespons
 export type PostVedicAstrologyKpChartData = {
     body?: KpChartRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/kp/chart';
 };
 
