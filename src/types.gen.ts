@@ -12343,40 +12343,40 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
             unfavorableNakshatras: Array<string>;
         };
         /**
-         * Panchaka, inauspicious period when Moon transits nakshatras 23-27. Five types based on the specific nakshatra. Includes timing when active. Avoid major activities during Panchaka.
+         * Panchaka, the inauspicious ~5-day window while the Moon transits the last five nakshatras (Dhanishta 3rd pada through Revati, 300 to 360 degrees sidereal). The dosha type depends on the weekday it begins; startsAt and endsAt report the period in force at sunrise or beginning later this day. Avoid major activities during Panchaka.
          */
         panchaka: {
             /**
-             * Whether Panchaka is currently active. Panchaka occurs when Moon transits through the last 5 nakshatras (Dhanishta to Revati).
+             * Whether Panchaka is in force at sunrise, the panchang day reference. Can be false while startsAt and endsAt are populated when Panchaka begins later in the day.
              */
             active: boolean;
             /**
-             * Panchaka type when active: Mrityu (death-related), Agni (fire-related), Raja (government-related), Chora (theft-related), or Roga (disease-related). Null when Panchaka is not active.
+             * Panchaka dosha, set by the weekday the period BEGINS (not the nakshatra): Roga (Sunday, disease), Raja (Monday, government), Agni (Tuesday, fire), Chora (Friday, theft), Mrityu (Saturday, death). Null when Panchaka begins on Wednesday or Thursday (no dosha) or when no Panchaka touches this date.
              */
             type: string;
             /**
-             * When the current Panchaka period started (Moon entered Dhanishta nakshatra). Null when not active. In requested timezone.
+             * When the Panchaka period starts (Moon enters 300 degrees, Dhanishta 3rd pada). May predate this date when Panchaka is already running. Null when no Panchaka is in force or begins on this date. In requested timezone.
              */
             startsAt: string;
             /**
-             * When the current Panchaka period ends (Moon exits Revati nakshatra). Null when not active. In requested timezone.
+             * When the Panchaka period ends (Moon exits Revati at 360 degrees), about five days after it starts. Null when no Panchaka. In requested timezone.
              */
             endsAt: string;
         };
         /**
-         * Bhadra, occurs during Vishti Karana period. One of the 7 movable karanas, Vishti (also called Bhadra) is avoided for all auspicious activities. Includes timing when active.
+         * Bhadra (Vishti Karana), the 7th movable karana, avoided for all auspicious activities. Bhadra recurs roughly every 3 to 5 days and lasts about half a tithi, so most occurrences begin after sunrise rather than at it. startsAt and endsAt report the Bhadra beginning on this date regardless of whether it is active at sunrise.
          */
         bhadra: {
             /**
-             * Whether Bhadra (Vishti Karana) is currently active. Bhadra is considered inauspicious for starting new ventures.
+             * Whether Bhadra (Vishti Karana) is in force at sunrise, the panchang day reference moment. Can be false while startsAt and endsAt are populated when Bhadra begins later in the day.
              */
             active: boolean;
             /**
-             * When the current Bhadra (Vishti) period started. Null when not active. In requested timezone.
+             * When the Bhadra (Vishti) period that begins on this date starts. Null when no Bhadra begins on this date. In requested timezone.
              */
             startsAt: string;
             /**
-             * When the current Bhadra (Vishti) period ends. Null when not active. In requested timezone.
+             * When the Bhadra (Vishti) period that begins on this date ends. May fall on the next calendar day. Null when no Bhadra begins on this date. In requested timezone.
              */
             endsAt: string;
         };
