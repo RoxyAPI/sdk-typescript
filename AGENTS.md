@@ -43,7 +43,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 |-----------|-----------|----------------|
 | `roxy.astrology` | 23 | Production-ready Western astrology API + remote MCP for AI agents and developers |
 | `roxy.vedicAstrology` | 43 | Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers |
-| `roxy.numerology` | 16 | Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers |
+| `roxy.numerology` | 20 | Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers |
 | `roxy.tarot` | 10 | Production-ready tarot card reading API + hosted MCP for AI agents and developers |
 | `roxy.humanDesign` | 12 | Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i... |
 | `roxy.forecast` | 5 | Merge upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm critical days, and... |

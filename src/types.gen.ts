@@ -21183,6 +21183,888 @@ export type PostNumerologyDailyResponses = {
 
 export type PostNumerologyDailyResponse = PostNumerologyDailyResponses[keyof PostNumerologyDailyResponses];
 
+export type PostNumerologyChaldeanData = {
+    body?: {
+        /**
+         * The name to analyze. Chaldean tradition uses the name a person is most known by, not necessarily the full legal birth name.
+         */
+        name: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/chaldean';
+};
+
+export type PostNumerologyChaldeanErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyChaldeanError = PostNumerologyChaldeanErrors[keyof PostNumerologyChaldeanErrors];
+
+export type PostNumerologyChaldeanResponses = {
+    /**
+     * Successfully calculated the Chaldean name reading
+     */
+    200: {
+        /**
+         * The name analyzed.
+         */
+        name: string;
+        /**
+         * The Destiny or name number from all letters. The primary Chaldean number, revealing the overall direction encoded in the name.
+         */
+        destiny: {
+            /**
+             * Raw sum of the Chaldean letter values before any reduction.
+             */
+            total: number;
+            /**
+             * The interpretable compound number (10 to 52), the hidden influence behind the name, or null when the total resolves below 10.
+             */
+            compound: number;
+            /**
+             * The single-digit root (1 to 9), the outward expression. Chaldean does not preserve master numbers.
+             */
+            root: number;
+            /**
+             * Letter-by-letter Chaldean breakdown summed to the total, then to compound and root.
+             */
+            calculation: string;
+            /**
+             * Cheiro compound-number interpretation when the aspect carries a compound layer.
+             */
+            compoundMeaning: {
+                /**
+                 * The compound number (10 to 52).
+                 */
+                number: number;
+                /**
+                 * Classical symbolic title from Cheiro, or null when the number has no named symbol.
+                 */
+                name: string;
+                /**
+                 * Overall tenor of the compound. "mixed" covers conditional numbers that are fortunate only alongside a favorable single number or in a specific domain.
+                 */
+                nature: 'fortunate' | 'unfortunate' | 'mixed';
+                /**
+                 * Cheiro interpretation of the hidden influence carried by this compound number.
+                 */
+                meaning: string;
+                /**
+                 * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
+                 */
+                sameAs?: number;
+            };
+        };
+        /**
+         * The Soul Urge number from the vowels, revealing inner desire. Root may be 0 when the name has no vowels.
+         */
+        soulUrge: {
+            /**
+             * Raw sum of the Chaldean letter values before any reduction.
+             */
+            total: number;
+            /**
+             * The interpretable compound number (10 to 52), the hidden influence behind the name, or null when the total resolves below 10.
+             */
+            compound: number;
+            /**
+             * The single-digit root (1 to 9), the outward expression. Chaldean does not preserve master numbers.
+             */
+            root: number;
+            /**
+             * Letter-by-letter Chaldean breakdown summed to the total, then to compound and root.
+             */
+            calculation: string;
+            /**
+             * Cheiro compound-number interpretation when the aspect carries a compound layer.
+             */
+            compoundMeaning: {
+                /**
+                 * The compound number (10 to 52).
+                 */
+                number: number;
+                /**
+                 * Classical symbolic title from Cheiro, or null when the number has no named symbol.
+                 */
+                name: string;
+                /**
+                 * Overall tenor of the compound. "mixed" covers conditional numbers that are fortunate only alongside a favorable single number or in a specific domain.
+                 */
+                nature: 'fortunate' | 'unfortunate' | 'mixed';
+                /**
+                 * Cheiro interpretation of the hidden influence carried by this compound number.
+                 */
+                meaning: string;
+                /**
+                 * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
+                 */
+                sameAs?: number;
+            };
+        };
+        /**
+         * The Personality number from the consonants, revealing the outer impression. Root may be 0 when the name has no consonants.
+         */
+        personality: {
+            /**
+             * Raw sum of the Chaldean letter values before any reduction.
+             */
+            total: number;
+            /**
+             * The interpretable compound number (10 to 52), the hidden influence behind the name, or null when the total resolves below 10.
+             */
+            compound: number;
+            /**
+             * The single-digit root (1 to 9), the outward expression. Chaldean does not preserve master numbers.
+             */
+            root: number;
+            /**
+             * Letter-by-letter Chaldean breakdown summed to the total, then to compound and root.
+             */
+            calculation: string;
+            /**
+             * Cheiro compound-number interpretation when the aspect carries a compound layer.
+             */
+            compoundMeaning: {
+                /**
+                 * The compound number (10 to 52).
+                 */
+                number: number;
+                /**
+                 * Classical symbolic title from Cheiro, or null when the number has no named symbol.
+                 */
+                name: string;
+                /**
+                 * Overall tenor of the compound. "mixed" covers conditional numbers that are fortunate only alongside a favorable single number or in a specific domain.
+                 */
+                nature: 'fortunate' | 'unfortunate' | 'mixed';
+                /**
+                 * Cheiro interpretation of the hidden influence carried by this compound number.
+                 */
+                meaning: string;
+                /**
+                 * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
+                 */
+                sameAs?: number;
+            };
+        };
+        numberMeaning: {
+            /**
+             * The Destiny root (1 to 9).
+             */
+            number: number;
+            /**
+             * Ruling planet.
+             */
+            planet: string;
+            /**
+             * Archetype of the root number.
+             */
+            title: string;
+            /**
+             * Core themes of the Destiny root.
+             */
+            keywords: Array<string>;
+            /**
+             * True for roots 4 and 8, the two numbers Cheiro counsels caution with.
+             */
+            caution: boolean;
+            /**
+             * Planetary interpretation of the Destiny root number.
+             */
+            meaning: string;
+        };
+        /**
+         * True when the Destiny root is 4 or 8, the karmic numbers Cheiro advises adjusting a name away from for material success.
+         */
+        caution: boolean;
+        /**
+         * One-line plain-language summary of the Chaldean reading.
+         */
+        summary: string;
+    };
+};
+
+export type PostNumerologyChaldeanResponse = PostNumerologyChaldeanResponses[keyof PostNumerologyChaldeanResponses];
+
+export type GetNumerologyCompoundNumberByNumberData = {
+    body?: never;
+    path: {
+        /**
+         * Compound number from 10 to 52.
+         */
+        number: string;
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/compound-number/{number}';
+};
+
+export type GetNumerologyCompoundNumberByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetNumerologyCompoundNumberByNumberError = GetNumerologyCompoundNumberByNumberErrors[keyof GetNumerologyCompoundNumberByNumberErrors];
+
+export type GetNumerologyCompoundNumberByNumberResponses = {
+    /**
+     * Successfully retrieved the compound number meaning
+     */
+    200: {
+        /**
+         * The compound number (10 to 52).
+         */
+        number: number;
+        /**
+         * Classical symbolic title from Cheiro, or null when none is given.
+         */
+        name: string;
+        /**
+         * Overall tenor of the number. "mixed" marks conditional numbers, fortunate only with a favorable single number or in one domain.
+         */
+        nature: 'fortunate' | 'unfortunate' | 'mixed';
+        /**
+         * Cheiro interpretation of the hidden influence carried by this compound number.
+         */
+        meaning: string;
+        /**
+         * The single-digit root the compound reduces to (1 to 9).
+         */
+        root: number;
+        /**
+         * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
+         */
+        sameAs?: number;
+    };
+};
+
+export type GetNumerologyCompoundNumberByNumberResponse = GetNumerologyCompoundNumberByNumberResponses[keyof GetNumerologyCompoundNumberByNumberResponses];
+
+export type PostNumerologyDualData = {
+    body?: {
+        /**
+         * The name to analyze in both systems.
+         */
+        name: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/dual';
+};
+
+export type PostNumerologyDualErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyDualError = PostNumerologyDualErrors[keyof PostNumerologyDualErrors];
+
+export type PostNumerologyDualResponses = {
+    /**
+     * Successfully calculated the name in both numerology systems
+     */
+    200: {
+        /**
+         * The name analyzed.
+         */
+        name: string;
+        pythagorean: {
+            /**
+             * Pythagorean Expression number (1 to 9, 11, 22, 33).
+             */
+            number: number;
+            /**
+             * Single digit or preserved master number.
+             */
+            type: 'single' | 'master';
+            /**
+             * Pythagorean letter breakdown and reduction.
+             */
+            calculation: string;
+            /**
+             * Archetype of the number.
+             */
+            title: string;
+            /**
+             * Core themes in the Pythagorean reading.
+             */
+            keywords: Array<string>;
+        };
+        chaldean: {
+            /**
+             * Chaldean compound number (10 to 52), the hidden influence, or null.
+             */
+            compound: number;
+            /**
+             * Chaldean root (1 to 9).
+             */
+            root: number;
+            /**
+             * Raw Chaldean letter total.
+             */
+            total: number;
+            /**
+             * Chaldean letter breakdown to compound and root.
+             */
+            calculation: string;
+            /**
+             * Planetary ruler of the Chaldean root.
+             */
+            planet: string;
+            /**
+             * Archetype of the Chaldean root.
+             */
+            title: string;
+            /**
+             * True when the Chaldean root is 4 or 8, the numbers of caution.
+             */
+            caution: boolean;
+            /**
+             * Cheiro compound interpretation when present.
+             */
+            compoundMeaning: {
+                /**
+                 * The compound number.
+                 */
+                number: number;
+                /**
+                 * Symbolic title.
+                 */
+                name: string;
+                /**
+                 * Tenor of the compound.
+                 */
+                nature: 'fortunate' | 'unfortunate' | 'mixed';
+                /**
+                 * Cheiro interpretation.
+                 */
+                meaning: string;
+                /**
+                 * Series equivalent for 33 to 52.
+                 */
+                sameAs?: number;
+            };
+        };
+        /**
+         * True when both systems reduce to the same single-digit energy (Pythagorean number reduced to one digit equals the Chaldean root). Agreement is read as a name whose vibrations are in harmony.
+         */
+        agreement: boolean;
+        /**
+         * Plain-language comparison of the two systems for this name.
+         */
+        note: string;
+    };
+};
+
+export type PostNumerologyDualResponse = PostNumerologyDualResponses[keyof PostNumerologyDualResponses];
+
+export type PostNumerologyBusinessNameData = {
+    body?: {
+        /**
+         * The business or brand name to evaluate.
+         */
+        name: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/numerology/business-name';
+};
+
+export type PostNumerologyBusinessNameErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostNumerologyBusinessNameError = PostNumerologyBusinessNameErrors[keyof PostNumerologyBusinessNameErrors];
+
+export type PostNumerologyBusinessNameResponses = {
+    /**
+     * Successfully analyzed the business name
+     */
+    200: {
+        /**
+         * The business name analyzed.
+         */
+        name: string;
+        /**
+         * Raw Chaldean letter total of the name.
+         */
+        total: number;
+        /**
+         * Chaldean compound number (10 to 52), the hidden influence, or null.
+         */
+        compound: number;
+        /**
+         * Single-digit business root (1 to 9), the outward commercial expression.
+         */
+        root: number;
+        /**
+         * Planetary ruler of the business root.
+         */
+        planet: string;
+        /**
+         * Overall favorability of the root for business. excellent and good are growth-friendly; caution (7, 8) and avoid (4) flag the demanding and unstable roots.
+         */
+        rating: 'excellent' | 'good' | 'caution' | 'avoid';
+        /**
+         * True when the compound number is one of Cheiro fortunate compounds, an extra positive signal layered over the root rating.
+         */
+        favorableCompound: boolean;
+        /**
+         * Industries the business root favors.
+         */
+        industries: Array<string>;
+        /**
+         * Plain-language guidance for using this number as a brand.
+         */
+        guidance: string;
+        /**
+         * Chaldean letter breakdown of the business name.
+         */
+        calculation: string;
+        /**
+         * Cheiro compound interpretation when present.
+         */
+        compoundMeaning: {
+            /**
+             * The compound number.
+             */
+            number: number;
+            /**
+             * Symbolic title, if any.
+             */
+            name: string;
+            /**
+             * Tenor of the compound.
+             */
+            nature: 'fortunate' | 'unfortunate' | 'mixed';
+            /**
+             * Cheiro interpretation.
+             */
+            meaning: string;
+            /**
+             * Series equivalent for 33 to 52.
+             */
+            sameAs?: number;
+        };
+        /**
+         * One-line plain-language verdict for the business name.
+         */
+        summary: string;
+    };
+};
+
+export type PostNumerologyBusinessNameResponse = PostNumerologyBusinessNameResponses[keyof PostNumerologyBusinessNameResponses];
+
 export type GetTarotCardsData = {
     body?: never;
     path?: never;

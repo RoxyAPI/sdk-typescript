@@ -785,6 +785,18 @@ const { data } = await roxy.numerology.getNumberMeaning({ path: { number: '5' } 
 
 // Get daily numerology number - Number of the Day with interpretation
 const { data } = await roxy.numerology.getDailyNumber({ body: { seed: 'user123', date: '2026-03-06' } });
+
+// Chaldean numerology name reading - Destiny, compound number, planetary ruler
+const { data } = await roxy.numerology.calculateChaldean({ body: { name: 'Helen' } });
+
+// Compound number meaning - Cheiro Chaldean interpretation 10 to 52
+const { data } = await roxy.numerology.getCompoundNumber({ path: { number: '23' } });
+
+// Dual numerology - Pythagorean and Chaldean name numbers in one call
+const { data } = await roxy.numerology.calculateDual({ body: { name: 'David' } });
+
+// Business name numerology - Chaldean brand name analysis and lucky numbers
+const { data } = await roxy.numerology.calculateBusinessName({ body: { name: 'Ford' } });
 ```
 
 ---
