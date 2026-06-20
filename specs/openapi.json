@@ -50663,7 +50663,7 @@
               "example": 34,
               "description": "Gate number from 1 to 64."
             },
-            "required": false,
+            "required": true,
             "description": "Gate number from 1 to 64.",
             "name": "number",
             "in": "path"

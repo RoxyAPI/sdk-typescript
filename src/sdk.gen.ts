@@ -1710,8 +1710,8 @@ export class HumanDesign extends HeyApiClient {
      *
      * Look up the static reference data for a Human Design gate by its number from 1 to 64: the gate keynote name, the center it sits in, the matching I-Ching hexagram, and the gates that form a channel with it. A pure reference endpoint with no birth data required.
      */
-    public getGate<ThrowOnError extends boolean = false>(options?: Options<GetHumanDesignGatesByNumberData, ThrowOnError>) {
-        return (options?.client ?? this.client).get<GetHumanDesignGatesByNumberResponses, GetHumanDesignGatesByNumberErrors, ThrowOnError>({
+    public getGate<ThrowOnError extends boolean = false>(options: Options<GetHumanDesignGatesByNumberData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetHumanDesignGatesByNumberResponses, GetHumanDesignGatesByNumberErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/human-design/gates/{number}',
             ...options

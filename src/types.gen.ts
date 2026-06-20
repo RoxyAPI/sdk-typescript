@@ -25145,11 +25145,11 @@ export type PostHumanDesignGatesResponse = PostHumanDesignGatesResponses[keyof P
 
 export type GetHumanDesignGatesByNumberData = {
     body?: never;
-    path?: {
+    path: {
         /**
          * Gate number from 1 to 64.
          */
-        number?: number;
+        number: number;
     };
     query?: {
         /**
