@@ -41,18 +41,18 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 <!-- BEGIN:DOMAINS -->
 | Namespace | Endpoints | What it covers |
 |-----------|-----------|----------------|
-| `roxy.astrology` | 23 | Production-ready Western astrology API + remote MCP for AI agents and developers |
-| `roxy.vedicAstrology` | 43 | Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers |
-| `roxy.numerology` | 20 | Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers |
-| `roxy.tarot` | 10 | Production-ready tarot card reading API + hosted MCP for AI agents and developers |
+| `roxy.astrology` | 28 | Western astrology API for natal birth charts, daily, weekly, and monthly horoscopes with unique content per sign, syn... |
+| `roxy.vedicAstrology` | 43 | Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), Ashtakoot Gun Milan ku... |
+| `roxy.numerology` | 20 | Numerology API to calculate life path, expression, soul urge, personality, and maturity numbers, with Pinnacle and Ch... |
+| `roxy.tarot` | 10 | Tarot reading API with the complete 78-card Rider-Waite-Smith deck and card meanings for love, career, health, and sp... |
 | `roxy.humanDesign` | 12 | Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i... |
 | `roxy.forecast` | 5 | Merge upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm critical days, and... |
-| `roxy.biorhythm` | 6 | The most complete biorhythm API + remote MCP for AI agents and developers |
-| `roxy.iching` | 9 | I-Ching oracle API + hosted MCP for AI agents and developers |
-| `roxy.crystals` | 12 | Production-ready crystal healing API + hosted MCP for AI agents and developers |
-| `roxy.dreams` | 5 | Dream interpretation API + hosted MCP for AI agents and developers |
-| `roxy.angelNumbers` | 4 | Production-ready angel numbers API + hosted MCP for AI agents and developers |
-| `roxy.location` | 3 | City search and geocoding API + hosted MCP for AI agents and astrology apps |
+| `roxy.biorhythm` | 6 | The most complete biorhythm API: 10 cycle types across 3 primary (physical, emotional, intellectual), 4 secondary (in... |
+| `roxy.iching` | 9 | I-Ching oracle API with all 64 hexagrams, 384 changing lines, 8 trigrams, and modern interpretations for love, career... |
+| `roxy.crystals` | 12 | Crystal healing API with 80 healing crystals and gemstones and their spiritual, emotional, and physical properties |
+| `roxy.dreams` | 5 | Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,... |
+| `roxy.angelNumbers` | 4 | Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve... |
+| `roxy.location` | 3 | City search and geocoding API with 7,000+ cities across 227 countries, returning latitude, longitude, IANA timezone,... |
 | `roxy.usage` | 1 | Monitor your API usage, check rate limits, and track request consumption |
 | `roxy.languages` | 1 | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->

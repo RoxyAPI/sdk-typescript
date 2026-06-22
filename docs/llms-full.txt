@@ -27,7 +27,7 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 
 ## Western Astrology — `roxy.astrology`
 
-Production-ready Western astrology API + remote MCP for AI agents and developers
+Western astrology API for natal birth charts, daily, weekly, and monthly horoscopes with unique content per sign, syn...
 
 ```typescript
 // Get all zodiac signs - Complete zodiac signs list with dates and elements
@@ -244,13 +244,75 @@ const { data } = await roxy.astrology.generatePlanetaryReturn({
     houseSystem: 'placidus',
   },
 });
+
+// Astrocartography map - planetary lines and relocation calculator
+const { data } = await roxy.astrology.generateAstrocartography({
+  query: { include: 'chiron' },
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+  },
+});
+
+// Generate relocation chart - Relocated birth chart calculator with shifted houses and angles
+const { data } = await roxy.astrology.generateRelocationChart({
+  body: {
+    date: '1961-08-04',
+    time: '19:24:00',
+    timezone: -10,
+    birthLatitude: 21.3069,
+    birthLongitude: -157.8583,
+    relocationLatitude: 40.7167,
+    relocationLongitude: -74.006,
+    houseSystem: 'placidus',
+  },
+});
+
+// Local space astrology map - Directional planetary compass lines
+const { data } = await roxy.astrology.generateLocalSpace({
+  query: { include: 'chiron,lilith' },
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+  },
+});
+
+// Fixed stars and star conjunctions calculator - Regulus, Spica, Algol natal report
+const { data } = await roxy.astrology.generateFixedStars({
+  query: { orb: 1 },
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+  },
+});
+
+// Arabic lots calculator - seven Hermetic parts including Part of Fortune and Spirit
+const { data } = await roxy.astrology.calculateArabicLots({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
+});
 ```
 
 ---
 
 ## Vedic Astrology — `roxy.vedicAstrology`
 
-Production-grade Vedic (Jyotish) and KP astrology API + remote MCP for AI agents and developers
+Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), Ashtakoot Gun Milan ku...
 
 ```typescript
 // Get birth chart (D1 Rashi chart) - Kundli Calculator API
@@ -683,7 +745,7 @@ const { data } = await roxy.vedicAstrology.calculateShadbala({
 
 ## Numerology — `roxy.numerology`
 
-Production-ready Pythagorean numerology API + hosted MCP for AI agents and developers
+Numerology API to calculate life path, expression, soul urge, personality, and maturity numbers, with Pinnacle and Ch...
 
 ```typescript
 // Calculate Life Path number - Most important numerology calculation
@@ -803,7 +865,7 @@ const { data } = await roxy.numerology.calculateBusinessName({ body: { name: 'Fo
 
 ## Tarot — `roxy.tarot`
 
-Production-ready tarot card reading API + hosted MCP for AI agents and developers
+Tarot reading API with the complete 78-card Rider-Waite-Smith deck and card meanings for love, career, health, and sp...
 
 ```typescript
 // List all 78 tarot cards
@@ -1130,7 +1192,7 @@ const { data } = await roxy.forecast.forecastSolarReturn({
 
 ## Biorhythm — `roxy.biorhythm`
 
-The most complete biorhythm API + remote MCP for AI agents and developers
+The most complete biorhythm API: 10 cycle types across 3 primary (physical, emotional, intellectual), 4 secondary (in...
 
 ```typescript
 // Get biorhythm reading - Complete cycle analysis for any date
@@ -1178,7 +1240,7 @@ const { data } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user123
 
 ## I-Ching — `roxy.iching`
 
-I-Ching oracle API + hosted MCP for AI agents and developers
+I-Ching oracle API with all 64 hexagrams, 384 changing lines, 8 trigrams, and modern interpretations for love, career...
 
 ```typescript
 // Get daily I-Ching hexagram
@@ -1213,7 +1275,7 @@ const { data } = await roxy.iching.getTrigram({ path: { id: 'Heaven' } });
 
 ## Crystals and Healing Stones — `roxy.crystals`
 
-Production-ready crystal healing API + hosted MCP for AI agents and developers
+Crystal healing API with 80 healing crystals and gemstones and their spiritual, emotional, and physical properties
 
 ```typescript
 // Crystals by Zodiac Sign
@@ -1276,7 +1338,7 @@ const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
 
 ## Dreams — `roxy.dreams`
 
-Dream interpretation API + hosted MCP for AI agents and developers
+Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,...
 
 ```typescript
 // List and search dream symbols
@@ -1299,7 +1361,7 @@ const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { seed: 'user123'
 
 ## Angel Numbers — `roxy.angelNumbers`
 
-Production-ready angel numbers API + hosted MCP for AI agents and developers
+Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve...
 
 ```typescript
 // List All Angel Numbers
@@ -1319,7 +1381,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 ## Location and Timezone — `roxy.location`
 
-City search and geocoding API + hosted MCP for AI agents and astrology apps
+City search and geocoding API with 7,000+ cities across 227 countries, returning latitude, longitude, IANA timezone,...
 
 ```typescript
 // Search cities worldwide - Geocoding autocomplete with coordinates and timezone
