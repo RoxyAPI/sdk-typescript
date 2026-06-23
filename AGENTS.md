@@ -1,6 +1,6 @@
 # @roxyapi/sdk - Agent Guide
 
-TypeScript SDK for RoxyAPI. Twelve domains (Western astrology, Vedic astrology, numerology, tarot, biorhythm, I Ching, crystals, dreams, angel numbers, location, usage, languages). One API key, fully typed, zero runtime dependencies.
+TypeScript SDK for RoxyAPI. 12+ domains (Western astrology, Vedic astrology, numerology, tarot, human design, forecast, biorhythm, I Ching, crystals, dreams, angel numbers, location) plus utility namespaces (usage, languages). One API key, fully typed, zero runtime dependencies.
 
 > Before writing any code with this SDK, read `docs/llms-full.txt` in this package for the complete method reference with examples.
 
@@ -23,16 +23,16 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibility, and natal endpoint needs `latitude`, `longitude`, and (for Western) `timezone`. **Never ask the user for coordinates.** Always call `roxy.location.searchCities` first.
 
 ```typescript
-const { data } = await roxy.location.searchCities({ query: { q: 'Mumbai' } });
+const { data } = await roxy.location.searchCities({ query: { q: 'New York' } });
 const { latitude, longitude, timezone } = data.cities[0];
-// `timezone` is the IANA string ("Asia/Kolkata"). Pass it directly to any chart
+// `timezone` is the IANA string ("America/New_York"). Pass it directly to any chart
 // endpoint and the server resolves it to the DST-correct decimal offset using
 // the chart's own `date`, so a January 1990 New York chart picks EST (-5) even
 // when you looked the city up in July. If you prefer numbers, `utcOffset`
 // (5.5, -5, 9, ...) also works and produces identical charts.
 ```
 
-`q` accepts bare city (`'Mumbai'`), city + country (`'Berlin Germany'`), or comma-qualified (`'Springfield, Illinois'`). Use the qualified form to disambiguate same-named cities.
+`q` accepts bare city (`'Paris'`), city + country (`'Berlin Germany'`), or comma-qualified (`'Springfield, Illinois'`). Use the qualified form to disambiguate same-named cities.
 
 ## Domains
 
@@ -57,7 +57,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.languages` | 1 | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
-**Total:** 148 endpoints across 12 product domains plus usage and languages. Counts auto-sync from `specs/openapi.json` at release time.
+**Total:** 150+ endpoints across 12+ product domains plus usage and languages. Per-domain counts in the table above auto-sync from `specs/openapi.json` at release time.
 
 ## Quality guidelines for agents
 
@@ -74,7 +74,7 @@ Five rules to follow when writing any call with this SDK. Get these right and th
 ### Two-step pattern for coordinate-dependent endpoints
 
 ```typescript
-const { data } = await roxy.location.searchCities({ query: { q: 'Delhi' } });
+const { data } = await roxy.location.searchCities({ query: { q: 'London' } });
 const { latitude, longitude, timezone } = data.cities[0];
 
 const { data: chart } = await roxy.astrology.generateNatalChart({
@@ -190,7 +190,7 @@ Ordered by domain priority (Western, Vedic, Numerology, Tarot, Biorhythm, I Chin
 | Dream symbol lookup | `roxy.dreams.getDreamSymbol({ path: { id: 'flying' } })` |
 | Angel number meaning | `roxy.angelNumbers.getAngelNumber({ path: { number: '1111' } })` |
 | Universal number lookup | `roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234' } })` |
-| Find city coordinates | `roxy.location.searchCities({ query: { q: 'Mumbai' } })` |
+| Find city coordinates | `roxy.location.searchCities({ query: { q: 'Berlin' } })` |
 | Check API usage | `roxy.usage.getUsageStats()` |
 | List supported languages | `roxy.languages.listLanguages()` |
 
@@ -203,8 +203,8 @@ These are the fields AI agents most often get wrong. Copy the format column exac
 | `timezone` | Decimal hours (number) OR IANA string | `5.5`, `-5`, `0` (decimal) OR `"Asia/Kolkata"`, `"America/New_York"` (IANA, resolved to DST-correct offset for the chart date) | `"5:30"`, `"+0530"`, `"GMT-5"`, partial names |
 | `date` | ISO date string | `"1990-01-15"` | `"Jan 15 1990"`, `new Date()`, `"15/01/1990"`, `"1990-1-15"` |
 | `time` | 24-hour string | `"14:30:00"`, `"09:00:00"` | `"2:30 PM"`, `"14:30"` (no seconds), `"9:0:0"` (no leading zeros) |
-| `latitude` | Decimal degrees (number) | `28.6139` (Delhi), `-33.8688` (Sydney), `40.7128` (NYC) | `"28°36'N"`, `"28 36 50"`, strings |
-| `longitude` | Decimal degrees (number) | `77.209` (Delhi), `-74.006` (NYC), `139.6917` (Tokyo) | Same as latitude - no DMS strings |
+| `latitude` | Decimal degrees (number) | `51.5074` (London), `-33.8688` (Sydney), `40.7128` (NYC) | `"28°36'N"`, `"28 36 50"`, strings |
+| `longitude` | Decimal degrees (number) | `-0.1278` (London), `-74.006` (NYC), `139.6917` (Tokyo) | Same as latitude - no DMS strings |
 | `sign` (horoscope path) | Lowercase zodiac name | `aries`, `taurus`, `gemini`, ... `pisces` | `"Aries"`, `"♈"`, `"1"`, `"ARIES"` (case-insensitive but prefer lowercase) |
 | `chakra` (crystals path) | Title-case English name from the fixed enum | `"Root"`, `"Sacral"`, `"Solar Plexus"`, `"Heart"`, `"Throat"`, `"Third Eye"`, `"Crown"` | `"heart"`, `"third-eye"`, `"solar plexus"` - route is case-insensitive at runtime, but the generated TS enum is title-case; lowercase fails `tsc --strict`. |
 | `fullName` (numerology) | Birth-certificate name | `"John William Smith"`, `"Priya Rajesh Sharma"` | Nickname, married name, partial name - affects all letter-based calcs |

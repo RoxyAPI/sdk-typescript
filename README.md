@@ -15,7 +15,7 @@ TypeScript SDK for astrology, Vedic astrology, numerology, tarot, and more.
 
 One API key. Fully typed. Verified against NASA JPL Horizons.
 
-The fastest way to add natal charts, kundli matching, daily horoscopes, tarot readings, and spiritual insights to Node.js apps, backends, and AI agents. Ten domains behind a single [Roxy](https://roxyapi.com) subscription, interpretations in eight languages.
+The fastest way to add natal charts, daily horoscopes, synastry, Vedic kundli, tarot spreads, numerology, human design bodygraphs, and transit forecasts to Node.js apps, backends, and AI agents. 12+ domains behind a single [Roxy](https://roxyapi.com) subscription, interpretations in eight languages.
 
 ## Install
 
@@ -49,7 +49,7 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
 // Step 1: geocode the birth city (required for any chart endpoint)
 const { data } = await roxy.location.searchCities({
-  query: { q: 'Mumbai, India' },
+  query: { q: 'London, UK' },
 });
 const { latitude, longitude, timezone } = data.cities[0];
 
@@ -112,7 +112,7 @@ The global astrology app market is $6.27B and almost entirely Western. These end
 ```typescript
 // Natal chart. The #1 Western query, called on every onboarding.
 const { data: natal } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209, timezone: 5.5 },
+  body: { date: '1990-01-15', time: '14:30:00', latitude: 40.7128, longitude: -74.006, timezone: -5 },
 });
 
 // Daily horoscope. Highest per-user call frequency in the catalog, drives DAUs and push.
@@ -122,8 +122,8 @@ const { data: horoscope } = await roxy.astrology.getDailyHoroscope({ path: { sig
 // Synastry. The dating-app pro-tier feature, full inter-aspect analysis between two charts.
 const { data: synastry } = await roxy.astrology.calculateSynastry({
   body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20, timezone: 5.5 },
-    person2: { date: '1992-07-22', time: '09:00:00', latitude: 19.07, longitude: 72.87, timezone: 5.5 },
+    person1: { date: '1990-01-15', time: '14:30:00', latitude: 40.71, longitude: -74.01, timezone: -5 },
+    person2: { date: '1992-07-22', time: '09:00:00', latitude: 51.51, longitude: -0.13, timezone: 1 },
   },
 });
 // synastry.compatibilityScore, synastry.interAspects, synastry.analysis.strengths
@@ -227,9 +227,9 @@ const { data: hd } = await roxy.humanDesign.generateBodygraph({
   body: {
     date: '1990-07-04',
     time: '10:12:00',
-    latitude: 28.6139,
-    longitude: 77.209,
-    timezone: 5.5,
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -4,
   },
 });
 // hd.type, hd.strategy, hd.profile, hd.definition
@@ -247,9 +247,9 @@ const { data: timeline } = await roxy.forecast.generateTimeline({
     birthData: {
       date: '1990-07-04',
       time: '10:12:00',
-      latitude: 28.6139,
-      longitude: 77.209,
-      timezone: 5.5,
+      latitude: 40.7128,
+      longitude: -74.006,
+      timezone: -4,
     },
     startDate: '2026-06-01',
     endDate: '2026-06-30',
