@@ -1569,6 +1569,556 @@ export type ArabicLotsRequest = {
     houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
 };
 
+export type AsteroidsResponse = {
+    /**
+     * Echo of the birth moment and place used to compute every asteroid.
+     */
+    birthDetails: {
+        /**
+         * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+         */
+        longitude: number;
+        /**
+         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         */
+        timezone: number;
+    };
+    /**
+     * House system actually used to place the asteroids, after any polar fallback to Whole Sign.
+     */
+    houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+    /**
+     * The four classical asteroid goddesses in canonical order: Ceres, Pallas, Juno, and Vesta, each with its tropical position, house, motion, and interpretation.
+     */
+    asteroids: Array<{
+        /**
+         * Display name of the asteroid, localized to the requested language.
+         */
+        name: string;
+        /**
+         * Absolute tropical ecliptic longitude of the asteroid in degrees (0 to 360).
+         */
+        longitude: number;
+        /**
+         * Ecliptic latitude in degrees, the angular distance north or south of the ecliptic plane.
+         */
+        latitude: number;
+        /**
+         * Tropical zodiac sign the asteroid falls in.
+         */
+        sign: string;
+        /**
+         * Degree of the asteroid within its zodiac sign (0 to 29.999).
+         */
+        degree: number;
+        /**
+         * Natal house placement (1 to 12) from the selected house system and birth location.
+         */
+        house: number;
+        /**
+         * Daily motion in degrees per day. Negative values indicate retrograde motion.
+         */
+        speed: number;
+        /**
+         * Whether the asteroid appears to move backward from Earth, true when the daily speed is negative.
+         */
+        isRetrograde: boolean;
+        /**
+         * Plain language meaning of this asteroid in its sign, suitable for chart reports and AI agents. Localized to the requested language.
+         */
+        interpretation: string;
+    }>;
+    /**
+     * Short overview of the asteroid set for previews and report intros.
+     */
+    summary: string;
+};
+
+export type AsteroidsRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     */
+    timezone: number | string;
+    /**
+     * House system used to assign each asteroid to a natal house. Placidus (default), Whole Sign, Equal, or Koch. Above the polar circle, quadrant systems fall back to Whole Sign and the echoed houseSystem reports the system actually used.
+     */
+    houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+};
+
+export type LilithResponse = {
+    /**
+     * Echo of the birth moment and place used to compute both Lilith variants.
+     */
+    birthDetails: {
+        /**
+         * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+         */
+        longitude: number;
+        /**
+         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         */
+        timezone: number;
+    };
+    /**
+     * House system applied when placing each variant in a house.
+     */
+    houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+    /**
+     * Both Black Moon Lilith variants, the mean lunar apogee first and the true (osculating) apogee second.
+     */
+    lilith: Array<{
+        /**
+         * Which lunar apogee this entry describes, localized to the requested language. The mean variant is the smoothed average apogee; the true variant is the instantaneous osculating apogee.
+         */
+        variant: string;
+        /**
+         * Absolute tropical ecliptic longitude of the apogee in degrees (0 to 360).
+         */
+        longitude: number;
+        /**
+         * Ecliptic latitude in degrees, the projection of the apogee off the ecliptic plane. Reaches up to about 5 degrees because the lunar orbit is inclined.
+         */
+        latitude: number;
+        /**
+         * Tropical zodiac sign the apogee falls in, naming where the suppressed instinct lives.
+         */
+        sign: string;
+        /**
+         * Degree of the apogee within its zodiac sign (0 to 29.999).
+         */
+        degree: number;
+        /**
+         * House placement (1 to 12) in the selected house system, the area of life where the Lilith theme plays out.
+         */
+        house: number;
+        /**
+         * Daily motion in degrees per day. The mean apogee is always positive (direct); the true apogee can be negative (retrograde).
+         */
+        speed: number;
+        /**
+         * Whether the apogee is moving backward. Always false for the mean apogee; the true apogee turns retrograde when the osculating ellipse swings the apogee direction backward.
+         */
+        isRetrograde: boolean;
+        /**
+         * Plain language meaning of this Lilith variant in its sign, suitable for chart reports and AI agents. Localized to the requested language.
+         */
+        interpretation: string;
+        /**
+         * Short explanation of how this variant is defined and how it differs from the other, localized to the requested language.
+         */
+        note: string;
+    }>;
+    /**
+     * Short overview of both variants for previews and report intros.
+     */
+    summary: string;
+};
+
+export type LilithRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     */
+    timezone: number | string;
+    /**
+     * House system used to place each Lilith variant in a house. Placidus (default), Whole Sign, Equal, or Koch.
+     */
+    houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+};
+
+export type ProgressionsResponse = {
+    /**
+     * Echo of the birth moment and place the progressed chart is built from.
+     */
+    birthDetails: {
+        /**
+         * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+         */
+        longitude: number;
+        /**
+         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         */
+        timezone: number;
+    };
+    /**
+     * The requested date the chart was progressed to.
+     */
+    targetDate: string;
+    /**
+     * UTC calendar date of the progressed moment, the ephemeris day whose real positions stand in for the target date. One day after birth per year of elapsed life.
+     */
+    progressedDate: string;
+    /**
+     * Years elapsed between birth and the target date, measured in mean tropical years. Drives both the progressed planets and the Naibod progression of the angles. Negative values progress the chart converse (before birth).
+     */
+    elapsedYears: number;
+    /**
+     * Every progressed body in canonical order: the 10 classical planets, the lunar nodes, Chiron, and Black Moon Lilith. The progressed Sun moves about one degree per year and the progressed Moon about one sign per two and a half years, so these two are the headline movers in any progressed reading.
+     */
+    planets: Array<{
+        /**
+         * Body name in canonical English. One of the 10 classical planets, the lunar nodes, Chiron, or Black Moon Lilith.
+         */
+        name: string;
+        /**
+         * Progressed tropical ecliptic longitude in degrees (0 to 360).
+         */
+        longitude: number;
+        /**
+         * Tropical zodiac sign the progressed body falls in.
+         */
+        sign: string;
+        /**
+         * Degree of the progressed body within its zodiac sign (0 to 29.999).
+         */
+        degree: number;
+        /**
+         * Whole-sign house (1 to 12) counted from the progressed Ascendant sign. The 1st house is the entire sign the progressed Ascendant falls in.
+         */
+        house: number;
+        /**
+         * Daily motion of the body at the progressed instant in degrees per day. Negative values indicate retrograde motion.
+         */
+        speed: number;
+        /**
+         * Whether the body is retrograde at the progressed instant, true when the daily speed is negative.
+         */
+        isRetrograde: boolean;
+        /**
+         * Plain language meaning of this progressed body in its sign, suitable for chart reports and AI agents. Localized to the requested language.
+         */
+        interpretation: string;
+    }>;
+    /**
+     * Progressed Ascendant, the rising degree advanced by the Naibod arc per year. Marks the evolving outward style and immediate environment.
+     */
+    ascendant: {
+        /**
+         * Absolute tropical ecliptic longitude of the progressed angle in degrees (0 to 360).
+         */
+        longitude: number;
+        /**
+         * Tropical zodiac sign the progressed angle falls in.
+         */
+        sign: string;
+        /**
+         * Degree of the progressed angle within its zodiac sign (0 to 29.999).
+         */
+        degree: number;
+    };
+    /**
+     * Progressed Midheaven, the culminating degree advanced by the Naibod arc per year. Marks the evolving vocation and public direction.
+     */
+    midheaven: {
+        /**
+         * Absolute tropical ecliptic longitude of the progressed angle in degrees (0 to 360).
+         */
+        longitude: number;
+        /**
+         * Tropical zodiac sign the progressed angle falls in.
+         */
+        sign: string;
+        /**
+         * Degree of the progressed angle within its zodiac sign (0 to 29.999).
+         */
+        degree: number;
+    };
+    /**
+     * Short overview of the progressed chart led by the progressed Sun and Moon. Localized to the requested language.
+     */
+    summary: string;
+};
+
+export type ProgressionsRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     */
+    timezone: number | string;
+    /**
+     * Date to progress the chart to, in YYYY-MM-DD format. Usually today or a forecast date. The day-for-a-year key turns the elapsed years since birth into the same number of ephemeris days after the birth moment.
+     */
+    targetDate: string;
+};
+
+export type SolarArcResponse = {
+    /**
+     * Echo of the birth moment and place used to compute the natal chart and the solar arc.
+     */
+    birthDetails: {
+        /**
+         * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+         */
+        longitude: number;
+        /**
+         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         */
+        timezone: number;
+    };
+    /**
+     * Echo of the date the chart was directed to.
+     */
+    targetDate: string;
+    /**
+     * The solar arc in degrees: the secondary-progressed Sun longitude minus the natal Sun longitude. Approximately one degree per year of life. Every natal point is advanced by exactly this arc.
+     */
+    solarArc: number;
+    /**
+     * Short overview of the directed chart for previews and report intros. Localized to the requested language.
+     */
+    summary: string;
+    /**
+     * Every natal point advanced by the solar arc: the planets and bodies in canonical order first, then the Ascendant and the Midheaven.
+     */
+    directed: Array<{
+        /**
+         * Name of the directed point, localized to the requested language. This covers the planets and the two angles, the Ascendant and the Midheaven, alike.
+         */
+        name: string;
+        /**
+         * Absolute tropical ecliptic longitude of the point in the natal chart, in degrees (0 to 360).
+         */
+        natalLongitude: number;
+        /**
+         * Absolute tropical ecliptic longitude after directing, in degrees (0 to 360). Equals the natal longitude plus the solar arc, normalized to a full circle.
+         */
+        directedLongitude: number;
+        /**
+         * Tropical zodiac sign the directed point falls in. A directed point crossing into a new sign marks a developmental turning point.
+         */
+        sign: string;
+        /**
+         * Degree of the directed point within its zodiac sign (0 to 29.999).
+         */
+        degree: number;
+        /**
+         * Plain language meaning of this directed point, suitable for chart reports and AI agents. Localized to the requested language.
+         */
+        interpretation: string;
+    }>;
+};
+
+export type SolarArcRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     */
+    timezone: number | string;
+    /**
+     * Date to direct the chart to, in YYYY-MM-DD format. Every natal point is advanced by the solar arc accumulated from birth to this date, about one degree for each year of life.
+     */
+    targetDate: string;
+};
+
+export type ProfectionsResponse = {
+    /**
+     * Echo of the birth moment and place used to derive the natal Ascendant and the lord of the year placement.
+     */
+    birthDetails: {
+        /**
+         * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+         */
+        longitude: number;
+        /**
+         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         */
+        timezone: number;
+    };
+    /**
+     * Target date whose profection year was computed, echoed from the request.
+     */
+    targetDate: string;
+    /**
+     * Completed whole years from birth to the target date. Age 0 is the birth year and profects the first house.
+     */
+    age: number;
+    /**
+     * Profected whole sign house activated for the year (1 to 12), computed as age modulo 12 plus 1. House 1 is the rising sign and the cycle repeats every twelve years.
+     */
+    profectedHouse: number;
+    /**
+     * Tropical zodiac sign on the profected house: the rising sign advanced by one whole sign for each completed year.
+     */
+    profectedSign: string;
+    /**
+     * Lord of the year (annual time lord): the traditional ruling planet of the profected sign whose natal condition and transits color the themes of the year.
+     */
+    lordOfYear: string;
+    /**
+     * Where the lord of the year sits in the birth chart: the natal sign and house that ground the theme of the profection year.
+     */
+    lordNatalPosition: {
+        /**
+         * Zodiac sign the lord of the year occupies in the natal chart.
+         */
+        sign: string;
+        /**
+         * Natal house the lord of the year occupies (1 to 12), in the requested house system.
+         */
+        house: number;
+    };
+    /**
+     * Plain language reading of the profection year, combining the profected house theme, the profected sign, and the lord of the year. Localized to the requested language.
+     */
+    interpretation: string;
+    /**
+     * Short overview of the profection year for previews and report intros.
+     */
+    summary: string;
+};
+
+export type ProfectionsRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+     */
+    longitude: number;
+    /**
+     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     */
+    timezone: number | string;
+    /**
+     * Date whose profection year you want, in YYYY-MM-DD format. The completed whole years from the birth date to this date select the profected house and sign. Must fall on or after the birth date.
+     */
+    targetDate: string;
+    /**
+     * House system used only to report where the lord of the year sits in the natal chart. The profected house and sign always use whole sign profection from the rising sign. Placidus (default), Whole Sign, Equal, or Koch.
+     */
+    houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+};
+
 export type BirthChartResponse = {
     aries: {
         /**
@@ -11374,6 +11924,631 @@ export type PostAstrologyArabicLotsResponses = {
 };
 
 export type PostAstrologyArabicLotsResponse = PostAstrologyArabicLotsResponses[keyof PostAstrologyArabicLotsResponses];
+
+export type PostAstrologyAsteroidsData = {
+    body?: AsteroidsRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/asteroids';
+};
+
+export type PostAstrologyAsteroidsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyAsteroidsError = PostAstrologyAsteroidsErrors[keyof PostAstrologyAsteroidsErrors];
+
+export type PostAstrologyAsteroidsResponses = {
+    /**
+     * Asteroid positions calculated successfully
+     */
+    200: AsteroidsResponse;
+};
+
+export type PostAstrologyAsteroidsResponse = PostAstrologyAsteroidsResponses[keyof PostAstrologyAsteroidsResponses];
+
+export type PostAstrologyLilithData = {
+    body?: LilithRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/lilith';
+};
+
+export type PostAstrologyLilithErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyLilithError = PostAstrologyLilithErrors[keyof PostAstrologyLilithErrors];
+
+export type PostAstrologyLilithResponses = {
+    /**
+     * Black Moon Lilith calculated successfully
+     */
+    200: LilithResponse;
+};
+
+export type PostAstrologyLilithResponse = PostAstrologyLilithResponses[keyof PostAstrologyLilithResponses];
+
+export type PostAstrologyProgressionsData = {
+    body?: ProgressionsRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/progressions';
+};
+
+export type PostAstrologyProgressionsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyProgressionsError = PostAstrologyProgressionsErrors[keyof PostAstrologyProgressionsErrors];
+
+export type PostAstrologyProgressionsResponses = {
+    /**
+     * Progressed chart calculated successfully
+     */
+    200: ProgressionsResponse;
+};
+
+export type PostAstrologyProgressionsResponse = PostAstrologyProgressionsResponses[keyof PostAstrologyProgressionsResponses];
+
+export type PostAstrologySolarArcData = {
+    body?: SolarArcRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/solar-arc';
+};
+
+export type PostAstrologySolarArcErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologySolarArcError = PostAstrologySolarArcErrors[keyof PostAstrologySolarArcErrors];
+
+export type PostAstrologySolarArcResponses = {
+    /**
+     * Solar arc directed chart calculated successfully
+     */
+    200: SolarArcResponse;
+};
+
+export type PostAstrologySolarArcResponse = PostAstrologySolarArcResponses[keyof PostAstrologySolarArcResponses];
+
+export type PostAstrologyProfectionsData = {
+    body?: ProfectionsRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/profections';
+};
+
+export type PostAstrologyProfectionsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyProfectionsError = PostAstrologyProfectionsErrors[keyof PostAstrologyProfectionsErrors];
+
+export type PostAstrologyProfectionsResponses = {
+    /**
+     * Annual profection calculated successfully
+     */
+    200: ProfectionsResponse;
+};
+
+export type PostAstrologyProfectionsResponse = PostAstrologyProfectionsResponses[keyof PostAstrologyProfectionsResponses];
 
 export type PostVedicAstrologyBirthChartData = {
     body?: BirthChartRequest;

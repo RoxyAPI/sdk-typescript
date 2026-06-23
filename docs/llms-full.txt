@@ -306,6 +306,67 @@ const { data } = await roxy.astrology.calculateArabicLots({
     houseSystem: 'placidus',
   },
 });
+
+// Asteroid goddesses calculator - Ceres, Pallas, Juno, and Vesta natal positions
+const { data } = await roxy.astrology.generateAsteroids({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
+});
+
+// Black Moon Lilith calculator - mean and true lunar apogee in the natal chart
+const { data } = await roxy.astrology.generateLilith({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    houseSystem: 'placidus',
+  },
+});
+
+// Secondary progressions calculator - progressed chart, progressed Sun and Moon
+const { data } = await roxy.astrology.generateProgressions({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    targetDate: '2025-07-15',
+  },
+});
+
+// Solar arc directions calculator - directed chart at one degree per year
+const { data } = await roxy.astrology.generateSolarArc({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    targetDate: '2025-07-15',
+  },
+});
+
+// Annual profections calculator - lord of the year and yearly time lord by age
+const { data } = await roxy.astrology.generateProfections({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: -5,
+    targetDate: '2025-08-04',
+    houseSystem: 'placidus',
+  },
+});
 ```
 
 ---
