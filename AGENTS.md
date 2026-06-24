@@ -57,7 +57,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.languages` | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
-**Total:** 150+ endpoints across 12+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
+**Total:** 160+ endpoints across 12+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
 
 ## Quality guidelines for agents
 
