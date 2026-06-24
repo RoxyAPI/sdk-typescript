@@ -337,14 +337,13 @@ function langNote(): string {
 function renderDomainsTable(): string {
 	const rows = specTags.map((tag) => {
 		const ns = `roxy.${tagToNamespace(tag)}`;
-		const count = opsByTag.get(tag)?.length ?? 0;
 		const summary = tagSummary(tagByName.get(tag) ?? { name: tag });
-		return `| \`${ns}\` | ${count} | ${summary} |`;
+		return `| \`${ns}\` | ${summary} |`;
 	});
 	return [
 		DOMAINS_BEGIN,
-		'| Namespace | Endpoints | What it covers |',
-		'|-----------|-----------|----------------|',
+		'| Namespace | What it covers |',
+		'|-----------|----------------|',
 		...rows,
 		DOMAINS_END,
 	].join('\n');
