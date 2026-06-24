@@ -12,6 +12,12 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: development
+    # hey-api is the pinned code generator and its paired runtime client.
+    # Bumps change generated output and break the codegen drift check, so
+    # they are upgraded deliberately at release time, never by dependabot.
+    ignore:
+      - dependency-name: "@hey-api/openapi-ts"
+      - dependency-name: "@hey-api/client-fetch"
 
   - package-ecosystem: github-actions
     directory: /
