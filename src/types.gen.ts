@@ -14898,7 +14898,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
          */
         panchaka: {
             /**
-             * Whether Panchaka is in force at sunrise, the panchang day reference. Can be false while startsAt and endsAt are populated when Panchaka begins later in the day.
+             * True when Panchaka is in effect on this date, whether it is already running at sunrise or begins later in the day, in which case startsAt and endsAt give the window. False only when no Panchaka touches this date.
              */
             active: boolean;
             /**
@@ -14915,11 +14915,11 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
             endsAt: string;
         };
         /**
-         * Bhadra (Vishti Karana), the 7th movable karana, avoided for all auspicious activities. Bhadra recurs roughly every 3 to 5 days and lasts about half a tithi, so most occurrences begin after sunrise rather than at it. startsAt and endsAt report the Bhadra beginning on this date regardless of whether it is active at sunrise.
+         * Bhadra (Vishti Karana), the 7th movable karana, avoided for all auspicious activities. Bhadra recurs roughly every 3 to 5 days and lasts about half a tithi. active is true whenever a Bhadra is attributed to this date; startsAt and endsAt give the window, which may end on the next calendar day.
          */
         bhadra: {
             /**
-             * Whether Bhadra (Vishti Karana) is in force at sunrise, the panchang day reference moment. Can be false while startsAt and endsAt are populated when Bhadra begins later in the day.
+             * True when a Bhadra (Vishti Karana) occurs on this date, in which case startsAt and endsAt give its window. False only when no Bhadra begins on this date.
              */
             active: boolean;
             /**
