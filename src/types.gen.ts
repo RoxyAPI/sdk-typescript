@@ -877,11 +877,11 @@ export type TransitsRequest = {
      */
     natalChart?: {
         /**
-         * Date in YYYY-MM-DD format.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
          */
         date: string;
         /**
-         * Time in 24-hour HH:MM:SS format.
+         * Time in 24-hour format. Seconds are optional and default to 00 (14:30 becomes 14:30:00); a single-digit hour is zero-padded. Out-of-range values are rejected.
          */
         time: string;
         latitude: number;
@@ -2779,7 +2779,7 @@ export type BirthChartResponse = {
         };
     };
     /**
-     * Twelve classical yogas detected against this chart: Gajakesari (three-rule parashara definition), Sunapha, Anapha, Dhurdhura, Kemadruma, Chandra Mangala, Budha-Aditya, and the five Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Sasa). Each entry carries an `id` (matches `GET /yoga/{id}` for full glossary lookup), a `present` boolean, and classical-text `evidence` for the rule that triggered or failed.
+     * Twelve classical yogas detected against this chart: Gajakesari (three-rule parashara definition), Sunapha, Anapha, Dhurdhura, Kemadruma, Chandra Mangala, Budha-Aditya, and the five Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Sasa). Each entry carries an `id` (matches `GET /yoga/{id}` for full glossary lookup), a `present` boolean, a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent), and classical-text `evidence` for the rule that triggered or failed.
      */
     yogas?: Array<{
         /**
@@ -3632,7 +3632,7 @@ export type SadhesatiRequest = {
 
 export type YogaDetectResponse = {
     /**
-     * Array of 12 detected yogas. Every entry carries a present boolean; filter on present === true for active yogas. Evidence text names the rule that triggered or failed.
+     * Array of 12 detected yogas. Every entry carries a `present` boolean and a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent); filter on present === true for active yogas. Evidence text names the rule that triggered or failed.
      */
     yogas: Array<{
         /**
@@ -4765,11 +4765,11 @@ export type KpPlanetsIntervalResponse = {
 
 export type KpPlanetsIntervalRequest = {
     /**
-     * Start datetime in ISO 8601 format. Always interpreted as local time when a non-zero timezone is provided (Z suffix is ignored). With timezone 0, Z suffix is treated as UTC.
+     * Start datetime in ISO 8601 (YYYY-MM-DDTHH:MM:SS). Interpreted as local time when a non-zero timezone is provided (a trailing Z is accepted but ignored); with timezone 0 it is UTC.
      */
     startDatetime: string;
     /**
-     * End datetime in ISO 8601 format. Maximum 7 days from start. Always interpreted as local time when a non-zero timezone is provided (Z suffix is ignored).
+     * End datetime in ISO 8601 (YYYY-MM-DDTHH:MM:SS). Maximum 7 days from start. Interpreted as local time when a non-zero timezone is provided (a trailing Z is accepted but ignored); with timezone 0 it is UTC.
      */
     endDatetime: string;
     /**
@@ -14341,7 +14341,7 @@ export type PostVedicAstrologyPanchangBasicResponse = PostVedicAstrologyPanchang
 export type PostVedicAstrologyPanchangDetailedData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
          */
         date: string;
         /**
@@ -15017,7 +15017,7 @@ export type PostVedicAstrologyPanchangDetailedResponse = PostVedicAstrologyPanch
 export type PostVedicAstrologyPanchangChoghadiyaData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
          */
         date: string;
         /**
@@ -15206,7 +15206,7 @@ export type PostVedicAstrologyPanchangChoghadiyaResponse = PostVedicAstrologyPan
 export type PostVedicAstrologyPanchangHoraData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
          */
         date: string;
         /**
@@ -16684,7 +16684,7 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
          */
         timezone?: number | string;
         /**
-         * ISO 8601 datetime for ruling planets. Defaults to current time. Always interpreted as local time when a non-zero timezone is provided (Z suffix is ignored).
+         * ISO 8601 datetime (YYYY-MM-DDTHH:MM:SS) for ruling planets. Defaults to current time. Interpreted as local time when a non-zero timezone is provided (a trailing Z is accepted but ignored); with timezone 0 it is UTC.
          */
         datetime?: string;
         /**
@@ -16821,11 +16821,11 @@ export type PostVedicAstrologyKpRulingPlanetsResponse = PostVedicAstrologyKpRuli
 export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
     body?: {
         /**
-         * Start of the interval range in ISO 8601 format. Always interpreted as local time when a non-zero timezone is provided (Z suffix is ignored).
+         * Start of the interval range in ISO 8601 (YYYY-MM-DDTHH:MM:SS). Interpreted as local time when a non-zero timezone is provided (a trailing Z is accepted but ignored); with timezone 0 it is UTC.
          */
         startDatetime: string;
         /**
-         * End of the interval range in ISO 8601 format. Always interpreted as local time when a non-zero timezone is provided (Z suffix is ignored).
+         * End of the interval range in ISO 8601 (YYYY-MM-DDTHH:MM:SS). Interpreted as local time when a non-zero timezone is provided (a trailing Z is accepted but ignored); with timezone 0 it is UTC.
          */
         endDatetime: string;
         /**
@@ -21665,7 +21665,7 @@ export type PostNumerologyPersonalDayData = {
          */
         day: number;
         /**
-         * Target date in YYYY-MM-DD format (defaults to today)
+         * Target date in YYYY-MM-DD format. Defaults to today (UTC).
          */
         targetDate?: string;
     };

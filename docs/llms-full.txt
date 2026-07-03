@@ -1442,7 +1442,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 ## Location and Timezone — `roxy.location`
 
-City search and geocoding API with 7,000+ cities across 227 countries, returning latitude, longitude, IANA timezone,...
+City search and geocoding API with 23,000+ cities across 240+ countries, returning latitude, longitude, IANA timezone...
 
 ```typescript
 // Search cities worldwide - Geocoding autocomplete with coordinates and timezone

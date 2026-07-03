@@ -96,7 +96,7 @@ const { latitude, longitude, timezone } = data.cities[0];
 | `roxy.crystals` | Crystal healing API with 80 healing crystals and gemstones and their spiritual, emotional, and physical properties |
 | `roxy.dreams` | Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,... |
 | `roxy.angelNumbers` | Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve... |
-| `roxy.location` | City search and geocoding API with 7,000+ cities across 227 countries, returning latitude, longitude, IANA timezone,... |
+| `roxy.location` | City search and geocoding API with 23,000+ cities across 240+ countries, returning latitude, longitude, IANA timezone... |
 | `roxy.usage` | Monitor your API usage, check rate limits, and track request consumption |
 | `roxy.languages` | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
