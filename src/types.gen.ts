@@ -33896,7 +33896,7 @@ export type GetCrystalsPairingsByIdData = {
     body?: never;
     path: {
         /**
-         * URL-safe crystal identifier to find pairings for (e.g., "amethyst", "rose-quartz").
+         * URL-safe crystal identifier to find pairings for, case-insensitive (e.g., "amethyst", "Amethyst", "rose-quartz" all resolve).
          */
         id: string;
     };
@@ -34855,7 +34855,7 @@ export type GetCrystalsByIdData = {
     body?: never;
     path: {
         /**
-         * URL-safe crystal identifier (e.g., "amethyst", "rose-quartz", "black-tourmaline"). Must match an entry in the database.
+         * URL-safe crystal identifier, case-insensitive (e.g., "amethyst", "Amethyst", "rose-quartz" all resolve). Must match an entry in the database.
          */
         id: string;
     };
