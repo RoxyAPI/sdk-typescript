@@ -35,7 +35,7 @@ export type NatalChartResponse = {
      */
     planets: Array<{
         /**
-         * Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith).
+         * Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
          */
         name: string;
         /**
@@ -746,7 +746,7 @@ export type TransitsResponse = {
      */
     transitPlanets: Array<{
         /**
-         * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith).
+         * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
          */
         name: string;
         /**
@@ -6737,7 +6737,7 @@ export type PostAstrologyPlanetsResponses = {
          */
         planets: Array<{
             /**
-             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith).
+             * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
              */
             name: string;
             /**
@@ -11255,7 +11255,7 @@ export type PostAstrologyAstrocartographyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Optional comma separated list of extra bodies to plot beyond the ten classical planets. Allowed values: north-node, chiron, lilith. Unknown values are ignored. Defaults to none.
+         * Optional comma separated list of extra bodies to plot beyond the ten classical planets. Allowed values: north-node, chiron, lilith. north-node is the mean lunar node. Unknown values are ignored. Defaults to none.
          */
         include?: string;
     };
@@ -11530,7 +11530,7 @@ export type PostAstrologyLocalSpaceData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Optional comma-separated extra bodies to add beyond the 10 classical planets. Allowed values: north-node, chiron, lilith. Omit to return the 10 classical planets only.
+         * Optional comma-separated extra bodies to add beyond the 10 classical planets. Allowed values: north-node, chiron, lilith. north-node is the mean lunar node. Omit to return the 10 classical planets only.
          */
         include?: string;
     };
