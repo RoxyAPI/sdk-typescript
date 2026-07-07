@@ -1,6 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: npm
+  # bun ecosystem (not npm): the repo lockfile is bun.lock, and npm-ecosystem
+  # bumps touch only package.json, so CI's frozen-lockfile install rejects
+  # every dependabot PR.
+  - package-ecosystem: bun
     directory: /
     schedule:
       interval: weekly
@@ -9,9 +12,11 @@ updates:
     # a chance to be flagged for supply-chain issues before they land.
     cooldown:
       default-days: 3
+    # bun does not support dependency-type grouping; every dep here is a
+    # devDependency, so a catch-all pattern is equivalent.
     groups:
       dev-dependencies:
-        dependency-type: development
+        patterns: ["*"]
     # hey-api is the pinned code generator and its paired runtime client.
     # Bumps change generated output and break the codegen drift check, so
     # they are upgraded deliberately at release time, never by dependabot.
