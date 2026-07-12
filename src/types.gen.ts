@@ -343,7 +343,7 @@ export type NatalChartRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -723,7 +723,7 @@ export type AspectPatternsRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
 };
@@ -1560,7 +1560,7 @@ export type ArabicLotsRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -1664,7 +1664,7 @@ export type AsteroidsRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -1772,7 +1772,7 @@ export type LilithRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -1914,7 +1914,7 @@ export type ProgressionsRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -2010,7 +2010,7 @@ export type SolarArcRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -2106,7 +2106,7 @@ export type ProfectionsRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
     /**
@@ -2883,7 +2883,7 @@ export type BirthChartRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -3022,7 +3022,7 @@ export type NavamsaRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -3182,7 +3182,7 @@ export type DivisionalChartRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
     /**
@@ -3282,7 +3282,7 @@ export type CompatibilityRequest = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
     };
@@ -3307,7 +3307,7 @@ export type CompatibilityRequest = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
     };
@@ -3422,7 +3422,7 @@ export type PlanetaryPositionsRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -3489,7 +3489,7 @@ export type ManglikRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -3564,7 +3564,7 @@ export type KalsarpaRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -3625,7 +3625,7 @@ export type SadhesatiRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -3698,7 +3698,7 @@ export type YogaDetectRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -4580,7 +4580,7 @@ export type KpSublordChangesRequest = {
      */
     endDate: string;
     /**
-     * Decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
+     * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC. IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
      */
     timezone?: number | string;
     /**
@@ -4659,7 +4659,7 @@ export type KpRasiChangesRequest = {
      */
     endDate: string;
     /**
-     * Decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
+     * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC. IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
      */
     timezone?: number | string;
     /**
@@ -4785,7 +4785,7 @@ export type KpPlanetsIntervalRequest = {
      */
     longitude: number;
     /**
-     * Decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for the startDatetime date. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Defaults to 0 (UTC).
+     * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC. IANA resolved to the DST-correct offset for the startDatetime date. When non-zero, all datetimes are treated as local time in this timezone (Z suffix is ignored). Defaults to 0 (UTC).
      */
     timezone?: number | string;
     /**
@@ -5054,7 +5054,7 @@ export type UpagrahaRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -5168,7 +5168,7 @@ export type AshtakavargaRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -5258,7 +5258,7 @@ export type ShadbalaRequest = {
      */
     longitude: number;
     /**
-     * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -6824,7 +6824,7 @@ export type GetAstrologyMoonPhaseCurrentData = {
          */
         time?: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).
+         * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours (e.g. -5 for EST, 1 for CET). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).
          */
         timezone?: number | string | unknown;
     };
@@ -7329,7 +7329,7 @@ export type PostAstrologySynastryData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
             /**
@@ -7355,7 +7355,7 @@ export type PostAstrologySynastryData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
             /**
@@ -8223,7 +8223,7 @@ export type PostAstrologyTransitAspectsData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
         };
@@ -9362,7 +9362,7 @@ export type PostAstrologyCompositeChartData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
         };
@@ -9387,7 +9387,7 @@ export type PostAstrologyCompositeChartData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
         };
@@ -9756,7 +9756,7 @@ export type PostAstrologyCompatibilityScoreData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
         };
@@ -9781,7 +9781,7 @@ export type PostAstrologyCompatibilityScoreData = {
              */
             longitude: number;
             /**
-             * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+             * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
         };
@@ -11244,7 +11244,7 @@ export type PostAstrologyAstrocartographyData = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
          */
         timezone: number | string;
     };
@@ -11669,7 +11669,7 @@ export type PostAstrologyFixedStarsData = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. -5 for EST, 5.5 for IST) OR IANA name (e.g. "America/New_York", "Asia/Kolkata"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
          */
         timezone: number | string;
     };
@@ -13370,7 +13370,7 @@ export type PostVedicAstrologyDashaCurrentData = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
     };
@@ -13679,7 +13679,7 @@ export type PostVedicAstrologyDashaMajorData = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
     };
@@ -13888,7 +13888,7 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "Asia/Kolkata", "America/New_York"). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5 (IST).
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
     };
@@ -16680,7 +16680,7 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
          */
         longitude: number;
         /**
-         * Timezone: decimal hours from UTC OR IANA name (e.g. "Asia/Kolkata"). IANA resolved to the DST-correct offset based on birthDate or datetime. Defaults to 5.5 (IST).
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC. IANA resolved to the DST-correct offset based on birthDate or datetime. Defaults to 5.5.
          */
         timezone?: number | string;
         /**
@@ -26252,7 +26252,7 @@ export type PostHumanDesignBodygraphData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -26388,13 +26388,29 @@ export type PostHumanDesignBodygraphResponses = {
          */
         type: string;
         /**
+         * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
+         */
+        typeDescription: string;
+        /**
+         * The aura mechanic of the type: how the energy field itself operates, for example open and enveloping, or closed and repelling.
+         */
+        aura: string;
+        /**
          * The aura strategy for engaging life correctly for this type.
          */
         strategy: string;
         /**
+         * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
+         */
+        strategyDescription: string;
+        /**
          * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
          */
         authority: string;
+        /**
+         * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart, so this is the field to lean on when grounding a reading.
+         */
+        authorityDescription: string;
         /**
          * The signature feeling of living in alignment with the type.
          */
@@ -26408,9 +26424,44 @@ export type PostHumanDesignBodygraphResponses = {
          */
         profile: string;
         /**
+         * The two line keynotes the profile is built from, conscious over unconscious, so the profile is readable without a separate lookup.
+         */
+        profileKeynotes: {
+            /**
+             * Line number 1 to 6 of the conscious Personality Sun, the first digit of the profile.
+             */
+            personalityLine: number;
+            /**
+             * Line number 1 to 6 of the unconscious Design Sun, the second digit of the profile.
+             */
+            designLine: number;
+            /**
+             * Keynote of the conscious Personality line. The half of the life role the person is aware of and can speak to.
+             */
+            personality: string;
+            /**
+             * Keynote of the unconscious Design line. The half of the life role others see operating in the body, which the person does not directly experience.
+             */
+            design: string;
+        };
+        /**
+         * Meaning of the combined profile. A profile is not the sum of its two lines: 6/2 has its own meaning that neither the line 6 nor the line 2 keynote carries alone.
+         */
+        profileDescription: string;
+        /**
          * Definition type from the number of connected components among defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
          */
         definition: string;
+        /**
+         * How energy flows through the defined centers in this configuration, and what the configuration needs. For a split, this is where the bridging gates of other people matter.
+         */
+        definitionDescription: string;
+        /**
+         * What the two chart sides are: personality is the conscious mind side, design is the unconscious body side computed 88 degrees of solar arc before birth. Returned once at the top level rather than repeated across all 26 activations.
+         */
+        sides: {
+            [key: string]: string;
+        };
         /**
          * The incarnation cross built from the four cardinal gates and the profile angle.
          */
@@ -26431,6 +26482,10 @@ export type PostHumanDesignBodygraphResponses = {
              * Canonical published name of the incarnation cross, determined by the Personality Sun gate and the angle. Falls back to a name composed from the angle and the four gates if no canonical name exists.
              */
             name: string;
+            /**
+             * The life theme of the cross, synthesized from its four gates and the orientation the angle gives them. The same Sun gate under a different angle is a genuinely different theme: Right Angle is personal destiny, Left Angle is worked out through other people, Juxtaposition is a fixed fate.
+             */
+            description?: string;
         };
         /**
          * All nine centers with their defined state and active gates.
@@ -26461,6 +26516,14 @@ export type PostHumanDesignBodygraphResponses = {
              */
             theme: string;
             /**
+             * The conditioning trap of this center when it is open. Returned on every center so a consumer can surface it the moment `defined` is false, which is where the not-self operates.
+             */
+            notSelfQuestion: string;
+            /**
+             * The gland, organ, or system this center corresponds to in the body.
+             */
+            biology: string;
+            /**
              * Active gate numbers that sit in this center.
              */
             gates: Array<number>;
@@ -26489,6 +26552,14 @@ export type PostHumanDesignBodygraphResponses = {
              * The two centers this channel connects and defines.
              */
             centers: Array<string>;
+            /**
+             * What this channel wires between its two centers and the nature of the energy it carries.
+             */
+            description: string;
+            /**
+             * What the circuit family of this channel governs.
+             */
+            circuitDescription: string;
         }>;
         /**
          * All 26 activations, 13 Personality and 13 Design.
@@ -26514,6 +26585,18 @@ export type PostHumanDesignBodygraphResponses = {
              * Human Design keynote name of the gate, describing its bodygraph function.
              */
             gateName: string;
+            /**
+             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
+             */
+            gateDescription: string;
+            /**
+             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
+             */
+            lineMeaning: string;
+            /**
+             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
+             */
+            planetDescription: string;
             /**
              * Cross-reference to the I-Ching hexagram that shares this gate number.
              */
@@ -26548,7 +26631,7 @@ export type PostHumanDesignConnectionData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -26573,7 +26656,7 @@ export type PostHumanDesignConnectionData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -26812,7 +26895,7 @@ export type PostHumanDesignPentaData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -27051,7 +27134,7 @@ export type PostHumanDesignTransitData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -27311,7 +27394,7 @@ export type PostHumanDesignTypeData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -27447,13 +27530,29 @@ export type PostHumanDesignTypeResponses = {
          */
         type: string;
         /**
+         * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
+         */
+        typeDescription: string;
+        /**
+         * The aura mechanic of the type: how the energy field itself operates, for example open and enveloping, or closed and repelling.
+         */
+        aura: string;
+        /**
          * The aura strategy for engaging life correctly for this type.
          */
         strategy: string;
         /**
+         * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
+         */
+        strategyDescription: string;
+        /**
          * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
          */
         authority: string;
+        /**
+         * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart.
+         */
+        authorityDescription: string;
         /**
          * The signature feeling of living in alignment.
          */
@@ -27482,7 +27581,7 @@ export type PostHumanDesignGatesData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -27638,6 +27737,18 @@ export type PostHumanDesignGatesResponses = {
              */
             gateName: string;
             /**
+             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
+             */
+            gateDescription: string;
+            /**
+             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
+             */
+            lineMeaning: string;
+            /**
+             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
+             */
+            planetDescription: string;
+            /**
              * Cross-reference to the I-Ching hexagram that shares this gate number.
              */
             ichingHexagram: {
@@ -27675,6 +27786,18 @@ export type PostHumanDesignGatesResponses = {
              * Human Design keynote name of the gate, describing its bodygraph function.
              */
             gateName: string;
+            /**
+             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
+             */
+            gateDescription: string;
+            /**
+             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
+             */
+            lineMeaning: string;
+            /**
+             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
+             */
+            planetDescription: string;
             /**
              * Cross-reference to the I-Ching hexagram that shares this gate number.
              */
@@ -27891,7 +28014,7 @@ export type PostHumanDesignChannelsData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -28046,6 +28169,14 @@ export type PostHumanDesignChannelsResponses = {
              * The two centers this channel connects and defines.
              */
             centers: Array<string>;
+            /**
+             * What this channel wires between its two centers and the nature of the energy it carries.
+             */
+            description: string;
+            /**
+             * What the circuit family of this channel governs.
+             */
+            circuitDescription: string;
         }>;
         /**
          * Number of defined channels in the bodygraph.
@@ -28071,7 +28202,7 @@ export type PostHumanDesignCentersData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -28230,6 +28361,14 @@ export type PostHumanDesignCentersResponses = {
              * Theme text describing the center in its current defined or undefined state.
              */
             theme: string;
+            /**
+             * The conditioning trap of this center when it is open. Returned on every center so a consumer can surface it the moment `defined` is false, which is where the not-self operates.
+             */
+            notSelfQuestion: string;
+            /**
+             * The gland, organ, or system this center corresponds to in the body.
+             */
+            biology: string;
             /**
              * Active gate numbers that sit in this center.
              */
@@ -28410,7 +28549,7 @@ export type PostHumanDesignProfileData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -28577,7 +28716,7 @@ export type PostHumanDesignVariablesData = {
          */
         time: string;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -28766,6 +28905,37 @@ export type PostHumanDesignVariablesResponses = {
              */
             directionLabel: string;
             /**
+             * What this arrow is and what it governs.
+             */
+            description: string;
+            /**
+             * What the layer this arrow belongs to governs, the body side or the mind side.
+             */
+            layerDescription: string;
+            /**
+             * Meaning of the Color for THIS arrow. The same Color number means something different under Determination than under Motivation, so this is the reading of colorLabel in context, not a generic gloss.
+             */
+            colorMeaning: string;
+            /**
+             * Meaning of the Tone. The six Tones are shared across all four arrows: the arrow does not change the Tone, it changes what the Tone qualifies.
+             */
+            toneMeaning: string;
+            /**
+             * Meaning of the left or right direction for THIS arrow, the reading of directionLabel.
+             */
+            directionMeaning: string;
+            /**
+             * Name of the Base. Informational only: the Base is finer than any civil birth time can resolve.
+             */
+            baseName: string;
+            /**
+             * Cognition, the strongest sense, read off the Determination Tone. Present on the determination arrow ONLY: no authority supports reading Cognition from the other three arrows, so it is omitted rather than invented.
+             */
+            cognition?: {
+                label: string;
+                description: string;
+            };
+            /**
              * Whether this arrow is far enough from a Color or Tone boundary to be reliable. When false the activation sits on a knife edge where the Color label or the arrow direction could flip with a more precise birth time, and the arrow should not be presented as fact.
              */
             confident: boolean;
@@ -28778,6 +28948,10 @@ export type PostHumanDesignVariablesResponses = {
          * Boundary margin in degrees of ecliptic longitude used for the per-arrow confidence flag, the solar arc over a few minutes of clock time. An activation within this distance of a Color or Tone boundary is flagged low-confidence.
          */
         confidenceMarginDeg: number;
+        /**
+         * What the Base layer is. Returned once at the top level rather than repeated on every arrow, since the Base layer is the same concept for all four. No per-Base meaning is returned: every one in circulation traces back to a single origin, so it fails the two-source bar this package holds.
+         */
+        baseDescription: string;
     };
 };
 
@@ -28798,7 +28972,7 @@ export type PostForecastTimelineData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -28976,7 +29150,7 @@ export type PostForecastTimelineResponses = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29081,7 +29255,7 @@ export type PostForecastTransitsData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29238,7 +29412,7 @@ export type PostForecastTransitsResponses = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29343,7 +29517,7 @@ export type PostForecastSignificantDatesData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29521,7 +29695,7 @@ export type PostForecastSignificantDatesResponses = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29626,7 +29800,7 @@ export type PostForecastDigestData = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29804,7 +29978,7 @@ export type PostForecastDigestResponses = {
              */
             time: string;
             /**
-             * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -29954,7 +30128,7 @@ export type PostForecastSolarReturnData = {
          */
         longitude: number;
         /**
-         * Decimal hours (e.g. 5.5 for IST, -5 for EST) OR IANA name (e.g. "America/New_York", "UTC"). IANA is resolved to the DST-correct offset for the request date. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**

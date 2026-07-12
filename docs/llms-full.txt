@@ -1029,7 +1029,7 @@ const { data } = await roxy.humanDesign.generateBodygraph({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1041,14 +1041,14 @@ const { data } = await roxy.humanDesign.calculateConnection({
     personA: {
       date: '1990-07-15',
       time: '13:00:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
     personB: {
       date: '1990-07-15',
       time: '13:00:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
@@ -1062,7 +1062,7 @@ const { data } = await roxy.humanDesign.calculatePenta({
       {
         date: '1990-07-15',
         time: '13:00:00',
-        timezone: 5.5,
+        timezone: 'America/New_York',
         latitude: 0,
         longitude: 0,
       },
@@ -1076,7 +1076,7 @@ const { data } = await roxy.humanDesign.generateTransit({
     birthData: {
       date: '1990-07-15',
       time: '13:00:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
@@ -1090,7 +1090,7 @@ const { data } = await roxy.humanDesign.calculateType({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1101,7 +1101,7 @@ const { data } = await roxy.humanDesign.calculateGates({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1115,7 +1115,7 @@ const { data } = await roxy.humanDesign.calculateChannels({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1126,7 +1126,7 @@ const { data } = await roxy.humanDesign.calculateCenters({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1140,7 +1140,7 @@ const { data } = await roxy.humanDesign.calculateProfile({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1151,7 +1151,7 @@ const { data } = await roxy.humanDesign.calculateVariables({
   body: {
     date: '1990-07-15',
     time: '13:00:00',
-    timezone: 5.5,
+    timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
   },
@@ -1171,7 +1171,7 @@ const { data } = await roxy.forecast.generateTimeline({
     birthData: {
       date: '1990-07-15',
       time: '13:30:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
@@ -1189,7 +1189,7 @@ const { data } = await roxy.forecast.forecastTransits({
     birthData: {
       date: '1990-07-15',
       time: '13:30:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
@@ -1205,7 +1205,7 @@ const { data } = await roxy.forecast.findSignificantDates({
     birthData: {
       date: '1990-07-15',
       time: '13:30:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
@@ -1223,7 +1223,7 @@ const { data } = await roxy.forecast.generateDigest({
     birthData: {
       date: '1990-07-15',
       time: '13:30:00',
-      timezone: 5.5,
+      timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
     },
@@ -1243,7 +1243,7 @@ const { data } = await roxy.forecast.forecastSolarReturn({
     year: 2026,
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: 5.5,
+    timezone: 'America/New_York',
     houseSystem: 'placidus',
   },
 });
