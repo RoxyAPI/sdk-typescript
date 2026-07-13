@@ -5459,6 +5459,21 @@ export type DrawnCard = {
     imageUrl: string;
 };
 
+export type ChangingLine = {
+    /**
+     * Line position (1-6, bottom to top). In I-Ching, each hexagram has six lines (yao) read from bottom upward.
+     */
+    position: number;
+    /**
+     * The oracle statement for this line. It applies when this specific line comes up changing (old yin or old yang) in a casting, and it speaks in the concrete imagery of the tradition.
+     */
+    text: string;
+    /**
+     * What the line statement asks of the querent, read from its position in the hexagram (1 is the hidden beginning, 3 is the exposed threshold, 5 is the ruling line, 6 is past the peak) and from whether the line is yin or yang. This is the meaning behind the image, so a consuming agent does not have to invent one.
+     */
+    meaning?: string;
+};
+
 export type BasicHexagram = {
     /**
      * Hexagram number in King Wen sequence (1-64).
@@ -5561,17 +5576,6 @@ export type Interpretation = {
     advice: string;
 };
 
-export type ChangingLine = {
-    /**
-     * Line position (1-6, bottom to top). In I-Ching, each hexagram has six lines (yao) read from bottom upward.
-     */
-    position: number;
-    /**
-     * Changing line interpretation text. Applies only when this specific line is a changing line (old yin or old yang) in a casting.
-     */
-    text: string;
-};
-
 export type BasicTrigram = {
     /**
      * Trigram number (1-8)
@@ -5605,7 +5609,7 @@ export type BasicTrigram = {
 
 export type Trigram = {
     /**
-     * Trigram number (1-8) in the traditional I-Ching ordering.
+     * Stable identifier for the trigram, 1 to 8. This is our lookup key, not a canonical sequence: the tradition has several orderings (King Wen, Fu Xi, Earlier and Later Heaven) and they disagree, so do not read ranking or precedence into it.
      */
     number: number;
     /**
@@ -32134,6 +32138,10 @@ export type PostIchingDailyCastResponses = {
          * Positions of changing lines (1-6, bottom to top). These lines transform yin to yang or vice versa.
          */
         changingLinePositions: Array<number>;
+        /**
+         * The oracle statement and meaning of each line that came up CHANGING, and only those. The changing lines are what the cast is actually about, so this saves a second call to read them and stops a consuming agent from having to invent them.
+         */
+        changingLines?: Array<ChangingLine>;
         /**
          * Hexagram after transformation (if changing lines present)
          */
