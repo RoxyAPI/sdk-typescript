@@ -3961,6 +3961,10 @@ export type KpChartResponse = {
          */
         sign: string;
         /**
+         * Ruling planet of the Ascendant sign (the rashi lord). In KP this is the weakest of the four lords, ranked below the star lord and sub lord, but it still sets the broad temperament of the Lagna.
+         */
+        signLord: string;
+        /**
          * Nakshatra (star) of the Ascendant.
          */
         nakshatra: string;
@@ -4127,6 +4131,10 @@ export type KpChartResponse = {
              * KP sub-sub lord (SSL) of Rahu.
              */
             subSubLord: string;
+            /**
+             * KP number (1-249) locating Rahu in the 249-division sub-lord scheme. Each of the 249 divisions maps to a unique sign, star lord and sub lord triple, so one integer pins the position precisely enough for KP event timing.
+             */
+            kpNumber: number;
         };
         /**
          * Ketu (South Lunar Node), shadow planet, spiritual karmic indicator.
@@ -4160,6 +4168,10 @@ export type KpChartResponse = {
              * KP sub-sub lord (SSL) of Ketu.
              */
             subSubLord: string;
+            /**
+             * KP number (1-249) locating Ketu in the 249-division sub-lord scheme. Each of the 249 divisions maps to a unique sign, star lord and sub lord triple, so one integer pins the position precisely enough for KP event timing.
+             */
+            kpNumber: number;
         };
     };
     /**
@@ -17477,7 +17489,7 @@ export type PostVedicAstrologyAspectsResponses = {
      */
     200: {
         /**
-         * UTC datetime used for aspect calculation (ISO 8601).
+         * Chart time the aspects were calculated for, echoed back as the local wall clock of the request (ISO 8601, no offset). This is the `date` and `time` you sent, NOT a UTC instant: hold them fixed and vary `timezone` and every longitude moves while this field does not. Combine it with the `timezone` you sent to recover the absolute moment.
          */
         datetime: string;
         /**

@@ -17,12 +17,20 @@ updates:
     groups:
       dev-dependencies:
         patterns: ["*"]
-    # hey-api is the pinned code generator and its paired runtime client.
-    # Bumps change generated output and break the codegen drift check, so
-    # they are upgraded deliberately at release time, never by dependabot.
     ignore:
+      # hey-api is the pinned code generator and its paired runtime client.
+      # Bumps change generated output and break the codegen drift check, so
+      # they are upgraded deliberately at release time, never by dependabot.
       - dependency-name: "@hey-api/openapi-ts"
       - dependency-name: "@hey-api/client-fetch"
+      # A TypeScript major is gated on hey-api, whose peer range is currently
+      # >=5.5.3 || >=6.0.0: on TS 7 the generator dies inside the compiler API
+      # ("Cannot read properties of undefined (reading 'LineFeed')") and every
+      # `generate` fails. Because this group is a catch-all, one unmergeable
+      # major used to hold the whole batch of safe dev bumps hostage. Adopt a TS
+      # major by hand once hey-api declares support.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
