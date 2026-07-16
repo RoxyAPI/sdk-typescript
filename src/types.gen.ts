@@ -803,7 +803,7 @@ export type TransitsResponse = {
          */
         isApplying: boolean;
         /**
-         * Aspect strength percentage (0-100). Based on orb tightness — 100 is exact.
+         * Aspect strength percentage (0-100) based on orb tightness, where 100 is exact.
          */
         strength: number;
         /**
@@ -26279,6 +26279,10 @@ export type PostHumanDesignBodygraphData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -26658,6 +26662,10 @@ export type PostHumanDesignConnectionData = {
              * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
              */
             longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
         };
         /**
          * Birth moment of the second person in the connection.
@@ -26683,6 +26691,10 @@ export type PostHumanDesignConnectionData = {
              * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
              */
             longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
         };
     };
     path?: never;
@@ -26922,6 +26934,10 @@ export type PostHumanDesignPentaData = {
              * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
              */
             longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
         }>;
     };
     path?: never;
@@ -27161,6 +27177,10 @@ export type PostHumanDesignTransitData = {
              * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
              */
             longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
         };
         /**
          * Transit date in YYYY-MM-DD UTC. Optional. Defaults to today in UTC when omitted, giving the just-now transit.
@@ -27421,6 +27441,10 @@ export type PostHumanDesignTypeData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -27608,6 +27632,10 @@ export type PostHumanDesignGatesData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -28041,6 +28069,10 @@ export type PostHumanDesignChannelsData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -28229,6 +28261,10 @@ export type PostHumanDesignCentersData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -28576,6 +28612,10 @@ export type PostHumanDesignProfileData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -28743,6 +28783,10 @@ export type PostHumanDesignVariablesData = {
          * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
          */
         longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {

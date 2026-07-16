@@ -1032,6 +1032,7 @@ const { data } = await roxy.humanDesign.generateBodygraph({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 
@@ -1044,6 +1045,7 @@ const { data } = await roxy.humanDesign.calculateConnection({
       timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
+      nodeType: 'true',
     },
     personB: {
       date: '1990-07-15',
@@ -1051,6 +1053,7 @@ const { data } = await roxy.humanDesign.calculateConnection({
       timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
+      nodeType: 'true',
     },
   },
 });
@@ -1065,6 +1068,7 @@ const { data } = await roxy.humanDesign.calculatePenta({
         timezone: 'America/New_York',
         latitude: 0,
         longitude: 0,
+        nodeType: 'true',
       },
     ],
   },
@@ -1079,6 +1083,7 @@ const { data } = await roxy.humanDesign.generateTransit({
       timezone: 'America/New_York',
       latitude: 0,
       longitude: 0,
+      nodeType: 'true',
     },
     date: '2026-05-23',
     time: '12:00:00',
@@ -1093,6 +1098,7 @@ const { data } = await roxy.humanDesign.calculateType({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 
@@ -1104,6 +1110,7 @@ const { data } = await roxy.humanDesign.calculateGates({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 
@@ -1118,6 +1125,7 @@ const { data } = await roxy.humanDesign.calculateChannels({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 
@@ -1129,6 +1137,7 @@ const { data } = await roxy.humanDesign.calculateCenters({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 
@@ -1143,6 +1152,7 @@ const { data } = await roxy.humanDesign.calculateProfile({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 
@@ -1154,6 +1164,7 @@ const { data } = await roxy.humanDesign.calculateVariables({
     timezone: 'America/New_York',
     latitude: 0,
     longitude: 0,
+    nodeType: 'true',
   },
 });
 ```
