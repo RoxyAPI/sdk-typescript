@@ -10,7 +10,7 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 ```
 
 <!-- BEGIN:LANGS -->
-**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, numerology, tarot, humanDesign, forecast, biorhythm, iching, crystals, angelNumbers. English-only: dreams, location, usage, languages. Languages without translations yet fall back to English.
+**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, forecast, humanDesign, numerology, tarot, biorhythm, iching, crystals, angelNumbers. English-only: dreams, location, usage, languages. Languages without translations yet fall back to English.
 <!-- END:LANGS -->
 
 ```typescript
@@ -446,7 +446,7 @@ const { data } = await roxy.vedicAstrology.getMonthlyEphemeris({
   body: { year: 2026, month: 2, coordinateSystem: 'sidereal' },
 });
 
-// Get current Mahadasha, Antardasha, Pratyantardasha - Dasha Calculator API
+// Get current Mahadasha, Antardasha, Pratyantardasha, Sookshma - Dasha Calculator API
 const { data } = await roxy.vedicAstrology.getCurrentDasha({
   body: {
     date: '1990-07-04',
@@ -454,6 +454,7 @@ const { data } = await roxy.vedicAstrology.getCurrentDasha({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
   },
 });
 
@@ -465,6 +466,7 @@ const { data } = await roxy.vedicAstrology.getMajorDashas({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
   },
 });
 
@@ -477,6 +479,37 @@ const { data } = await roxy.vedicAstrology.getSubDashas({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+  },
+});
+
+// Get all Pratyantardashas (antara periods) for a Mahadasha and Antardasha
+const { data } = await roxy.vedicAstrology.getPratyantardashas({
+  path: { mahadasha: 'Saturn', antardasha: 'Venus' },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'lahiri',
+  },
+});
+
+// Get all Sookshma dashas for a Mahadasha, Antardasha and Pratyantardasha
+const { data } = await roxy.vedicAstrology.getSookshmaDashas({
+  path: {
+    mahadasha: 'Saturn',
+    antardasha: 'Venus',
+    pratyantardasha: 'Rahu',
+  },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'lahiri',
   },
 });
 
@@ -804,6 +837,249 @@ const { data } = await roxy.vedicAstrology.calculateShadbala({
 
 ---
 
+## Forecast — `roxy.forecast`
+
+Merge upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm critical days, and...
+
+```typescript
+// Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
+const { data } = await roxy.forecast.generateTimeline({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-08-30',
+    domains: ['western', 'vedic', 'biorhythm'],
+    minSignificance: 0,
+    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
+  },
+});
+
+// Western astrology forecast - aspects, ingresses, stations, eclipses, moon phases
+const { data } = await roxy.forecast.forecastTransits({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-08-30',
+    minSignificance: 0,
+  },
+});
+
+// Significant dates - High-significance cross-domain forecast highlights
+const { data } = await roxy.forecast.findSignificantDates({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    endDate: '2026-08-30',
+    domains: ['western', 'vedic', 'biorhythm'],
+    minSignificance: 70,
+    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
+  },
+});
+
+// Forecast digest - Pre-summarized next 24h, 7d, 30d, and 90d rollups
+const { data } = await roxy.forecast.generateDigest({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:30:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+    },
+    startDate: '2026-06-01',
+    domains: ['western', 'vedic', 'biorhythm'],
+    minSignificance: 0,
+    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
+    top: 3,
+  },
+});
+
+// Solar return chart - Annual birthday forecast chart for a single subject
+const { data } = await roxy.forecast.forecastSolarReturn({
+  body: {
+    date: '1990-07-15',
+    time: '14:30:00',
+    year: 2026,
+    latitude: 40.7128,
+    longitude: -74.006,
+    timezone: 'America/New_York',
+    houseSystem: 'placidus',
+  },
+});
+```
+
+---
+
+## Human Design — `roxy.humanDesign`
+
+Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i...
+
+```typescript
+// Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
+const { data } = await roxy.humanDesign.generateBodygraph({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+
+// Calculate Human Design connection chart - Two-person composite bodygraph compatibility
+const { data } = await roxy.humanDesign.calculateConnection({
+  body: {
+    personA: {
+      date: '1990-07-15',
+      time: '13:00:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+      nodeType: 'true',
+    },
+    personB: {
+      date: '1990-07-15',
+      time: '13:00:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+      nodeType: 'true',
+    },
+  },
+});
+
+// Calculate Human Design Penta - Small-group BG5 operating system for three to five people
+const { data } = await roxy.humanDesign.calculatePenta({
+  body: {
+    members: [
+      {
+        date: '1990-07-15',
+        time: '13:00:00',
+        timezone: 'America/New_York',
+        latitude: 0,
+        longitude: 0,
+        nodeType: 'true',
+      },
+    ],
+  },
+});
+
+// Generate Human Design transit overlay - Current planetary activations on a natal bodygraph
+const { data } = await roxy.humanDesign.generateTransit({
+  body: {
+    birthData: {
+      date: '1990-07-15',
+      time: '13:00:00',
+      timezone: 'America/New_York',
+      latitude: 0,
+      longitude: 0,
+      nodeType: 'true',
+    },
+    date: '2026-05-23',
+    time: '12:00:00',
+  },
+});
+
+// Calculate Human Design type, authority and profile
+const { data } = await roxy.humanDesign.calculateType({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+
+// Calculate the 26 Human Design gate activations
+const { data } = await roxy.humanDesign.calculateGates({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+
+// Look up a Human Design gate by number
+const { data } = await roxy.humanDesign.getGate({ path: { number: 34 } });
+
+// Calculate the defined Human Design channels
+const { data } = await roxy.humanDesign.calculateChannels({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+
+// Calculate the nine Human Design centers
+const { data } = await roxy.humanDesign.calculateCenters({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+
+// Look up a Human Design center by id
+const { data } = await roxy.humanDesign.getCenter({ path: { id: 'sacral' } });
+
+// Calculate the Human Design profile and line keynotes
+const { data } = await roxy.humanDesign.calculateProfile({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+
+// Calculate Human Design Variables - The four arrows and Color, Tone, Base substructure
+const { data } = await roxy.humanDesign.calculateVariables({
+  body: {
+    date: '1990-07-15',
+    time: '13:00:00',
+    timezone: 'America/New_York',
+    latitude: 0,
+    longitude: 0,
+    nodeType: 'true',
+  },
+});
+```
+
+---
+
 ## Numerology — `roxy.numerology`
 
 Numerology API to calculate life path, expression, soul urge, personality, and maturity numbers, with Pinnacle and Ch...
@@ -1013,249 +1289,6 @@ const { data } = await roxy.tarot.castCustomSpread({
     ],
     question: 'Optional question',
     seed: 'optional-seed',
-  },
-});
-```
-
----
-
-## Human Design — `roxy.humanDesign`
-
-Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i...
-
-```typescript
-// Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
-const { data } = await roxy.humanDesign.generateBodygraph({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-
-// Calculate Human Design connection chart - Two-person composite bodygraph compatibility
-const { data } = await roxy.humanDesign.calculateConnection({
-  body: {
-    personA: {
-      date: '1990-07-15',
-      time: '13:00:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-      nodeType: 'true',
-    },
-    personB: {
-      date: '1990-07-15',
-      time: '13:00:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-      nodeType: 'true',
-    },
-  },
-});
-
-// Calculate Human Design Penta - Small-group BG5 operating system for three to five people
-const { data } = await roxy.humanDesign.calculatePenta({
-  body: {
-    members: [
-      {
-        date: '1990-07-15',
-        time: '13:00:00',
-        timezone: 'America/New_York',
-        latitude: 0,
-        longitude: 0,
-        nodeType: 'true',
-      },
-    ],
-  },
-});
-
-// Generate Human Design transit overlay - Current planetary activations on a natal bodygraph
-const { data } = await roxy.humanDesign.generateTransit({
-  body: {
-    birthData: {
-      date: '1990-07-15',
-      time: '13:00:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-      nodeType: 'true',
-    },
-    date: '2026-05-23',
-    time: '12:00:00',
-  },
-});
-
-// Calculate Human Design type, authority and profile
-const { data } = await roxy.humanDesign.calculateType({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-
-// Calculate the 26 Human Design gate activations
-const { data } = await roxy.humanDesign.calculateGates({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-
-// Look up a Human Design gate by number
-const { data } = await roxy.humanDesign.getGate({ path: { number: 34 } });
-
-// Calculate the defined Human Design channels
-const { data } = await roxy.humanDesign.calculateChannels({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-
-// Calculate the nine Human Design centers
-const { data } = await roxy.humanDesign.calculateCenters({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-
-// Look up a Human Design center by id
-const { data } = await roxy.humanDesign.getCenter({ path: { id: 'sacral' } });
-
-// Calculate the Human Design profile and line keynotes
-const { data } = await roxy.humanDesign.calculateProfile({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-
-// Calculate Human Design Variables - The four arrows and Color, Tone, Base substructure
-const { data } = await roxy.humanDesign.calculateVariables({
-  body: {
-    date: '1990-07-15',
-    time: '13:00:00',
-    timezone: 'America/New_York',
-    latitude: 0,
-    longitude: 0,
-    nodeType: 'true',
-  },
-});
-```
-
----
-
-## Forecast — `roxy.forecast`
-
-Merge upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm critical days, and...
-
-```typescript
-// Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
-const { data } = await roxy.forecast.generateTimeline({
-  body: {
-    birthData: {
-      date: '1990-07-15',
-      time: '13:30:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-    },
-    startDate: '2026-06-01',
-    endDate: '2026-08-30',
-    domains: ['western', 'vedic', 'biorhythm'],
-    minSignificance: 0,
-    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
-  },
-});
-
-// Western astrology forecast - aspects, ingresses, stations, eclipses, moon phases
-const { data } = await roxy.forecast.forecastTransits({
-  body: {
-    birthData: {
-      date: '1990-07-15',
-      time: '13:30:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-    },
-    startDate: '2026-06-01',
-    endDate: '2026-08-30',
-    minSignificance: 0,
-  },
-});
-
-// Significant dates - High-significance cross-domain forecast highlights
-const { data } = await roxy.forecast.findSignificantDates({
-  body: {
-    birthData: {
-      date: '1990-07-15',
-      time: '13:30:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-    },
-    startDate: '2026-06-01',
-    endDate: '2026-08-30',
-    domains: ['western', 'vedic', 'biorhythm'],
-    minSignificance: 70,
-    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
-  },
-});
-
-// Forecast digest - Pre-summarized next 24h, 7d, 30d, and 90d rollups
-const { data } = await roxy.forecast.generateDigest({
-  body: {
-    birthData: {
-      date: '1990-07-15',
-      time: '13:30:00',
-      timezone: 'America/New_York',
-      latitude: 0,
-      longitude: 0,
-    },
-    startDate: '2026-06-01',
-    domains: ['western', 'vedic', 'biorhythm'],
-    minSignificance: 0,
-    domainWeights: { vedic: 1.5, biorhythm: 0.5 },
-    top: 3,
-  },
-});
-
-// Solar return chart - Annual birthday forecast chart for a single subject
-const { data } = await roxy.forecast.forecastSolarReturn({
-  body: {
-    date: '1990-07-15',
-    time: '14:30:00',
-    year: 2026,
-    latitude: 40.7128,
-    longitude: -74.006,
-    timezone: 'America/New_York',
-    houseSystem: 'placidus',
   },
 });
 ```

@@ -13389,6 +13389,10 @@ export type PostVedicAstrologyDashaCurrentData = {
          * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
+        /**
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         */
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
     };
     path?: never;
     query?: {
@@ -13506,7 +13510,7 @@ export type PostVedicAstrologyDashaCurrentError = PostVedicAstrologyDashaCurrent
 
 export type PostVedicAstrologyDashaCurrentResponses = {
     /**
-     * Currently active Mahadasha, Antardasha, and Pratyantardasha with start/end dates, remaining balance, Moon nakshatra, and Vedic interpretations for each period.
+     * Currently active Mahadasha, Antardasha, Pratyantardasha, and Sookshma dasha with start/end dates, remaining balance, Moon nakshatra, and Vedic interpretations for each period.
      */
     200: {
         /**
@@ -13521,6 +13525,18 @@ export type PostVedicAstrologyDashaCurrentResponses = {
          * Vimshottari dasha lord of the birth nakshatra. This planet rules the first Mahadasha in the native life cycle.
          */
         nakshatraLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Sidereal (nirayana) longitude of the birth Moon in degrees, 0 to 360, measured in the ayanamsa frame reported below. This single value determines the birth nakshatra and therefore every dasha start and end date in this response. Compare it against a reference chart to reconcile any date difference at its source.
+         */
+        moonLongitude: number;
+        /**
+         * Ayanamsa actually applied, in degrees. The precession offset subtracted from the tropical (sayana) longitude to get the sidereal (nirayana) one. Lahiri sits near 23 deg 43 min for a 1990 birth, KP-Newcomb near 23 deg 38 min.
+         */
+        ayanamsa: number;
+        /**
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         */
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
         /**
          * Mahadasha (major planetary period) in the 120-year Vimshottari dasha cycle. Start and end dates are determined by Moon nakshatra at birth.
          */
@@ -13541,6 +13557,10 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
              */
             durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
             /**
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
@@ -13566,6 +13586,10 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
              */
             durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
             /**
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
@@ -13596,6 +13620,10 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              */
             durationYears: number;
             /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
@@ -13607,6 +13635,47 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              * Parent Antardasha lord under which this Pratyantardasha runs.
              */
             antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * Sookshma dasha (sookshma antardasha), the fourth level of the Vimshottari dasha hierarchy. Each Pratyantardasha divides into 9 Sookshma periods running roughly 3 to 30 days each, the finest level exposed by this API and the one used for day-level event timing and muhurta style selection.
+         */
+        sookshmaDasha: {
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Pratyantardasha lord under which this Sookshma dasha runs.
+             */
+            pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
         };
         /**
          * Time remaining in the currently running Mahadasha (major period).
@@ -13671,6 +13740,27 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              */
             totalDays: number;
         };
+        /**
+         * Time remaining in the currently running Sookshma dasha (fourth level). Sookshma periods last days rather than months, so this value turns over quickly.
+         */
+        remainingInSookshma: {
+            /**
+             * Full years remaining in this Vimshottari dasha period.
+             */
+            years: number;
+            /**
+             * Additional months remaining beyond full years.
+             */
+            months: number;
+            /**
+             * Additional days remaining beyond full months.
+             */
+            days: number;
+            /**
+             * Total remaining days in this dasha period. Useful for progress calculations.
+             */
+            totalDays: number;
+        };
     };
 };
 
@@ -13698,6 +13788,10 @@ export type PostVedicAstrologyDashaMajorData = {
          * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
+        /**
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         */
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
     };
     path?: never;
     query?: {
@@ -13831,6 +13925,18 @@ export type PostVedicAstrologyDashaMajorResponses = {
          */
         nakshatraLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
         /**
+         * Sidereal (nirayana) longitude of the birth Moon in degrees, 0 to 360, measured in the ayanamsa frame reported below. This single value determines the birth nakshatra and therefore every dasha start and end date in this response. Compare it against a reference chart to reconcile any date difference at its source.
+         */
+        moonLongitude: number;
+        /**
+         * Ayanamsa actually applied, in degrees. The precession offset subtracted from the tropical (sayana) longitude to get the sidereal (nirayana) one. Lahiri sits near 23 deg 43 min for a 1990 birth, KP-Newcomb near 23 deg 38 min.
+         */
+        ayanamsa: number;
+        /**
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         */
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
          * Remaining balance of the first Mahadasha at birth. Based on Moon degree within the birth nakshatra. partial dasha already elapsed before birth.
          */
         birthDashaBalance: {
@@ -13872,6 +13978,10 @@ export type PostVedicAstrologyDashaMajorResponses = {
              */
             durationYears: number;
             /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
@@ -13907,6 +14017,10 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
          */
         timezone?: number | string;
+        /**
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         */
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
     };
     path: {
         /**
@@ -14037,6 +14151,18 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
          */
         mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
         /**
+         * Sidereal (nirayana) longitude of the birth Moon in degrees, 0 to 360, measured in the ayanamsa frame reported below. This single value determines the birth nakshatra and therefore every dasha start and end date in this response. Compare it against a reference chart to reconcile any date difference at its source.
+         */
+        moonLongitude: number;
+        /**
+         * Ayanamsa actually applied, in degrees. The precession offset subtracted from the tropical (sayana) longitude to get the sidereal (nirayana) one. Lahiri sits near 23 deg 43 min for a 1990 birth, KP-Newcomb near 23 deg 38 min.
+         */
+        ayanamsa: number;
+        /**
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         */
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
          * Full details of the parent Mahadasha including start/end dates and duration.
          */
         mahadashaPeriod: {
@@ -14057,12 +14183,16 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
              */
             durationYears: number;
             /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
         };
         /**
-         * All 9 Antardasha sub-periods within this Mahadasha, proportional to each planet Vimshottari years. Sorted chronologically.
+         * Antardasha (bhukti) sub-periods within this Mahadasha, proportional to each planet Vimshottari years, sorted chronologically. Nine for any Mahadasha the native lived through in full. FEWER than nine for the first Mahadasha in the chart, because the Vimshottari cycle was already running at birth: the Antardashas that ended before the birth date are not part of the chart, and the one in force at birth starts on the birth date.
          */
         antardashas: Array<{
             /**
@@ -14082,6 +14212,10 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
              */
             durationYears: number;
             /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
@@ -14094,6 +14228,522 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
 };
 
 export type PostVedicAstrologyDashaSubByMahadashaResponse = PostVedicAstrologyDashaSubByMahadashaResponses[keyof PostVedicAstrologyDashaSubByMahadashaResponses];
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+        /**
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         */
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+    };
+    path: {
+        /**
+         * Mahadasha planet name, case-insensitive (e.g. saturn, Saturn, SATURN all work). Valid: Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury.
+         */
+        mahadasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Antardasha (bhukti) planet name inside that Mahadasha, case-insensitive. Every Mahadasha contains all 9 lords, so a repeat such as saturn/saturn is valid.
+         */
+        antardasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}';
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaError = PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors];
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
+    /**
+     * All 9 Pratyantardasha periods within the specified Mahadasha and Antardasha, with start/end dates and the parent Antardasha period details.
+     */
+    200: {
+        /**
+         * Ruling planet of the requested Mahadasha period.
+         */
+        mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Ruling planet of the requested Antardasha sub-period.
+         */
+        antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Sidereal (nirayana) longitude of the birth Moon in degrees, 0 to 360, measured in the ayanamsa frame reported below. This single value determines the birth nakshatra and therefore every dasha start and end date in this response. Compare it against a reference chart to reconcile any date difference at its source.
+         */
+        moonLongitude: number;
+        /**
+         * Ayanamsa actually applied, in degrees. The precession offset subtracted from the tropical (sayana) longitude to get the sidereal (nirayana) one. Lahiri sits near 23 deg 43 min for a 1990 birth, KP-Newcomb near 23 deg 38 min.
+         */
+        ayanamsa: number;
+        /**
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         */
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Full details of the parent Antardasha including start/end dates and duration.
+         */
+        antardashaPeriod: {
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * Pratyantardasha (antara) periods within this Antardasha, proportional to each planet Vimshottari years, sorted chronologically and starting with the Antardasha lord. Fewer than nine only when the parent Antardasha is the one that was already running at birth, in which case the periods that ended before the birth date are omitted.
+         */
+        pratyantardashas: Array<{
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        }>;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponse = PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses];
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+        /**
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         */
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+    };
+    path: {
+        /**
+         * Mahadasha planet name, case-insensitive. Valid: Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury.
+         */
+        mahadasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Antardasha (bhukti) planet name inside that Mahadasha, case-insensitive.
+         */
+        antardasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Pratyantardasha (antara) planet name inside that Antardasha, case-insensitive.
+         */
+        pratyantardasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}/{pratyantardasha}';
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaError = PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaErrors[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaErrors];
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses = {
+    /**
+     * All 9 Sookshma dasha periods within the specified Mahadasha, Antardasha, and Pratyantardasha, with start/end dates and the parent Pratyantardasha period details.
+     */
+    200: {
+        /**
+         * Ruling planet of the requested Mahadasha period.
+         */
+        mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Ruling planet of the requested Antardasha sub-period.
+         */
+        antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Ruling planet of the requested Pratyantardasha sub-sub-period.
+         */
+        pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Sidereal (nirayana) longitude of the birth Moon in degrees, 0 to 360, measured in the ayanamsa frame reported below. This single value determines the birth nakshatra and therefore every dasha start and end date in this response. Compare it against a reference chart to reconcile any date difference at its source.
+         */
+        moonLongitude: number;
+        /**
+         * Ayanamsa actually applied, in degrees. The precession offset subtracted from the tropical (sayana) longitude to get the sidereal (nirayana) one. Lahiri sits near 23 deg 43 min for a 1990 birth, KP-Newcomb near 23 deg 38 min.
+         */
+        ayanamsa: number;
+        /**
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         */
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Full details of the parent Pratyantardasha including start/end dates and duration.
+         */
+        pratyantardashaPeriod: {
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * Sookshma dasha periods within this Pratyantardasha, proportional to each planet Vimshottari years, sorted chronologically and starting with the Pratyantardasha lord. Fewer than nine only when the parent Pratyantardasha is the one that was already running at birth, in which case the periods that ended before the birth date are omitted.
+         */
+        sookshmaDashas: Array<{
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Pratyantardasha lord under which this Sookshma dasha runs.
+             */
+            pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        }>;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponse = PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses];
 
 export type PostVedicAstrologyPanchangBasicData = {
     body?: {
@@ -19855,6 +20505,4282 @@ export type PostVedicAstrologyShadbalaResponses = {
 };
 
 export type PostVedicAstrologyShadbalaResponse = PostVedicAstrologyShadbalaResponses[keyof PostVedicAstrologyShadbalaResponses];
+
+export type PostForecastTimelineData = {
+    body?: {
+        /**
+         * The single birth subject this forecast is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the forecast window in YYYY-MM-DD format. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Last day of the forecast window in YYYY-MM-DD format. Defaults to startDate plus 30 days. The window is clamped to a maximum of 90 days from startDate.
+         */
+        endDate?: string;
+        /**
+         * Which forecast domains to include. Defaults to all three. Pass a subset to scope the timeline to one or two engines.
+         */
+        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
+        /**
+         * Drop events scoring below this significance threshold from 0 to 100. Defaults to 0, keeping all events.
+         */
+        minSignificance?: number;
+        /**
+         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
+         */
+        domainWeights?: {
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            western?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            vedic?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            biorhythm?: number;
+        };
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/timeline';
+};
+
+export type PostForecastTimelineErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastTimelineError = PostForecastTimelineErrors[keyof PostForecastTimelineErrors];
+
+export type PostForecastTimelineResponses = {
+    /**
+     * Merged forecast timeline with time-ordered events across the requested domains
+     */
+    200: {
+        /**
+         * Echo of the birth subject this forecast was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the resolved forecast window.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved forecast window after the horizon clamp.
+         */
+        endDate: string;
+        /**
+         * Number of events in the timeline after deduplication, filtering, and the event cap.
+         */
+        count: number;
+        /**
+         * The merged, time-ordered forecast events across the requested domains.
+         */
+        events: Array<{
+            /**
+             * Calendar date of the event in YYYY-MM-DD (UTC).
+             */
+            date: string;
+            /**
+             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             */
+            datetime: string;
+            /**
+             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            domain: 'western' | 'vedic' | 'biorhythm';
+            /**
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
+            /**
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+             */
+            body: string;
+            /**
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
+             */
+            target?: string;
+            /**
+             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+             */
+            aspect?: string;
+            /**
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             */
+            orb?: number;
+            /**
+             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+             */
+            station?: 'retrograde' | 'direct';
+            /**
+             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+             */
+            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+            /**
+             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+             */
+            obscuration?: number;
+            /**
+             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+             */
+            phase?: 'new-moon' | 'full-moon';
+            /**
+             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             */
+            description: string;
+            /**
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
+             */
+            significance: number;
+        }>;
+    };
+};
+
+export type PostForecastTimelineResponse = PostForecastTimelineResponses[keyof PostForecastTimelineResponses];
+
+export type PostForecastTransitsData = {
+    body?: {
+        /**
+         * The single birth subject this transit forecast is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the transit window in YYYY-MM-DD format. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Last day of the transit window in YYYY-MM-DD format. Defaults to startDate plus 30 days. Clamped to a maximum of 90 days from startDate.
+         */
+        endDate?: string;
+        /**
+         * Drop transit events scoring below this significance threshold from 0 to 100. Defaults to 0.
+         */
+        minSignificance?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/transits';
+};
+
+export type PostForecastTransitsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastTransitsError = PostForecastTransitsErrors[keyof PostForecastTransitsErrors];
+
+export type PostForecastTransitsResponses = {
+    /**
+     * Time-ordered western forecast events: aspects, ingresses, stations, eclipses, and moon phases
+     */
+    200: {
+        /**
+         * Echo of the birth subject this forecast was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the resolved forecast window.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved forecast window after the horizon clamp.
+         */
+        endDate: string;
+        /**
+         * Number of events in the timeline after deduplication, filtering, and the event cap.
+         */
+        count: number;
+        /**
+         * The merged, time-ordered forecast events across the requested domains.
+         */
+        events: Array<{
+            /**
+             * Calendar date of the event in YYYY-MM-DD (UTC).
+             */
+            date: string;
+            /**
+             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             */
+            datetime: string;
+            /**
+             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            domain: 'western' | 'vedic' | 'biorhythm';
+            /**
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
+            /**
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+             */
+            body: string;
+            /**
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
+             */
+            target?: string;
+            /**
+             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+             */
+            aspect?: string;
+            /**
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             */
+            orb?: number;
+            /**
+             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+             */
+            station?: 'retrograde' | 'direct';
+            /**
+             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+             */
+            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+            /**
+             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+             */
+            obscuration?: number;
+            /**
+             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+             */
+            phase?: 'new-moon' | 'full-moon';
+            /**
+             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             */
+            description: string;
+            /**
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
+             */
+            significance: number;
+        }>;
+    };
+};
+
+export type PostForecastTransitsResponse = PostForecastTransitsResponses[keyof PostForecastTransitsResponses];
+
+export type PostForecastSignificantDatesData = {
+    body?: {
+        /**
+         * The single birth subject this forecast is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the window in YYYY-MM-DD format. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Last day of the window in YYYY-MM-DD format. Defaults to startDate plus 30 days. Clamped to a maximum of 90 days from startDate.
+         */
+        endDate?: string;
+        /**
+         * Which forecast domains to consider before filtering by significance. Defaults to all three.
+         */
+        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
+        /**
+         * Significance floor from 0 to 100 for what counts as a significant date. Defaults to 70.
+         */
+        minSignificance?: number;
+        /**
+         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
+         */
+        domainWeights?: {
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            western?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            vedic?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            biorhythm?: number;
+        };
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/significant-dates';
+};
+
+export type PostForecastSignificantDatesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastSignificantDatesError = PostForecastSignificantDatesErrors[keyof PostForecastSignificantDatesErrors];
+
+export type PostForecastSignificantDatesResponses = {
+    /**
+     * High-significance forecast events across the requested domains
+     */
+    200: {
+        /**
+         * Echo of the birth subject this forecast was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * First day of the resolved forecast window.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved forecast window after the horizon clamp.
+         */
+        endDate: string;
+        /**
+         * Number of events in the timeline after deduplication, filtering, and the event cap.
+         */
+        count: number;
+        /**
+         * The merged, time-ordered forecast events across the requested domains.
+         */
+        events: Array<{
+            /**
+             * Calendar date of the event in YYYY-MM-DD (UTC).
+             */
+            date: string;
+            /**
+             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             */
+            datetime: string;
+            /**
+             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            domain: 'western' | 'vedic' | 'biorhythm';
+            /**
+             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+             */
+            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
+            /**
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+             */
+            body: string;
+            /**
+             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
+             */
+            target?: string;
+            /**
+             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+             */
+            aspect?: string;
+            /**
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             */
+            orb?: number;
+            /**
+             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+             */
+            station?: 'retrograde' | 'direct';
+            /**
+             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+             */
+            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+            /**
+             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+             */
+            obscuration?: number;
+            /**
+             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+             */
+            phase?: 'new-moon' | 'full-moon';
+            /**
+             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             */
+            description: string;
+            /**
+             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
+             */
+            significance: number;
+        }>;
+    };
+};
+
+export type PostForecastSignificantDatesResponse = PostForecastSignificantDatesResponses[keyof PostForecastSignificantDatesResponses];
+
+export type PostForecastDigestData = {
+    body?: {
+        /**
+         * The single birth subject this digest is built for. One object only, never an array.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * Start anchor for every window in YYYY-MM-DD format. The next 24h, 7d, 30d, and 90d windows are measured forward from this date at 00:00:00 UTC. Defaults to today in UTC.
+         */
+        startDate?: string;
+        /**
+         * Which forecast domains to include before rolling up the windows. Defaults to all three.
+         */
+        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
+        /**
+         * Drop events scoring below this significance threshold from 0 to 100 before the rollup. Defaults to 0.
+         */
+        minSignificance?: number;
+        /**
+         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
+         */
+        domainWeights?: {
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            western?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            vedic?: number;
+            /**
+             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
+             */
+            biorhythm?: number;
+        };
+        /**
+         * Number of highest-significance events to surface per window. Defaults to 3, capped at 20.
+         */
+        top?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/digest';
+};
+
+export type PostForecastDigestErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastDigestError = PostForecastDigestErrors[keyof PostForecastDigestErrors];
+
+export type PostForecastDigestResponses = {
+    /**
+     * Pre-summarized forecast windows: next 24h, 7d, 30d, and 90d rollups
+     */
+    200: {
+        /**
+         * Echo of the birth subject this digest was built for.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
+             */
+            longitude?: number;
+        };
+        /**
+         * Start anchor every window is measured from.
+         */
+        startDate: string;
+        /**
+         * Last day of the resolved 90 day horizon the timeline was built over before slicing.
+         */
+        endDate: string;
+        /**
+         * The four rollups in ascending window length: next 24h, 7d, 30d, and 90d from the start anchor.
+         */
+        windows: Array<{
+            /**
+             * Length of this window in days forward from the start anchor. One of 1, 7, 30, 90.
+             */
+            days: number;
+            /**
+             * Inclusive lower bound of the window as an ISO-8601 UTC datetime, the start anchor.
+             */
+            from: string;
+            /**
+             * Exclusive upper bound of the window as an ISO-8601 UTC datetime, the start anchor plus the window length.
+             */
+            to: string;
+            /**
+             * Number of events whose datetime falls inside this window.
+             */
+            count: number;
+            /**
+             * Count of events in this window broken down by domain. Only domains with at least one event in the window are present. The values sum to count.
+             */
+            byDomain: {
+                western?: number;
+                vedic?: number;
+                biorhythm?: number;
+            };
+            /**
+             * Count of events in this window broken down by event type. Only types with at least one event in the window are present. The values sum to count.
+             */
+            byType: {
+                'transit-aspect'?: number;
+                'sign-ingress'?: number;
+                'retrograde-station'?: number;
+                eclipse?: number;
+                'lunar-phase'?: number;
+                'dasha-change'?: number;
+                'critical-day'?: number;
+            };
+            /**
+             * The highest-significance events in this window, most significant first, up to the requested top count. The same TimelineEvent shape as the timeline endpoints.
+             */
+            top: Array<{
+                /**
+                 * Calendar date of the event in YYYY-MM-DD (UTC).
+                 */
+                date: string;
+                /**
+                 * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+                 */
+                datetime: string;
+                /**
+                 * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
+                 */
+                domain: 'western' | 'vedic' | 'biorhythm';
+                /**
+                 * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
+                 */
+                type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
+                /**
+                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+                 */
+                body: string;
+                /**
+                 * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
+                 */
+                target?: string;
+                /**
+                 * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
+                 */
+                aspect?: string;
+                /**
+                 * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+                 */
+                orb?: number;
+                /**
+                 * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
+                 */
+                station?: 'retrograde' | 'direct';
+                /**
+                 * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
+                 */
+                kind?: 'penumbral' | 'partial' | 'annular' | 'total';
+                /**
+                 * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
+                 */
+                obscuration?: number;
+                /**
+                 * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
+                 */
+                phase?: 'new-moon' | 'full-moon';
+                /**
+                 * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+                 */
+                description: string;
+                /**
+                 * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
+                 */
+                significance: number;
+            }>;
+        }>;
+    };
+};
+
+export type PostForecastDigestResponse = PostForecastDigestResponses[keyof PostForecastDigestResponses];
+
+export type PostForecastSolarReturnData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Anchors the natal Sun longitude the transiting Sun returns to each year.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Pins the exact natal Sun position that defines the solar return moment.
+         */
+        time: string;
+        /**
+         * Year to cast the solar return for. The chart is erected for the moment in this year when the transiting Sun returns to the natal Sun longitude, on or within a day of the birthday.
+         */
+        year: number;
+        /**
+         * Latitude of the solar return location in decimal degrees. The solar return is location-sensitive: use the birthplace to anchor the chart to natal geography, or the current city for a relocated solar return.
+         */
+        latitude: number;
+        /**
+         * Longitude of the solar return location in decimal degrees. Sets the local sidereal time, so it drives the Ascendant, Midheaven, and house cusps of the return chart.
+         */
+        longitude: number;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * House system for the return chart. placidus is the Western default. whole-sign, equal, and koch are also supported.
+         */
+        houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/forecast/solar-return';
+};
+
+export type PostForecastSolarReturnErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostForecastSolarReturnError = PostForecastSolarReturnErrors[keyof PostForecastSolarReturnErrors];
+
+export type PostForecastSolarReturnResponses = {
+    /**
+     * Solar return chart cast for the requested year and location
+     */
+    200: {
+        /**
+         * Echo of the birth date used to find the natal Sun longitude.
+         */
+        birthDate: string;
+        /**
+         * Exact solar return moment, when the transiting Sun returns to the natal Sun longitude, formatted in the requested timezone. The astrological birthday for the year.
+         */
+        solarReturnDate: string;
+        /**
+         * Year of this solar return. The chart covers the period to the next birthday.
+         */
+        solarReturnYear: number;
+        /**
+         * Location the return chart was cast for. The Ascendant and house cusps change with this location, the basis of the relocated solar return technique.
+         */
+        location: {
+            /**
+             * Latitude used for the return chart house cusps and Ascendant.
+             */
+            latitude: number;
+            /**
+             * Longitude used for local sidereal time and the Midheaven.
+             */
+            longitude: number;
+            /**
+             * Decimal timezone offset applied to the output datetime.
+             */
+            timezone: number;
+        };
+        /**
+         * The natal Sun position whose annual return defines this chart.
+         */
+        natalSunPosition: {
+            /**
+             * Natal Sun ecliptic longitude in degrees from 0 to 360 that the Sun returns to.
+             */
+            longitude: number;
+            /**
+             * Tropical zodiac sign of the natal Sun.
+             */
+            sign: string;
+            /**
+             * Degree within the sign from 0 to 29.999 that the Sun returns to.
+             */
+            degree: number;
+        };
+        /**
+         * Full chart erected for the solar return moment: all bodies with house placements, the 12 house cusps, aspects, Part of Fortune, and Vertex in the tropical zodiac.
+         */
+        chart: {
+            /**
+             * Birth details used to generate this chart.
+             */
+            birthDetails: {
+                /**
+                 * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
+                 */
+                date: string;
+                /**
+                 * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
+                 */
+                time: string;
+                /**
+                 * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
+                 */
+                latitude: number;
+                /**
+                 * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
+                 */
+                longitude: number;
+                /**
+                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+                 */
+                timezone: number;
+            };
+            /**
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
+             */
+            planets: Array<{
+                /**
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+                 */
+                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
+                /**
+                 * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
+                 */
+                longitude: number;
+                /**
+                 * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
+                 */
+                latitude: number;
+                /**
+                 * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
+                 */
+                sign: string;
+                /**
+                 * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
+                 */
+                degree: number;
+                /**
+                 * House placement (1-12). Determined by the selected house system and birth location.
+                 */
+                house: number;
+                /**
+                 * Daily motion in degrees per day. Negative values indicate retrograde motion.
+                 */
+                speed: number;
+                /**
+                 * Whether the planet appears to move backward from Earth perspective. Retrograde periods signal review and introspection.
+                 */
+                isRetrograde: boolean;
+            }>;
+            /**
+             * All 12 house cusps calculated using the selected house system.
+             */
+            houses: Array<{
+                /**
+                 * House number (1-12). Each house governs specific life themes in Western astrology.
+                 */
+                number: number;
+                /**
+                 * Ecliptic longitude of this house cusp in degrees (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Zodiac sign on this house cusp. Colors the themes of this life area.
+                 */
+                sign: string;
+                /**
+                 * Degree within the zodiac sign on this cusp (0-29.999).
+                 */
+                degree: number;
+            }>;
+            /**
+             * House system used for this chart (placidus, whole-sign, equal, or koch).
+             */
+            houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+            /**
+             * All planetary aspects found in this chart with orbs, strength, and applying/separating status.
+             */
+            aspects: Array<{
+                /**
+                 * First planet in the aspect pair.
+                 */
+                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
+                /**
+                 * Second planet in the aspect pair.
+                 */
+                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
+                /**
+                 * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
+                 */
+                type: 'CONJUNCTION' | 'OPPOSITION' | 'TRINE' | 'SQUARE' | 'SEXTILE' | 'SEMI_SEXTILE' | 'QUINCUNX' | 'SEMI_SQUARE' | 'SESQUIQUADRATE';
+                /**
+                 * Exact angular separation that defines this aspect type in degrees.
+                 */
+                angle: number;
+                /**
+                 * Deviation from exact aspect in degrees. Tighter orb means stronger influence.
+                 */
+                orb: number;
+                /**
+                 * Whether the aspect is applying (planets moving toward exact) or separating (moving apart). Applying aspects grow stronger.
+                 */
+                isApplying: boolean;
+                /**
+                 * Aspect strength percentage (0-100). Based on orb tightness relative to the allowed maximum.
+                 */
+                strength: number;
+                /**
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 */
+                interpretation: 'harmonious' | 'challenging' | 'neutral';
+            }>;
+            /**
+             * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
+             */
+            partOfFortune: {
+                /**
+                 * Zodiac sign holding the Part of Fortune.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Part of Fortune sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Part of Fortune (0-360).
+                 */
+                longitude: number;
+                /**
+                 * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
+                 */
+                sect: 'day' | 'night';
+            };
+            /**
+             * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
+             */
+            vertex: {
+                /**
+                 * Zodiac sign holding the Vertex.
+                 */
+                sign: string;
+                /**
+                 * Degree within the Vertex sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * Absolute ecliptic longitude of the Vertex (0-360).
+                 */
+                longitude: number;
+            };
+        };
+    };
+};
+
+export type PostForecastSolarReturnResponse = PostForecastSolarReturnResponses[keyof PostForecastSolarReturnResponses];
+
+export type PostHumanDesignBodygraphData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/bodygraph';
+};
+
+export type PostHumanDesignBodygraphErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignBodygraphError = PostHumanDesignBodygraphErrors[keyof PostHumanDesignBodygraphErrors];
+
+export type PostHumanDesignBodygraphResponses = {
+    /**
+     * Complete bodygraph with type, authority, profile, centers, channels, and gates
+     */
+    200: {
+        /**
+         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
+         */
+        type: string;
+        /**
+         * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
+         */
+        typeDescription: string;
+        /**
+         * The aura mechanic of the type: how the energy field itself operates, for example open and enveloping, or closed and repelling.
+         */
+        aura: string;
+        /**
+         * The aura strategy for engaging life correctly for this type.
+         */
+        strategy: string;
+        /**
+         * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
+         */
+        strategyDescription: string;
+        /**
+         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
+         */
+        authority: string;
+        /**
+         * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart, so this is the field to lean on when grounding a reading.
+         */
+        authorityDescription: string;
+        /**
+         * The signature feeling of living in alignment with the type.
+         */
+        signature: string;
+        /**
+         * The not-self theme, the recurring feeling that signals being out of alignment.
+         */
+        notSelf: string;
+        /**
+         * Profile in conscious/unconscious form from the Personality Sun line over the Design Sun line.
+         */
+        profile: string;
+        /**
+         * The two line keynotes the profile is built from, conscious over unconscious, so the profile is readable without a separate lookup.
+         */
+        profileKeynotes: {
+            /**
+             * Line number 1 to 6 of the conscious Personality Sun, the first digit of the profile.
+             */
+            personalityLine: number;
+            /**
+             * Line number 1 to 6 of the unconscious Design Sun, the second digit of the profile.
+             */
+            designLine: number;
+            /**
+             * Keynote of the conscious Personality line. The half of the life role the person is aware of and can speak to.
+             */
+            personality: string;
+            /**
+             * Keynote of the unconscious Design line. The half of the life role others see operating in the body, which the person does not directly experience.
+             */
+            design: string;
+        };
+        /**
+         * Meaning of the combined profile. A profile is not the sum of its two lines: 6/2 has its own meaning that neither the line 6 nor the line 2 keynote carries alone.
+         */
+        profileDescription: string;
+        /**
+         * Definition type from the number of connected components among defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
+         */
+        definition: string;
+        /**
+         * How energy flows through the defined centers in this configuration, and what the configuration needs. For a split, this is where the bridging gates of other people matter.
+         */
+        definitionDescription: string;
+        /**
+         * What the two chart sides are: personality is the conscious mind side, design is the unconscious body side computed 88 degrees of solar arc before birth. Returned once at the top level rather than repeated across all 26 activations.
+         */
+        sides: {
+            [key: string]: string;
+        };
+        /**
+         * The incarnation cross built from the four cardinal gates and the profile angle.
+         */
+        incarnationCross: {
+            /**
+             * The four cardinal gates of the cross: Personality Sun, Personality Earth, Design Sun, Design Earth.
+             */
+            gates: Array<number>;
+            /**
+             * Cross angle. One of Right Angle, Juxtaposition, Left Angle.
+             */
+            angle: string;
+            /**
+             * Short code for the angle. One of RAX, JXT, LAX.
+             */
+            angleCode: string;
+            /**
+             * Canonical published name of the incarnation cross, determined by the Personality Sun gate and the angle. Falls back to a name composed from the angle and the four gates if no canonical name exists.
+             */
+            name: string;
+            /**
+             * The life theme of the cross, synthesized from its four gates and the orientation the angle gives them. The same Sun gate under a different angle is a genuinely different theme: Right Angle is personal destiny, Left Angle is worked out through other people, Juxtaposition is a fixed fate.
+             */
+            description?: string;
+        };
+        /**
+         * All nine centers with their defined state and active gates.
+         */
+        centers: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
+             */
+            defined: boolean;
+            /**
+             * Whether this is a motor center (energy source). The four motors are Heart, Sacral, Solar Plexus, and Root.
+             */
+            motor: boolean;
+            /**
+             * Whether this is an awareness center. The three awareness centers are Ajna, Solar Plexus, and Spleen.
+             */
+            awareness: boolean;
+            /**
+             * Theme text describing the center in its current defined or undefined state.
+             */
+            theme: string;
+            /**
+             * The conditioning trap of this center when it is open. Returned on every center so a consumer can surface it the moment `defined` is false, which is where the not-self operates.
+             */
+            notSelfQuestion: string;
+            /**
+             * The gland, organ, or system this center corresponds to in the body.
+             */
+            biology: string;
+            /**
+             * Active gate numbers that sit in this center.
+             */
+            gates: Array<number>;
+        }>;
+        /**
+         * The defined channels where both gates are activated.
+         */
+        channels: Array<{
+            /**
+             * First gate of the channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the channel.
+             */
+            gateB: number;
+            /**
+             * Name of the defined channel.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects and defines.
+             */
+            centers: Array<string>;
+            /**
+             * What this channel wires between its two centers and the nature of the energy it carries.
+             */
+            description: string;
+            /**
+             * What the circuit family of this channel governs.
+             */
+            circuitDescription: string;
+        }>;
+        /**
+         * All 26 activations, 13 Personality and 13 Design.
+         */
+        gates: Array<{
+            /**
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            planet: string;
+            /**
+             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
+             */
+            side: string;
+            /**
+             * Human Design gate number from 1 to 64 that this activation falls in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate, describing its bodygraph function.
+             */
+            gateName: string;
+            /**
+             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
+             */
+            gateDescription: string;
+            /**
+             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
+             */
+            lineMeaning: string;
+            /**
+             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
+             */
+            planetDescription: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+    };
+};
+
+export type PostHumanDesignBodygraphResponse = PostHumanDesignBodygraphResponses[keyof PostHumanDesignBodygraphResponses];
+
+export type PostHumanDesignConnectionData = {
+    body?: {
+        /**
+         * Birth moment of the first person in the connection.
+         */
+        personA: {
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
+        };
+        /**
+         * Birth moment of the second person in the connection.
+         */
+        personB: {
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
+        };
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/connection';
+};
+
+export type PostHumanDesignConnectionErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignConnectionError = PostHumanDesignConnectionErrors[keyof PostHumanDesignConnectionErrors];
+
+export type PostHumanDesignConnectionResponses = {
+    /**
+     * Connection chart with per-channel dynamics, combined centers, definition, and a dynamic count
+     */
+    200: {
+        /**
+         * Total number of connected channels between the two people. Equals the length of channels and the sum of the summary counts.
+         */
+        totalChannels: number;
+        /**
+         * Every connected channel between the two people with its dynamic. A channel is connected when the two people together hold both of its gates.
+         */
+        channels: Array<{
+            /**
+             * First gate of the channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the channel.
+             */
+            gateB: number;
+            /**
+             * Name of the channel whose connection dynamic is reported.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects in the bodygraph.
+             */
+            centers: Array<string>;
+            /**
+             * Connection dynamic for this channel. Electromagnetic means each person holds one of the two gates and the channel completes only together, the classic point of attraction. Dominance means one person holds both gates and the other holds neither, a one-way conditioning. Compromise means one person holds both gates and the other holds a single hanging gate. Companionship means both people independently hold both gates, a shared and familiar frequency.
+             */
+            dynamic: string;
+            /**
+             * Which of the channel two gates person A holds, from one to both.
+             */
+            personAGates: Array<number>;
+            /**
+             * Which of the channel two gates person B holds, from one to both.
+             */
+            personBGates: Array<number>;
+        }>;
+        /**
+         * All nine centers with their defined state in the combined connection bodygraph and which person defines each.
+         */
+        centers: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Whether the center is defined in the combined connection bodygraph, where a channel counts as defined when the two people together hold both of its gates.
+             */
+            defined: boolean;
+            /**
+             * Who defines this center in their own chart. A, B, both, or empty when the center is open in both individual charts.
+             */
+            definedBy: Array<string>;
+        }>;
+        /**
+         * Definition of the combined connection bodygraph from connected components among its defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
+         */
+        combinedDefinition: string;
+        /**
+         * Count of each connection dynamic across all connected channels.
+         */
+        summary: {
+            /**
+             * Count of electromagnetic channels, the points of mutual attraction.
+             */
+            electromagnetic: number;
+            /**
+             * Count of dominance channels, where one person conditions the other one way.
+             */
+            dominance: number;
+            /**
+             * Count of compromise channels, a full channel meeting a single hanging gate.
+             */
+            compromise: number;
+            /**
+             * Count of companionship channels, where both people share the whole channel.
+             */
+            companionship: number;
+        };
+    };
+};
+
+export type PostHumanDesignConnectionResponse = PostHumanDesignConnectionResponses[keyof PostHumanDesignConnectionResponses];
+
+export type PostHumanDesignPentaData = {
+    body?: {
+        /**
+         * Birth moments of the three to five people in the group. Below three no Penta forms; above five a second Penta emerges.
+         */
+        members: Array<{
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
+        }>;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/penta';
+};
+
+export type PostHumanDesignPentaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignPentaError = PostHumanDesignPentaErrors[keyof PostHumanDesignPentaErrors];
+
+export type PostHumanDesignPentaResponses = {
+    /**
+     * Penta chart with per-channel Strengths, per-gate fill state, and a group summary
+     */
+    200: {
+        /**
+         * Number of people in the group, always between 3 and 5.
+         */
+        memberCount: number;
+        /**
+         * The six channels of the Penta with their defined Strength state and which members supply each gate. Three upper channels run G to Throat (The Alpha, Inspiration, The Prodigal); three lower channels run G to Sacral (Rhythm, The Beat, Discovery).
+         */
+        channels: Array<{
+            /**
+             * First gate of the Penta channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the Penta channel.
+             */
+            gateB: number;
+            /**
+             * Name of the Penta channel. One of The Alpha, Inspiration, The Prodigal, Rhythm, The Beat, Discovery.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * Position of the channel in the Penta. upper channels run from the G Center to the Throat and carry the leadership and how-the-group-presents roles. lower channels run from the G Center to the Sacral and carry the managed, generative, resource roles.
+             */
+            position: string;
+            /**
+             * Whether this is the 2/14 Channel of the Beat, the material core of the Penta vortex: gate 2 the direction for resources, gate 14 the resources themselves.
+             */
+            isCore: boolean;
+            /**
+             * Whether the channel is a defined Strength: both of its gates are present somewhere in the group, so the function it governs has no gap.
+             */
+            defined: boolean;
+            /**
+             * Zero-based indices of the members whose chart holds gate A, in member order.
+             */
+            gateAHeldBy: Array<number>;
+            /**
+             * Zero-based indices of the members whose chart holds gate B, in member order.
+             */
+            gateBHeldBy: Array<number>;
+        }>;
+        /**
+         * The twelve Penta gates with their filled state and which members hold each.
+         */
+        gates: Array<{
+            /**
+             * Penta gate number. One of 1, 2, 5, 7, 8, 13, 14, 15, 29, 31, 33, 46.
+             */
+            gate: number;
+            /**
+             * Human Design keynote name of the gate, describing the role it brings to the group.
+             */
+            gateName: string;
+            /**
+             * Whether at least one member holds this gate. A gate held by nobody is a gap that conditions the group to compensate for the missing role.
+             */
+            filled: boolean;
+            /**
+             * Zero-based indices of the members whose chart holds this gate. Empty when the gate is a gap.
+             */
+            heldBy: Array<number>;
+        }>;
+        /**
+         * Group-level rollup of the Penta channels and gates.
+         */
+        summary: {
+            /**
+             * Count of the six Penta channels that are defined Strengths in the group.
+             */
+            definedChannels: number;
+            /**
+             * Count of the twelve Penta gates filled by at least one member.
+             */
+            filledGates: number;
+            /**
+             * Penta gates held by no member. A non-empty list flags the functional gaps in the group.
+             */
+            gapGates: Array<number>;
+            /**
+             * Whether the 2/14 Channel of the Beat, the material core of the Penta, is defined across the group.
+             */
+            coreDefined: boolean;
+        };
+    };
+};
+
+export type PostHumanDesignPentaResponse = PostHumanDesignPentaResponses[keyof PostHumanDesignPentaResponses];
+
+export type PostHumanDesignTransitData = {
+    body?: {
+        /**
+         * Birth moment whose natal bodygraph the transit is overlaid on.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+             */
+            longitude?: number;
+            /**
+             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             */
+            nodeType?: 'mean' | 'true';
+        };
+        /**
+         * Transit date in YYYY-MM-DD UTC. Optional. Defaults to today in UTC when omitted, giving the just-now transit.
+         */
+        date?: string;
+        /**
+         * Transit time in HH:MM:SS UTC. Optional. Defaults to the current UTC time when omitted. Precision matters: the Moon moves through a gate in roughly half a day.
+         */
+        time?: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/transit';
+};
+
+export type PostHumanDesignTransitErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignTransitError = PostHumanDesignTransitErrors[keyof PostHumanDesignTransitErrors];
+
+export type PostHumanDesignTransitResponses = {
+    /**
+     * Transit overlay with transiting activations, completed channels, temporary centers, and a summary
+     */
+    200: {
+        /**
+         * Date the transit overlay was computed for, in YYYY-MM-DD UTC.
+         */
+        date: string;
+        /**
+         * Time the transit overlay was computed for, in HH:MM:SS UTC.
+         */
+        time: string;
+        /**
+         * UTC offset of the transit moment. Always 0, since the transit is computed in UTC.
+         */
+        timezone: number;
+        /**
+         * The 13 transiting bodies at this moment with the gate and line each currently activates. A transit is a single instant, so there is no Design side, only current positions.
+         */
+        activations: Array<{
+            /**
+             * Transiting body whose current position lands on this gate. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            body: string;
+            /**
+             * Human Design gate number from 1 to 64 this transiting body currently sits in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote of the transit.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate the transiting body activates.
+             */
+            gateName: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+        /**
+         * Channels the transit temporarily completes that the natal chart did not already define, each labelled personal or educational with the side that supplied each gate.
+         */
+        completedChannels: Array<{
+            /**
+             * First gate of the completed channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the completed channel.
+             */
+            gateB: number;
+            /**
+             * Name of the channel the transit temporarily completes.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects and temporarily defines.
+             */
+            centers: Array<string>;
+            /**
+             * How the transit completes the channel. personal means the natal chart already holds one gate and the transit supplies the other, the classic electromagnetic completion. educational means both gates are open in the natal chart and the transit supplies both at once.
+             */
+            kind: string;
+            /**
+             * Gate or gates of this channel the natal chart already holds. Empty for an educational channel.
+             */
+            natalGates: Array<number>;
+            /**
+             * Gate or gates of this channel supplied by the transit. One gate for a personal channel, both gates for an educational channel.
+             */
+            transitGates: Array<number>;
+        }>;
+        /**
+         * Centers that are open in the natal chart and temporarily defined by a transit-completed channel.
+         */
+        temporaryCenters: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Always true. The center is open in the natal chart and temporarily defined by a transit-completed channel for the duration of the transit.
+             */
+            temporarilyDefined: boolean;
+        }>;
+        /**
+         * Short factual summary of the overlay with channel and center counts only.
+         */
+        summary: string;
+    };
+};
+
+export type PostHumanDesignTransitResponse = PostHumanDesignTransitResponses[keyof PostHumanDesignTransitResponses];
+
+export type PostHumanDesignTypeData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/type';
+};
+
+export type PostHumanDesignTypeErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignTypeError = PostHumanDesignTypeErrors[keyof PostHumanDesignTypeErrors];
+
+export type PostHumanDesignTypeResponses = {
+    /**
+     * Type, strategy, authority, signature, not-self theme, and profile
+     */
+    200: {
+        /**
+         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
+         */
+        type: string;
+        /**
+         * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
+         */
+        typeDescription: string;
+        /**
+         * The aura mechanic of the type: how the energy field itself operates, for example open and enveloping, or closed and repelling.
+         */
+        aura: string;
+        /**
+         * The aura strategy for engaging life correctly for this type.
+         */
+        strategy: string;
+        /**
+         * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
+         */
+        strategyDescription: string;
+        /**
+         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
+         */
+        authority: string;
+        /**
+         * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart.
+         */
+        authorityDescription: string;
+        /**
+         * The signature feeling of living in alignment.
+         */
+        signature: string;
+        /**
+         * The not-self theme that signals being out of alignment.
+         */
+        notSelf: string;
+        /**
+         * Profile from the Personality Sun line over the Design Sun line.
+         */
+        profile: string;
+    };
+};
+
+export type PostHumanDesignTypeResponse = PostHumanDesignTypeResponses[keyof PostHumanDesignTypeResponses];
+
+export type PostHumanDesignGatesData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/gates';
+};
+
+export type PostHumanDesignGatesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignGatesError = PostHumanDesignGatesErrors[keyof PostHumanDesignGatesErrors];
+
+export type PostHumanDesignGatesResponses = {
+    /**
+     * Personality and Design activation lists, 13 each
+     */
+    200: {
+        /**
+         * The 13 conscious Personality activations computed at the exact birth moment, in black on a standard chart.
+         */
+        personality: Array<{
+            /**
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            planet: string;
+            /**
+             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
+             */
+            side: string;
+            /**
+             * Human Design gate number from 1 to 64 that this activation falls in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate, describing its bodygraph function.
+             */
+            gateName: string;
+            /**
+             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
+             */
+            gateDescription: string;
+            /**
+             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
+             */
+            lineMeaning: string;
+            /**
+             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
+             */
+            planetDescription: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+        /**
+         * The 13 unconscious Design activations computed 88 degrees of solar arc before birth, in red on a standard chart.
+         */
+        design: Array<{
+            /**
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             */
+            planet: string;
+            /**
+             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
+             */
+            side: string;
+            /**
+             * Human Design gate number from 1 to 64 that this activation falls in.
+             */
+            gate: number;
+            /**
+             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
+             */
+            line: number;
+            /**
+             * Human Design keynote name of the gate, describing its bodygraph function.
+             */
+            gateName: string;
+            /**
+             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
+             */
+            gateDescription: string;
+            /**
+             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
+             */
+            lineMeaning: string;
+            /**
+             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
+             */
+            planetDescription: string;
+            /**
+             * Cross-reference to the I-Ching hexagram that shares this gate number.
+             */
+            ichingHexagram: {
+                /**
+                 * I-Ching hexagram number, identical to the gate number it corresponds to.
+                 */
+                number: number;
+                /**
+                 * English name of the corresponding I-Ching hexagram.
+                 */
+                english: string;
+            };
+        }>;
+    };
+};
+
+export type PostHumanDesignGatesResponse = PostHumanDesignGatesResponses[keyof PostHumanDesignGatesResponses];
+
+export type GetHumanDesignGatesByNumberData = {
+    body?: never;
+    path: {
+        /**
+         * Gate number from 1 to 64.
+         */
+        number: number;
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/gates/{number}';
+};
+
+export type GetHumanDesignGatesByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Gate number is outside the range 1 to 64
+     */
+    404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetHumanDesignGatesByNumberError = GetHumanDesignGatesByNumberErrors[keyof GetHumanDesignGatesByNumberErrors];
+
+export type GetHumanDesignGatesByNumberResponses = {
+    /**
+     * Gate reference data with center, hexagram, and channel partners
+     */
+    200: {
+        /**
+         * Gate number from 1 to 64.
+         */
+        number: number;
+        /**
+         * Human Design keynote name of the gate.
+         */
+        name: string;
+        /**
+         * Center the gate sits in.
+         */
+        center: string;
+        /**
+         * Display name of the center.
+         */
+        centerName: string;
+        /**
+         * The I-Ching hexagram that shares this gate number.
+         */
+        ichingHexagram: {
+            /**
+             * I-Ching hexagram number.
+             */
+            number: number;
+            /**
+             * Hexagram name.
+             */
+            english: string;
+        };
+        /**
+         * Gates that form a channel with this gate, with the channel name for each.
+         */
+        channelPartners: Array<{
+            /**
+             * Partner gate number.
+             */
+            gate: number;
+            /**
+             * Name of the shared channel.
+             */
+            channel: string;
+        }>;
+    };
+};
+
+export type GetHumanDesignGatesByNumberResponse = GetHumanDesignGatesByNumberResponses[keyof GetHumanDesignGatesByNumberResponses];
+
+export type PostHumanDesignChannelsData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/channels';
+};
+
+export type PostHumanDesignChannelsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignChannelsError = PostHumanDesignChannelsErrors[keyof PostHumanDesignChannelsErrors];
+
+export type PostHumanDesignChannelsResponses = {
+    /**
+     * Defined channels with circuits and the centers they define
+     */
+    200: {
+        /**
+         * The defined channels, where both gates are activated.
+         */
+        channels: Array<{
+            /**
+             * First gate of the channel.
+             */
+            gateA: number;
+            /**
+             * Second gate of the channel.
+             */
+            gateB: number;
+            /**
+             * Name of the defined channel.
+             */
+            name: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             */
+            circuit: string;
+            /**
+             * The two centers this channel connects and defines.
+             */
+            centers: Array<string>;
+            /**
+             * What this channel wires between its two centers and the nature of the energy it carries.
+             */
+            description: string;
+            /**
+             * What the circuit family of this channel governs.
+             */
+            circuitDescription: string;
+        }>;
+        /**
+         * Number of defined channels in the bodygraph.
+         */
+        total: number;
+        /**
+         * The centers defined by these channels.
+         */
+        definedCenters: Array<string>;
+    };
+};
+
+export type PostHumanDesignChannelsResponse = PostHumanDesignChannelsResponses[keyof PostHumanDesignChannelsResponses];
+
+export type PostHumanDesignCentersData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/centers';
+};
+
+export type PostHumanDesignCentersErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignCentersError = PostHumanDesignCentersErrors[keyof PostHumanDesignCentersErrors];
+
+export type PostHumanDesignCentersResponses = {
+    /**
+     * All nine centers with defined state, flags, theme, and active gates
+     */
+    200: {
+        /**
+         * All nine centers with their defined state and active gates.
+         */
+        centers: Array<{
+            /**
+             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+             */
+            id: string;
+            /**
+             * Display name of the center.
+             */
+            name: string;
+            /**
+             * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
+             */
+            defined: boolean;
+            /**
+             * Whether this is a motor center (energy source). The four motors are Heart, Sacral, Solar Plexus, and Root.
+             */
+            motor: boolean;
+            /**
+             * Whether this is an awareness center. The three awareness centers are Ajna, Solar Plexus, and Spleen.
+             */
+            awareness: boolean;
+            /**
+             * Theme text describing the center in its current defined or undefined state.
+             */
+            theme: string;
+            /**
+             * The conditioning trap of this center when it is open. Returned on every center so a consumer can surface it the moment `defined` is false, which is where the not-self operates.
+             */
+            notSelfQuestion: string;
+            /**
+             * The gland, organ, or system this center corresponds to in the body.
+             */
+            biology: string;
+            /**
+             * Active gate numbers that sit in this center.
+             */
+            gates: Array<number>;
+        }>;
+        /**
+         * How many of the nine centers are defined.
+         */
+        definedCount: number;
+    };
+};
+
+export type PostHumanDesignCentersResponse = PostHumanDesignCentersResponses[keyof PostHumanDesignCentersResponses];
+
+export type GetHumanDesignCentersByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Center id. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
+         */
+        id: 'head' | 'ajna' | 'throat' | 'g' | 'heart' | 'sacral' | 'solar-plexus' | 'spleen' | 'root';
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/centers/{id}';
+};
+
+export type GetHumanDesignCentersByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetHumanDesignCentersByIdError = GetHumanDesignCentersByIdErrors[keyof GetHumanDesignCentersByIdErrors];
+
+export type GetHumanDesignCentersByIdResponses = {
+    /**
+     * Center reference data with defined and undefined meanings
+     */
+    200: {
+        /**
+         * Center identifier.
+         */
+        id: string;
+        /**
+         * Display name of the center.
+         */
+        name: string;
+        /**
+         * Whether this is a motor center.
+         */
+        motor: boolean;
+        /**
+         * Whether this is an awareness center.
+         */
+        awareness: boolean;
+        /**
+         * What this center means when defined: a consistent, reliable energy or awareness.
+         */
+        definedMeaning: string;
+        /**
+         * What this center means when undefined and open: a place of conditioning and learning.
+         */
+        undefinedMeaning: string;
+    };
+};
+
+export type GetHumanDesignCentersByIdResponse = GetHumanDesignCentersByIdResponses[keyof GetHumanDesignCentersByIdResponses];
+
+export type PostHumanDesignProfileData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/profile';
+};
+
+export type PostHumanDesignProfileErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignProfileError = PostHumanDesignProfileErrors[keyof PostHumanDesignProfileErrors];
+
+export type PostHumanDesignProfileResponses = {
+    /**
+     * Profile string, the two line numbers, and line keynotes
+     */
+    200: {
+        /**
+         * Profile in conscious/unconscious form, the Personality Sun line over the Design Sun line.
+         */
+        profile: string;
+        /**
+         * Line number from 1 to 6 of the conscious Personality Sun.
+         */
+        personalityLine: number;
+        /**
+         * Line number from 1 to 6 of the unconscious Design Sun.
+         */
+        designLine: number;
+        /**
+         * Keynote of the Personality line, the conscious half of the profile.
+         */
+        personalityKeynote: string;
+        /**
+         * Keynote of the Design line, the unconscious half of the profile.
+         */
+        designKeynote: string;
+    };
+};
+
+export type PostHumanDesignProfileResponse = PostHumanDesignProfileResponses[keyof PostHumanDesignProfileResponses];
+
+export type PostHumanDesignVariablesData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
+         */
+        longitude?: number;
+        /**
+         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/human-design/variables';
+};
+
+export type PostHumanDesignVariablesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostHumanDesignVariablesError = PostHumanDesignVariablesErrors[keyof PostHumanDesignVariablesErrors];
+
+export type PostHumanDesignVariablesResponses = {
+    /**
+     * The four Variable arrows with substructure numbers, labels, and confidence flags
+     */
+    200: {
+        /**
+         * The four Variable arrows: Determination and Environment from the design side, Perspective and Motivation from the personality side. Together they form the Rave Variables / Primary Health System layer that sits beneath Type, Strategy, Authority, and Profile.
+         */
+        arrows: Array<{
+            /**
+             * Stable arrow identifier. One of determination, environment, perspective, motivation.
+             */
+            key: string;
+            /**
+             * Arrow name. Determination is the top-left arrow governing the Primary Health System and digestion, Environment the bottom-left arrow, Perspective the bottom-right arrow also called View, and Motivation the top-right arrow.
+             */
+            name: string;
+            /**
+             * Which half of the advanced layer the arrow belongs to. Primary Health System covers the body-side Determination and Environment arrows, Rave Psychology covers the mind-side Perspective and Motivation arrows.
+             */
+            layer: string;
+            /**
+             * Position of the arrow at the head of the bodygraph. One of Top left, Bottom left, Top right, Bottom right.
+             */
+            position: string;
+            /**
+             * The single activation, body and chart side, that this arrow is derived from.
+             */
+            activation: {
+                /**
+                 * Activating body whose substructure feeds this arrow. Determination and Motivation come from the Sun, Environment and Perspective from the North Node.
+                 */
+                planet: string;
+                /**
+                 * Chart side of the activation. Determination and Environment come from the design side, Perspective and Motivation from the personality side.
+                 */
+                side: string;
+            };
+            /**
+             * Color number from 1 to 6, the substructure level one octave finer than the line. Color selects the arrow theme, for example the determination family or the motivation.
+             */
+            color: number;
+            /**
+             * Tone number from 1 to 6, the substructure level beneath Color. Tone sets the arrow direction: tones 1 to 3 face left, tones 4 to 6 face right.
+             */
+            tone: number;
+            /**
+             * Base number from 1 to 5, the finest published subdivision of the wheel. Returned for completeness but treated as informational, since it is finer than most birth times can resolve.
+             */
+            base: number;
+            /**
+             * Arrow direction derived from the Tone. left for tones 1 to 3, right for tones 4 to 6.
+             */
+            direction: string;
+            /**
+             * Name of the Color theme for this arrow, for example a determination family such as Touch, an environment such as Mountains, a perspective such as Personal, or a motivation such as Hope.
+             */
+            colorLabel: string;
+            /**
+             * Keynote of the arrow direction for this arrow, for example Active or Passive for Determination, Focused or Peripheral for Perspective.
+             */
+            directionLabel: string;
+            /**
+             * What this arrow is and what it governs.
+             */
+            description: string;
+            /**
+             * What the layer this arrow belongs to governs, the body side or the mind side.
+             */
+            layerDescription: string;
+            /**
+             * Meaning of the Color for THIS arrow. The same Color number means something different under Determination than under Motivation, so this is the reading of colorLabel in context, not a generic gloss.
+             */
+            colorMeaning: string;
+            /**
+             * Meaning of the Tone. The six Tones are shared across all four arrows: the arrow does not change the Tone, it changes what the Tone qualifies.
+             */
+            toneMeaning: string;
+            /**
+             * Meaning of the left or right direction for THIS arrow, the reading of directionLabel.
+             */
+            directionMeaning: string;
+            /**
+             * Name of the Base. Informational only: the Base is finer than any civil birth time can resolve.
+             */
+            baseName: string;
+            /**
+             * Cognition, the strongest sense, read off the Determination Tone. Present on the determination arrow ONLY: no authority supports reading Cognition from the other three arrows, so it is omitted rather than invented.
+             */
+            cognition?: {
+                label: string;
+                description: string;
+            };
+            /**
+             * Whether this arrow is far enough from a Color or Tone boundary to be reliable. When false the activation sits on a knife edge where the Color label or the arrow direction could flip with a more precise birth time, and the arrow should not be presented as fact.
+             */
+            confident: boolean;
+        }>;
+        /**
+         * True only when all four arrows are confident. A single knife-edge arrow makes the whole configuration uncertain.
+         */
+        confident: boolean;
+        /**
+         * Boundary margin in degrees of ecliptic longitude used for the per-arrow confidence flag, the solar arc over a few minutes of clock time. An activation within this distance of a Color or Tone boundary is flagged low-confidence.
+         */
+        confidenceMarginDeg: number;
+        /**
+         * What the Base layer is. Returned once at the top level rather than repeated on every arrow, since the Base layer is the same concept for all four. No per-Base meaning is returned: every one in circulation traces back to a single origin, so it fails the two-source bar this package holds.
+         */
+        baseDescription: string;
+    };
+};
+
+export type PostHumanDesignVariablesResponse = PostHumanDesignVariablesResponses[keyof PostHumanDesignVariablesResponses];
 
 export type PostNumerologyLifePathData = {
     body?: {
@@ -26256,4282 +31182,6 @@ export type PostTarotSpreadsCustomResponses = {
 };
 
 export type PostTarotSpreadsCustomResponse = PostTarotSpreadsCustomResponses[keyof PostTarotSpreadsCustomResponses];
-
-export type PostHumanDesignBodygraphData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/bodygraph';
-};
-
-export type PostHumanDesignBodygraphErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignBodygraphError = PostHumanDesignBodygraphErrors[keyof PostHumanDesignBodygraphErrors];
-
-export type PostHumanDesignBodygraphResponses = {
-    /**
-     * Complete bodygraph with type, authority, profile, centers, channels, and gates
-     */
-    200: {
-        /**
-         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
-         */
-        type: string;
-        /**
-         * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
-         */
-        typeDescription: string;
-        /**
-         * The aura mechanic of the type: how the energy field itself operates, for example open and enveloping, or closed and repelling.
-         */
-        aura: string;
-        /**
-         * The aura strategy for engaging life correctly for this type.
-         */
-        strategy: string;
-        /**
-         * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
-         */
-        strategyDescription: string;
-        /**
-         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
-         */
-        authority: string;
-        /**
-         * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart, so this is the field to lean on when grounding a reading.
-         */
-        authorityDescription: string;
-        /**
-         * The signature feeling of living in alignment with the type.
-         */
-        signature: string;
-        /**
-         * The not-self theme, the recurring feeling that signals being out of alignment.
-         */
-        notSelf: string;
-        /**
-         * Profile in conscious/unconscious form from the Personality Sun line over the Design Sun line.
-         */
-        profile: string;
-        /**
-         * The two line keynotes the profile is built from, conscious over unconscious, so the profile is readable without a separate lookup.
-         */
-        profileKeynotes: {
-            /**
-             * Line number 1 to 6 of the conscious Personality Sun, the first digit of the profile.
-             */
-            personalityLine: number;
-            /**
-             * Line number 1 to 6 of the unconscious Design Sun, the second digit of the profile.
-             */
-            designLine: number;
-            /**
-             * Keynote of the conscious Personality line. The half of the life role the person is aware of and can speak to.
-             */
-            personality: string;
-            /**
-             * Keynote of the unconscious Design line. The half of the life role others see operating in the body, which the person does not directly experience.
-             */
-            design: string;
-        };
-        /**
-         * Meaning of the combined profile. A profile is not the sum of its two lines: 6/2 has its own meaning that neither the line 6 nor the line 2 keynote carries alone.
-         */
-        profileDescription: string;
-        /**
-         * Definition type from the number of connected components among defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
-         */
-        definition: string;
-        /**
-         * How energy flows through the defined centers in this configuration, and what the configuration needs. For a split, this is where the bridging gates of other people matter.
-         */
-        definitionDescription: string;
-        /**
-         * What the two chart sides are: personality is the conscious mind side, design is the unconscious body side computed 88 degrees of solar arc before birth. Returned once at the top level rather than repeated across all 26 activations.
-         */
-        sides: {
-            [key: string]: string;
-        };
-        /**
-         * The incarnation cross built from the four cardinal gates and the profile angle.
-         */
-        incarnationCross: {
-            /**
-             * The four cardinal gates of the cross: Personality Sun, Personality Earth, Design Sun, Design Earth.
-             */
-            gates: Array<number>;
-            /**
-             * Cross angle. One of Right Angle, Juxtaposition, Left Angle.
-             */
-            angle: string;
-            /**
-             * Short code for the angle. One of RAX, JXT, LAX.
-             */
-            angleCode: string;
-            /**
-             * Canonical published name of the incarnation cross, determined by the Personality Sun gate and the angle. Falls back to a name composed from the angle and the four gates if no canonical name exists.
-             */
-            name: string;
-            /**
-             * The life theme of the cross, synthesized from its four gates and the orientation the angle gives them. The same Sun gate under a different angle is a genuinely different theme: Right Angle is personal destiny, Left Angle is worked out through other people, Juxtaposition is a fixed fate.
-             */
-            description?: string;
-        };
-        /**
-         * All nine centers with their defined state and active gates.
-         */
-        centers: Array<{
-            /**
-             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
-             */
-            id: string;
-            /**
-             * Display name of the center.
-             */
-            name: string;
-            /**
-             * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
-             */
-            defined: boolean;
-            /**
-             * Whether this is a motor center (energy source). The four motors are Heart, Sacral, Solar Plexus, and Root.
-             */
-            motor: boolean;
-            /**
-             * Whether this is an awareness center. The three awareness centers are Ajna, Solar Plexus, and Spleen.
-             */
-            awareness: boolean;
-            /**
-             * Theme text describing the center in its current defined or undefined state.
-             */
-            theme: string;
-            /**
-             * The conditioning trap of this center when it is open. Returned on every center so a consumer can surface it the moment `defined` is false, which is where the not-self operates.
-             */
-            notSelfQuestion: string;
-            /**
-             * The gland, organ, or system this center corresponds to in the body.
-             */
-            biology: string;
-            /**
-             * Active gate numbers that sit in this center.
-             */
-            gates: Array<number>;
-        }>;
-        /**
-         * The defined channels where both gates are activated.
-         */
-        channels: Array<{
-            /**
-             * First gate of the channel.
-             */
-            gateA: number;
-            /**
-             * Second gate of the channel.
-             */
-            gateB: number;
-            /**
-             * Name of the defined channel.
-             */
-            name: string;
-            /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
-             */
-            circuit: string;
-            /**
-             * The two centers this channel connects and defines.
-             */
-            centers: Array<string>;
-            /**
-             * What this channel wires between its two centers and the nature of the energy it carries.
-             */
-            description: string;
-            /**
-             * What the circuit family of this channel governs.
-             */
-            circuitDescription: string;
-        }>;
-        /**
-         * All 26 activations, 13 Personality and 13 Design.
-         */
-        gates: Array<{
-            /**
-             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
-             */
-            planet: string;
-            /**
-             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
-             */
-            side: string;
-            /**
-             * Human Design gate number from 1 to 64 that this activation falls in.
-             */
-            gate: number;
-            /**
-             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
-             */
-            line: number;
-            /**
-             * Human Design keynote name of the gate, describing its bodygraph function.
-             */
-            gateName: string;
-            /**
-             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
-             */
-            gateDescription: string;
-            /**
-             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
-             */
-            lineMeaning: string;
-            /**
-             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
-             */
-            planetDescription: string;
-            /**
-             * Cross-reference to the I-Ching hexagram that shares this gate number.
-             */
-            ichingHexagram: {
-                /**
-                 * I-Ching hexagram number, identical to the gate number it corresponds to.
-                 */
-                number: number;
-                /**
-                 * English name of the corresponding I-Ching hexagram.
-                 */
-                english: string;
-            };
-        }>;
-    };
-};
-
-export type PostHumanDesignBodygraphResponse = PostHumanDesignBodygraphResponses[keyof PostHumanDesignBodygraphResponses];
-
-export type PostHumanDesignConnectionData = {
-    body?: {
-        /**
-         * Birth moment of the first person in the connection.
-         */
-        personA: {
-            /**
-             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-             */
-            longitude?: number;
-            /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-             */
-            nodeType?: 'mean' | 'true';
-        };
-        /**
-         * Birth moment of the second person in the connection.
-         */
-        personB: {
-            /**
-             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-             */
-            longitude?: number;
-            /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-             */
-            nodeType?: 'mean' | 'true';
-        };
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/connection';
-};
-
-export type PostHumanDesignConnectionErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignConnectionError = PostHumanDesignConnectionErrors[keyof PostHumanDesignConnectionErrors];
-
-export type PostHumanDesignConnectionResponses = {
-    /**
-     * Connection chart with per-channel dynamics, combined centers, definition, and a dynamic count
-     */
-    200: {
-        /**
-         * Total number of connected channels between the two people. Equals the length of channels and the sum of the summary counts.
-         */
-        totalChannels: number;
-        /**
-         * Every connected channel between the two people with its dynamic. A channel is connected when the two people together hold both of its gates.
-         */
-        channels: Array<{
-            /**
-             * First gate of the channel.
-             */
-            gateA: number;
-            /**
-             * Second gate of the channel.
-             */
-            gateB: number;
-            /**
-             * Name of the channel whose connection dynamic is reported.
-             */
-            name: string;
-            /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
-             */
-            circuit: string;
-            /**
-             * The two centers this channel connects in the bodygraph.
-             */
-            centers: Array<string>;
-            /**
-             * Connection dynamic for this channel. Electromagnetic means each person holds one of the two gates and the channel completes only together, the classic point of attraction. Dominance means one person holds both gates and the other holds neither, a one-way conditioning. Compromise means one person holds both gates and the other holds a single hanging gate. Companionship means both people independently hold both gates, a shared and familiar frequency.
-             */
-            dynamic: string;
-            /**
-             * Which of the channel two gates person A holds, from one to both.
-             */
-            personAGates: Array<number>;
-            /**
-             * Which of the channel two gates person B holds, from one to both.
-             */
-            personBGates: Array<number>;
-        }>;
-        /**
-         * All nine centers with their defined state in the combined connection bodygraph and which person defines each.
-         */
-        centers: Array<{
-            /**
-             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
-             */
-            id: string;
-            /**
-             * Display name of the center.
-             */
-            name: string;
-            /**
-             * Whether the center is defined in the combined connection bodygraph, where a channel counts as defined when the two people together hold both of its gates.
-             */
-            defined: boolean;
-            /**
-             * Who defines this center in their own chart. A, B, both, or empty when the center is open in both individual charts.
-             */
-            definedBy: Array<string>;
-        }>;
-        /**
-         * Definition of the combined connection bodygraph from connected components among its defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
-         */
-        combinedDefinition: string;
-        /**
-         * Count of each connection dynamic across all connected channels.
-         */
-        summary: {
-            /**
-             * Count of electromagnetic channels, the points of mutual attraction.
-             */
-            electromagnetic: number;
-            /**
-             * Count of dominance channels, where one person conditions the other one way.
-             */
-            dominance: number;
-            /**
-             * Count of compromise channels, a full channel meeting a single hanging gate.
-             */
-            compromise: number;
-            /**
-             * Count of companionship channels, where both people share the whole channel.
-             */
-            companionship: number;
-        };
-    };
-};
-
-export type PostHumanDesignConnectionResponse = PostHumanDesignConnectionResponses[keyof PostHumanDesignConnectionResponses];
-
-export type PostHumanDesignPentaData = {
-    body?: {
-        /**
-         * Birth moments of the three to five people in the group. Below three no Penta forms; above five a second Penta emerges.
-         */
-        members: Array<{
-            /**
-             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-             */
-            longitude?: number;
-            /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-             */
-            nodeType?: 'mean' | 'true';
-        }>;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/penta';
-};
-
-export type PostHumanDesignPentaErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignPentaError = PostHumanDesignPentaErrors[keyof PostHumanDesignPentaErrors];
-
-export type PostHumanDesignPentaResponses = {
-    /**
-     * Penta chart with per-channel Strengths, per-gate fill state, and a group summary
-     */
-    200: {
-        /**
-         * Number of people in the group, always between 3 and 5.
-         */
-        memberCount: number;
-        /**
-         * The six channels of the Penta with their defined Strength state and which members supply each gate. Three upper channels run G to Throat (The Alpha, Inspiration, The Prodigal); three lower channels run G to Sacral (Rhythm, The Beat, Discovery).
-         */
-        channels: Array<{
-            /**
-             * First gate of the Penta channel.
-             */
-            gateA: number;
-            /**
-             * Second gate of the Penta channel.
-             */
-            gateB: number;
-            /**
-             * Name of the Penta channel. One of The Alpha, Inspiration, The Prodigal, Rhythm, The Beat, Discovery.
-             */
-            name: string;
-            /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
-             */
-            circuit: string;
-            /**
-             * Position of the channel in the Penta. upper channels run from the G Center to the Throat and carry the leadership and how-the-group-presents roles. lower channels run from the G Center to the Sacral and carry the managed, generative, resource roles.
-             */
-            position: string;
-            /**
-             * Whether this is the 2/14 Channel of the Beat, the material core of the Penta vortex: gate 2 the direction for resources, gate 14 the resources themselves.
-             */
-            isCore: boolean;
-            /**
-             * Whether the channel is a defined Strength: both of its gates are present somewhere in the group, so the function it governs has no gap.
-             */
-            defined: boolean;
-            /**
-             * Zero-based indices of the members whose chart holds gate A, in member order.
-             */
-            gateAHeldBy: Array<number>;
-            /**
-             * Zero-based indices of the members whose chart holds gate B, in member order.
-             */
-            gateBHeldBy: Array<number>;
-        }>;
-        /**
-         * The twelve Penta gates with their filled state and which members hold each.
-         */
-        gates: Array<{
-            /**
-             * Penta gate number. One of 1, 2, 5, 7, 8, 13, 14, 15, 29, 31, 33, 46.
-             */
-            gate: number;
-            /**
-             * Human Design keynote name of the gate, describing the role it brings to the group.
-             */
-            gateName: string;
-            /**
-             * Whether at least one member holds this gate. A gate held by nobody is a gap that conditions the group to compensate for the missing role.
-             */
-            filled: boolean;
-            /**
-             * Zero-based indices of the members whose chart holds this gate. Empty when the gate is a gap.
-             */
-            heldBy: Array<number>;
-        }>;
-        /**
-         * Group-level rollup of the Penta channels and gates.
-         */
-        summary: {
-            /**
-             * Count of the six Penta channels that are defined Strengths in the group.
-             */
-            definedChannels: number;
-            /**
-             * Count of the twelve Penta gates filled by at least one member.
-             */
-            filledGates: number;
-            /**
-             * Penta gates held by no member. A non-empty list flags the functional gaps in the group.
-             */
-            gapGates: Array<number>;
-            /**
-             * Whether the 2/14 Channel of the Beat, the material core of the Penta, is defined across the group.
-             */
-            coreDefined: boolean;
-        };
-    };
-};
-
-export type PostHumanDesignPentaResponse = PostHumanDesignPentaResponses[keyof PostHumanDesignPentaResponses];
-
-export type PostHumanDesignTransitData = {
-    body?: {
-        /**
-         * Birth moment whose natal bodygraph the transit is overlaid on.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-             */
-            longitude?: number;
-            /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-             */
-            nodeType?: 'mean' | 'true';
-        };
-        /**
-         * Transit date in YYYY-MM-DD UTC. Optional. Defaults to today in UTC when omitted, giving the just-now transit.
-         */
-        date?: string;
-        /**
-         * Transit time in HH:MM:SS UTC. Optional. Defaults to the current UTC time when omitted. Precision matters: the Moon moves through a gate in roughly half a day.
-         */
-        time?: string;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/transit';
-};
-
-export type PostHumanDesignTransitErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignTransitError = PostHumanDesignTransitErrors[keyof PostHumanDesignTransitErrors];
-
-export type PostHumanDesignTransitResponses = {
-    /**
-     * Transit overlay with transiting activations, completed channels, temporary centers, and a summary
-     */
-    200: {
-        /**
-         * Date the transit overlay was computed for, in YYYY-MM-DD UTC.
-         */
-        date: string;
-        /**
-         * Time the transit overlay was computed for, in HH:MM:SS UTC.
-         */
-        time: string;
-        /**
-         * UTC offset of the transit moment. Always 0, since the transit is computed in UTC.
-         */
-        timezone: number;
-        /**
-         * The 13 transiting bodies at this moment with the gate and line each currently activates. A transit is a single instant, so there is no Design side, only current positions.
-         */
-        activations: Array<{
-            /**
-             * Transiting body whose current position lands on this gate. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
-             */
-            body: string;
-            /**
-             * Human Design gate number from 1 to 64 this transiting body currently sits in.
-             */
-            gate: number;
-            /**
-             * Line number from 1 to 6 within the gate, setting the line keynote of the transit.
-             */
-            line: number;
-            /**
-             * Human Design keynote name of the gate the transiting body activates.
-             */
-            gateName: string;
-            /**
-             * Cross-reference to the I-Ching hexagram that shares this gate number.
-             */
-            ichingHexagram: {
-                /**
-                 * I-Ching hexagram number, identical to the gate number it corresponds to.
-                 */
-                number: number;
-                /**
-                 * English name of the corresponding I-Ching hexagram.
-                 */
-                english: string;
-            };
-        }>;
-        /**
-         * Channels the transit temporarily completes that the natal chart did not already define, each labelled personal or educational with the side that supplied each gate.
-         */
-        completedChannels: Array<{
-            /**
-             * First gate of the completed channel.
-             */
-            gateA: number;
-            /**
-             * Second gate of the completed channel.
-             */
-            gateB: number;
-            /**
-             * Name of the channel the transit temporarily completes.
-             */
-            name: string;
-            /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
-             */
-            circuit: string;
-            /**
-             * The two centers this channel connects and temporarily defines.
-             */
-            centers: Array<string>;
-            /**
-             * How the transit completes the channel. personal means the natal chart already holds one gate and the transit supplies the other, the classic electromagnetic completion. educational means both gates are open in the natal chart and the transit supplies both at once.
-             */
-            kind: string;
-            /**
-             * Gate or gates of this channel the natal chart already holds. Empty for an educational channel.
-             */
-            natalGates: Array<number>;
-            /**
-             * Gate or gates of this channel supplied by the transit. One gate for a personal channel, both gates for an educational channel.
-             */
-            transitGates: Array<number>;
-        }>;
-        /**
-         * Centers that are open in the natal chart and temporarily defined by a transit-completed channel.
-         */
-        temporaryCenters: Array<{
-            /**
-             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
-             */
-            id: string;
-            /**
-             * Display name of the center.
-             */
-            name: string;
-            /**
-             * Always true. The center is open in the natal chart and temporarily defined by a transit-completed channel for the duration of the transit.
-             */
-            temporarilyDefined: boolean;
-        }>;
-        /**
-         * Short factual summary of the overlay with channel and center counts only.
-         */
-        summary: string;
-    };
-};
-
-export type PostHumanDesignTransitResponse = PostHumanDesignTransitResponses[keyof PostHumanDesignTransitResponses];
-
-export type PostHumanDesignTypeData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/type';
-};
-
-export type PostHumanDesignTypeErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignTypeError = PostHumanDesignTypeErrors[keyof PostHumanDesignTypeErrors];
-
-export type PostHumanDesignTypeResponses = {
-    /**
-     * Type, strategy, authority, signature, not-self theme, and profile
-     */
-    200: {
-        /**
-         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
-         */
-        type: string;
-        /**
-         * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
-         */
-        typeDescription: string;
-        /**
-         * The aura mechanic of the type: how the energy field itself operates, for example open and enveloping, or closed and repelling.
-         */
-        aura: string;
-        /**
-         * The aura strategy for engaging life correctly for this type.
-         */
-        strategy: string;
-        /**
-         * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
-         */
-        strategyDescription: string;
-        /**
-         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
-         */
-        authority: string;
-        /**
-         * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart.
-         */
-        authorityDescription: string;
-        /**
-         * The signature feeling of living in alignment.
-         */
-        signature: string;
-        /**
-         * The not-self theme that signals being out of alignment.
-         */
-        notSelf: string;
-        /**
-         * Profile from the Personality Sun line over the Design Sun line.
-         */
-        profile: string;
-    };
-};
-
-export type PostHumanDesignTypeResponse = PostHumanDesignTypeResponses[keyof PostHumanDesignTypeResponses];
-
-export type PostHumanDesignGatesData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/gates';
-};
-
-export type PostHumanDesignGatesErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignGatesError = PostHumanDesignGatesErrors[keyof PostHumanDesignGatesErrors];
-
-export type PostHumanDesignGatesResponses = {
-    /**
-     * Personality and Design activation lists, 13 each
-     */
-    200: {
-        /**
-         * The 13 conscious Personality activations computed at the exact birth moment, in black on a standard chart.
-         */
-        personality: Array<{
-            /**
-             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
-             */
-            planet: string;
-            /**
-             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
-             */
-            side: string;
-            /**
-             * Human Design gate number from 1 to 64 that this activation falls in.
-             */
-            gate: number;
-            /**
-             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
-             */
-            line: number;
-            /**
-             * Human Design keynote name of the gate, describing its bodygraph function.
-             */
-            gateName: string;
-            /**
-             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
-             */
-            gateDescription: string;
-            /**
-             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
-             */
-            lineMeaning: string;
-            /**
-             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
-             */
-            planetDescription: string;
-            /**
-             * Cross-reference to the I-Ching hexagram that shares this gate number.
-             */
-            ichingHexagram: {
-                /**
-                 * I-Ching hexagram number, identical to the gate number it corresponds to.
-                 */
-                number: number;
-                /**
-                 * English name of the corresponding I-Ching hexagram.
-                 */
-                english: string;
-            };
-        }>;
-        /**
-         * The 13 unconscious Design activations computed 88 degrees of solar arc before birth, in red on a standard chart.
-         */
-        design: Array<{
-            /**
-             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
-             */
-            planet: string;
-            /**
-             * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
-             */
-            side: string;
-            /**
-             * Human Design gate number from 1 to 64 that this activation falls in.
-             */
-            gate: number;
-            /**
-             * Line number from 1 to 6 within the gate, setting the line keynote and the profile.
-             */
-            line: number;
-            /**
-             * Human Design keynote name of the gate, describing its bodygraph function.
-             */
-            gateName: string;
-            /**
-             * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
-             */
-            gateDescription: string;
-            /**
-             * Meaning of this gate at this specific line, one of 384. The finest interpretive layer in the chart and the one that makes a reading specific rather than generic. This is not the six abstract line archetypes: gate 41 line 3 carries its own meaning that neither the gate keynote nor the line-3 archetype holds alone.
-             */
-            lineMeaning: string;
-            /**
-             * What this planetary activation contributes in Human Design specifically, which is not its meaning in western astrology.
-             */
-            planetDescription: string;
-            /**
-             * Cross-reference to the I-Ching hexagram that shares this gate number.
-             */
-            ichingHexagram: {
-                /**
-                 * I-Ching hexagram number, identical to the gate number it corresponds to.
-                 */
-                number: number;
-                /**
-                 * English name of the corresponding I-Ching hexagram.
-                 */
-                english: string;
-            };
-        }>;
-    };
-};
-
-export type PostHumanDesignGatesResponse = PostHumanDesignGatesResponses[keyof PostHumanDesignGatesResponses];
-
-export type GetHumanDesignGatesByNumberData = {
-    body?: never;
-    path: {
-        /**
-         * Gate number from 1 to 64.
-         */
-        number: number;
-    };
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/gates/{number}';
-};
-
-export type GetHumanDesignGatesByNumberErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Gate number is outside the range 1 to 64
-     */
-    404: {
-        /**
-         * Human-readable error message. May change wording — do not parse programmatically.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetHumanDesignGatesByNumberError = GetHumanDesignGatesByNumberErrors[keyof GetHumanDesignGatesByNumberErrors];
-
-export type GetHumanDesignGatesByNumberResponses = {
-    /**
-     * Gate reference data with center, hexagram, and channel partners
-     */
-    200: {
-        /**
-         * Gate number from 1 to 64.
-         */
-        number: number;
-        /**
-         * Human Design keynote name of the gate.
-         */
-        name: string;
-        /**
-         * Center the gate sits in.
-         */
-        center: string;
-        /**
-         * Display name of the center.
-         */
-        centerName: string;
-        /**
-         * The I-Ching hexagram that shares this gate number.
-         */
-        ichingHexagram: {
-            /**
-             * I-Ching hexagram number.
-             */
-            number: number;
-            /**
-             * Hexagram name.
-             */
-            english: string;
-        };
-        /**
-         * Gates that form a channel with this gate, with the channel name for each.
-         */
-        channelPartners: Array<{
-            /**
-             * Partner gate number.
-             */
-            gate: number;
-            /**
-             * Name of the shared channel.
-             */
-            channel: string;
-        }>;
-    };
-};
-
-export type GetHumanDesignGatesByNumberResponse = GetHumanDesignGatesByNumberResponses[keyof GetHumanDesignGatesByNumberResponses];
-
-export type PostHumanDesignChannelsData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/channels';
-};
-
-export type PostHumanDesignChannelsErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignChannelsError = PostHumanDesignChannelsErrors[keyof PostHumanDesignChannelsErrors];
-
-export type PostHumanDesignChannelsResponses = {
-    /**
-     * Defined channels with circuits and the centers they define
-     */
-    200: {
-        /**
-         * The defined channels, where both gates are activated.
-         */
-        channels: Array<{
-            /**
-             * First gate of the channel.
-             */
-            gateA: number;
-            /**
-             * Second gate of the channel.
-             */
-            gateB: number;
-            /**
-             * Name of the defined channel.
-             */
-            name: string;
-            /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
-             */
-            circuit: string;
-            /**
-             * The two centers this channel connects and defines.
-             */
-            centers: Array<string>;
-            /**
-             * What this channel wires between its two centers and the nature of the energy it carries.
-             */
-            description: string;
-            /**
-             * What the circuit family of this channel governs.
-             */
-            circuitDescription: string;
-        }>;
-        /**
-         * Number of defined channels in the bodygraph.
-         */
-        total: number;
-        /**
-         * The centers defined by these channels.
-         */
-        definedCenters: Array<string>;
-    };
-};
-
-export type PostHumanDesignChannelsResponse = PostHumanDesignChannelsResponses[keyof PostHumanDesignChannelsResponses];
-
-export type PostHumanDesignCentersData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/centers';
-};
-
-export type PostHumanDesignCentersErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignCentersError = PostHumanDesignCentersErrors[keyof PostHumanDesignCentersErrors];
-
-export type PostHumanDesignCentersResponses = {
-    /**
-     * All nine centers with defined state, flags, theme, and active gates
-     */
-    200: {
-        /**
-         * All nine centers with their defined state and active gates.
-         */
-        centers: Array<{
-            /**
-             * Center identifier. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
-             */
-            id: string;
-            /**
-             * Display name of the center.
-             */
-            name: string;
-            /**
-             * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
-             */
-            defined: boolean;
-            /**
-             * Whether this is a motor center (energy source). The four motors are Heart, Sacral, Solar Plexus, and Root.
-             */
-            motor: boolean;
-            /**
-             * Whether this is an awareness center. The three awareness centers are Ajna, Solar Plexus, and Spleen.
-             */
-            awareness: boolean;
-            /**
-             * Theme text describing the center in its current defined or undefined state.
-             */
-            theme: string;
-            /**
-             * The conditioning trap of this center when it is open. Returned on every center so a consumer can surface it the moment `defined` is false, which is where the not-self operates.
-             */
-            notSelfQuestion: string;
-            /**
-             * The gland, organ, or system this center corresponds to in the body.
-             */
-            biology: string;
-            /**
-             * Active gate numbers that sit in this center.
-             */
-            gates: Array<number>;
-        }>;
-        /**
-         * How many of the nine centers are defined.
-         */
-        definedCount: number;
-    };
-};
-
-export type PostHumanDesignCentersResponse = PostHumanDesignCentersResponses[keyof PostHumanDesignCentersResponses];
-
-export type GetHumanDesignCentersByIdData = {
-    body?: never;
-    path: {
-        /**
-         * Center id. One of head, ajna, throat, g, heart, sacral, solar-plexus, spleen, root.
-         */
-        id: 'head' | 'ajna' | 'throat' | 'g' | 'heart' | 'sacral' | 'solar-plexus' | 'spleen' | 'root';
-    };
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/centers/{id}';
-};
-
-export type GetHumanDesignCentersByIdErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type GetHumanDesignCentersByIdError = GetHumanDesignCentersByIdErrors[keyof GetHumanDesignCentersByIdErrors];
-
-export type GetHumanDesignCentersByIdResponses = {
-    /**
-     * Center reference data with defined and undefined meanings
-     */
-    200: {
-        /**
-         * Center identifier.
-         */
-        id: string;
-        /**
-         * Display name of the center.
-         */
-        name: string;
-        /**
-         * Whether this is a motor center.
-         */
-        motor: boolean;
-        /**
-         * Whether this is an awareness center.
-         */
-        awareness: boolean;
-        /**
-         * What this center means when defined: a consistent, reliable energy or awareness.
-         */
-        definedMeaning: string;
-        /**
-         * What this center means when undefined and open: a place of conditioning and learning.
-         */
-        undefinedMeaning: string;
-    };
-};
-
-export type GetHumanDesignCentersByIdResponse = GetHumanDesignCentersByIdResponses[keyof GetHumanDesignCentersByIdResponses];
-
-export type PostHumanDesignProfileData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/profile';
-};
-
-export type PostHumanDesignProfileErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignProfileError = PostHumanDesignProfileErrors[keyof PostHumanDesignProfileErrors];
-
-export type PostHumanDesignProfileResponses = {
-    /**
-     * Profile string, the two line numbers, and line keynotes
-     */
-    200: {
-        /**
-         * Profile in conscious/unconscious form, the Personality Sun line over the Design Sun line.
-         */
-        profile: string;
-        /**
-         * Line number from 1 to 6 of the conscious Personality Sun.
-         */
-        personalityLine: number;
-        /**
-         * Line number from 1 to 6 of the unconscious Design Sun.
-         */
-        designLine: number;
-        /**
-         * Keynote of the Personality line, the conscious half of the profile.
-         */
-        personalityKeynote: string;
-        /**
-         * Keynote of the Design line, the unconscious half of the profile.
-         */
-        designKeynote: string;
-    };
-};
-
-export type PostHumanDesignProfileResponse = PostHumanDesignProfileResponses[keyof PostHumanDesignProfileResponses];
-
-export type PostHumanDesignVariablesData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. The anchor for both the Personality activations at birth and the Design activations 88 degrees of solar arc earlier.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Precision matters: the profile lines and gate boundaries shift with the exact minute of birth.
-         */
-        time: string;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * Birth latitude in decimal degrees. Optional and does not affect the bodygraph, which depends only on ecliptic longitudes. Defaults to 0.
-         */
-        latitude?: number;
-        /**
-         * Birth longitude in decimal degrees. Optional and does not affect the bodygraph. Defaults to 0.
-         */
-        longitude?: number;
-        /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
-         */
-        nodeType?: 'mean' | 'true';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/human-design/variables';
-};
-
-export type PostHumanDesignVariablesErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostHumanDesignVariablesError = PostHumanDesignVariablesErrors[keyof PostHumanDesignVariablesErrors];
-
-export type PostHumanDesignVariablesResponses = {
-    /**
-     * The four Variable arrows with substructure numbers, labels, and confidence flags
-     */
-    200: {
-        /**
-         * The four Variable arrows: Determination and Environment from the design side, Perspective and Motivation from the personality side. Together they form the Rave Variables / Primary Health System layer that sits beneath Type, Strategy, Authority, and Profile.
-         */
-        arrows: Array<{
-            /**
-             * Stable arrow identifier. One of determination, environment, perspective, motivation.
-             */
-            key: string;
-            /**
-             * Arrow name. Determination is the top-left arrow governing the Primary Health System and digestion, Environment the bottom-left arrow, Perspective the bottom-right arrow also called View, and Motivation the top-right arrow.
-             */
-            name: string;
-            /**
-             * Which half of the advanced layer the arrow belongs to. Primary Health System covers the body-side Determination and Environment arrows, Rave Psychology covers the mind-side Perspective and Motivation arrows.
-             */
-            layer: string;
-            /**
-             * Position of the arrow at the head of the bodygraph. One of Top left, Bottom left, Top right, Bottom right.
-             */
-            position: string;
-            /**
-             * The single activation, body and chart side, that this arrow is derived from.
-             */
-            activation: {
-                /**
-                 * Activating body whose substructure feeds this arrow. Determination and Motivation come from the Sun, Environment and Perspective from the North Node.
-                 */
-                planet: string;
-                /**
-                 * Chart side of the activation. Determination and Environment come from the design side, Perspective and Motivation from the personality side.
-                 */
-                side: string;
-            };
-            /**
-             * Color number from 1 to 6, the substructure level one octave finer than the line. Color selects the arrow theme, for example the determination family or the motivation.
-             */
-            color: number;
-            /**
-             * Tone number from 1 to 6, the substructure level beneath Color. Tone sets the arrow direction: tones 1 to 3 face left, tones 4 to 6 face right.
-             */
-            tone: number;
-            /**
-             * Base number from 1 to 5, the finest published subdivision of the wheel. Returned for completeness but treated as informational, since it is finer than most birth times can resolve.
-             */
-            base: number;
-            /**
-             * Arrow direction derived from the Tone. left for tones 1 to 3, right for tones 4 to 6.
-             */
-            direction: string;
-            /**
-             * Name of the Color theme for this arrow, for example a determination family such as Touch, an environment such as Mountains, a perspective such as Personal, or a motivation such as Hope.
-             */
-            colorLabel: string;
-            /**
-             * Keynote of the arrow direction for this arrow, for example Active or Passive for Determination, Focused or Peripheral for Perspective.
-             */
-            directionLabel: string;
-            /**
-             * What this arrow is and what it governs.
-             */
-            description: string;
-            /**
-             * What the layer this arrow belongs to governs, the body side or the mind side.
-             */
-            layerDescription: string;
-            /**
-             * Meaning of the Color for THIS arrow. The same Color number means something different under Determination than under Motivation, so this is the reading of colorLabel in context, not a generic gloss.
-             */
-            colorMeaning: string;
-            /**
-             * Meaning of the Tone. The six Tones are shared across all four arrows: the arrow does not change the Tone, it changes what the Tone qualifies.
-             */
-            toneMeaning: string;
-            /**
-             * Meaning of the left or right direction for THIS arrow, the reading of directionLabel.
-             */
-            directionMeaning: string;
-            /**
-             * Name of the Base. Informational only: the Base is finer than any civil birth time can resolve.
-             */
-            baseName: string;
-            /**
-             * Cognition, the strongest sense, read off the Determination Tone. Present on the determination arrow ONLY: no authority supports reading Cognition from the other three arrows, so it is omitted rather than invented.
-             */
-            cognition?: {
-                label: string;
-                description: string;
-            };
-            /**
-             * Whether this arrow is far enough from a Color or Tone boundary to be reliable. When false the activation sits on a knife edge where the Color label or the arrow direction could flip with a more precise birth time, and the arrow should not be presented as fact.
-             */
-            confident: boolean;
-        }>;
-        /**
-         * True only when all four arrows are confident. A single knife-edge arrow makes the whole configuration uncertain.
-         */
-        confident: boolean;
-        /**
-         * Boundary margin in degrees of ecliptic longitude used for the per-arrow confidence flag, the solar arc over a few minutes of clock time. An activation within this distance of a Color or Tone boundary is flagged low-confidence.
-         */
-        confidenceMarginDeg: number;
-        /**
-         * What the Base layer is. Returned once at the top level rather than repeated on every arrow, since the Base layer is the same concept for all four. No per-Base meaning is returned: every one in circulation traces back to a single origin, so it fails the two-source bar this package holds.
-         */
-        baseDescription: string;
-    };
-};
-
-export type PostHumanDesignVariablesResponse = PostHumanDesignVariablesResponses[keyof PostHumanDesignVariablesResponses];
-
-export type PostForecastTimelineData = {
-    body?: {
-        /**
-         * The single birth subject this forecast is built for. One object only, never an array.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * First day of the forecast window in YYYY-MM-DD format. Defaults to today in UTC.
-         */
-        startDate?: string;
-        /**
-         * Last day of the forecast window in YYYY-MM-DD format. Defaults to startDate plus 30 days. The window is clamped to a maximum of 90 days from startDate.
-         */
-        endDate?: string;
-        /**
-         * Which forecast domains to include. Defaults to all three. Pass a subset to scope the timeline to one or two engines.
-         */
-        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
-        /**
-         * Drop events scoring below this significance threshold from 0 to 100. Defaults to 0, keeping all events.
-         */
-        minSignificance?: number;
-        /**
-         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
-         */
-        domainWeights?: {
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            western?: number;
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            vedic?: number;
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            biorhythm?: number;
-        };
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/forecast/timeline';
-};
-
-export type PostForecastTimelineErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostForecastTimelineError = PostForecastTimelineErrors[keyof PostForecastTimelineErrors];
-
-export type PostForecastTimelineResponses = {
-    /**
-     * Merged forecast timeline with time-ordered events across the requested domains
-     */
-    200: {
-        /**
-         * Echo of the birth subject this forecast was built for.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * First day of the resolved forecast window.
-         */
-        startDate: string;
-        /**
-         * Last day of the resolved forecast window after the horizon clamp.
-         */
-        endDate: string;
-        /**
-         * Number of events in the timeline after deduplication, filtering, and the event cap.
-         */
-        count: number;
-        /**
-         * The merged, time-ordered forecast events across the requested domains.
-         */
-        events: Array<{
-            /**
-             * Calendar date of the event in YYYY-MM-DD (UTC).
-             */
-            date: string;
-            /**
-             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
-             */
-            datetime: string;
-            /**
-             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
-             */
-            domain: 'western' | 'vedic' | 'biorhythm';
-            /**
-             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
-             */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
-            /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
-             */
-            body: string;
-            /**
-             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
-             */
-            target?: string;
-            /**
-             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
-             */
-            aspect?: string;
-            /**
-             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
-             */
-            orb?: number;
-            /**
-             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
-             */
-            station?: 'retrograde' | 'direct';
-            /**
-             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
-             */
-            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
-            /**
-             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
-             */
-            obscuration?: number;
-            /**
-             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
-             */
-            phase?: 'new-moon' | 'full-moon';
-            /**
-             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
-             */
-            description: string;
-            /**
-             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
-             */
-            significance: number;
-        }>;
-    };
-};
-
-export type PostForecastTimelineResponse = PostForecastTimelineResponses[keyof PostForecastTimelineResponses];
-
-export type PostForecastTransitsData = {
-    body?: {
-        /**
-         * The single birth subject this transit forecast is built for. One object only, never an array.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * First day of the transit window in YYYY-MM-DD format. Defaults to today in UTC.
-         */
-        startDate?: string;
-        /**
-         * Last day of the transit window in YYYY-MM-DD format. Defaults to startDate plus 30 days. Clamped to a maximum of 90 days from startDate.
-         */
-        endDate?: string;
-        /**
-         * Drop transit events scoring below this significance threshold from 0 to 100. Defaults to 0.
-         */
-        minSignificance?: number;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/forecast/transits';
-};
-
-export type PostForecastTransitsErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostForecastTransitsError = PostForecastTransitsErrors[keyof PostForecastTransitsErrors];
-
-export type PostForecastTransitsResponses = {
-    /**
-     * Time-ordered western forecast events: aspects, ingresses, stations, eclipses, and moon phases
-     */
-    200: {
-        /**
-         * Echo of the birth subject this forecast was built for.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * First day of the resolved forecast window.
-         */
-        startDate: string;
-        /**
-         * Last day of the resolved forecast window after the horizon clamp.
-         */
-        endDate: string;
-        /**
-         * Number of events in the timeline after deduplication, filtering, and the event cap.
-         */
-        count: number;
-        /**
-         * The merged, time-ordered forecast events across the requested domains.
-         */
-        events: Array<{
-            /**
-             * Calendar date of the event in YYYY-MM-DD (UTC).
-             */
-            date: string;
-            /**
-             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
-             */
-            datetime: string;
-            /**
-             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
-             */
-            domain: 'western' | 'vedic' | 'biorhythm';
-            /**
-             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
-             */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
-            /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
-             */
-            body: string;
-            /**
-             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
-             */
-            target?: string;
-            /**
-             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
-             */
-            aspect?: string;
-            /**
-             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
-             */
-            orb?: number;
-            /**
-             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
-             */
-            station?: 'retrograde' | 'direct';
-            /**
-             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
-             */
-            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
-            /**
-             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
-             */
-            obscuration?: number;
-            /**
-             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
-             */
-            phase?: 'new-moon' | 'full-moon';
-            /**
-             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
-             */
-            description: string;
-            /**
-             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
-             */
-            significance: number;
-        }>;
-    };
-};
-
-export type PostForecastTransitsResponse = PostForecastTransitsResponses[keyof PostForecastTransitsResponses];
-
-export type PostForecastSignificantDatesData = {
-    body?: {
-        /**
-         * The single birth subject this forecast is built for. One object only, never an array.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * First day of the window in YYYY-MM-DD format. Defaults to today in UTC.
-         */
-        startDate?: string;
-        /**
-         * Last day of the window in YYYY-MM-DD format. Defaults to startDate plus 30 days. Clamped to a maximum of 90 days from startDate.
-         */
-        endDate?: string;
-        /**
-         * Which forecast domains to consider before filtering by significance. Defaults to all three.
-         */
-        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
-        /**
-         * Significance floor from 0 to 100 for what counts as a significant date. Defaults to 70.
-         */
-        minSignificance?: number;
-        /**
-         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
-         */
-        domainWeights?: {
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            western?: number;
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            vedic?: number;
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            biorhythm?: number;
-        };
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/forecast/significant-dates';
-};
-
-export type PostForecastSignificantDatesErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostForecastSignificantDatesError = PostForecastSignificantDatesErrors[keyof PostForecastSignificantDatesErrors];
-
-export type PostForecastSignificantDatesResponses = {
-    /**
-     * High-significance forecast events across the requested domains
-     */
-    200: {
-        /**
-         * Echo of the birth subject this forecast was built for.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * First day of the resolved forecast window.
-         */
-        startDate: string;
-        /**
-         * Last day of the resolved forecast window after the horizon clamp.
-         */
-        endDate: string;
-        /**
-         * Number of events in the timeline after deduplication, filtering, and the event cap.
-         */
-        count: number;
-        /**
-         * The merged, time-ordered forecast events across the requested domains.
-         */
-        events: Array<{
-            /**
-             * Calendar date of the event in YYYY-MM-DD (UTC).
-             */
-            date: string;
-            /**
-             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
-             */
-            datetime: string;
-            /**
-             * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
-             */
-            domain: 'western' | 'vedic' | 'biorhythm';
-            /**
-             * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
-             */
-            type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
-            /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
-             */
-            body: string;
-            /**
-             * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
-             */
-            target?: string;
-            /**
-             * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
-             */
-            aspect?: string;
-            /**
-             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
-             */
-            orb?: number;
-            /**
-             * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
-             */
-            station?: 'retrograde' | 'direct';
-            /**
-             * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
-             */
-            kind?: 'penumbral' | 'partial' | 'annular' | 'total';
-            /**
-             * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
-             */
-            obscuration?: number;
-            /**
-             * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
-             */
-            phase?: 'new-moon' | 'full-moon';
-            /**
-             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
-             */
-            description: string;
-            /**
-             * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
-             */
-            significance: number;
-        }>;
-    };
-};
-
-export type PostForecastSignificantDatesResponse = PostForecastSignificantDatesResponses[keyof PostForecastSignificantDatesResponses];
-
-export type PostForecastDigestData = {
-    body?: {
-        /**
-         * The single birth subject this digest is built for. One object only, never an array.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * Start anchor for every window in YYYY-MM-DD format. The next 24h, 7d, 30d, and 90d windows are measured forward from this date at 00:00:00 UTC. Defaults to today in UTC.
-         */
-        startDate?: string;
-        /**
-         * Which forecast domains to include before rolling up the windows. Defaults to all three.
-         */
-        domains?: Array<'western' | 'vedic' | 'biorhythm'>;
-        /**
-         * Drop events scoring below this significance threshold from 0 to 100 before the rollup. Defaults to 0.
-         */
-        minSignificance?: number;
-        /**
-         * Per-domain significance multipliers applied before the significance floor and event cap. Bias which domains survive filtering and the cap. Omitted domains default to a weight of 1. Valid keys are western, vedic, and biorhythm.
-         */
-        domainWeights?: {
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            western?: number;
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            vedic?: number;
-            /**
-             * Multiplier for this domain significance. 1 leaves it unchanged, above 1 promotes the domain, below 1 demotes it.
-             */
-            biorhythm?: number;
-        };
-        /**
-         * Number of highest-significance events to surface per window. Defaults to 3, capped at 20.
-         */
-        top?: number;
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/forecast/digest';
-};
-
-export type PostForecastDigestErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostForecastDigestError = PostForecastDigestErrors[keyof PostForecastDigestErrors];
-
-export type PostForecastDigestResponses = {
-    /**
-     * Pre-summarized forecast windows: next 24h, 7d, 30d, and 90d rollups
-     */
-    200: {
-        /**
-         * Echo of the birth subject this digest was built for.
-         */
-        birthData: {
-            /**
-             * Birth date in YYYY-MM-DD format. Anchors the natal chart and the Vimshottari dasha sequence.
-             */
-            date: string;
-            /**
-             * Birth time in 24-hour HH:MM:SS format. Precision matters for the natal positions the transit aspects are measured against.
-             */
-            time: string;
-            /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-             */
-            timezone: number | string;
-            /**
-             * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            latitude?: number;
-            /**
-             * Birth longitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
-             */
-            longitude?: number;
-        };
-        /**
-         * Start anchor every window is measured from.
-         */
-        startDate: string;
-        /**
-         * Last day of the resolved 90 day horizon the timeline was built over before slicing.
-         */
-        endDate: string;
-        /**
-         * The four rollups in ascending window length: next 24h, 7d, 30d, and 90d from the start anchor.
-         */
-        windows: Array<{
-            /**
-             * Length of this window in days forward from the start anchor. One of 1, 7, 30, 90.
-             */
-            days: number;
-            /**
-             * Inclusive lower bound of the window as an ISO-8601 UTC datetime, the start anchor.
-             */
-            from: string;
-            /**
-             * Exclusive upper bound of the window as an ISO-8601 UTC datetime, the start anchor plus the window length.
-             */
-            to: string;
-            /**
-             * Number of events whose datetime falls inside this window.
-             */
-            count: number;
-            /**
-             * Count of events in this window broken down by domain. Only domains with at least one event in the window are present. The values sum to count.
-             */
-            byDomain: {
-                western?: number;
-                vedic?: number;
-                biorhythm?: number;
-            };
-            /**
-             * Count of events in this window broken down by event type. Only types with at least one event in the window are present. The values sum to count.
-             */
-            byType: {
-                'transit-aspect'?: number;
-                'sign-ingress'?: number;
-                'retrograde-station'?: number;
-                eclipse?: number;
-                'lunar-phase'?: number;
-                'dasha-change'?: number;
-                'critical-day'?: number;
-            };
-            /**
-             * The highest-significance events in this window, most significant first, up to the requested top count. The same TimelineEvent shape as the timeline endpoints.
-             */
-            top: Array<{
-                /**
-                 * Calendar date of the event in YYYY-MM-DD (UTC).
-                 */
-                date: string;
-                /**
-                 * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
-                 */
-                datetime: string;
-                /**
-                 * Forecast domain. western covers transit aspects, sign ingresses, retrograde stations, eclipses, and new and full moons. vedic covers Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. biorhythm covers critical days. A stable machine value, never localized, so consumers can branch on it under any language.
-                 */
-                domain: 'western' | 'vedic' | 'biorhythm';
-                /**
-                 * Event kind. transit-aspect, sign-ingress, retrograde-station, eclipse, and lunar-phase are western, dasha-change is vedic Vimshottari, critical-day is biorhythm. A stable machine value, never localized, so consumers can branch on it under any language.
-                 */
-                type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
-                /**
-                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
-                 */
-                body: string;
-                /**
-                 * For a transit-aspect, the natal body the transit aspects. For a sign-ingress, the zodiac sign entered, and for a lunar-phase, the zodiac sign of the New or Full Moon. Absent for other event types.
-                 */
-                target?: string;
-                /**
-                 * For a transit-aspect, the angular relationship. One of conjunction, sextile, square, trine, opposition. Absent for other event types.
-                 */
-                aspect?: string;
-                /**
-                 * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
-                 */
-                orb?: number;
-                /**
-                 * For a retrograde-station, whether the planet turns retrograde or direct. A stable machine value, never localized. Absent for other event types.
-                 */
-                station?: 'retrograde' | 'direct';
-                /**
-                 * For an eclipse, its classification. total and penumbral apply to lunar eclipses, partial applies to both, annular and total apply to solar eclipses. A stable machine value, never localized. Absent for other event types.
-                 */
-                kind?: 'penumbral' | 'partial' | 'annular' | 'total';
-                /**
-                 * For a lunar eclipse, the peak fraction from 0 to 1 of the Moon disc covered by Earth umbra. 1 for a total lunar eclipse, between 0 and 1 for a partial, 0 for a penumbral. Absent for solar eclipses and other event types.
-                 */
-                obscuration?: number;
-                /**
-                 * For a lunar-phase event, which syzygy it is: new-moon (Sun-Moon conjunction) or full-moon (Sun-Moon opposition). The intermediate quarters are not emitted. A stable machine value, never localized. Absent for other event types.
-                 */
-                phase?: 'new-moon' | 'full-moon';
-                /**
-                 * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
-                 */
-                description: string;
-                /**
-                 * Importance score from 0 to 100. Outer-planet exact transit aspects and mahadasha changes score highest; fast Moon events and biorhythm critical days score lower. When domainWeights is supplied this is the weighted score, rounded and clamped to 0 to 100, which is the same value the significance floor and the event cap acted on.
-                 */
-                significance: number;
-            }>;
-        }>;
-    };
-};
-
-export type PostForecastDigestResponse = PostForecastDigestResponses[keyof PostForecastDigestResponses];
-
-export type PostForecastSolarReturnData = {
-    body?: {
-        /**
-         * Birth date in YYYY-MM-DD format. Anchors the natal Sun longitude the transiting Sun returns to each year.
-         */
-        date: string;
-        /**
-         * Birth time in 24-hour HH:MM:SS format. Pins the exact natal Sun position that defines the solar return moment.
-         */
-        time: string;
-        /**
-         * Year to cast the solar return for. The chart is erected for the moment in this year when the transiting Sun returns to the natal Sun longitude, on or within a day of the birthday.
-         */
-        year: number;
-        /**
-         * Latitude of the solar return location in decimal degrees. The solar return is location-sensitive: use the birthplace to anchor the chart to natal geography, or the current city for a relocated solar return.
-         */
-        latitude: number;
-        /**
-         * Longitude of the solar return location in decimal degrees. Sets the local sidereal time, so it drives the Ascendant, Midheaven, and house cusps of the return chart.
-         */
-        longitude: number;
-        /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
-         */
-        timezone: number | string;
-        /**
-         * House system for the return chart. placidus is the Western default. whole-sign, equal, and koch are also supported.
-         */
-        houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
-    };
-    path?: never;
-    query?: {
-        /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
-         */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
-    };
-    url: '/forecast/solar-return';
-};
-
-export type PostForecastSolarReturnErrors = {
-    /**
-     * Validation error. `issues[]` lists every failed field.
-     */
-    400: {
-        /**
-         * First issue summary.
-         */
-        error: string;
-        code: 'validation_error';
-        /**
-         * Every validation failure. Use this to rebuild a valid request.
-         */
-        issues: Array<{
-            /**
-             * Dot-separated field path, or "(root)" for top-level.
-             */
-            path: string;
-            message: string;
-            /**
-             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
-             */
-            code?: string;
-            /**
-             * Expected type for invalid_type.
-             */
-            expected?: string;
-            /**
-             * Minimum bound for too_small issues.
-             */
-            minimum?: number | string;
-            /**
-             * Maximum bound for too_big issues.
-             */
-            maximum?: number | string;
-            inclusive?: boolean;
-            /**
-             * Format name for string issues (regex, email, url, uuid).
-             */
-            format?: string;
-            /**
-             * Regex pattern when format is regex.
-             */
-            pattern?: string;
-        }>;
-    };
-    /**
-     * Invalid or missing API key
-     */
-    401: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
-     */
-    405: {
-        error: string;
-        code: 'method_not_allowed';
-        /**
-         * Allowed HTTP methods for this path. Mirrors the Allow response header.
-         */
-        allow: Array<string>;
-        /**
-         * Link to the product page for this domain.
-         */
-        docs?: string;
-    };
-    /**
-     * Monthly rate limit exceeded
-     */
-    429: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Internal server error
-     */
-    500: {
-        /**
-         * Human-readable error message. May change wording.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-};
-
-export type PostForecastSolarReturnError = PostForecastSolarReturnErrors[keyof PostForecastSolarReturnErrors];
-
-export type PostForecastSolarReturnResponses = {
-    /**
-     * Solar return chart cast for the requested year and location
-     */
-    200: {
-        /**
-         * Echo of the birth date used to find the natal Sun longitude.
-         */
-        birthDate: string;
-        /**
-         * Exact solar return moment, when the transiting Sun returns to the natal Sun longitude, formatted in the requested timezone. The astrological birthday for the year.
-         */
-        solarReturnDate: string;
-        /**
-         * Year of this solar return. The chart covers the period to the next birthday.
-         */
-        solarReturnYear: number;
-        /**
-         * Location the return chart was cast for. The Ascendant and house cusps change with this location, the basis of the relocated solar return technique.
-         */
-        location: {
-            /**
-             * Latitude used for the return chart house cusps and Ascendant.
-             */
-            latitude: number;
-            /**
-             * Longitude used for local sidereal time and the Midheaven.
-             */
-            longitude: number;
-            /**
-             * Decimal timezone offset applied to the output datetime.
-             */
-            timezone: number;
-        };
-        /**
-         * The natal Sun position whose annual return defines this chart.
-         */
-        natalSunPosition: {
-            /**
-             * Natal Sun ecliptic longitude in degrees from 0 to 360 that the Sun returns to.
-             */
-            longitude: number;
-            /**
-             * Tropical zodiac sign of the natal Sun.
-             */
-            sign: string;
-            /**
-             * Degree within the sign from 0 to 29.999 that the Sun returns to.
-             */
-            degree: number;
-        };
-        /**
-         * Full chart erected for the solar return moment: all bodies with house placements, the 12 house cusps, aspects, Part of Fortune, and Vertex in the tropical zodiac.
-         */
-        chart: {
-            /**
-             * Birth details used to generate this chart.
-             */
-            birthDetails: {
-                /**
-                 * Birth date in YYYY-MM-DD format. Determines planetary positions for the specific calendar day.
-                 */
-                date: string;
-                /**
-                 * Birth time in 24-hour HH:MM:SS format. Determines the Ascendant (rising sign) and house cusps. Use 12:00:00 if unknown.
-                 */
-                time: string;
-                /**
-                 * Birth location latitude in decimal degrees (-90 to 90). Positive = North, negative = South.
-                 */
-                latitude: number;
-                /**
-                 * Birth location longitude in decimal degrees (-180 to 180). Positive = East, negative = West.
-                 */
-                longitude: number;
-                /**
-                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
-                 */
-                timezone: number;
-            };
-            /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
-             */
-            planets: Array<{
-                /**
-                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
-                 */
-                name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
-                /**
-                 * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for zodiac sign and aspect calculations.
-                 */
-                longitude: number;
-                /**
-                 * Ecliptic latitude in degrees. Near zero for most planets, varies for the Moon and Pluto, and reaches up to about 5 degrees for Black Moon Lilith (projected from the inclined mean lunar orbit).
-                 */
-                latitude: number;
-                /**
-                 * Tropical zodiac sign this planet occupies. Determined by 30-degree divisions of ecliptic longitude.
-                 */
-                sign: string;
-                /**
-                 * Degree within the zodiac sign (0-29.999). Indicates how far the planet has progressed through the sign.
-                 */
-                degree: number;
-                /**
-                 * House placement (1-12). Determined by the selected house system and birth location.
-                 */
-                house: number;
-                /**
-                 * Daily motion in degrees per day. Negative values indicate retrograde motion.
-                 */
-                speed: number;
-                /**
-                 * Whether the planet appears to move backward from Earth perspective. Retrograde periods signal review and introspection.
-                 */
-                isRetrograde: boolean;
-            }>;
-            /**
-             * All 12 house cusps calculated using the selected house system.
-             */
-            houses: Array<{
-                /**
-                 * House number (1-12). Each house governs specific life themes in Western astrology.
-                 */
-                number: number;
-                /**
-                 * Ecliptic longitude of this house cusp in degrees (0-360).
-                 */
-                longitude: number;
-                /**
-                 * Zodiac sign on this house cusp. Colors the themes of this life area.
-                 */
-                sign: string;
-                /**
-                 * Degree within the zodiac sign on this cusp (0-29.999).
-                 */
-                degree: number;
-            }>;
-            /**
-             * House system used for this chart (placidus, whole-sign, equal, or koch).
-             */
-            houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
-            /**
-             * All planetary aspects found in this chart with orbs, strength, and applying/separating status.
-             */
-            aspects: Array<{
-                /**
-                 * First planet in the aspect pair.
-                 */
-                planet1: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
-                /**
-                 * Second planet in the aspect pair.
-                 */
-                planet2: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
-                /**
-                 * Aspect type. Major: conjunction (0), opposition (180), trine (120), square (90), sextile (60). Minor: semi-sextile, quincunx, semi-square, sesquiquadrate.
-                 */
-                type: 'CONJUNCTION' | 'OPPOSITION' | 'TRINE' | 'SQUARE' | 'SEXTILE' | 'SEMI_SEXTILE' | 'QUINCUNX' | 'SEMI_SQUARE' | 'SESQUIQUADRATE';
-                /**
-                 * Exact angular separation that defines this aspect type in degrees.
-                 */
-                angle: number;
-                /**
-                 * Deviation from exact aspect in degrees. Tighter orb means stronger influence.
-                 */
-                orb: number;
-                /**
-                 * Whether the aspect is applying (planets moving toward exact) or separating (moving apart). Applying aspects grow stronger.
-                 */
-                isApplying: boolean;
-                /**
-                 * Aspect strength percentage (0-100). Based on orb tightness relative to the allowed maximum.
-                 */
-                strength: number;
-                /**
-                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
-                 */
-                interpretation: 'harmonious' | 'challenging' | 'neutral';
-            }>;
-            /**
-             * Part of Fortune (Lot of Fortune). A point derived from the Ascendant and the two luminaries that marks an area of ease, vitality, and material wellbeing in the chart.
-             */
-            partOfFortune: {
-                /**
-                 * Zodiac sign holding the Part of Fortune.
-                 */
-                sign: string;
-                /**
-                 * Degree within the Part of Fortune sign (0-29.999).
-                 */
-                degree: number;
-                /**
-                 * Absolute ecliptic longitude of the Part of Fortune (0-360).
-                 */
-                longitude: number;
-                /**
-                 * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
-                 */
-                sect: 'day' | 'night';
-            };
-            /**
-             * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
-             */
-            vertex: {
-                /**
-                 * Zodiac sign holding the Vertex.
-                 */
-                sign: string;
-                /**
-                 * Degree within the Vertex sign (0-29.999).
-                 */
-                degree: number;
-                /**
-                 * Absolute ecliptic longitude of the Vertex (0-360).
-                 */
-                longitude: number;
-            };
-        };
-    };
-};
-
-export type PostForecastSolarReturnResponse = PostForecastSolarReturnResponses[keyof PostForecastSolarReturnResponses];
 
 export type PostBiorhythmReadingData = {
     body?: {

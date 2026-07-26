@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetAngelNumbersLookupData, GetAngelNumbersLookupErrors, GetAngelNumbersLookupResponses, GetAngelNumbersNumbersByNumberData, GetAngelNumbersNumbersByNumberErrors, GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersData, GetAngelNumbersNumbersErrors, GetAngelNumbersNumbersResponses, GetAstrologyHoroscopeBySignDailyData, GetAstrologyHoroscopeBySignDailyErrors, GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignMonthlyData, GetAstrologyHoroscopeBySignMonthlyErrors, GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignWeeklyData, GetAstrologyHoroscopeBySignWeeklyErrors, GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyMoonPhaseCalendarByYearByMonthData, GetAstrologyMoonPhaseCalendarByYearByMonthErrors, GetAstrologyMoonPhaseCalendarByYearByMonthResponses, GetAstrologyMoonPhaseCurrentData, GetAstrologyMoonPhaseCurrentErrors, GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseUpcomingData, GetAstrologyMoonPhaseUpcomingErrors, GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyPlanetMeaningsByIdData, GetAstrologyPlanetMeaningsByIdErrors, GetAstrologyPlanetMeaningsByIdResponses, GetAstrologyPlanetMeaningsData, GetAstrologyPlanetMeaningsErrors, GetAstrologyPlanetMeaningsResponses, GetAstrologySignsByIdData, GetAstrologySignsByIdErrors, GetAstrologySignsByIdResponses, GetAstrologySignsData, GetAstrologySignsErrors, GetAstrologySignsResponses, GetCrystalsBirthstoneByMonthData, GetCrystalsBirthstoneByMonthErrors, GetCrystalsBirthstoneByMonthResponses, GetCrystalsByIdData, GetCrystalsByIdErrors, GetCrystalsByIdResponses, GetCrystalsChakraByChakraData, GetCrystalsChakraByChakraErrors, GetCrystalsChakraByChakraResponses, GetCrystalsColorsData, GetCrystalsColorsErrors, GetCrystalsColorsResponses, GetCrystalsData, GetCrystalsElementByElementData, GetCrystalsElementByElementErrors, GetCrystalsElementByElementResponses, GetCrystalsErrors, GetCrystalsPairingsByIdData, GetCrystalsPairingsByIdErrors, GetCrystalsPairingsByIdResponses, GetCrystalsPlanetsData, GetCrystalsPlanetsErrors, GetCrystalsPlanetsResponses, GetCrystalsRandomData, GetCrystalsRandomErrors, GetCrystalsRandomResponses, GetCrystalsResponses, GetCrystalsSearchData, GetCrystalsSearchErrors, GetCrystalsSearchResponses, GetCrystalsZodiacBySignData, GetCrystalsZodiacBySignErrors, GetCrystalsZodiacBySignResponses, GetDreamsSymbolsByIdData, GetDreamsSymbolsByIdErrors, GetDreamsSymbolsByIdResponses, GetDreamsSymbolsData, GetDreamsSymbolsErrors, GetDreamsSymbolsLettersData, GetDreamsSymbolsLettersErrors, GetDreamsSymbolsLettersResponses, GetDreamsSymbolsRandomData, GetDreamsSymbolsRandomErrors, GetDreamsSymbolsRandomResponses, GetDreamsSymbolsResponses, GetHumanDesignCentersByIdData, GetHumanDesignCentersByIdErrors, GetHumanDesignCentersByIdResponses, GetHumanDesignGatesByNumberData, GetHumanDesignGatesByNumberErrors, GetHumanDesignGatesByNumberResponses, GetIchingCastData, GetIchingCastErrors, GetIchingCastResponses, GetIchingHexagramsByNumberData, GetIchingHexagramsByNumberErrors, GetIchingHexagramsByNumberResponses, GetIchingHexagramsData, GetIchingHexagramsErrors, GetIchingHexagramsLookupData, GetIchingHexagramsLookupErrors, GetIchingHexagramsLookupResponses, GetIchingHexagramsRandomData, GetIchingHexagramsRandomErrors, GetIchingHexagramsRandomResponses, GetIchingHexagramsResponses, GetIchingTrigramsByIdData, GetIchingTrigramsByIdErrors, GetIchingTrigramsByIdResponses, GetIchingTrigramsData, GetIchingTrigramsErrors, GetIchingTrigramsResponses, GetLanguagesData, GetLanguagesErrors, GetLanguagesResponses, GetLocationCountriesByIso2Data, GetLocationCountriesByIso2Errors, GetLocationCountriesByIso2Responses, GetLocationCountriesData, GetLocationCountriesErrors, GetLocationCountriesResponses, GetLocationSearchData, GetLocationSearchErrors, GetLocationSearchResponses, GetNumerologyCompoundNumberByNumberData, GetNumerologyCompoundNumberByNumberErrors, GetNumerologyCompoundNumberByNumberResponses, GetNumerologyMeaningsByNumberData, GetNumerologyMeaningsByNumberErrors, GetNumerologyMeaningsByNumberResponses, GetTarotCardsByIdData, GetTarotCardsByIdErrors, GetTarotCardsByIdResponses, GetTarotCardsData, GetTarotCardsErrors, GetTarotCardsResponses, GetUsageData, GetUsageErrors, GetUsageResponses, GetVedicAstrologyKpAyanamsaData, GetVedicAstrologyKpAyanamsaErrors, GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyNakshatrasByIdData, GetVedicAstrologyNakshatrasByIdErrors, GetVedicAstrologyNakshatrasByIdResponses, GetVedicAstrologyNakshatrasData, GetVedicAstrologyNakshatrasErrors, GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyRashisByIdData, GetVedicAstrologyRashisByIdErrors, GetVedicAstrologyRashisByIdResponses, GetVedicAstrologyRashisData, GetVedicAstrologyRashisErrors, GetVedicAstrologyRashisResponses, GetVedicAstrologyYogaByIdData, GetVedicAstrologyYogaByIdErrors, GetVedicAstrologyYogaByIdResponses, GetVedicAstrologyYogaData, GetVedicAstrologyYogaErrors, GetVedicAstrologyYogaResponses, PostAngelNumbersDailyData, PostAngelNumbersDailyErrors, PostAngelNumbersDailyResponses, PostAstrologyArabicLotsData, PostAstrologyArabicLotsErrors, PostAstrologyArabicLotsResponses, PostAstrologyAspectPatternsData, PostAstrologyAspectPatternsErrors, PostAstrologyAspectPatternsResponses, PostAstrologyAspectsData, PostAstrologyAspectsErrors, PostAstrologyAspectsResponses, PostAstrologyAsteroidsData, PostAstrologyAsteroidsErrors, PostAstrologyAsteroidsResponses, PostAstrologyAstrocartographyData, PostAstrologyAstrocartographyErrors, PostAstrologyAstrocartographyResponses, PostAstrologyCompatibilityScoreData, PostAstrologyCompatibilityScoreErrors, PostAstrologyCompatibilityScoreResponses, PostAstrologyCompositeChartData, PostAstrologyCompositeChartErrors, PostAstrologyCompositeChartResponses, PostAstrologyFixedStarsData, PostAstrologyFixedStarsErrors, PostAstrologyFixedStarsResponses, PostAstrologyHousesData, PostAstrologyHousesErrors, PostAstrologyHousesResponses, PostAstrologyLilithData, PostAstrologyLilithErrors, PostAstrologyLilithResponses, PostAstrologyLocalSpaceData, PostAstrologyLocalSpaceErrors, PostAstrologyLocalSpaceResponses, PostAstrologyLunarReturnData, PostAstrologyLunarReturnErrors, PostAstrologyLunarReturnResponses, PostAstrologyNatalChartData, PostAstrologyNatalChartErrors, PostAstrologyNatalChartResponses, PostAstrologyPlanetaryReturnsData, PostAstrologyPlanetaryReturnsErrors, PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetsData, PostAstrologyPlanetsErrors, PostAstrologyPlanetsResponses, PostAstrologyProfectionsData, PostAstrologyProfectionsErrors, PostAstrologyProfectionsResponses, PostAstrologyProgressionsData, PostAstrologyProgressionsErrors, PostAstrologyProgressionsResponses, PostAstrologyRelocationChartData, PostAstrologyRelocationChartErrors, PostAstrologyRelocationChartResponses, PostAstrologySolarArcData, PostAstrologySolarArcErrors, PostAstrologySolarArcResponses, PostAstrologySolarReturnData, PostAstrologySolarReturnErrors, PostAstrologySolarReturnResponses, PostAstrologySynastryData, PostAstrologySynastryErrors, PostAstrologySynastryResponses, PostAstrologyTransitAspectsData, PostAstrologyTransitAspectsErrors, PostAstrologyTransitAspectsResponses, PostAstrologyTransitsData, PostAstrologyTransitsErrors, PostAstrologyTransitsResponses, PostBiorhythmCompatibilityData, PostBiorhythmCompatibilityErrors, PostBiorhythmCompatibilityResponses, PostBiorhythmCriticalDaysData, PostBiorhythmCriticalDaysErrors, PostBiorhythmCriticalDaysResponses, PostBiorhythmDailyData, PostBiorhythmDailyErrors, PostBiorhythmDailyResponses, PostBiorhythmForecastData, PostBiorhythmForecastErrors, PostBiorhythmForecastResponses, PostBiorhythmPhasesData, PostBiorhythmPhasesErrors, PostBiorhythmPhasesResponses, PostBiorhythmReadingData, PostBiorhythmReadingErrors, PostBiorhythmReadingResponses, PostCrystalsDailyData, PostCrystalsDailyErrors, PostCrystalsDailyResponses, PostDreamsDailyData, PostDreamsDailyErrors, PostDreamsDailyResponses, PostForecastDigestData, PostForecastDigestErrors, PostForecastDigestResponses, PostForecastSignificantDatesData, PostForecastSignificantDatesErrors, PostForecastSignificantDatesResponses, PostForecastSolarReturnData, PostForecastSolarReturnErrors, PostForecastSolarReturnResponses, PostForecastTimelineData, PostForecastTimelineErrors, PostForecastTimelineResponses, PostForecastTransitsData, PostForecastTransitsErrors, PostForecastTransitsResponses, PostHumanDesignBodygraphData, PostHumanDesignBodygraphErrors, PostHumanDesignBodygraphResponses, PostHumanDesignCentersData, PostHumanDesignCentersErrors, PostHumanDesignCentersResponses, PostHumanDesignChannelsData, PostHumanDesignChannelsErrors, PostHumanDesignChannelsResponses, PostHumanDesignConnectionData, PostHumanDesignConnectionErrors, PostHumanDesignConnectionResponses, PostHumanDesignGatesData, PostHumanDesignGatesErrors, PostHumanDesignGatesResponses, PostHumanDesignPentaData, PostHumanDesignPentaErrors, PostHumanDesignPentaResponses, PostHumanDesignProfileData, PostHumanDesignProfileErrors, PostHumanDesignProfileResponses, PostHumanDesignTransitData, PostHumanDesignTransitErrors, PostHumanDesignTransitResponses, PostHumanDesignTypeData, PostHumanDesignTypeErrors, PostHumanDesignTypeResponses, PostHumanDesignVariablesData, PostHumanDesignVariablesErrors, PostHumanDesignVariablesResponses, PostIchingDailyCastData, PostIchingDailyCastErrors, PostIchingDailyCastResponses, PostIchingDailyData, PostIchingDailyErrors, PostIchingDailyResponses, PostNumerologyBirthDayData, PostNumerologyBirthDayErrors, PostNumerologyBirthDayResponses, PostNumerologyBridgeData, PostNumerologyBridgeErrors, PostNumerologyBridgeResponses, PostNumerologyBusinessNameData, PostNumerologyBusinessNameErrors, PostNumerologyBusinessNameResponses, PostNumerologyChaldeanData, PostNumerologyChaldeanErrors, PostNumerologyChaldeanResponses, PostNumerologyChartData, PostNumerologyChartErrors, PostNumerologyChartResponses, PostNumerologyCompatibilityData, PostNumerologyCompatibilityErrors, PostNumerologyCompatibilityResponses, PostNumerologyDailyData, PostNumerologyDailyErrors, PostNumerologyDailyResponses, PostNumerologyDualData, PostNumerologyDualErrors, PostNumerologyDualResponses, PostNumerologyExpressionData, PostNumerologyExpressionErrors, PostNumerologyExpressionResponses, PostNumerologyKarmicDebtData, PostNumerologyKarmicDebtErrors, PostNumerologyKarmicDebtResponses, PostNumerologyKarmicLessonsData, PostNumerologyKarmicLessonsErrors, PostNumerologyKarmicLessonsResponses, PostNumerologyLifePathData, PostNumerologyLifePathErrors, PostNumerologyLifePathResponses, PostNumerologyMaturityData, PostNumerologyMaturityErrors, PostNumerologyMaturityResponses, PostNumerologyPersonalDayData, PostNumerologyPersonalDayErrors, PostNumerologyPersonalDayResponses, PostNumerologyPersonalityData, PostNumerologyPersonalityErrors, PostNumerologyPersonalityResponses, PostNumerologyPersonalMonthData, PostNumerologyPersonalMonthErrors, PostNumerologyPersonalMonthResponses, PostNumerologyPersonalYearData, PostNumerologyPersonalYearErrors, PostNumerologyPersonalYearResponses, PostNumerologySoulUrgeData, PostNumerologySoulUrgeErrors, PostNumerologySoulUrgeResponses, PostTarotDailyData, PostTarotDailyErrors, PostTarotDailyResponses, PostTarotDrawData, PostTarotDrawErrors, PostTarotDrawResponses, PostTarotSpreadsCareerData, PostTarotSpreadsCareerErrors, PostTarotSpreadsCareerResponses, PostTarotSpreadsCelticCrossData, PostTarotSpreadsCelticCrossErrors, PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCustomData, PostTarotSpreadsCustomErrors, PostTarotSpreadsCustomResponses, PostTarotSpreadsLoveData, PostTarotSpreadsLoveErrors, PostTarotSpreadsLoveResponses, PostTarotSpreadsThreeCardData, PostTarotSpreadsThreeCardErrors, PostTarotSpreadsThreeCardResponses, PostTarotYesNoData, PostTarotYesNoErrors, PostTarotYesNoResponses, PostVedicAstrologyAshtakavargaData, PostVedicAstrologyAshtakavargaErrors, PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAspectsData, PostVedicAstrologyAspectsErrors, PostVedicAstrologyAspectsLunarData, PostVedicAstrologyAspectsLunarErrors, PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsMonthlyData, PostVedicAstrologyAspectsMonthlyErrors, PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsResponses, PostVedicAstrologyBirthChartData, PostVedicAstrologyBirthChartErrors, PostVedicAstrologyBirthChartResponses, PostVedicAstrologyCompatibilityData, PostVedicAstrologyCompatibilityErrors, PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyDashaCurrentData, PostVedicAstrologyDashaCurrentErrors, PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaMajorData, PostVedicAstrologyDashaMajorErrors, PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaSubByMahadashaData, PostVedicAstrologyDashaSubByMahadashaErrors, PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDivisionalChartData, PostVedicAstrologyDivisionalChartErrors, PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDoshaKalsarpaData, PostVedicAstrologyDoshaKalsarpaErrors, PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaManglikData, PostVedicAstrologyDoshaManglikErrors, PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaSadhesatiData, PostVedicAstrologyDoshaSadhesatiErrors, PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyEclipticCrossingsData, PostVedicAstrologyEclipticCrossingsErrors, PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyKpChartData, PostVedicAstrologyKpChartErrors, PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpCuspsData, PostVedicAstrologyKpCuspsErrors, PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpPlanetsData, PostVedicAstrologyKpPlanetsErrors, PostVedicAstrologyKpPlanetsIntervalData, PostVedicAstrologyKpPlanetsIntervalErrors, PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpRasiChangesData, PostVedicAstrologyKpRasiChangesErrors, PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRulingPlanetsData, PostVedicAstrologyKpRulingPlanetsErrors, PostVedicAstrologyKpRulingPlanetsIntervalData, PostVedicAstrologyKpRulingPlanetsIntervalErrors, PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpSublordChangesData, PostVedicAstrologyKpSublordChangesErrors, PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyNavamsaData, PostVedicAstrologyNavamsaErrors, PostVedicAstrologyNavamsaResponses, PostVedicAstrologyPanchangBasicData, PostVedicAstrologyPanchangBasicErrors, PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangChoghadiyaData, PostVedicAstrologyPanchangChoghadiyaErrors, PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangDetailedData, PostVedicAstrologyPanchangDetailedErrors, PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangHoraData, PostVedicAstrologyPanchangHoraErrors, PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyParallelsData, PostVedicAstrologyParallelsErrors, PostVedicAstrologyParallelsMonthlyData, PostVedicAstrologyParallelsMonthlyErrors, PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsResponses, PostVedicAstrologyPlanetaryPositionsData, PostVedicAstrologyPlanetaryPositionsErrors, PostVedicAstrologyPlanetaryPositionsMonthlyData, PostVedicAstrologyPlanetaryPositionsMonthlyErrors, PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyShadbalaData, PostVedicAstrologyShadbalaErrors, PostVedicAstrologyShadbalaResponses, PostVedicAstrologyTransitData, PostVedicAstrologyTransitErrors, PostVedicAstrologyTransitMonthlyData, PostVedicAstrologyTransitMonthlyErrors, PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitResponses, PostVedicAstrologyUpagrahaData, PostVedicAstrologyUpagrahaErrors, PostVedicAstrologyUpagrahaResponses, PostVedicAstrologyYogaDetectData, PostVedicAstrologyYogaDetectErrors, PostVedicAstrologyYogaDetectResponses } from './types.gen';
+import type { GetAngelNumbersLookupData, GetAngelNumbersLookupErrors, GetAngelNumbersLookupResponses, GetAngelNumbersNumbersByNumberData, GetAngelNumbersNumbersByNumberErrors, GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersData, GetAngelNumbersNumbersErrors, GetAngelNumbersNumbersResponses, GetAstrologyHoroscopeBySignDailyData, GetAstrologyHoroscopeBySignDailyErrors, GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignMonthlyData, GetAstrologyHoroscopeBySignMonthlyErrors, GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignWeeklyData, GetAstrologyHoroscopeBySignWeeklyErrors, GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyMoonPhaseCalendarByYearByMonthData, GetAstrologyMoonPhaseCalendarByYearByMonthErrors, GetAstrologyMoonPhaseCalendarByYearByMonthResponses, GetAstrologyMoonPhaseCurrentData, GetAstrologyMoonPhaseCurrentErrors, GetAstrologyMoonPhaseCurrentResponses, GetAstrologyMoonPhaseUpcomingData, GetAstrologyMoonPhaseUpcomingErrors, GetAstrologyMoonPhaseUpcomingResponses, GetAstrologyPlanetMeaningsByIdData, GetAstrologyPlanetMeaningsByIdErrors, GetAstrologyPlanetMeaningsByIdResponses, GetAstrologyPlanetMeaningsData, GetAstrologyPlanetMeaningsErrors, GetAstrologyPlanetMeaningsResponses, GetAstrologySignsByIdData, GetAstrologySignsByIdErrors, GetAstrologySignsByIdResponses, GetAstrologySignsData, GetAstrologySignsErrors, GetAstrologySignsResponses, GetCrystalsBirthstoneByMonthData, GetCrystalsBirthstoneByMonthErrors, GetCrystalsBirthstoneByMonthResponses, GetCrystalsByIdData, GetCrystalsByIdErrors, GetCrystalsByIdResponses, GetCrystalsChakraByChakraData, GetCrystalsChakraByChakraErrors, GetCrystalsChakraByChakraResponses, GetCrystalsColorsData, GetCrystalsColorsErrors, GetCrystalsColorsResponses, GetCrystalsData, GetCrystalsElementByElementData, GetCrystalsElementByElementErrors, GetCrystalsElementByElementResponses, GetCrystalsErrors, GetCrystalsPairingsByIdData, GetCrystalsPairingsByIdErrors, GetCrystalsPairingsByIdResponses, GetCrystalsPlanetsData, GetCrystalsPlanetsErrors, GetCrystalsPlanetsResponses, GetCrystalsRandomData, GetCrystalsRandomErrors, GetCrystalsRandomResponses, GetCrystalsResponses, GetCrystalsSearchData, GetCrystalsSearchErrors, GetCrystalsSearchResponses, GetCrystalsZodiacBySignData, GetCrystalsZodiacBySignErrors, GetCrystalsZodiacBySignResponses, GetDreamsSymbolsByIdData, GetDreamsSymbolsByIdErrors, GetDreamsSymbolsByIdResponses, GetDreamsSymbolsData, GetDreamsSymbolsErrors, GetDreamsSymbolsLettersData, GetDreamsSymbolsLettersErrors, GetDreamsSymbolsLettersResponses, GetDreamsSymbolsRandomData, GetDreamsSymbolsRandomErrors, GetDreamsSymbolsRandomResponses, GetDreamsSymbolsResponses, GetHumanDesignCentersByIdData, GetHumanDesignCentersByIdErrors, GetHumanDesignCentersByIdResponses, GetHumanDesignGatesByNumberData, GetHumanDesignGatesByNumberErrors, GetHumanDesignGatesByNumberResponses, GetIchingCastData, GetIchingCastErrors, GetIchingCastResponses, GetIchingHexagramsByNumberData, GetIchingHexagramsByNumberErrors, GetIchingHexagramsByNumberResponses, GetIchingHexagramsData, GetIchingHexagramsErrors, GetIchingHexagramsLookupData, GetIchingHexagramsLookupErrors, GetIchingHexagramsLookupResponses, GetIchingHexagramsRandomData, GetIchingHexagramsRandomErrors, GetIchingHexagramsRandomResponses, GetIchingHexagramsResponses, GetIchingTrigramsByIdData, GetIchingTrigramsByIdErrors, GetIchingTrigramsByIdResponses, GetIchingTrigramsData, GetIchingTrigramsErrors, GetIchingTrigramsResponses, GetLanguagesData, GetLanguagesErrors, GetLanguagesResponses, GetLocationCountriesByIso2Data, GetLocationCountriesByIso2Errors, GetLocationCountriesByIso2Responses, GetLocationCountriesData, GetLocationCountriesErrors, GetLocationCountriesResponses, GetLocationSearchData, GetLocationSearchErrors, GetLocationSearchResponses, GetNumerologyCompoundNumberByNumberData, GetNumerologyCompoundNumberByNumberErrors, GetNumerologyCompoundNumberByNumberResponses, GetNumerologyMeaningsByNumberData, GetNumerologyMeaningsByNumberErrors, GetNumerologyMeaningsByNumberResponses, GetTarotCardsByIdData, GetTarotCardsByIdErrors, GetTarotCardsByIdResponses, GetTarotCardsData, GetTarotCardsErrors, GetTarotCardsResponses, GetUsageData, GetUsageErrors, GetUsageResponses, GetVedicAstrologyKpAyanamsaData, GetVedicAstrologyKpAyanamsaErrors, GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyNakshatrasByIdData, GetVedicAstrologyNakshatrasByIdErrors, GetVedicAstrologyNakshatrasByIdResponses, GetVedicAstrologyNakshatrasData, GetVedicAstrologyNakshatrasErrors, GetVedicAstrologyNakshatrasResponses, GetVedicAstrologyRashisByIdData, GetVedicAstrologyRashisByIdErrors, GetVedicAstrologyRashisByIdResponses, GetVedicAstrologyRashisData, GetVedicAstrologyRashisErrors, GetVedicAstrologyRashisResponses, GetVedicAstrologyYogaByIdData, GetVedicAstrologyYogaByIdErrors, GetVedicAstrologyYogaByIdResponses, GetVedicAstrologyYogaData, GetVedicAstrologyYogaErrors, GetVedicAstrologyYogaResponses, PostAngelNumbersDailyData, PostAngelNumbersDailyErrors, PostAngelNumbersDailyResponses, PostAstrologyArabicLotsData, PostAstrologyArabicLotsErrors, PostAstrologyArabicLotsResponses, PostAstrologyAspectPatternsData, PostAstrologyAspectPatternsErrors, PostAstrologyAspectPatternsResponses, PostAstrologyAspectsData, PostAstrologyAspectsErrors, PostAstrologyAspectsResponses, PostAstrologyAsteroidsData, PostAstrologyAsteroidsErrors, PostAstrologyAsteroidsResponses, PostAstrologyAstrocartographyData, PostAstrologyAstrocartographyErrors, PostAstrologyAstrocartographyResponses, PostAstrologyCompatibilityScoreData, PostAstrologyCompatibilityScoreErrors, PostAstrologyCompatibilityScoreResponses, PostAstrologyCompositeChartData, PostAstrologyCompositeChartErrors, PostAstrologyCompositeChartResponses, PostAstrologyFixedStarsData, PostAstrologyFixedStarsErrors, PostAstrologyFixedStarsResponses, PostAstrologyHousesData, PostAstrologyHousesErrors, PostAstrologyHousesResponses, PostAstrologyLilithData, PostAstrologyLilithErrors, PostAstrologyLilithResponses, PostAstrologyLocalSpaceData, PostAstrologyLocalSpaceErrors, PostAstrologyLocalSpaceResponses, PostAstrologyLunarReturnData, PostAstrologyLunarReturnErrors, PostAstrologyLunarReturnResponses, PostAstrologyNatalChartData, PostAstrologyNatalChartErrors, PostAstrologyNatalChartResponses, PostAstrologyPlanetaryReturnsData, PostAstrologyPlanetaryReturnsErrors, PostAstrologyPlanetaryReturnsResponses, PostAstrologyPlanetsData, PostAstrologyPlanetsErrors, PostAstrologyPlanetsResponses, PostAstrologyProfectionsData, PostAstrologyProfectionsErrors, PostAstrologyProfectionsResponses, PostAstrologyProgressionsData, PostAstrologyProgressionsErrors, PostAstrologyProgressionsResponses, PostAstrologyRelocationChartData, PostAstrologyRelocationChartErrors, PostAstrologyRelocationChartResponses, PostAstrologySolarArcData, PostAstrologySolarArcErrors, PostAstrologySolarArcResponses, PostAstrologySolarReturnData, PostAstrologySolarReturnErrors, PostAstrologySolarReturnResponses, PostAstrologySynastryData, PostAstrologySynastryErrors, PostAstrologySynastryResponses, PostAstrologyTransitAspectsData, PostAstrologyTransitAspectsErrors, PostAstrologyTransitAspectsResponses, PostAstrologyTransitsData, PostAstrologyTransitsErrors, PostAstrologyTransitsResponses, PostBiorhythmCompatibilityData, PostBiorhythmCompatibilityErrors, PostBiorhythmCompatibilityResponses, PostBiorhythmCriticalDaysData, PostBiorhythmCriticalDaysErrors, PostBiorhythmCriticalDaysResponses, PostBiorhythmDailyData, PostBiorhythmDailyErrors, PostBiorhythmDailyResponses, PostBiorhythmForecastData, PostBiorhythmForecastErrors, PostBiorhythmForecastResponses, PostBiorhythmPhasesData, PostBiorhythmPhasesErrors, PostBiorhythmPhasesResponses, PostBiorhythmReadingData, PostBiorhythmReadingErrors, PostBiorhythmReadingResponses, PostCrystalsDailyData, PostCrystalsDailyErrors, PostCrystalsDailyResponses, PostDreamsDailyData, PostDreamsDailyErrors, PostDreamsDailyResponses, PostForecastDigestData, PostForecastDigestErrors, PostForecastDigestResponses, PostForecastSignificantDatesData, PostForecastSignificantDatesErrors, PostForecastSignificantDatesResponses, PostForecastSolarReturnData, PostForecastSolarReturnErrors, PostForecastSolarReturnResponses, PostForecastTimelineData, PostForecastTimelineErrors, PostForecastTimelineResponses, PostForecastTransitsData, PostForecastTransitsErrors, PostForecastTransitsResponses, PostHumanDesignBodygraphData, PostHumanDesignBodygraphErrors, PostHumanDesignBodygraphResponses, PostHumanDesignCentersData, PostHumanDesignCentersErrors, PostHumanDesignCentersResponses, PostHumanDesignChannelsData, PostHumanDesignChannelsErrors, PostHumanDesignChannelsResponses, PostHumanDesignConnectionData, PostHumanDesignConnectionErrors, PostHumanDesignConnectionResponses, PostHumanDesignGatesData, PostHumanDesignGatesErrors, PostHumanDesignGatesResponses, PostHumanDesignPentaData, PostHumanDesignPentaErrors, PostHumanDesignPentaResponses, PostHumanDesignProfileData, PostHumanDesignProfileErrors, PostHumanDesignProfileResponses, PostHumanDesignTransitData, PostHumanDesignTransitErrors, PostHumanDesignTransitResponses, PostHumanDesignTypeData, PostHumanDesignTypeErrors, PostHumanDesignTypeResponses, PostHumanDesignVariablesData, PostHumanDesignVariablesErrors, PostHumanDesignVariablesResponses, PostIchingDailyCastData, PostIchingDailyCastErrors, PostIchingDailyCastResponses, PostIchingDailyData, PostIchingDailyErrors, PostIchingDailyResponses, PostNumerologyBirthDayData, PostNumerologyBirthDayErrors, PostNumerologyBirthDayResponses, PostNumerologyBridgeData, PostNumerologyBridgeErrors, PostNumerologyBridgeResponses, PostNumerologyBusinessNameData, PostNumerologyBusinessNameErrors, PostNumerologyBusinessNameResponses, PostNumerologyChaldeanData, PostNumerologyChaldeanErrors, PostNumerologyChaldeanResponses, PostNumerologyChartData, PostNumerologyChartErrors, PostNumerologyChartResponses, PostNumerologyCompatibilityData, PostNumerologyCompatibilityErrors, PostNumerologyCompatibilityResponses, PostNumerologyDailyData, PostNumerologyDailyErrors, PostNumerologyDailyResponses, PostNumerologyDualData, PostNumerologyDualErrors, PostNumerologyDualResponses, PostNumerologyExpressionData, PostNumerologyExpressionErrors, PostNumerologyExpressionResponses, PostNumerologyKarmicDebtData, PostNumerologyKarmicDebtErrors, PostNumerologyKarmicDebtResponses, PostNumerologyKarmicLessonsData, PostNumerologyKarmicLessonsErrors, PostNumerologyKarmicLessonsResponses, PostNumerologyLifePathData, PostNumerologyLifePathErrors, PostNumerologyLifePathResponses, PostNumerologyMaturityData, PostNumerologyMaturityErrors, PostNumerologyMaturityResponses, PostNumerologyPersonalDayData, PostNumerologyPersonalDayErrors, PostNumerologyPersonalDayResponses, PostNumerologyPersonalityData, PostNumerologyPersonalityErrors, PostNumerologyPersonalityResponses, PostNumerologyPersonalMonthData, PostNumerologyPersonalMonthErrors, PostNumerologyPersonalMonthResponses, PostNumerologyPersonalYearData, PostNumerologyPersonalYearErrors, PostNumerologyPersonalYearResponses, PostNumerologySoulUrgeData, PostNumerologySoulUrgeErrors, PostNumerologySoulUrgeResponses, PostTarotDailyData, PostTarotDailyErrors, PostTarotDailyResponses, PostTarotDrawData, PostTarotDrawErrors, PostTarotDrawResponses, PostTarotSpreadsCareerData, PostTarotSpreadsCareerErrors, PostTarotSpreadsCareerResponses, PostTarotSpreadsCelticCrossData, PostTarotSpreadsCelticCrossErrors, PostTarotSpreadsCelticCrossResponses, PostTarotSpreadsCustomData, PostTarotSpreadsCustomErrors, PostTarotSpreadsCustomResponses, PostTarotSpreadsLoveData, PostTarotSpreadsLoveErrors, PostTarotSpreadsLoveResponses, PostTarotSpreadsThreeCardData, PostTarotSpreadsThreeCardErrors, PostTarotSpreadsThreeCardResponses, PostTarotYesNoData, PostTarotYesNoErrors, PostTarotYesNoResponses, PostVedicAstrologyAshtakavargaData, PostVedicAstrologyAshtakavargaErrors, PostVedicAstrologyAshtakavargaResponses, PostVedicAstrologyAspectsData, PostVedicAstrologyAspectsErrors, PostVedicAstrologyAspectsLunarData, PostVedicAstrologyAspectsLunarErrors, PostVedicAstrologyAspectsLunarResponses, PostVedicAstrologyAspectsMonthlyData, PostVedicAstrologyAspectsMonthlyErrors, PostVedicAstrologyAspectsMonthlyResponses, PostVedicAstrologyAspectsResponses, PostVedicAstrologyBirthChartData, PostVedicAstrologyBirthChartErrors, PostVedicAstrologyBirthChartResponses, PostVedicAstrologyCompatibilityData, PostVedicAstrologyCompatibilityErrors, PostVedicAstrologyCompatibilityResponses, PostVedicAstrologyDashaCurrentData, PostVedicAstrologyDashaCurrentErrors, PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaMajorData, PostVedicAstrologyDashaMajorErrors, PostVedicAstrologyDashaMajorResponses, PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaData, PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaErrors, PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses, PostVedicAstrologyDashaSubByMahadashaByAntardashaData, PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors, PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses, PostVedicAstrologyDashaSubByMahadashaData, PostVedicAstrologyDashaSubByMahadashaErrors, PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDivisionalChartData, PostVedicAstrologyDivisionalChartErrors, PostVedicAstrologyDivisionalChartResponses, PostVedicAstrologyDoshaKalsarpaData, PostVedicAstrologyDoshaKalsarpaErrors, PostVedicAstrologyDoshaKalsarpaResponses, PostVedicAstrologyDoshaManglikData, PostVedicAstrologyDoshaManglikErrors, PostVedicAstrologyDoshaManglikResponses, PostVedicAstrologyDoshaSadhesatiData, PostVedicAstrologyDoshaSadhesatiErrors, PostVedicAstrologyDoshaSadhesatiResponses, PostVedicAstrologyEclipticCrossingsData, PostVedicAstrologyEclipticCrossingsErrors, PostVedicAstrologyEclipticCrossingsResponses, PostVedicAstrologyKpChartData, PostVedicAstrologyKpChartErrors, PostVedicAstrologyKpChartResponses, PostVedicAstrologyKpCuspsData, PostVedicAstrologyKpCuspsErrors, PostVedicAstrologyKpCuspsResponses, PostVedicAstrologyKpPlanetsData, PostVedicAstrologyKpPlanetsErrors, PostVedicAstrologyKpPlanetsIntervalData, PostVedicAstrologyKpPlanetsIntervalErrors, PostVedicAstrologyKpPlanetsIntervalResponses, PostVedicAstrologyKpPlanetsResponses, PostVedicAstrologyKpRasiChangesData, PostVedicAstrologyKpRasiChangesErrors, PostVedicAstrologyKpRasiChangesResponses, PostVedicAstrologyKpRulingPlanetsData, PostVedicAstrologyKpRulingPlanetsErrors, PostVedicAstrologyKpRulingPlanetsIntervalData, PostVedicAstrologyKpRulingPlanetsIntervalErrors, PostVedicAstrologyKpRulingPlanetsIntervalResponses, PostVedicAstrologyKpRulingPlanetsResponses, PostVedicAstrologyKpSublordChangesData, PostVedicAstrologyKpSublordChangesErrors, PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyNavamsaData, PostVedicAstrologyNavamsaErrors, PostVedicAstrologyNavamsaResponses, PostVedicAstrologyPanchangBasicData, PostVedicAstrologyPanchangBasicErrors, PostVedicAstrologyPanchangBasicResponses, PostVedicAstrologyPanchangChoghadiyaData, PostVedicAstrologyPanchangChoghadiyaErrors, PostVedicAstrologyPanchangChoghadiyaResponses, PostVedicAstrologyPanchangDetailedData, PostVedicAstrologyPanchangDetailedErrors, PostVedicAstrologyPanchangDetailedResponses, PostVedicAstrologyPanchangHoraData, PostVedicAstrologyPanchangHoraErrors, PostVedicAstrologyPanchangHoraResponses, PostVedicAstrologyParallelsData, PostVedicAstrologyParallelsErrors, PostVedicAstrologyParallelsMonthlyData, PostVedicAstrologyParallelsMonthlyErrors, PostVedicAstrologyParallelsMonthlyResponses, PostVedicAstrologyParallelsResponses, PostVedicAstrologyPlanetaryPositionsData, PostVedicAstrologyPlanetaryPositionsErrors, PostVedicAstrologyPlanetaryPositionsMonthlyData, PostVedicAstrologyPlanetaryPositionsMonthlyErrors, PostVedicAstrologyPlanetaryPositionsMonthlyResponses, PostVedicAstrologyPlanetaryPositionsResponses, PostVedicAstrologyShadbalaData, PostVedicAstrologyShadbalaErrors, PostVedicAstrologyShadbalaResponses, PostVedicAstrologyTransitData, PostVedicAstrologyTransitErrors, PostVedicAstrologyTransitMonthlyData, PostVedicAstrologyTransitMonthlyErrors, PostVedicAstrologyTransitMonthlyResponses, PostVedicAstrologyTransitResponses, PostVedicAstrologyUpagrahaData, PostVedicAstrologyUpagrahaErrors, PostVedicAstrologyUpagrahaResponses, PostVedicAstrologyYogaDetectData, PostVedicAstrologyYogaDetectErrors, PostVedicAstrologyYogaDetectResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -673,9 +673,9 @@ export class VedicAstrology extends HeyApiClient {
     }
     
     /**
-     * Get current Mahadasha, Antardasha, Pratyantardasha - Dasha Calculator API
+     * Get current Mahadasha, Antardasha, Pratyantardasha, Sookshma - Dasha Calculator API
      *
-     * Calculate current Vimshottari Dasha periods (Mahadasha, Antardasha, Pratyantardasha) with remaining time. Accurate dasha calculator API for life phase prediction and planetary period analysis. Returns dasha timeline with start/end dates for each period. Essential for understanding current planetary influences, dasha transitions, and timing events in Vedic astrology. 120-year dasha system based on moon nakshatra at birth.
+     * Calculate all four running Vimshottari Dasha levels (Mahadasha, Antardasha, Pratyantardasha, Sookshma) with remaining time in each. Accurate dasha calculator API for life phase prediction and planetary period analysis. Returns the dasha timeline with start/end dates for every level, ready for a current DBA readout. Essential for understanding current planetary influences, dasha transitions, and timing events in Vedic astrology. 120-year dasha system based on moon nakshatra at birth, with selectable Lahiri or KP ayanamsa.
      */
     public getCurrentDasha<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyDashaCurrentData, ThrowOnError>) {
         return (options?.client ?? this.client).post<PostVedicAstrologyDashaCurrentResponses, PostVedicAstrologyDashaCurrentErrors, ThrowOnError>({
@@ -715,6 +715,40 @@ export class VedicAstrology extends HeyApiClient {
         return (options.client ?? this.client).post<PostVedicAstrologyDashaSubByMahadashaResponses, PostVedicAstrologyDashaSubByMahadashaErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/vedic-astrology/dasha/sub/{mahadasha}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Get all Pratyantardashas (antara periods) for a Mahadasha and Antardasha
+     *
+     * Pratyantardasha calculator API. Returns the 9 Pratyantardasha (antara) periods inside a chosen Antardasha, the third level of the Vimshottari dasha hierarchy. Use it to drill from a Mahadasha into month level timing for event prediction, muhurta selection, and dasha timeline UIs. Each period is proportional to the Vimshottari years of its lord.
+     */
+    public getPratyantardashas<ThrowOnError extends boolean = false>(options: Options<PostVedicAstrologyDashaSubByMahadashaByAntardashaData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses, PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+    
+    /**
+     * Get all Sookshma dashas for a Mahadasha, Antardasha and Pratyantardasha
+     *
+     * Sookshma dasha API. Returns the 9 Sookshma periods inside a chosen Pratyantardasha, the fourth and finest level of the Vimshottari dasha hierarchy. Completes a full vimshottari drill down from the 120-year cycle to day level timing, typically 3 to 30 days per period. Built for dasha drill down tables, current DBA readouts, and precise event timing in Vedic astrology software.
+     */
+    public getSookshmaDashas<ThrowOnError extends boolean = false>(options: Options<PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaData, ThrowOnError>) {
+        return (options.client ?? this.client).post<PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses, PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}/{pratyantardasha}',
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -1274,6 +1308,291 @@ export class VedicAstrology extends HeyApiClient {
     }
 }
 
+export class Forecast extends HeyApiClient {
+    /**
+     * Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
+     *
+     * Build one time-ordered forecast for a single birth subject by merging upcoming events across three domains: western transit-to-natal aspects, sign ingresses, retrograde stations, eclipses, and new and full moons; biorhythm critical days; and vedic Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. The window is clamped to 90 days and events are capped and scored by significance. Built for what-is-coming dashboards, daily and weekly forecast feeds, and timing tools.
+     */
+    public generateTimeline<ThrowOnError extends boolean = false>(options?: Options<PostForecastTimelineData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostForecastTimelineResponses, PostForecastTimelineErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/forecast/timeline',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Western astrology forecast - aspects, ingresses, stations, eclipses, moon phases
+     *
+     * Forecast the western astrology events for a single birth chart over a window up to 90 days: every transit-to-natal major aspect refined to its exact instant, every transiting planet sign ingress, every retrograde or direct station, every solar and lunar eclipse, and every New and Full Moon. Returns a time-ordered, significance-scored timeline. Built for astrology forecast feeds, transit alerts, and timing tools.
+     */
+    public forecastTransits<ThrowOnError extends boolean = false>(options?: Options<PostForecastTransitsData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostForecastTransitsResponses, PostForecastTransitsErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/forecast/transits',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Significant dates - High-significance cross-domain forecast highlights
+     *
+     * Return only the high-significance dates from the merged cross-domain forecast for a single birth subject: the rare outer-planet exact transit aspects, slow-planet sign ingresses, retrograde stations, and Vimshottari mahadasha and antardasha changes that mark genuine turning points. Defaults to a significance floor of 70 so the response is a short list of the most meaningful upcoming dates. Built for what-is-coming highlights, timing alerts, and at-a-glance forecast strips.
+     */
+    public findSignificantDates<ThrowOnError extends boolean = false>(options?: Options<PostForecastSignificantDatesData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostForecastSignificantDatesResponses, PostForecastSignificantDatesErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/forecast/significant-dates',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Forecast digest - Pre-summarized next 24h, 7d, 30d, and 90d rollups
+     *
+     * Roll the cross-domain forecast for a single birth subject into four pre-summarized windows: the next 24 hours, 7 days, 30 days, and 90 days from the start date. Each window returns its event count, a per-domain count breakdown, a per-type count breakdown, and the top highest-significance events. Built for a glanceable what-is-coming strip so a caller can render the upcoming highlights without scanning the full event list.
+     */
+    public generateDigest<ThrowOnError extends boolean = false>(options?: Options<PostForecastDigestData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostForecastDigestResponses, PostForecastDigestErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/forecast/digest',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Solar return chart - Annual birthday forecast chart for a single subject
+     *
+     * Cast the solar return chart for one subject and year: the chart erected for the exact moment the transiting Sun returns to its natal ecliptic longitude, the foundational technique for annual astrological forecasting. Returns the full tropical chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Location-sensitive: pass the birthplace to anchor the chart to natal geography, or the current city for a relocated solar return where the houses and Ascendant shift to where you are on your birthday. Built for year-ahead forecast tools, birthday charts, and annual horoscope features.
+     */
+    public forecastSolarReturn<ThrowOnError extends boolean = false>(options?: Options<PostForecastSolarReturnData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostForecastSolarReturnResponses, PostForecastSolarReturnErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/forecast/solar-return',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+}
+
+export class HumanDesign extends HeyApiClient {
+    /**
+     * Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
+     *
+     * Generate a complete Human Design bodygraph from a birth date, time, and timezone. Returns the energy type, strategy, inner authority, signature, not-self theme, profile, definition, incarnation cross, all nine centers with defined state and active gates, the defined channels, and all 26 planetary activations across the Personality and Design sides. The single endpoint for a full chart in one call, built for Human Design apps, readings, and coaching tools.
+     */
+    public generateBodygraph<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignBodygraphData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignBodygraphResponses, PostHumanDesignBodygraphErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/bodygraph',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Calculate Human Design connection chart - Two-person composite bodygraph compatibility
+     *
+     * Calculate a Human Design connection chart by overlaying two bodygraphs. For each of the 36 channels the dynamic between the two people is classified as electromagnetic, dominance, compromise, or companionship, the four mechanics of how two designs meet. Also returns the nine centers as defined or open in the combined bodygraph with which person defines each, the combined definition, and a count of each dynamic. Built for relationship, dating, and coaching tools.
+     */
+    public calculateConnection<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignConnectionData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignConnectionResponses, PostHumanDesignConnectionErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/connection',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Calculate Human Design Penta - Small-group BG5 operating system for three to five people
+     *
+     * Calculate the Human Design Penta (BG5, Base Group 5) for a small group of three to five people. The Penta is a trans-auric form built from a fixed set of six channels running only between the Sacral, the G Center, and the Throat. It reports which of the twelve Penta gates are filled and by whom, which of the six channels are defined Strengths, the upper leadership channels versus the lower generative channels, the 2/14 material core, and the functional gaps where no member supplies a role. Built for team, family, and group analysis tools. Below three people no Penta forms and above five a second Penta emerges, so the group size must be three to five.
+     */
+    public calculatePenta<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignPentaData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignPentaResponses, PostHumanDesignPentaErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/penta',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Generate Human Design transit overlay - Current planetary activations on a natal bodygraph
+     *
+     * Overlay the current or any given planetary positions on a natal Human Design bodygraph to see which channels the transit temporarily completes. Returns the 13 transiting body activations with gate and line, the channels the transit completes beyond the natal definition split into personal channels where the transit supplies the partner gate of a natal gate and educational channels where the transit supplies both gates, the natally open centers those channels temporarily define, and a short factual summary. A transit is a single moment, so there is no Design side. When date and time are omitted the overlay is computed for now in UTC. Built for daily Human Design apps, transit widgets, and notification tools.
+     */
+    public generateTransit<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignTransitData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignTransitResponses, PostHumanDesignTransitErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/transit',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Calculate Human Design type, authority and profile
+     *
+     * Calculate the core Human Design identity from a birth moment: the energy type, the aura strategy, the inner authority, the signature and not-self themes, and the profile. The fast lookup for type-and-authority features without the full bodygraph payload. Verified against NASA JPL Horizons positions.
+     */
+    public calculateType<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignTypeData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignTypeResponses, PostHumanDesignTypeErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/type',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Calculate the 26 Human Design gate activations
+     *
+     * Calculate the 26 gate activations for a birth moment, split into the 13 conscious Personality activations at birth and the 13 unconscious Design activations 88 degrees of solar arc earlier. Each activation reports the planet, gate, line, gate keynote, and the matching I-Ching hexagram. Built for activation columns and detailed chart views.
+     */
+    public calculateGates<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignGatesData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignGatesResponses, PostHumanDesignGatesErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/gates',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Look up a Human Design gate by number
+     *
+     * Look up the static reference data for a Human Design gate by its number from 1 to 64: the gate keynote name, the center it sits in, the matching I-Ching hexagram, and the gates that form a channel with it. A pure reference endpoint with no birth data required.
+     */
+    public getGate<ThrowOnError extends boolean = false>(options: Options<GetHumanDesignGatesByNumberData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetHumanDesignGatesByNumberResponses, GetHumanDesignGatesByNumberErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/gates/{number}',
+            ...options
+        });
+    }
+    
+    /**
+     * Calculate the defined Human Design channels
+     *
+     * Calculate the defined channels for a birth moment. A channel is defined when both of its gates are activated, and it wires together the two centers it connects. Returns each defined channel with its gates, name, circuit family, and connected centers, plus the full set of centers those channels define. Built for bodygraph rendering and definition analysis.
+     */
+    public calculateChannels<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignChannelsData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignChannelsResponses, PostHumanDesignChannelsErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/channels',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Calculate the nine Human Design centers
+     *
+     * Calculate the state of all nine Human Design centers for a birth moment: whether each is defined or open, whether it is a motor or an awareness center, its theme, and the active gates it holds. The data layer behind a rendered bodygraph where defined centers are colored and open centers are white.
+     */
+    public calculateCenters<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignCentersData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignCentersResponses, PostHumanDesignCentersErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/centers',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Look up a Human Design center by id
+     *
+     * Look up the static reference data for one of the nine Human Design centers by its id: the display name, whether it is a motor or awareness center, and what it means both defined and undefined. A pure reference endpoint with no birth data required.
+     */
+    public getCenter<ThrowOnError extends boolean = false>(options: Options<GetHumanDesignCentersByIdData, ThrowOnError>) {
+        return (options.client ?? this.client).get<GetHumanDesignCentersByIdResponses, GetHumanDesignCentersByIdErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/centers/{id}',
+            ...options
+        });
+    }
+    
+    /**
+     * Calculate the Human Design profile and line keynotes
+     *
+     * Calculate the Human Design profile for a birth moment: the conscious Personality Sun line over the unconscious Design Sun line, with the keynote for each. The profile is the geometry of the life role, for example 5/1 the Heretic Investigator. Verified against NASA JPL Horizons positions.
+     */
+    public calculateProfile<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignProfileData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignProfileResponses, PostHumanDesignProfileErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/profile',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+    
+    /**
+     * Calculate Human Design Variables - The four arrows and Color, Tone, Base substructure
+     *
+     * Calculate the four Human Design Variable arrows for a birth moment: Determination and Environment on the design side, Perspective and Motivation on the personality side. Each arrow returns its Color, Tone, and Base numbers from the hexagram-line substructure, the left or right direction set by the Tone, and the sourced Color and direction labels. This is the advanced Rave Variables and Primary Health System layer beneath Type, Strategy, Authority, and Profile. Color, Tone, and Base shift with tiny differences in birth time, so each arrow carries a confidence flag that turns false near a Color or Tone boundary, and a precise birth time is essential. Built for Human Design apps offering PHS, diet, environment, and Rave Psychology readings.
+     */
+    public calculateVariables<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignVariablesData, ThrowOnError>) {
+        return (options?.client ?? this.client).post<PostHumanDesignVariablesResponses, PostHumanDesignVariablesErrors, ThrowOnError>({
+            security: [{ name: 'X-API-Key', type: 'apiKey' }],
+            url: '/human-design/variables',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options?.headers
+            }
+        });
+    }
+}
+
 export class Numerology extends HeyApiClient {
     /**
      * Calculate Life Path number - Most important numerology calculation
@@ -1767,291 +2086,6 @@ export class Tarot extends HeyApiClient {
             headers: {
                 'Content-Type': 'application/json',
                 ...options.headers
-            }
-        });
-    }
-}
-
-export class HumanDesign extends HeyApiClient {
-    /**
-     * Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
-     *
-     * Generate a complete Human Design bodygraph from a birth date, time, and timezone. Returns the energy type, strategy, inner authority, signature, not-self theme, profile, definition, incarnation cross, all nine centers with defined state and active gates, the defined channels, and all 26 planetary activations across the Personality and Design sides. The single endpoint for a full chart in one call, built for Human Design apps, readings, and coaching tools.
-     */
-    public generateBodygraph<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignBodygraphData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignBodygraphResponses, PostHumanDesignBodygraphErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/bodygraph',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Calculate Human Design connection chart - Two-person composite bodygraph compatibility
-     *
-     * Calculate a Human Design connection chart by overlaying two bodygraphs. For each of the 36 channels the dynamic between the two people is classified as electromagnetic, dominance, compromise, or companionship, the four mechanics of how two designs meet. Also returns the nine centers as defined or open in the combined bodygraph with which person defines each, the combined definition, and a count of each dynamic. Built for relationship, dating, and coaching tools.
-     */
-    public calculateConnection<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignConnectionData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignConnectionResponses, PostHumanDesignConnectionErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/connection',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Calculate Human Design Penta - Small-group BG5 operating system for three to five people
-     *
-     * Calculate the Human Design Penta (BG5, Base Group 5) for a small group of three to five people. The Penta is a trans-auric form built from a fixed set of six channels running only between the Sacral, the G Center, and the Throat. It reports which of the twelve Penta gates are filled and by whom, which of the six channels are defined Strengths, the upper leadership channels versus the lower generative channels, the 2/14 material core, and the functional gaps where no member supplies a role. Built for team, family, and group analysis tools. Below three people no Penta forms and above five a second Penta emerges, so the group size must be three to five.
-     */
-    public calculatePenta<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignPentaData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignPentaResponses, PostHumanDesignPentaErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/penta',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Generate Human Design transit overlay - Current planetary activations on a natal bodygraph
-     *
-     * Overlay the current or any given planetary positions on a natal Human Design bodygraph to see which channels the transit temporarily completes. Returns the 13 transiting body activations with gate and line, the channels the transit completes beyond the natal definition split into personal channels where the transit supplies the partner gate of a natal gate and educational channels where the transit supplies both gates, the natally open centers those channels temporarily define, and a short factual summary. A transit is a single moment, so there is no Design side. When date and time are omitted the overlay is computed for now in UTC. Built for daily Human Design apps, transit widgets, and notification tools.
-     */
-    public generateTransit<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignTransitData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignTransitResponses, PostHumanDesignTransitErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/transit',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Calculate Human Design type, authority and profile
-     *
-     * Calculate the core Human Design identity from a birth moment: the energy type, the aura strategy, the inner authority, the signature and not-self themes, and the profile. The fast lookup for type-and-authority features without the full bodygraph payload. Verified against NASA JPL Horizons positions.
-     */
-    public calculateType<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignTypeData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignTypeResponses, PostHumanDesignTypeErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/type',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Calculate the 26 Human Design gate activations
-     *
-     * Calculate the 26 gate activations for a birth moment, split into the 13 conscious Personality activations at birth and the 13 unconscious Design activations 88 degrees of solar arc earlier. Each activation reports the planet, gate, line, gate keynote, and the matching I-Ching hexagram. Built for activation columns and detailed chart views.
-     */
-    public calculateGates<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignGatesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignGatesResponses, PostHumanDesignGatesErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/gates',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Look up a Human Design gate by number
-     *
-     * Look up the static reference data for a Human Design gate by its number from 1 to 64: the gate keynote name, the center it sits in, the matching I-Ching hexagram, and the gates that form a channel with it. A pure reference endpoint with no birth data required.
-     */
-    public getGate<ThrowOnError extends boolean = false>(options: Options<GetHumanDesignGatesByNumberData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetHumanDesignGatesByNumberResponses, GetHumanDesignGatesByNumberErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/gates/{number}',
-            ...options
-        });
-    }
-    
-    /**
-     * Calculate the defined Human Design channels
-     *
-     * Calculate the defined channels for a birth moment. A channel is defined when both of its gates are activated, and it wires together the two centers it connects. Returns each defined channel with its gates, name, circuit family, and connected centers, plus the full set of centers those channels define. Built for bodygraph rendering and definition analysis.
-     */
-    public calculateChannels<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignChannelsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignChannelsResponses, PostHumanDesignChannelsErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/channels',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Calculate the nine Human Design centers
-     *
-     * Calculate the state of all nine Human Design centers for a birth moment: whether each is defined or open, whether it is a motor or an awareness center, its theme, and the active gates it holds. The data layer behind a rendered bodygraph where defined centers are colored and open centers are white.
-     */
-    public calculateCenters<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignCentersData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignCentersResponses, PostHumanDesignCentersErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/centers',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Look up a Human Design center by id
-     *
-     * Look up the static reference data for one of the nine Human Design centers by its id: the display name, whether it is a motor or awareness center, and what it means both defined and undefined. A pure reference endpoint with no birth data required.
-     */
-    public getCenter<ThrowOnError extends boolean = false>(options: Options<GetHumanDesignCentersByIdData, ThrowOnError>) {
-        return (options.client ?? this.client).get<GetHumanDesignCentersByIdResponses, GetHumanDesignCentersByIdErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/centers/{id}',
-            ...options
-        });
-    }
-    
-    /**
-     * Calculate the Human Design profile and line keynotes
-     *
-     * Calculate the Human Design profile for a birth moment: the conscious Personality Sun line over the unconscious Design Sun line, with the keynote for each. The profile is the geometry of the life role, for example 5/1 the Heretic Investigator. Verified against NASA JPL Horizons positions.
-     */
-    public calculateProfile<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignProfileData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignProfileResponses, PostHumanDesignProfileErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/profile',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Calculate Human Design Variables - The four arrows and Color, Tone, Base substructure
-     *
-     * Calculate the four Human Design Variable arrows for a birth moment: Determination and Environment on the design side, Perspective and Motivation on the personality side. Each arrow returns its Color, Tone, and Base numbers from the hexagram-line substructure, the left or right direction set by the Tone, and the sourced Color and direction labels. This is the advanced Rave Variables and Primary Health System layer beneath Type, Strategy, Authority, and Profile. Color, Tone, and Base shift with tiny differences in birth time, so each arrow carries a confidence flag that turns false near a Color or Tone boundary, and a precise birth time is essential. Built for Human Design apps offering PHS, diet, environment, and Rave Psychology readings.
-     */
-    public calculateVariables<ThrowOnError extends boolean = false>(options?: Options<PostHumanDesignVariablesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostHumanDesignVariablesResponses, PostHumanDesignVariablesErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/human-design/variables',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-}
-
-export class Forecast extends HeyApiClient {
-    /**
-     * Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
-     *
-     * Build one time-ordered forecast for a single birth subject by merging upcoming events across three domains: western transit-to-natal aspects, sign ingresses, retrograde stations, eclipses, and new and full moons; biorhythm critical days; and vedic Vimshottari mahadasha, antardasha, and pratyantardasha boundaries. The window is clamped to 90 days and events are capped and scored by significance. Built for what-is-coming dashboards, daily and weekly forecast feeds, and timing tools.
-     */
-    public generateTimeline<ThrowOnError extends boolean = false>(options?: Options<PostForecastTimelineData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostForecastTimelineResponses, PostForecastTimelineErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/forecast/timeline',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Western astrology forecast - aspects, ingresses, stations, eclipses, moon phases
-     *
-     * Forecast the western astrology events for a single birth chart over a window up to 90 days: every transit-to-natal major aspect refined to its exact instant, every transiting planet sign ingress, every retrograde or direct station, every solar and lunar eclipse, and every New and Full Moon. Returns a time-ordered, significance-scored timeline. Built for astrology forecast feeds, transit alerts, and timing tools.
-     */
-    public forecastTransits<ThrowOnError extends boolean = false>(options?: Options<PostForecastTransitsData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostForecastTransitsResponses, PostForecastTransitsErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/forecast/transits',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Significant dates - High-significance cross-domain forecast highlights
-     *
-     * Return only the high-significance dates from the merged cross-domain forecast for a single birth subject: the rare outer-planet exact transit aspects, slow-planet sign ingresses, retrograde stations, and Vimshottari mahadasha and antardasha changes that mark genuine turning points. Defaults to a significance floor of 70 so the response is a short list of the most meaningful upcoming dates. Built for what-is-coming highlights, timing alerts, and at-a-glance forecast strips.
-     */
-    public findSignificantDates<ThrowOnError extends boolean = false>(options?: Options<PostForecastSignificantDatesData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostForecastSignificantDatesResponses, PostForecastSignificantDatesErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/forecast/significant-dates',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Forecast digest - Pre-summarized next 24h, 7d, 30d, and 90d rollups
-     *
-     * Roll the cross-domain forecast for a single birth subject into four pre-summarized windows: the next 24 hours, 7 days, 30 days, and 90 days from the start date. Each window returns its event count, a per-domain count breakdown, a per-type count breakdown, and the top highest-significance events. Built for a glanceable what-is-coming strip so a caller can render the upcoming highlights without scanning the full event list.
-     */
-    public generateDigest<ThrowOnError extends boolean = false>(options?: Options<PostForecastDigestData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostForecastDigestResponses, PostForecastDigestErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/forecast/digest',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
-            }
-        });
-    }
-    
-    /**
-     * Solar return chart - Annual birthday forecast chart for a single subject
-     *
-     * Cast the solar return chart for one subject and year: the chart erected for the exact moment the transiting Sun returns to its natal ecliptic longitude, the foundational technique for annual astrological forecasting. Returns the full tropical chart with planetary positions, house cusps, aspects, Ascendant, and Midheaven. Location-sensitive: pass the birthplace to anchor the chart to natal geography, or the current city for a relocated solar return where the houses and Ascendant shift to where you are on your birthday. Built for year-ahead forecast tools, birthday charts, and annual horoscope features.
-     */
-    public forecastSolarReturn<ThrowOnError extends boolean = false>(options?: Options<PostForecastSolarReturnData, ThrowOnError>) {
-        return (options?.client ?? this.client).post<PostForecastSolarReturnResponses, PostForecastSolarReturnErrors, ThrowOnError>({
-            security: [{ name: 'X-API-Key', type: 'apiKey' }],
-            url: '/forecast/solar-return',
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options?.headers
             }
         });
     }
@@ -2671,6 +2705,16 @@ export class Roxy extends HeyApiClient {
         return this._vedicAstrology ??= new VedicAstrology({ client: this.client });
     }
     
+    private _forecast?: Forecast;
+    get forecast(): Forecast {
+        return this._forecast ??= new Forecast({ client: this.client });
+    }
+    
+    private _humanDesign?: HumanDesign;
+    get humanDesign(): HumanDesign {
+        return this._humanDesign ??= new HumanDesign({ client: this.client });
+    }
+    
     private _numerology?: Numerology;
     get numerology(): Numerology {
         return this._numerology ??= new Numerology({ client: this.client });
@@ -2679,16 +2723,6 @@ export class Roxy extends HeyApiClient {
     private _tarot?: Tarot;
     get tarot(): Tarot {
         return this._tarot ??= new Tarot({ client: this.client });
-    }
-    
-    private _humanDesign?: HumanDesign;
-    get humanDesign(): HumanDesign {
-        return this._humanDesign ??= new HumanDesign({ client: this.client });
-    }
-    
-    private _forecast?: Forecast;
-    get forecast(): Forecast {
-        return this._forecast ??= new Forecast({ client: this.client });
     }
     
     private _biorhythm?: Biorhythm;
