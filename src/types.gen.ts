@@ -7304,6 +7304,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthResponses = {
          */
         month: number;
         /**
+         * Month name, localized to the requested language. Saves the caller a lookup table when labelling a calendar heading, since the numeric month alone cannot be rendered without one.
+         */
+        monthName: string;
+        /**
          * Daily moon phase and illumination for every day of the month.
          */
         calendar: Array<{
@@ -7504,7 +7508,7 @@ export type PostAstrologySynastryResponses = {
      */
     200: {
         /**
-         * Person 1 chart highlights: Ascendant, Sun sign, and Moon sign.
+         * Person 1 chart highlights: Ascendant, Sun sign, Moon sign, and plotting positions.
          */
         person1: {
             /**
@@ -7532,9 +7536,38 @@ export type PostAstrologySynastryResponses = {
              * Moon sign of this person. Emotional nature and inner needs.
              */
             moonSign: string;
+            /**
+             * Planet positions for person 1, enough to render this side of a dual wheel without a second request. Per-planet interpretations are not repeated here; call the natal chart endpoint for an individual reading.
+             */
+            planets: Array<{
+                /**
+                 * Planet or point name. Matches the names used in interAspects.
+                 */
+                name: string;
+                /**
+                 * Ecliptic longitude in degrees (0-360) measured from 0 Aries. This is the value a wheel plots.
+                 */
+                longitude: number;
+                /**
+                 * Zodiac sign containing the planet.
+                 */
+                sign: string;
+                /**
+                 * Degree within the sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * House this planet occupies in the person 1 chart (1-12).
+                 */
+                house: number;
+                /**
+                 * True when the planet is retrograde at this moment.
+                 */
+                isRetrograde: boolean;
+            }>;
         };
         /**
-         * Person 2 chart highlights: Ascendant, Sun sign, and Moon sign.
+         * Person 2 chart highlights: Ascendant, Sun sign, Moon sign, and plotting positions.
          */
         person2: {
             /**
@@ -7542,7 +7575,7 @@ export type PostAstrologySynastryResponses = {
              */
             name?: string;
             /**
-             * Ascendant position for person 2.
+             * Ascendant position for person 2. Determines first house cusp and outward personality.
              */
             ascendant: {
                 /**
@@ -7555,13 +7588,42 @@ export type PostAstrologySynastryResponses = {
                 degree: number;
             };
             /**
-             * Sun sign of this person.
+             * Sun sign (zodiac sign) of this person. Core identity and ego expression.
              */
             sunSign: string;
             /**
-             * Moon sign of this person.
+             * Moon sign of this person. Emotional nature and inner needs.
              */
             moonSign: string;
+            /**
+             * Planet positions for person 2, enough to render this side of a dual wheel without a second request. Per-planet interpretations are not repeated here; call the natal chart endpoint for an individual reading.
+             */
+            planets: Array<{
+                /**
+                 * Planet or point name. Matches the names used in interAspects.
+                 */
+                name: string;
+                /**
+                 * Ecliptic longitude in degrees (0-360) measured from 0 Aries. This is the value a wheel plots.
+                 */
+                longitude: number;
+                /**
+                 * Zodiac sign containing the planet.
+                 */
+                sign: string;
+                /**
+                 * Degree within the sign (0-29.999).
+                 */
+                degree: number;
+                /**
+                 * House this planet occupies in the person 2 chart (1-12).
+                 */
+                house: number;
+                /**
+                 * True when the planet is retrograde at this moment.
+                 */
+                isRetrograde: boolean;
+            }>;
         };
         /**
          * Overall compatibility score (0-100). Calculated from the balance of harmonious vs challenging inter-chart aspects weighted by planet importance.
@@ -10805,6 +10867,10 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
          * Monthly financial outlook and guidance.
          */
         finance: string;
+        /**
+         * Actionable guidance for the month as a whole, derived from the Mercury house activation for this sign. Distinct from the per-week advice inside weekByWeek: this is the single takeaway for the month.
+         */
+        advice: string;
         /**
          * Week-by-week breakdown with sign-specific focus areas based on transit house positions.
          */
@@ -15019,7 +15085,7 @@ export type PostVedicAstrologyPanchangDetailedData = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Used for sunrise/sunset/moonrise/moonset search accuracy and output time formatting. Essential for correct results outside IST. Defaults to 5.5 (IST).
+         * Timezone offset from UTC in decimal hours, for example -5 for New York or 9 for Tokyo. Send the offset that matches the coordinates: sunrise, sunset and every muhurta boundary are found by searching forward from local midnight, so the default anchors the search to an Indian day. Omitting it for a location outside IST returns a correctly ordered set of periods for the wrong window, shifted by the difference between 5.5 and the real offset. Defaults to 5.5 (IST).
          */
         timezone?: number | string;
     };
