@@ -446,7 +446,7 @@ const { data } = await roxy.vedicAstrology.getMonthlyEphemeris({
   body: { year: 2026, month: 2, coordinateSystem: 'sidereal' },
 });
 
-// Get current Mahadasha, Antardasha, Pratyantardasha, Sookshma - Dasha Calculator API
+// Get current Mahadasha, Antardasha, Pratyantardasha, Sookshma, Prana - Dasha Calculator API
 const { data } = await roxy.vedicAstrology.getCurrentDasha({
   body: {
     date: '1990-07-04',
@@ -455,6 +455,8 @@ const { data } = await roxy.vedicAstrology.getCurrentDasha({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    significators: false,
+    nodeType: 'mean',
   },
 });
 
@@ -467,6 +469,8 @@ const { data } = await roxy.vedicAstrology.getMajorDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    significators: false,
+    nodeType: 'mean',
   },
 });
 
@@ -480,6 +484,8 @@ const { data } = await roxy.vedicAstrology.getSubDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    significators: false,
+    nodeType: 'mean',
   },
 });
 
@@ -493,6 +499,8 @@ const { data } = await roxy.vedicAstrology.getPratyantardashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    significators: false,
+    nodeType: 'mean',
   },
 });
 
@@ -510,6 +518,28 @@ const { data } = await roxy.vedicAstrology.getSookshmaDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    significators: false,
+    nodeType: 'mean',
+  },
+});
+
+// Get all Prana dashas for a Mahadasha, Antardasha, Pratyantardasha and Sookshma
+const { data } = await roxy.vedicAstrology.getPranaDashas({
+  path: {
+    mahadasha: 'Saturn',
+    antardasha: 'Venus',
+    pratyantardasha: 'Rahu',
+    sookshma: 'Jupiter',
+  },
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'lahiri',
+    significators: false,
+    nodeType: 'mean',
   },
 });
 

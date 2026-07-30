@@ -4436,19 +4436,19 @@ export type KpRulingPlanetsIntervalResponse = {
          */
         moonSignLordSignifies: {
             /**
-             * Level 1 (strongest signification). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes L1 houses from agent planets (conjoined, aspecting, sign lord).
+             * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
              */
             L1: Array<number>;
             /**
-             * Level 2. The house this planet physically occupies in the chart. For Rahu and Ketu, also includes houses occupied by agent planets (conjoined, aspecting, sign lord).
+             * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
              */
             L2: Array<number>;
             /**
-             * Level 3. Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes L3 houses from agent planets.
+             * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
              */
             L3: Array<number>;
             /**
-             * Level 4 (weakest signification). Houses this planet rules by zodiac sign ownership. For Sun through Saturn, can be up to 2 houses. For Rahu and Ketu, includes houses owned by agent planets (conjoined, aspecting, sign lord).
+             * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
              */
             L4: Array<number>;
         };
@@ -4457,19 +4457,19 @@ export type KpRulingPlanetsIntervalResponse = {
          */
         moonStarLordSignifies: {
             /**
-             * Level 1 (strongest signification). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes L1 houses from agent planets (conjoined, aspecting, sign lord).
+             * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
              */
             L1: Array<number>;
             /**
-             * Level 2. The house this planet physically occupies in the chart. For Rahu and Ketu, also includes houses occupied by agent planets (conjoined, aspecting, sign lord).
+             * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
              */
             L2: Array<number>;
             /**
-             * Level 3. Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes L3 houses from agent planets.
+             * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
              */
             L3: Array<number>;
             /**
-             * Level 4 (weakest signification). Houses this planet rules by zodiac sign ownership. For Sun through Saturn, can be up to 2 houses. For Rahu and Ketu, includes houses owned by agent planets (conjoined, aspecting, sign lord).
+             * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
              */
             L4: Array<number>;
         };
@@ -4478,19 +4478,19 @@ export type KpRulingPlanetsIntervalResponse = {
          */
         moonSublordSignifies: {
             /**
-             * Level 1 (strongest signification). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes L1 houses from agent planets (conjoined, aspecting, sign lord).
+             * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
              */
             L1: Array<number>;
             /**
-             * Level 2. The house this planet physically occupies in the chart. For Rahu and Ketu, also includes houses occupied by agent planets (conjoined, aspecting, sign lord).
+             * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
              */
             L2: Array<number>;
             /**
-             * Level 3. Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes L3 houses from agent planets.
+             * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
              */
             L3: Array<number>;
             /**
-             * Level 4 (weakest signification). Houses this planet rules by zodiac sign ownership. For Sun through Saturn, can be up to 2 houses. For Rahu and Ketu, includes houses owned by agent planets (conjoined, aspecting, sign lord).
+             * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
              */
             L4: Array<number>;
         };
@@ -4499,19 +4499,19 @@ export type KpRulingPlanetsIntervalResponse = {
          */
         moonSignifies: {
             /**
-             * Level 1 (strongest signification). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes L1 houses from agent planets (conjoined, aspecting, sign lord).
+             * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
              */
             L1: Array<number>;
             /**
-             * Level 2. The house this planet physically occupies in the chart. For Rahu and Ketu, also includes houses occupied by agent planets (conjoined, aspecting, sign lord).
+             * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
              */
             L2: Array<number>;
             /**
-             * Level 3. Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes L3 houses from agent planets.
+             * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
              */
             L3: Array<number>;
             /**
-             * Level 4 (weakest signification). Houses this planet rules by zodiac sign ownership. For Sun through Saturn, can be up to 2 houses. For Rahu and Ketu, includes houses owned by agent planets (conjoined, aspecting, sign lord).
+             * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
              */
             L4: Array<number>;
         };
@@ -13459,6 +13459,14 @@ export type PostVedicAstrologyDashaCurrentData = {
          * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
         ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
+         */
+        significators?: boolean;
+        /**
+         * Lunar node type for Rahu and Ketu, used ONLY when "significators" is true. Dasha dates themselves come from the Moon and never move with this field. "mean" uses the smooth mean node (traditional default). "true" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -13576,9 +13584,15 @@ export type PostVedicAstrologyDashaCurrentError = PostVedicAstrologyDashaCurrent
 
 export type PostVedicAstrologyDashaCurrentResponses = {
     /**
-     * Currently active Mahadasha, Antardasha, Pratyantardasha, and Sookshma dasha with start/end dates, remaining balance, Moon nakshatra, and Vedic interpretations for each period.
+     * Currently active Mahadasha, Antardasha, Pratyantardasha, Sookshma and Prana dasha with start/end dates, remaining balance, Moon nakshatra, and Vedic interpretations for each period.
      */
     200: {
+        /**
+         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         */
+        houseThemes?: {
+            [key: string]: Array<string>;
+        };
         /**
          * Birth Moon nakshatra number (1-27). This nakshatra determines the starting dasha lord in the Vimshottari 120-year cycle.
          */
@@ -13631,6 +13645,69 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
         };
         /**
          * Antardasha (bhukti), sub-period within a Mahadasha. Each Mahadasha contains 9 Antardashas proportional to the Vimshottari years of each planet.
@@ -13660,6 +13737,69 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
             /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
@@ -13694,6 +13834,69 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              */
             interpretation?: string;
             /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
             mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -13703,7 +13906,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
             antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
         };
         /**
-         * Sookshma dasha (sookshma antardasha), the fourth level of the Vimshottari dasha hierarchy. Each Pratyantardasha divides into 9 Sookshma periods running roughly 3 to 30 days each, the finest level exposed by this API and the one used for day-level event timing and muhurta style selection.
+         * Sookshma dasha (sookshma antardasha), the fourth level of the Vimshottari dasha hierarchy. Each Pratyantardasha divides into 9 Sookshma periods running roughly 3 to 30 days each, used for day-level event timing and muhurta style selection.
          */
         sookshmaDasha: {
             /**
@@ -13731,6 +13934,69 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              */
             interpretation?: string;
             /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
             mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -13742,6 +14008,127 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              * Parent Pratyantardasha lord under which this Sookshma dasha runs.
              */
             pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * Prana dasha (praana antardasha), the fifth and finest level of the Vimshottari dasha hierarchy. Each Sookshma dasha divides into 9 Prana periods, running from about 20 minutes inside a Sun Mahadasha to about 4 days inside a Saturn one. This is the level that takes Vimshottari from day-level to hour-level timing, used for muhurta selection and pinpointing the trigger inside an already identified window.
+         */
+        pranaDasha: {
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Pratyantardasha lord under which this Sookshma dasha runs.
+             */
+            pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Sookshma dasha lord under which this Prana dasha runs.
+             */
+            sookshmaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * Houses common to the significators of the running dasha lords. In KP a matter fructifies under lords that jointly signify the houses of that matter, so these two sets are what a prediction is checked against.
+         */
+        commonHouses?: {
+            /**
+             * Houses signified by ALL FIVE running lords at once (Mahadasha through Prana). The tightest reading available: a house every active level carries is the one the current moment is pointed at. Often empty, which is itself informative, it means the five levels do not converge on a single house.
+             */
+            allLevels: Array<number>;
+            /**
+             * Houses signified by the Mahadasha, Antardasha and Pratyantardasha lords together, the classical KP three-lord test used to decide whether a matter fructifies in the running period. Wider than allLevels because it ignores the two fastest levels, which is what makes it the practical filter for month-scale predictions.
+             */
+            dashaBhuktiAntara: Array<number>;
         };
         /**
          * Time remaining in the currently running Mahadasha (major period).
@@ -13827,6 +14214,27 @@ export type PostVedicAstrologyDashaCurrentResponses = {
              */
             totalDays: number;
         };
+        /**
+         * Time remaining in the currently running Prana dasha (fifth level). Prana periods run hours to days, so totalDays is often 0 or 1 and the years and months fields are almost always zero.
+         */
+        remainingInPrana: {
+            /**
+             * Full years remaining in this Vimshottari dasha period.
+             */
+            years: number;
+            /**
+             * Additional months remaining beyond full years.
+             */
+            months: number;
+            /**
+             * Additional days remaining beyond full months.
+             */
+            days: number;
+            /**
+             * Total remaining days in this dasha period. Useful for progress calculations.
+             */
+            totalDays: number;
+        };
     };
 };
 
@@ -13858,6 +14266,14 @@ export type PostVedicAstrologyDashaMajorData = {
          * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
         ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
+         */
+        significators?: boolean;
+        /**
+         * Lunar node type for Rahu and Ketu, used ONLY when "significators" is true. Dasha dates themselves come from the Moon and never move with this field. "mean" uses the smooth mean node (traditional default). "true" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -13979,6 +14395,12 @@ export type PostVedicAstrologyDashaMajorResponses = {
      */
     200: {
         /**
+         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         */
+        houseThemes?: {
+            [key: string]: Array<string>;
+        };
+        /**
          * Birth Moon nakshatra number (1-27) that determines the Vimshottari starting point.
          */
         moonNakshatra: number;
@@ -14051,6 +14473,69 @@ export type PostVedicAstrologyDashaMajorResponses = {
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
         }>;
         /**
          * Total Vimshottari cycle length in years (always 120).
@@ -14087,6 +14572,14 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
         ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
+         */
+        significators?: boolean;
+        /**
+         * Lunar node type for Rahu and Ketu, used ONLY when "significators" is true. Dasha dates themselves come from the Moon and never move with this field. "mean" uses the smooth mean node (traditional default). "true" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path: {
         /**
@@ -14213,6 +14706,12 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
      */
     200: {
         /**
+         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         */
+        houseThemes?: {
+            [key: string]: Array<string>;
+        };
+        /**
          * Ruling planet of the requested Mahadasha period.
          */
         mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -14256,6 +14755,69 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
         };
         /**
          * Antardasha (bhukti) sub-periods within this Mahadasha, proportional to each planet Vimshottari years, sorted chronologically. Nine for any Mahadasha the native lived through in full. FEWER than nine for the first Mahadasha in the chart, because the Vimshottari cycle was already running at birth: the Antardashas that ended before the birth date are not part of the chart, and the one in force at birth starts on the birth date.
@@ -14285,6 +14847,69 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
             /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
@@ -14321,6 +14946,14 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaData = {
          * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
         ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
+         */
+        significators?: boolean;
+        /**
+         * Lunar node type for Rahu and Ketu, used ONLY when "significators" is true. Dasha dates themselves come from the Moon and never move with this field. "mean" uses the smooth mean node (traditional default). "true" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path: {
         /**
@@ -14451,6 +15084,12 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
      */
     200: {
         /**
+         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         */
+        houseThemes?: {
+            [key: string]: Array<string>;
+        };
+        /**
          * Ruling planet of the requested Mahadasha period.
          */
         mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -14499,6 +15138,69 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
              */
             interpretation?: string;
             /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
             mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -14531,6 +15233,69 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
              * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
              */
             interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
             /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
@@ -14571,6 +15336,14 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaDa
          * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
         ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
+         */
+        significators?: boolean;
+        /**
+         * Lunar node type for Rahu and Ketu, used ONLY when "significators" is true. Dasha dates themselves come from the Moon and never move with this field. "mean" uses the smooth mean node (traditional default). "true" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path: {
         /**
@@ -14705,6 +15478,12 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
      */
     200: {
         /**
+         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         */
+        houseThemes?: {
+            [key: string]: Array<string>;
+        };
+        /**
          * Ruling planet of the requested Mahadasha period.
          */
         mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -14757,6 +15536,69 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
              */
             interpretation?: string;
             /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
             mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -14794,6 +15636,69 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
              */
             interpretation?: string;
             /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
              * Parent Mahadasha lord under which this Antardasha sub-period runs.
              */
             mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
@@ -14810,6 +15715,428 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
 };
 
 export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponse = PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaResponses];
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+        /**
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         */
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
+         */
+        significators?: boolean;
+        /**
+         * Lunar node type for Rahu and Ketu, used ONLY when "significators" is true. Dasha dates themselves come from the Moon and never move with this field. "mean" uses the smooth mean node (traditional default). "true" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path: {
+        /**
+         * Mahadasha planet name, case-insensitive. Valid: Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury.
+         */
+        mahadasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Antardasha (bhukti) planet name inside that Mahadasha, case-insensitive.
+         */
+        antardasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Pratyantardasha (antara) planet name inside that Antardasha, case-insensitive.
+         */
+        pratyantardasha: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Sookshma dasha planet name inside that Pratyantardasha, case-insensitive. Every full period contains all 9 lords, so a repeat such as saturn/saturn/saturn/saturn is valid.
+         */
+        sookshma: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}/{pratyantardasha}/{sookshma}';
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaError = PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaErrors[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaErrors];
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponses = {
+    /**
+     * All 9 Prana dasha periods within the specified Mahadasha, Antardasha, Pratyantardasha, and Sookshma dasha, with start/end dates and the parent Sookshma period details.
+     */
+    200: {
+        /**
+         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         */
+        houseThemes?: {
+            [key: string]: Array<string>;
+        };
+        /**
+         * Ruling planet of the requested Mahadasha period.
+         */
+        mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Ruling planet of the requested Antardasha sub-period.
+         */
+        antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Ruling planet of the requested Pratyantardasha sub-sub-period.
+         */
+        pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Ruling planet of the requested Sookshma dasha.
+         */
+        sookshmaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        /**
+         * Sidereal (nirayana) longitude of the birth Moon in degrees, 0 to 360, measured in the ayanamsa frame reported below. This single value determines the birth nakshatra and therefore every dasha start and end date in this response. Compare it against a reference chart to reconcile any date difference at its source.
+         */
+        moonLongitude: number;
+        /**
+         * Ayanamsa actually applied, in degrees. The precession offset subtracted from the tropical (sayana) longitude to get the sidereal (nirayana) one. Lahiri sits near 23 deg 43 min for a 1990 birth, KP-Newcomb near 23 deg 38 min.
+         */
+        ayanamsa: number;
+        /**
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         */
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        /**
+         * Full details of the parent Sookshma dasha including start/end dates and duration.
+         */
+        sookshmaPeriod: {
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Pratyantardasha lord under which this Sookshma dasha runs.
+             */
+            pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * Prana dasha periods within this Sookshma dasha, proportional to each planet Vimshottari years, sorted chronologically and starting with the Sookshma lord. Fewer than nine only when the parent Sookshma dasha is the one that was already running at birth, in which case the periods that ended before the birth date are omitted.
+         */
+        pranaDashas: Array<{
+            /**
+             * Ruling graha of this Vimshottari dasha period. One of 9 planets in the Ketu-Venus-Sun-Moon-Mars-Rahu-Jupiter-Saturn-Mercury sequence.
+             */
+            planet: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Start datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            startDate: string;
+            /**
+             * End datetime of this dasha period. Adjusted to the requested timezone offset.
+             */
+            endDate: string;
+            /**
+             * Duration of this dasha period in years. Mahadasha durations range from 6 years (Sun) to 20 years (Venus).
+             */
+            durationYears: number;
+            /**
+             * Theoretical start of this period, present ONLY when the birth date truncated it. The Vimshottari cycle is already running when a native is born, so the period in force at birth began earlier: startDate is clipped to the birth moment while this field keeps the real start. Its presence is also why the first period of a chart can contain fewer than 9 sub-periods, the earlier ones having finished before birth. Absent on every period that runs its full length.
+             */
+            nominalStartDate?: string;
+            /**
+             * Vedic interpretation of the planetary period describing themes, karmic lessons, and life areas affected by this graha.
+             */
+            interpretation?: string;
+            /**
+             * KP significators of this period lord, read from the Placidus birth chart in the requested ayanamsa. Present only when the request sets "significators": true.
+             */
+            significators?: {
+                /**
+                 * House 1-12 this lord occupies in the Placidus birth chart. Its own Level 2 signification, repeated here because the occupied house is the first thing a KP reading looks at.
+                 */
+                house: number;
+                /**
+                 * Lord of the nakshatra this planet sits in, one of the 9 grahas. In KP the star lord outranks the planet itself: a period lord mainly delivers the houses its star lord occupies and owns, which is why those appear at L1 and L3 rather than the planet own house.
+                 */
+                starLord: string;
+                /**
+                 * KP sub lord of this planet, the 1 of 249 subdivision its longitude falls in, one of the 9 grahas. The star lord says WHAT results the period gives, the sub lord says WHETHER they materialize, so KP judgement checks both.
+                 */
+                subLord?: string;
+                /**
+                 * KP 4-level significator breakdown showing which houses (1-12) this planet signifies at each strength tier. L1 is strongest, L4 is weakest.
+                 */
+                signifies: {
+                    /**
+                     * Level 1, the strongest signification (grade A). Houses influenced because this planet sits in the nakshatra (star) of a planet occupying those houses. For Rahu and Ketu, also includes the L1 houses of their agent planets (conjoined, aspecting, sign lord).
+                     */
+                    L1: Array<number>;
+                    /**
+                     * Level 2 (grade B). The house this planet physically occupies. For Rahu and Ketu, also includes houses occupied by their agent planets.
+                     */
+                    L2: Array<number>;
+                    /**
+                     * Level 3 (grade C). Houses influenced because this planet sits in the nakshatra of the sign lord (owner) of those houses. For Rahu and Ketu, also includes the L3 houses of their agent planets.
+                     */
+                    L3: Array<number>;
+                    /**
+                     * Level 4, the weakest signification (grade D). Houses this planet rules by zodiac sign ownership, up to 2 for Sun through Saturn and 3 where a sign is intercepted. Rahu and Ketu own no sign, so their L4 comes entirely from their agent planets.
+                     */
+                    L4: Array<number>;
+                };
+                /**
+                 * Every house this lord signifies, deduplicated and ordered strongest tier first. Where a house is reached at more than one level it is listed once, at its strongest. This is the flat "houses signified" column of a KP dasha table.
+                 */
+                signifiedHouses: Array<number>;
+                /**
+                 * Subset of signifiedHouses reached at grade A or B (levels L1 and L2). These are the houses a KP reading acts on for this period; the rest are supporting connections.
+                 */
+                strongHouses: Array<number>;
+                /**
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 */
+                strength: {
+                    /**
+                     * Mean KP percentage weight across signifiedHouses, each house counted at its strongest level (A 100, B 75, C 50, D 25). A mean rather than a total, so signifying many houses weakly does not outrank signifying two houses at grade A.
+                     */
+                    score: number;
+                    /**
+                     * Band the score falls in, on the standard KP significator grading: A planets in the constellation of the occupant, B occupants, C planets in the constellation of the house owner, D the house owner. Band edges are the midpoints between the four weights.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Plain-language form of grade: "very-strong" for A, "strong" for B, "moderate" for C, "weak" for D. Says how firmly this lord is connected to the houses it signifies, NOT whether those houses are favourable, which depends on the matter being judged.
+                     */
+                    label: 'very-strong' | 'strong' | 'moderate' | 'weak';
+                };
+            };
+            /**
+             * Parent Mahadasha lord under which this Antardasha sub-period runs.
+             */
+            mahadashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Antardasha lord under which this Pratyantardasha runs.
+             */
+            antardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Pratyantardasha lord under which this Sookshma dasha runs.
+             */
+            pratyantardashaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+            /**
+             * Parent Sookshma dasha lord under which this Prana dasha runs.
+             */
+            sookshmaLord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        }>;
+    };
+};
+
+export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponse = PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponses[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponses];
 
 export type PostVedicAstrologyPanchangBasicData = {
     body?: {
