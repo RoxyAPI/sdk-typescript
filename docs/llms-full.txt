@@ -378,6 +378,7 @@ Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional ch
 ```typescript
 // Get birth chart (D1 Rashi chart) - Kundli Calculator API
 const { data } = await roxy.vedicAstrology.generateBirthChart({
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -448,6 +449,7 @@ const { data } = await roxy.vedicAstrology.getMonthlyEphemeris({
 
 // Get current Mahadasha, Antardasha, Pratyantardasha, Sookshma, Prana - Dasha Calculator API
 const { data } = await roxy.vedicAstrology.getCurrentDasha({
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -462,6 +464,7 @@ const { data } = await roxy.vedicAstrology.getCurrentDasha({
 
 // Get all 9 Mahadasha periods (120-year cycle)
 const { data } = await roxy.vedicAstrology.getMajorDashas({
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -477,6 +480,7 @@ const { data } = await roxy.vedicAstrology.getMajorDashas({
 // Get all Antardashas (sub-periods) for a specific Mahadasha
 const { data } = await roxy.vedicAstrology.getSubDashas({
   path: { mahadasha: 'Jupiter' },
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -492,6 +496,7 @@ const { data } = await roxy.vedicAstrology.getSubDashas({
 // Get all Pratyantardashas (antara periods) for a Mahadasha and Antardasha
 const { data } = await roxy.vedicAstrology.getPratyantardashas({
   path: { mahadasha: 'Saturn', antardasha: 'Venus' },
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -511,6 +516,7 @@ const { data } = await roxy.vedicAstrology.getSookshmaDashas({
     antardasha: 'Venus',
     pratyantardasha: 'Rahu',
   },
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -531,6 +537,7 @@ const { data } = await roxy.vedicAstrology.getPranaDashas({
     pratyantardasha: 'Rahu',
     sookshma: 'Jupiter',
   },
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -666,6 +673,7 @@ const { data } = await roxy.vedicAstrology.getKpCusps({
 
 // Generate complete KP birth chart
 const { data } = await roxy.vedicAstrology.generateKpChart({
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -861,6 +869,35 @@ const { data } = await roxy.vedicAstrology.calculateShadbala({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+  },
+});
+
+// List all 17 avastha states - Planetary State Reference
+const { data } = await roxy.vedicAstrology.listAvasthas({ query: { system: 'deeptadi' } });
+
+// Get avastha by ID - Planetary State Detail
+const { data } = await roxy.vedicAstrology.getAvastha({ path: { id: 'dipta' } });
+
+// Get the twelve Arudha padas - Arudha Lagna Calculator API
+const { data } = await roxy.vedicAstrology.calculateArudhaPadas({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+  },
+});
+
+// Get Chara Karakas including Atmakaraka - Jaimini Karaka Calculator API
+const { data } = await roxy.vedicAstrology.calculateCharaKarakas({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    scheme: 'eight',
   },
 });
 ```

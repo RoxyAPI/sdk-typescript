@@ -2167,6 +2167,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     taurus: {
@@ -2216,6 +2224,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     gemini: {
@@ -2265,6 +2281,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     cancer: {
@@ -2314,6 +2338,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     leo: {
@@ -2363,6 +2395,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     virgo: {
@@ -2412,6 +2452,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     libra: {
@@ -2461,6 +2509,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     scorpio: {
@@ -2510,6 +2566,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     sagittarius: {
@@ -2559,6 +2623,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     capricorn: {
@@ -2608,6 +2680,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     aquarius: {
@@ -2657,6 +2737,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     pisces: {
@@ -2706,6 +2794,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         }>;
     };
     /**
@@ -2724,6 +2820,10 @@ export type BirthChartResponse = {
          * Significations of the bhava (house). Present when an interpretation entry exists for this house.
          */
         description?: string;
+        /**
+         * Significations of the bhava as short keywords, the compact form of description. Bhava 1 covers self, body and vitality; 2 wealth and speech; 7 marriage and partnership; 10 career and status. Suited to chart labels, table cells and legends where the full classical description is too long, and identical to the houseThemes map returned by the Vimshottari dasha and KP chart routes. Localized by the lang query parameter.
+         */
+        themes?: Array<string>;
     }>;
     /**
      * Combust planets (astangata graha): grahas within their combustion orb of the Sun. Combustion weakens a planet significations. Empty when no planet is combust.
@@ -2779,7 +2879,7 @@ export type BirthChartResponse = {
         };
     };
     /**
-     * Twelve classical yogas detected against this chart: Gajakesari (three-rule parashara definition), Sunapha, Anapha, Dhurdhura, Kemadruma, Chandra Mangala, Budha-Aditya, and the five Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Sasa). Each entry carries an `id` (matches `GET /yoga/{id}` for full glossary lookup), a `present` boolean, a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent), and classical-text `evidence` for the rule that triggered or failed.
+     * Forty-four classical yogas detected against this chart. Twelve conjunction and dignity yogas: Gajakesari (three-rule parashara definition), Sunapha, Anapha, Dhurdhura, Kemadruma, Chandra Mangala, Budha-Aditya, and the five Pancha Mahapurusha (Ruchaka, Bhadra, Hamsa, Malavya, Sasa). Plus all 32 Nabhasa distribution yogas across the Asraya, Dala, Akriti and Sankhya families, which read how the seven visible grahas are spread over the whole chart rather than any single conjunction, and which apply the four classical precedence norms so an outranked yoga is returned as absent with evidence naming the norm that silenced it. Each entry carries an `id` (matches `GET /yoga/{id}` for full glossary lookup), a `present` boolean, a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent), and classical-text `evidence` for the rule that triggered or failed. Filter on `present === true` for the active list.
      */
     yogas?: Array<{
         /**
@@ -2791,7 +2891,7 @@ export type BirthChartResponse = {
          */
         name: string;
         /**
-         * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, or aspect pattern required for the yoga to form.
+         * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, aspect pattern, sign modality, or whole-chart bhava distribution required for the yoga to form.
          */
         description: string;
         /**
@@ -2803,11 +2903,11 @@ export type BirthChartResponse = {
          */
         quality: 'Positive' | 'Negative' | 'Both';
         /**
-         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not.
+         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not, and Nabhasa cases where the yoga matched its own rule but a stronger family outranked it under the classical precedence norms. Read `evidence` to tell those apart.
          */
         present: boolean;
         /**
-         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendrādhipati status, lordship, or malefic drishti.
+         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya.
          */
         evidence?: string;
     }>;
@@ -2861,6 +2961,14 @@ export type BirthChartResponse = {
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
             awastha?: 'Bala' | 'Kumara' | 'Yuva' | 'Vriddha' | 'Mrita';
+            /**
+             * Jagradadi avastha, the waking state of the graha set by its sign dignity: Jagrat (awake, own sign or exaltation, full results), Swapna (dreaming, a friendly or neutral sign, medium results), Sushupti (sleeping, an enemy sign or debilitation, no results). Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna own no sign and are omitted.
+             */
+            jagradadi?: 'Jagrat' | 'Swapna' | 'Sushupti';
+            /**
+             * Deeptadi avastha, the dispositional state of the graha, one of nine: Dipta (exalted, blazing), Svastha (own sign, healthy), Pramudita (great friend sign, delighted), Shanta (friendly sign, at peace), Dina (neutral sign, helpless), Duhkhita (enemy sign, sorrowful), Khala (great enemy sign, harsh), Vikala (joined by a natural malefic, disabled), Kopa (eclipsed by the Sun, enraged). Where more than one applies the more severe is returned, so combustion outranks a malefic conjunction, which outranks the sign reading. Present for the seven classical grahas on the D1 chart; Rahu, Ketu and the Lagna are omitted.
+             */
+            deeptadi?: 'Dipta' | 'Svastha' | 'Pramudita' | 'Shanta' | 'Dina' | 'Duhkhita' | 'Vikala' | 'Khala' | 'Kopa';
         };
     };
 };
@@ -3630,9 +3738,32 @@ export type SadhesatiRequest = {
     timezone?: number | string;
 };
 
+export type YogaDetail = {
+    /**
+     * Glossary id (lowercase, kebab-case) matching an entry in the 300-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
+     */
+    id: string;
+    /**
+     * Classical Sanskrit name of the yoga as referenced in BPHS (Brihat Parashara Hora Shastra), Phaladeepika, and B.V. Raman *Three Hundred Important Combinations*.
+     */
+    name: string;
+    /**
+     * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, aspect pattern, sign modality, or whole-chart bhava distribution required for the yoga to form.
+     */
+    description: string;
+    /**
+     * Classical phala (life-effect) description of the yoga when present, sourced from the parashari and phaladeepika tradition.
+     */
+    result: string;
+    /**
+     * Overall nature. Auspicious yogas (Pancha Mahapurusha, Gajakesari) bestow benefits; inauspicious yogas (Kemadruma) indicate challenges; Both denotes context-dependent effects.
+     */
+    quality: 'Positive' | 'Negative' | 'Both';
+};
+
 export type YogaDetectResponse = {
     /**
-     * Array of 12 detected yogas. Every entry carries a `present` boolean and a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent); filter on present === true for active yogas. Evidence text names the rule that triggered or failed.
+     * Array of 44 detected yogas, always the full set so a caller can render absent verdicts too. Every entry carries a `present` boolean and a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent); filter on present === true for active yogas. Evidence text names the rule that triggered or failed, or the precedence norm that outranked it.
      */
     yogas: Array<{
         /**
@@ -3644,7 +3775,7 @@ export type YogaDetectResponse = {
          */
         name: string;
         /**
-         * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, or aspect pattern required for the yoga to form.
+         * Brief classical formation rule. Identifies the planetary placement, lordship, dignity, aspect pattern, sign modality, or whole-chart bhava distribution required for the yoga to form.
          */
         description: string;
         /**
@@ -3656,16 +3787,16 @@ export type YogaDetectResponse = {
          */
         quality: 'Positive' | 'Negative' | 'Both';
         /**
-         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not.
+         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not, and Nabhasa cases where the yoga matched its own rule but a stronger family outranked it under the classical precedence norms. Read `evidence` to tell those apart.
          */
         present: boolean;
         /**
-         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendrādhipati status, lordship, or malefic drishti.
+         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya.
          */
         evidence?: string;
     }>;
     /**
-     * Count of yogas where present === true in this chart. Range 0-12.
+     * Count of yogas where present === true in this chart. Range 0-44, though real charts sit in the low single digits: the Nabhasa families are mutually constrained by the precedence norms, and most shape yogas are rare.
      */
     total: number;
     /**
@@ -4222,6 +4353,12 @@ export type KpChartResponse = {
              */
             allHouses: Array<number>;
         }>;
+    };
+    /**
+     * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
+     */
+    houseThemes: {
+        [key: string]: Array<string>;
     };
 };
 
@@ -5273,6 +5410,190 @@ export type ShadbalaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+};
+
+/**
+ * The twelve Arudha padas of a birth chart, computed per the Jaimini rule with the classical exception applied.
+ */
+export type ArudhaResponse = {
+    /**
+     * Zodiac sign of the Ascendant (Lagna), which anchors the twelve bhavas the padas are derived from.
+     */
+    lagnaRashi: string;
+    /**
+     * Zodiac sign of the Arudha Lagna (AL), the pada of the first house and the single most used value in this response. Repeated at the top level so a client rendering only the AL does not have to search the array.
+     */
+    arudhaLagna: string;
+    /**
+     * Zodiac sign of the Upapada (UL), the pada of the twelfth house, read for marriage and its durability. The second most used value, so it is also lifted to the top level.
+     */
+    upapada: string;
+    /**
+     * All twelve Arudha padas in bhava order, a1 through a12. Each carries the lord and the count it came from, so the derivation can be checked by hand.
+     */
+    padas: Array<{
+        /**
+         * Pada identifier, a1 through a12, matching the bhava it belongs to. a1 is the Arudha Lagna and a12 the Upapada.
+         */
+        id: string;
+        /**
+         * Practitioner shorthand written on a chart: AL for the Arudha Lagna, A2 through A11, and UL for the Upapada.
+         */
+        abbreviation: string;
+        /**
+         * Classical Sanskrit name of the pada, for example Arudha Lagna, Dhana Pada, Dara Pada, Upapada.
+         */
+        name: string;
+        /**
+         * Bhava (house) number 1-12 whose pada this is. The pada is the perceived, outward form of that bhava.
+         */
+        house: number;
+        /**
+         * Zodiac sign (rashi) occupying that bhava, counted whole-sign from the Lagna. The count to the pada starts here.
+         */
+        bhavaRashi: string;
+        /**
+         * Lord of the bhava sign. The pada is found by counting to this graha and then the same distance again.
+         */
+        lord: string;
+        /**
+         * Zodiac sign the bhava lord occupies, which sets the length of the count.
+         */
+        lordRashi: string;
+        /**
+         * Zodiac sign the pada falls in, after the classical exception is applied. This is the answer most readings start from.
+         */
+        rashi: string;
+        /**
+         * Which house from the Lagna the pada sits in, counted inclusively 1-12. Reading a pada against the natal Lagna is how its strength is judged.
+         */
+        houseFromLagna: number;
+        /**
+         * True when the raw pada landed in the same bhava or the seventh from it and was moved to the tenth from there, as the classical rule requires. Surfaced so a reader can see exactly why a pada sits where it does, which is the step implementations most often skip.
+         */
+        exceptionApplied: boolean;
+        /**
+         * Short label for what this pada is read for, sized for a table cell.
+         */
+        meaning: string;
+        /**
+         * What this pada governs. Padas describe how a matter is PERCEIVED, which is what separates them from the bhava significations of the same house.
+         */
+        significations: string;
+    }>;
+};
+
+export type ArudhaRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+     */
+    longitude: number;
+    /**
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+     */
+    timezone?: number | string;
+};
+
+/**
+ * Chara Karakas for a birth chart: the movable significators of Jaimini astrology, ranked by how far each graha has advanced into its sign.
+ */
+export type CharaKarakaResponse = {
+    /**
+     * Scheme the ranking used, echoed back so a cached or logged response is self describing.
+     */
+    scheme: 'seven' | 'eight';
+    /**
+     * Graha holding the Atmakaraka office, the most consequential single value in Jaimini analysis. Lifted to the top level so a client reading only the Atmakaraka does not have to search the array.
+     */
+    atmakaraka: string;
+    /**
+     * Graha holding the Darakaraka office, read for the spouse. The second most requested value, so it is also lifted to the top level.
+     */
+    darakaraka: string;
+    /**
+     * Karaka offices in descending rank, Atmakaraka first. Eight entries in the eight-karaka scheme, seven in the seven-karaka scheme.
+     */
+    karakas: Array<{
+        /**
+         * Karaka office identifier: atmakaraka, amatyakaraka, bhratrikaraka, matrikaraka, pitrikaraka, putrakaraka, gnatikaraka, darakaraka. Returned in descending rank, so the first entry is always the Atmakaraka.
+         */
+        id: string;
+        /**
+         * Classical Sanskrit name of the karaka office.
+         */
+        name: string;
+        /**
+         * Practitioner shorthand: AK, AmK, BK, MK, PiK, PK, GK, DK, in descending rank order.
+         */
+        abbreviation: string;
+        /**
+         * Graha holding this office in this chart.
+         */
+        graha: string;
+        /**
+         * Zodiac sign (rashi) the graha occupies.
+         */
+        rashi: string;
+        /**
+         * Degree the graha has advanced into its sign, 0 to 30. This is the figure a chart displays.
+         */
+        degreeInRashi: number;
+        /**
+         * The degree actually ranked. Identical to degreeInRashi for every graha except Rahu, where it is 30 minus that value because Rahu advances backward through the sign. Returned so the ordering can be checked without knowing the rule.
+         */
+        rankingDegree: number;
+        /**
+         * True only for Rahu, flagging that its degree was measured from the end of the sign rather than the start.
+         */
+        isReversed: boolean;
+        /**
+         * Short label for what this karaka is read for, sized for a table cell.
+         */
+        meaning: string;
+        /**
+         * What this karaka office governs in a reading.
+         */
+        significations: string;
+    }>;
+};
+
+export type CharaKarakaRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+     */
+    time: string;
+    /**
+     * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+     */
+    latitude: number;
+    /**
+     * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+     */
+    longitude: number;
+    /**
+     * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+     */
+    timezone?: number | string;
+    /**
+     * Which Chara Karaka scheme to rank. "eight" includes Rahu, counting its degree in reverse because it moves retrograde, and returns eight offices including Pitrikaraka. "seven" ranks only the seven classical grahas and drops Pitrikaraka. Ketu is excluded from both, since it always mirrors the Rahu degree exactly. The two schemes can produce a different Atmakaraka for the same chart, so select the one your reference software uses. Defaults to "eight".
+     */
+    scheme?: 'seven' | 'eight';
 };
 
 export type BasicCard = {
@@ -12640,6 +12961,10 @@ export type PostVedicAstrologyBirthChartData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/birth-chart';
 };
@@ -13474,6 +13799,10 @@ export type PostVedicAstrologyDashaCurrentData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/dasha/current';
 };
@@ -13588,7 +13917,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
      */
     200: {
         /**
-         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
          */
         houseThemes?: {
             [key: string]: Array<string>;
@@ -13691,7 +14020,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -13783,7 +14112,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -13879,7 +14208,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -13979,7 +14308,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -14083,7 +14412,7 @@ export type PostVedicAstrologyDashaCurrentResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -14281,6 +14610,10 @@ export type PostVedicAstrologyDashaMajorData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/dasha/major';
 };
@@ -14395,7 +14728,7 @@ export type PostVedicAstrologyDashaMajorResponses = {
      */
     200: {
         /**
-         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
          */
         houseThemes?: {
             [key: string]: Array<string>;
@@ -14519,7 +14852,7 @@ export type PostVedicAstrologyDashaMajorResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -14592,6 +14925,10 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/dasha/sub/{mahadasha}';
 };
@@ -14706,7 +15043,7 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
      */
     200: {
         /**
-         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
          */
         houseThemes?: {
             [key: string]: Array<string>;
@@ -14801,7 +15138,7 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -14893,7 +15230,7 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -14970,6 +15307,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}';
 };
@@ -15084,7 +15425,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
      */
     200: {
         /**
-         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
          */
         houseThemes?: {
             [key: string]: Array<string>;
@@ -15183,7 +15524,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -15279,7 +15620,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -15364,6 +15705,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaDa
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}/{pratyantardasha}';
 };
@@ -15478,7 +15823,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
      */
     200: {
         /**
-         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
          */
         houseThemes?: {
             [key: string]: Array<string>;
@@ -15581,7 +15926,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -15681,7 +16026,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -15774,6 +16119,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/dasha/sub/{mahadasha}/{antardasha}/{pratyantardasha}/{sookshma}';
 };
@@ -15888,7 +16237,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
      */
     200: {
         /**
-         * What each house MEANS, keyed by house number 1 to 12, in the requested language. Turns a house list into words without the client writing any interpretation copy: for a period signifying houses 2, 7 and 8, join houseThemes for those keys to render the "nature" line of a KP dasha table. Sent once per response rather than repeated on every period, so look the houses up from signifiedHouses or strongHouses. Localized by the lang query, like every other interpretation field.
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
          */
         houseThemes?: {
             [key: string]: Array<string>;
@@ -15995,7 +16344,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -16099,7 +16448,7 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
                  */
                 strongHouses: Array<number>;
                 /**
-                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading.
+                 * How firmly this lord is tied to the houses it signifies, on the KP A to D significator grading. Reproducible from the significator levels alone, in two steps. STEP 1, per house keep only the strongest level: a planet routinely reaches the same house at more than one level, for example its star lord occupies house 11 and it also owns house 11, and KP cites a significator by its best connection, so that house counts once at grade A. This is why signifiedHouses is shorter than the four level arrays concatenated, and omitting it is what makes a hand calculation disagree. STEP 2, average the surviving weights: each house contributes 100, 75, 50 or 25 for grade A, B, C or D, and the mean is the score. Worked example, a lord signifying house 11 at level 1, house 6 at level 2 and house 2 at level 4 scores (100 + 75 + 25) / 3 = 66.7, which lands in band B because the band edges are the midpoints 87.5, 62.5 and 37.5. The score says how firmly the lord is connected, never whether the houses are favourable, which depends on the matter being judged.
                  */
                 strength: {
                     /**
@@ -17955,7 +18304,7 @@ export type GetVedicAstrologyYogaByIdData = {
         /**
          * Yoga identifier (lowercase, hyphenated)
          */
-        id: 'gajakesari' | 'sunapha' | 'anapha' | 'dhurdhura' | 'kemadruma' | 'chandramangala' | 'adhi' | 'chatussagara' | 'vasumathi' | 'rajalakshana' | 'vanchanachorabheethi' | 'sakata' | 'amala' | 'parvata' | 'kahala' | 'vesi' | 'vasi' | 'obhayachari' | 'hamsa' | 'malavya' | 'sasa' | 'ruchaka' | 'bhadra' | 'budhaaditya' | 'mahabhagya' | 'pushkala' | 'lakshmi' | 'gauri' | 'bharathi' | 'chapa' | 'sreenatha' | 'lagnamalika' | 'dhanamalika' | 'vikramamalika' | 'sukhamalika' | 'putramalika' | 'satrumalika' | 'kalatramalika' | 'randhramalika' | 'bhagyamalika' | 'karmamalika' | 'labhamalika' | 'vrayamalika' | 'sankha' | 'bheri' | 'mridanga' | 'parijatha' | 'gaja' | 'kalanidhi' | 'amsavatara' | 'hariharabrahma' | 'kusuma' | 'matsya' | 'kurma' | 'devendra' | 'makuta' | 'chandika' | 'jaya' | 'vidyut' | 'gandharva' | 'siva' | 'vishnu' | 'brahma' | 'indra' | 'ravi' | 'garuda' | 'go' | 'gola' | 'thrilochana' | 'kulavardhana' | 'yupa' | 'ishu' | 'sakti' | 'danda' | 'nav' | 'kuta' | 'chhatra' | 'chapa-2' | 'ardhachandra' | 'chandra' | 'gada' | 'sakata-2' | 'vihaga' | 'vajra' | 'yava' | 'sringhataka' | 'hala' | 'kamala' | 'vapee' | 'samudra' | 'vallaki' | 'damni' | 'pasa' | 'kedara' | 'sula' | 'yuga' | 'gola-2' | 'rajju' | 'musala' | 'nala' | 'srik' | 'sarpa' | 'duryoga' | 'daridra' | 'harsha' | 'sarala' | 'vimala' | 'sareerasoukhya' | 'dehapushti' | 'dehakashta' | 'rogagrastha' | 'krisanga' | 'krisanga-2' | 'dehasthoulya' | 'dehasthoulya-2' | 'dehasthoulya-3' | 'sadasanchara' | 'dhana' | 'dhana-2' | 'dhana-3' | 'dhana-4' | 'dhana-5' | 'dhana-6' | 'dhana-7' | 'dhana-8' | 'dhana-9' | 'dhana-10' | 'dhana-11' | 'bahudravyarjana' | 'swaveeryaddhana' | 'swaveeryaddhana-2' | 'swaveeryaddhana-3' | 'madhyavayasidhana' | 'anthyavayasidhana' | 'balyadhana' | 'bhratrumooladdhanaprapti' | 'bhratrumooladdhanaprapti-2' | 'matrumooladdhana' | 'putramooladdhana' | 'satrumooladdhana' | 'kalatramooladdhana' | 'amarananthadhana' | 'ayatnadhanalabha' | 'daridra-2' | 'daridra-3' | 'daridra-4' | 'daridra-5' | 'daridra-6' | 'daridra-7' | 'daridra-8' | 'daridra-9' | 'daridra-10' | 'daridra-11' | 'yukthisamanwithavagmi' | 'yukthisamanwithavagmi-2' | 'parihasaka' | 'asatyavadi' | 'jada' | 'bhaskara' | 'marud' | 'saraswathi' | 'budha' | 'mooka' | 'netranasa' | 'andha' | 'sumukha' | 'sumukha-2' | 'durmukha' | 'durmukha-2' | 'bhojanasoukhya' | 'annadana' | 'parannabhojana' | 'sraddhannabhuktha' | 'sarpaganda' | 'vakchalana' | 'vishaprayoga' | 'bhratruvriddhi' | 'sodaranasa' | 'ekabhagini' | 'dwadasasahodara' | 'sapthasankhyasahodara' | 'parakrama' | 'yuddhapraveena' | 'yuddhatpoorvadridhachitta' | 'yuddhatpaschaddrudha' | 'satkathadisravana' | 'uttamagriha' | 'vichitrasaudhaprakara' | 'ayatnagrihaprapta' | 'ayatnagrihaprapta-2' | 'grihanasa' | 'grihanasa-2' | 'bandhupujya' | 'bandhupujya-2' | 'bandhubhisthyaktha' | 'matrudeerghayur' | 'matrudeerghayur-2' | 'matrunasa' | 'matrunasa-2' | 'matrugami' | 'sahodareesangama' | 'kapata' | 'kapata-2' | 'kapata-3' | 'nishkapata' | 'nishkapata-2' | 'matrusatrutwa' | 'matrusneha' | 'vahana' | 'vahana-2' | 'anapathya' | 'sarpasapa' | 'sarpasapa-2' | 'sarpasapa-3' | 'sarpasapa-4' | 'pitrusapasutakshaya' | 'matrusapasutakshaya' | 'bhratrusapasutakshaya' | 'pretasapa' | 'bahuputra' | 'bahuputra-2' | 'dattaputra' | 'dattaputra-2' | 'aputra' | 'ekaputra' | 'suputra' | 'kalanirdesatputra' | 'kalanirdesatputra-2' | 'kalanirdesatputranasa' | 'kalanirdesatputranasa-2' | 'buddhimaturya' | 'theevrabuddhi' | 'buddhijada' | 'thrikalagnana' | 'putrasukha' | 'jara' | 'jarajaputra' | 'bahustree' | 'satkalatra' | 'bhagachumbana' | 'bhagya' | 'jananatpurvampitrumarana' | 'dhatrutwa' | 'apakeerti' | 'raja' | 'raja-2' | 'raja-3' | 'raja-4' | 'raja-5' | 'raja-6' | 'raja-7' | 'raja-8' | 'raja-9' | 'raja-10' | 'raja-11' | 'raja-12' | 'raja-13' | 'raja-14' | 'raja-15' | 'raja-16' | 'raja-17' | 'raja-18' | 'raja-19' | 'galakarna' | 'vrana' | 'sisnavyadhi' | 'kalatrashanda' | 'kushtaroga' | 'kushtaroga-2' | 'kshayaroga' | 'bandhana' | 'karascheda' | 'sirachcheda' | 'durmarana' | 'yuddhemarana' | 'sanghatakamarana' | 'sanghatakamarana-2' | 'peenasaroga' | 'pittaroga' | 'vikalangapatni' | 'putrakalatraheena' | 'bharyasahavyabhichara' | 'vamsacheda' | 'guhyaroga' | 'angaheena' | 'swetakushta' | 'pisachagrastha' | 'andha-2' | 'andha-3' | 'vatharoga' | 'matibhramana' | 'matibhramana-2' | 'matibhramana-3' | 'matibhramana-4' | 'khalwata' | 'nishturabhashi' | 'rajabhrashta' | 'raja-20' | 'raja-21' | 'gohanta';
+        id: 'gajakesari' | 'sunapha' | 'anapha' | 'dhurdhura' | 'kemadruma' | 'chandramangala' | 'adhi' | 'chatussagara' | 'vasumathi' | 'rajalakshana' | 'vanchanachorabheethi' | 'sakata' | 'amala' | 'parvata' | 'kahala' | 'vesi' | 'vasi' | 'obhayachari' | 'hamsa' | 'malavya' | 'sasa' | 'ruchaka' | 'bhadra' | 'budhaaditya' | 'mahabhagya' | 'pushkala' | 'lakshmi' | 'gauri' | 'bharathi' | 'chapa' | 'sreenatha' | 'lagnamalika' | 'dhanamalika' | 'vikramamalika' | 'sukhamalika' | 'putramalika' | 'satrumalika' | 'kalatramalika' | 'randhramalika' | 'bhagyamalika' | 'karmamalika' | 'labhamalika' | 'vrayamalika' | 'sankha' | 'bheri' | 'mridanga' | 'parijatha' | 'gaja' | 'kalanidhi' | 'amsavatara' | 'hariharabrahma' | 'kusuma' | 'matsya' | 'kurma' | 'devendra' | 'makuta' | 'chandika' | 'jaya' | 'vidyut' | 'gandharva' | 'siva' | 'vishnu' | 'brahma' | 'indra' | 'ravi' | 'garuda' | 'go' | 'gola' | 'thrilochana' | 'kulavardhana' | 'yupa' | 'ishu' | 'sakti' | 'danda' | 'nav' | 'kuta' | 'chhatra' | 'chapa-2' | 'ardhachandra' | 'chandra' | 'gada' | 'sakata-2' | 'vihaga' | 'vajra' | 'yava' | 'sringhataka' | 'hala' | 'kamala' | 'vapee' | 'samudra' | 'vallaki' | 'damni' | 'pasa' | 'kedara' | 'sula' | 'yuga' | 'gola-2' | 'rajju' | 'musala' | 'nala' | 'srik' | 'mala' | 'sarpa' | 'duryoga' | 'daridra' | 'harsha' | 'sarala' | 'vimala' | 'sareerasoukhya' | 'dehapushti' | 'dehakashta' | 'rogagrastha' | 'krisanga' | 'krisanga-2' | 'dehasthoulya' | 'dehasthoulya-2' | 'dehasthoulya-3' | 'sadasanchara' | 'dhana' | 'dhana-2' | 'dhana-3' | 'dhana-4' | 'dhana-5' | 'dhana-6' | 'dhana-7' | 'dhana-8' | 'dhana-9' | 'dhana-10' | 'dhana-11' | 'bahudravyarjana' | 'swaveeryaddhana' | 'swaveeryaddhana-2' | 'swaveeryaddhana-3' | 'madhyavayasidhana' | 'anthyavayasidhana' | 'balyadhana' | 'bhratrumooladdhanaprapti' | 'bhratrumooladdhanaprapti-2' | 'matrumooladdhana' | 'putramooladdhana' | 'satrumooladdhana' | 'kalatramooladdhana' | 'amarananthadhana' | 'ayatnadhanalabha' | 'daridra-2' | 'daridra-3' | 'daridra-4' | 'daridra-5' | 'daridra-6' | 'daridra-7' | 'daridra-8' | 'daridra-9' | 'daridra-10' | 'daridra-11' | 'yukthisamanwithavagmi' | 'yukthisamanwithavagmi-2' | 'parihasaka' | 'asatyavadi' | 'jada' | 'bhaskara' | 'marud' | 'saraswathi' | 'budha' | 'mooka' | 'netranasa' | 'andha' | 'sumukha' | 'sumukha-2' | 'durmukha' | 'durmukha-2' | 'bhojanasoukhya' | 'annadana' | 'parannabhojana' | 'sraddhannabhuktha' | 'sarpaganda' | 'vakchalana' | 'vishaprayoga' | 'bhratruvriddhi' | 'sodaranasa' | 'ekabhagini' | 'dwadasasahodara' | 'sapthasankhyasahodara' | 'parakrama' | 'yuddhapraveena' | 'yuddhatpoorvadridhachitta' | 'yuddhatpaschaddrudha' | 'satkathadisravana' | 'uttamagriha' | 'vichitrasaudhaprakara' | 'ayatnagrihaprapta' | 'ayatnagrihaprapta-2' | 'grihanasa' | 'grihanasa-2' | 'bandhupujya' | 'bandhupujya-2' | 'bandhubhisthyaktha' | 'matrudeerghayur' | 'matrudeerghayur-2' | 'matrunasa' | 'matrunasa-2' | 'matrugami' | 'sahodareesangama' | 'kapata' | 'kapata-2' | 'kapata-3' | 'nishkapata' | 'nishkapata-2' | 'matrusatrutwa' | 'matrusneha' | 'vahana' | 'vahana-2' | 'anapathya' | 'sarpasapa' | 'sarpasapa-2' | 'sarpasapa-3' | 'sarpasapa-4' | 'pitrusapasutakshaya' | 'matrusapasutakshaya' | 'bhratrusapasutakshaya' | 'pretasapa' | 'bahuputra' | 'bahuputra-2' | 'dattaputra' | 'dattaputra-2' | 'aputra' | 'ekaputra' | 'suputra' | 'kalanirdesatputra' | 'kalanirdesatputra-2' | 'kalanirdesatputranasa' | 'kalanirdesatputranasa-2' | 'buddhimaturya' | 'theevrabuddhi' | 'buddhijada' | 'thrikalagnana' | 'putrasukha' | 'jara' | 'jarajaputra' | 'bahustree' | 'satkalatra' | 'bhagachumbana' | 'bhagya' | 'jananatpurvampitrumarana' | 'dhatrutwa' | 'apakeerti' | 'raja' | 'raja-2' | 'raja-3' | 'raja-4' | 'raja-5' | 'raja-6' | 'raja-7' | 'raja-8' | 'raja-9' | 'raja-10' | 'raja-11' | 'raja-12' | 'raja-13' | 'raja-14' | 'raja-15' | 'raja-16' | 'raja-17' | 'raja-18' | 'raja-19' | 'galakarna' | 'vrana' | 'sisnavyadhi' | 'kalatrashanda' | 'kushtaroga' | 'kushtaroga-2' | 'kshayaroga' | 'bandhana' | 'karascheda' | 'sirachcheda' | 'durmarana' | 'yuddhemarana' | 'sanghatakamarana' | 'sanghatakamarana-2' | 'peenasaroga' | 'pittaroga' | 'vikalangapatni' | 'putrakalatraheena' | 'bharyasahavyabhichara' | 'vamsacheda' | 'guhyaroga' | 'angaheena' | 'swetakushta' | 'pisachagrastha' | 'andha-2' | 'andha-3' | 'vatharoga' | 'matibhramana' | 'matibhramana-2' | 'matibhramana-3' | 'matibhramana-4' | 'khalwata' | 'nishturabhashi' | 'rajabhrashta' | 'raja-20' | 'raja-21' | 'gohanta';
     };
     query?: {
         /**
@@ -18087,28 +18436,7 @@ export type GetVedicAstrologyYogaByIdResponses = {
     /**
      * Detailed yoga information
      */
-    200: {
-        /**
-         * Unique yoga identifier in lowercase kebab-case. Use this to fetch yoga details via GET /yogas/:id.
-         */
-        id: string;
-        /**
-         * Traditional Sanskrit name of the planetary yoga combination as referenced in classical Vedic astrology texts.
-         */
-        name: string;
-        /**
-         * Brief formation rule describing which planets must be in which houses or signs for this yoga to form in a birth chart.
-         */
-        description: string;
-        /**
-         * Detailed prediction of the effects and life outcomes when this yoga is present in a horoscope. Covers personality traits, career, wealth, relationships, and spiritual tendencies.
-         */
-        result: string;
-        /**
-         * Overall nature of the yoga. Positive yogas (Raj Yoga, Gajakesari) bestow benefits. Negative yogas (Kemadruma, Kaal Sarp) indicate challenges. Both means the yoga has mixed effects depending on chart context.
-         */
-        quality: 'Positive' | 'Negative' | 'Both';
-    };
+    200: YogaDetail;
 };
 
 export type GetVedicAstrologyYogaByIdResponse = GetVedicAstrologyYogaByIdResponses[keyof GetVedicAstrologyYogaByIdResponses];
@@ -18231,7 +18559,7 @@ export type PostVedicAstrologyYogaDetectError = PostVedicAstrologyYogaDetectErro
 
 export type PostVedicAstrologyYogaDetectResponses = {
     /**
-     * List of 12 classical yogas with present/absent verdicts and classical-text evidence.
+     * List of 44 classical yogas with present/absent verdicts and classical-text evidence.
      */
     200: YogaDetectResponse;
 };
@@ -18611,6 +18939,10 @@ export type PostVedicAstrologyKpChartData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
     };
     url: '/vedic-astrology/kp/chart';
 };
@@ -21898,6 +22230,570 @@ export type PostVedicAstrologyShadbalaResponses = {
 };
 
 export type PostVedicAstrologyShadbalaResponse = PostVedicAstrologyShadbalaResponses[keyof PostVedicAstrologyShadbalaResponses];
+
+export type GetVedicAstrologyAvasthasData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Return only the states of one system: "baladi" (5), "jagradadi" (3) or "deeptadi" (9). Omit for all 17.
+         */
+        system?: 'baladi' | 'jagradadi' | 'deeptadi';
+    };
+    url: '/vedic-astrology/avasthas';
+};
+
+export type GetVedicAstrologyAvasthasErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVedicAstrologyAvasthasError = GetVedicAstrologyAvasthasErrors[keyof GetVedicAstrologyAvasthasErrors];
+
+export type GetVedicAstrologyAvasthasResponses = {
+    /**
+     * Avastha states with their labels and interpretations, in system order.
+     */
+    200: Array<{
+        /**
+         * Unique slug for the avastha state. It is the lowercased form of the state name the birth chart returns, so a chart value maps straight onto this record.
+         */
+        id: string;
+        /**
+         * Sanskrit name of the state, exactly as it appears in the `awastha`, `jagradadi` or `deeptadi` field of a birth chart.
+         */
+        name: string;
+        /**
+         * Which avastha system the state belongs to, and therefore which birth-chart field it appears in. "baladi" is the five-fold age state set by degree within the sign and appears in `awastha`. "jagradadi" is the three-fold waking state set by sign dignity. "deeptadi" is the nine-fold dispositional state. Baladi applies to every body; the other two apply to the seven classical grahas only.
+         */
+        system: 'baladi' | 'jagradadi' | 'deeptadi';
+        /**
+         * Short label for the state, sized for a table cell beside the graha.
+         */
+        meaning: string;
+        /**
+         * What the state means for the results the graha delivers, which is the whole purpose of reading an avastha: the chart says where a graha is, the avastha says how much of its promise it can keep.
+         */
+        interpretation: string;
+    }>;
+};
+
+export type GetVedicAstrologyAvasthasResponse = GetVedicAstrologyAvasthasResponses[keyof GetVedicAstrologyAvasthasResponses];
+
+export type GetVedicAstrologyAvasthasByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Avastha slug. Baladi: bala, kumara, yuva, vriddha, mrita. Jagradadi: jagrat, swapna, sushupti. Deeptadi: dipta, svastha, pramudita, shanta, dina, duhkhita, vikala, khala, kopa.
+         */
+        id: 'bala' | 'kumara' | 'yuva' | 'vriddha' | 'mrita' | 'jagrat' | 'swapna' | 'sushupti' | 'dipta' | 'svastha' | 'pramudita' | 'shanta' | 'dina' | 'duhkhita' | 'vikala' | 'khala' | 'kopa';
+    };
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/avasthas/{id}';
+};
+
+export type GetVedicAstrologyAvasthasByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No avastha state matches that slug.
+     */
+    404: {
+        /**
+         * Human-readable error message. May change wording — do not parse programmatically.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVedicAstrologyAvasthasByIdError = GetVedicAstrologyAvasthasByIdErrors[keyof GetVedicAstrologyAvasthasByIdErrors];
+
+export type GetVedicAstrologyAvasthasByIdResponses = {
+    /**
+     * The avastha state with its system, label and interpretation.
+     */
+    200: {
+        /**
+         * Unique slug for the avastha state. It is the lowercased form of the state name the birth chart returns, so a chart value maps straight onto this record.
+         */
+        id: string;
+        /**
+         * Sanskrit name of the state, exactly as it appears in the `awastha`, `jagradadi` or `deeptadi` field of a birth chart.
+         */
+        name: string;
+        /**
+         * Which avastha system the state belongs to, and therefore which birth-chart field it appears in. "baladi" is the five-fold age state set by degree within the sign and appears in `awastha`. "jagradadi" is the three-fold waking state set by sign dignity. "deeptadi" is the nine-fold dispositional state. Baladi applies to every body; the other two apply to the seven classical grahas only.
+         */
+        system: 'baladi' | 'jagradadi' | 'deeptadi';
+        /**
+         * Short label for the state, sized for a table cell beside the graha.
+         */
+        meaning: string;
+        /**
+         * What the state means for the results the graha delivers, which is the whole purpose of reading an avastha: the chart says where a graha is, the avastha says how much of its promise it can keep.
+         */
+        interpretation: string;
+    };
+};
+
+export type GetVedicAstrologyAvasthasByIdResponse = GetVedicAstrologyAvasthasByIdResponses[keyof GetVedicAstrologyAvasthasByIdResponses];
+
+export type PostVedicAstrologyArudhaData = {
+    body?: ArudhaRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/arudha';
+};
+
+export type PostVedicAstrologyArudhaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyArudhaError = PostVedicAstrologyArudhaErrors[keyof PostVedicAstrologyArudhaErrors];
+
+export type PostVedicAstrologyArudhaResponses = {
+    /**
+     * All twelve Arudha padas with derivation detail, plus the Arudha Lagna and Upapada lifted to the top level.
+     */
+    200: ArudhaResponse;
+};
+
+export type PostVedicAstrologyArudhaResponse = PostVedicAstrologyArudhaResponses[keyof PostVedicAstrologyArudhaResponses];
+
+export type PostVedicAstrologyCharaKarakasData = {
+    body?: CharaKarakaRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/vedic-astrology/chara-karakas';
+};
+
+export type PostVedicAstrologyCharaKarakasErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyCharaKarakasError = PostVedicAstrologyCharaKarakasErrors[keyof PostVedicAstrologyCharaKarakasErrors];
+
+export type PostVedicAstrologyCharaKarakasResponses = {
+    /**
+     * Karaka offices in descending rank with the ranking degree for each, plus the Atmakaraka and Darakaraka lifted to the top level.
+     */
+    200: CharaKarakaResponse;
+};
+
+export type PostVedicAstrologyCharaKarakasResponse = PostVedicAstrologyCharaKarakasResponses[keyof PostVedicAstrologyCharaKarakasResponses];
 
 export type PostForecastTimelineData = {
     body?: {
