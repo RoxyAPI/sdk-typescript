@@ -24,13 +24,15 @@ jobs:
 
       # Hermetic: regenerates from the committed spec, so this verifies that the committed
       # generated code still reproduces from it, with no network dependency. Refreshing the
-      # spec itself is the release workflow's job.
+      # spec itself is the release workflow's job. `generate` also runs sync-docs (see
+      # scripts/generate.ts), so the docs are asserted in the same diff rather than by a
+      # second identical run.
       - name: Codegen drift check
         env:
           ROXYAPI_SPEC_FILE: specs/openapi.json
         run: |
           bun run generate
-          git diff --exit-code -- specs/openapi.json src/client.gen.ts src/sdk.gen.ts src/types.gen.ts src/client src/core \
+          git diff --exit-code -- specs/openapi.json src/client.gen.ts src/sdk.gen.ts src/types.gen.ts src/client src/core README.md AGENTS.md docs/llms-full.txt \
             || { echo 'codegen drift: commit the regenerated files'; exit 1; }
 
       - name: Lint
@@ -38,12 +40,6 @@ jobs:
 
       - name: Typecheck
         run: bun typecheck
-
-      - name: Docs drift check
-        run: |
-          bun run docs:sync
-          git diff --exit-code -- README.md AGENTS.md docs/llms-full.txt \
-            || { echo 'docs drift: commit the regenerated README.md/AGENTS.md/llms-full.txt'; exit 1; }
 
       - name: Test
         run: bun run test

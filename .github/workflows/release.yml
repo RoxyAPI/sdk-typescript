@@ -32,11 +32,10 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      # Also runs sync-docs internally (scripts/generate.ts), so README/AGENTS/llms-full
+      # are already refreshed by the time the commit step stages them.
       - name: Regenerate SDK
         run: bun run generate
-
-      - name: Sync docs from spec
-        run: bun run docs:sync
 
       - name: Check if spec changed
         id: diff
