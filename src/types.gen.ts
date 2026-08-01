@@ -3840,6 +3840,10 @@ export type KpAyanamsaResponse = {
      */
     date: string;
     /**
+     * The exact UTC instant the value was computed for, after applying the time and timezone. Echoed so a client reconciling to the arcsecond can confirm the moment rather than infer it from the date alone. Equals midnight UTC of the date when no time was supplied.
+     */
+    instant: string;
+    /**
      * KP-Newcomb ayanamsa value in degrees
      */
     ayanamsa: number;
@@ -4008,6 +4012,12 @@ export type KpCuspsResponse = {
          */
         kpNumber: number;
     }>;
+    /**
+     * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
+     */
+    houseThemes: {
+        [key: string]: Array<string>;
+    };
 };
 
 export type KpCuspsRequest = {
@@ -4463,6 +4473,12 @@ export type KpRulingPlanetsResponse = {
          */
         signifies: Array<number>;
     }>;
+    /**
+     * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
+     */
+    houseThemes?: {
+        [key: string]: Array<string>;
+    };
 };
 
 export type KpRulingPlanetsIntervalResponse = {
@@ -4653,6 +4669,12 @@ export type KpRulingPlanetsIntervalResponse = {
             L4: Array<number>;
         };
     }>;
+    /**
+     * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
+     */
+    houseThemes: {
+        [key: string]: Array<string>;
+    };
 };
 
 export type KpSublordChangesResponse = {
@@ -7161,9 +7183,9 @@ export type GetAstrologyMoonPhaseCurrentData = {
          */
         time?: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours (e.g. -5 for EST, 1 for CET). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).
+         * IANA name (e.g. "America/New_York", "Europe/London"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).
          */
-        timezone?: number | string | unknown;
+        timezone?: string;
     };
     url: '/astrology/moon-phase/current';
 };
@@ -10678,9 +10700,13 @@ export type GetAstrologyHoroscopeBySignDailyData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
         /**
-         * Forecast date in YYYY-MM-DD format. Defaults to today. Supports future and past dates for editorial scheduling.
+         * Forecast date in YYYY-MM-DD format. Past and future dates are both supported, for editorial scheduling and backfill. Defaults to the current period in the timezone parameter.
          */
         date?: string;
+        /**
+         * Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on each day. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. "America/New_York"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
+         */
+        timezone?: string;
     };
     url: '/astrology/horoscope/{sign}/daily';
 };
@@ -10872,6 +10898,14 @@ export type GetAstrologyHoroscopeBySignWeeklyData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Any date inside the target week, in YYYY-MM-DD format. The forecast covers the Monday to Sunday week containing it. Defaults to the current period in the timezone parameter.
+         */
+        date?: string;
+        /**
+         * Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on each Monday. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. "America/New_York"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
+         */
+        timezone?: string;
     };
     url: '/astrology/horoscope/{sign}/weekly';
 };
@@ -11047,6 +11081,14 @@ export type GetAstrologyHoroscopeBySignMonthlyData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Any date inside the target month, in YYYY-MM-DD format. The forecast covers the whole calendar month containing it. Defaults to the current period in the timezone parameter.
+         */
+        date?: string;
+        /**
+         * Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on the 1st. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. "America/New_York"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
+         */
+        timezone?: string;
     };
     url: '/astrology/horoscope/{sign}/monthly';
 };
@@ -13781,9 +13823,13 @@ export type PostVedicAstrologyDashaCurrentData = {
          */
         timezone?: number | string;
         /**
-         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
-        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
+        /**
+         * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+         */
+        ayanamsaValue?: number;
         /**
          * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
          */
@@ -13943,9 +13989,9 @@ export type PostVedicAstrologyDashaCurrentResponses = {
          */
         ayanamsa: number;
         /**
-         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old" or "custom". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads "custom" the ayanamsa field above carries the exact value you supplied.
          */
-        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
         /**
          * Mahadasha (major planetary period) in the 120-year Vimshottari dasha cycle. Start and end dates are determined by Moon nakshatra at birth.
          */
@@ -14592,9 +14638,13 @@ export type PostVedicAstrologyDashaMajorData = {
          */
         timezone?: number | string;
         /**
-         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
-        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
+        /**
+         * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+         */
+        ayanamsaValue?: number;
         /**
          * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
          */
@@ -14754,9 +14804,9 @@ export type PostVedicAstrologyDashaMajorResponses = {
          */
         ayanamsa: number;
         /**
-         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old" or "custom". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads "custom" the ayanamsa field above carries the exact value you supplied.
          */
-        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
         /**
          * Remaining balance of the first Mahadasha at birth. Based on Moon degree within the birth nakshatra. partial dasha already elapsed before birth.
          */
@@ -14902,9 +14952,13 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
          */
         timezone?: number | string;
         /**
-         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
-        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
+        /**
+         * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+         */
+        ayanamsaValue?: number;
         /**
          * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
          */
@@ -15061,9 +15115,9 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
          */
         ayanamsa: number;
         /**
-         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old" or "custom". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads "custom" the ayanamsa field above carries the exact value you supplied.
          */
-        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
         /**
          * Full details of the parent Mahadasha including start/end dates and duration.
          */
@@ -15280,9 +15334,13 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaData = {
          */
         timezone?: number | string;
         /**
-         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
-        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
+        /**
+         * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+         */
+        ayanamsaValue?: number;
         /**
          * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
          */
@@ -15447,9 +15505,9 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
          */
         ayanamsa: number;
         /**
-         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old" or "custom". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads "custom" the ayanamsa field above carries the exact value you supplied.
          */
-        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
         /**
          * Full details of the parent Antardasha including start/end dates and duration.
          */
@@ -15674,9 +15732,13 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaDa
          */
         timezone?: number | string;
         /**
-         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
-        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
+        /**
+         * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+         */
+        ayanamsaValue?: number;
         /**
          * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
          */
@@ -15849,9 +15911,9 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
          */
         ayanamsa: number;
         /**
-         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old" or "custom". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads "custom" the ayanamsa field above carries the exact value you supplied.
          */
-        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
         /**
          * Full details of the parent Pratyantardasha including start/end dates and duration.
          */
@@ -16084,9 +16146,13 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
          */
         timezone?: number | string;
         /**
-         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
+         * Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. "lahiri" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. "kp-newcomb" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. "kp-old" uses the Krishnamurti original table from KP Reader-1. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses.
          */
-        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
+        /**
+         * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+         */
+        ayanamsaValue?: number;
         /**
          * Set true to attach the KP significators of each period lord: its star lord, sub lord, occupied house, the houses it signifies at levels L1 to L4, and a strength grade. Off by default, so responses stay exactly as they are for clients that only need dates. Requires the birth latitude and longitude, since significators are read off a Placidus house chart, and uses the same ayanamsa frame selected above.
          */
@@ -16267,9 +16333,9 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
          */
         ayanamsa: number;
         /**
-         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old". Echoed so a client can confirm which frame produced these dates without re-deriving it.
+         * Ayanamsa system used, echoing the request field. One of "lahiri", "kp-newcomb", "kp-old" or "custom". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads "custom" the ayanamsa field above carries the exact value you supplied.
          */
-        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri';
+        ayanamsaType: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'custom';
         /**
          * Full details of the parent Sookshma dasha including start/end dates and duration.
          */
@@ -18574,6 +18640,14 @@ export type GetVedicAstrologyKpAyanamsaData = {
          * Date for ayanamsa calculation in YYYY-MM-DD format. Defaults to today if not provided. Ayanamsa changes by ~0.01 degrees per month due to the precession of Earth.
          */
         date?: string;
+        /**
+         * Time of day in 24-hour HH:MM:SS format, interpreted in the timezone below. Omit for midnight UTC. The ayanamsa moves about 0.14 arcseconds across a day, so supplying the time matters only when reconciling a chart against reference software to the arcsecond.
+         */
+        time?: string;
+        /**
+         * IANA name (e.g. "Asia/Kolkata", "America/New_York"), decimal hours (e.g. 5.5 for IST, -5 for EST), or a fixed UTC offset (e.g. "+05:30"). IANA resolved to the DST-correct offset for the given date. Applies to the time field above. Defaults to 0 (UTC).
+         */
+        timezone?: string;
     };
     url: '/vedic-astrology/kp/ayanamsa';
 };
@@ -18814,7 +18888,16 @@ export type PostVedicAstrologyKpPlanetsResponse = PostVedicAstrologyKpPlanetsRes
 export type PostVedicAstrologyKpCuspsData = {
     body?: KpCuspsRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
+    };
     url: '/vedic-astrology/kp/cusps';
 };
 
@@ -19092,7 +19175,16 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
         nodeType?: 'mean' | 'true';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
+    };
     url: '/vedic-astrology/kp/ruling-planets';
 };
 
@@ -19245,7 +19337,16 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
         nodeType?: 'mean' | 'true';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
+    };
     url: '/vedic-astrology/kp/ruling-planets-interval';
 };
 

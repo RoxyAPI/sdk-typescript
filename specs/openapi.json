@@ -7698,6 +7698,11 @@
             "example": "2025-12-26",
             "description": "Date for which ayanamsa was calculated"
           },
+          "instant": {
+            "type": "string",
+            "example": "2025-12-26T03:30:00.000Z",
+            "description": "The exact UTC instant the value was computed for, after applying the time and timezone. Echoed so a client reconciling to the arcsecond can confirm the moment rather than infer it from the date alone. Equals midnight UTC of the date when no time was supplied."
+          },
           "ayanamsa": {
             "type": "number",
             "example": 24.22233926,
@@ -7721,6 +7726,7 @@
         },
         "required": [
           "date",
+          "instant",
           "ayanamsa",
           "type",
           "formula",
@@ -7996,12 +8002,32 @@
                 "kpNumber"
               ]
             }
+          },
+          "houseThemes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "2": [
+                "wealth",
+                "family",
+                "speech",
+                "possessions",
+                "food"
+              ]
+            },
+            "description": "Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field."
           }
         },
         "required": [
           "ayanamsa",
           "houseSystem",
-          "cusps"
+          "cusps",
+          "houseThemes"
         ]
       },
       "KPCuspsRequest": {
@@ -8813,6 +8839,25 @@
               }
             ],
             "description": "Houses signified by each ruling planet (only when birthDate and birthTime provided). Based on 4-level KP significator hierarchy from birth chart."
+          },
+          "houseThemes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "2": [
+                "wealth",
+                "family",
+                "speech",
+                "possessions",
+                "food"
+              ]
+            },
+            "description": "Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field."
           }
         },
         "required": [
@@ -9229,6 +9274,25 @@
               ]
             },
             "description": "Ruling planets with significators at each interval"
+          },
+          "houseThemes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "2": [
+                "wealth",
+                "family",
+                "speech",
+                "possessions",
+                "food"
+              ]
+            },
+            "description": "Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field."
           }
         },
         "required": [
@@ -9237,7 +9301,8 @@
           "intervalMinutes",
           "location",
           "totalIntervals",
-          "intervals"
+          "intervals",
+          "houseThemes"
         ]
       },
       "KPSublordChangesResponse": {
@@ -13958,27 +14023,12 @@
           },
           {
             "schema": {
-              "anyOf": [
-                {
-                  "type": "number",
-                  "nullable": true,
-                  "minimum": -14,
-                  "maximum": 14
-                },
-                {
-                  "type": "string",
-                  "pattern": "^[A-Za-z_]+(?:\\/[A-Za-z0-9_+-]+){0,2}$"
-                },
-                {
-                  "nullable": true
-                }
-              ],
-              "default": 0,
+              "type": "string",
               "example": 0,
-              "description": "IANA name (e.g. \"America/New_York\", \"Europe/London\") OR decimal hours (e.g. -5 for EST, 1 for CET). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC)."
+              "description": "IANA name (e.g. \"America/New_York\", \"Europe/London\"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. \"-05:00\"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC)."
             },
             "required": false,
-            "description": "IANA name (e.g. \"America/New_York\", \"Europe/London\") OR decimal hours (e.g. -5 for EST, 1 for CET). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).",
+            "description": "IANA name (e.g. \"America/New_York\", \"Europe/London\"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. \"-05:00\"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).",
             "name": "timezone",
             "in": "query"
           }
@@ -21185,7 +21235,7 @@
           "Western Astrology"
         ],
         "summary": "Daily horoscope by zodiac sign - Transit-based forecast with house activations",
-        "description": "Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits using whole-sign house positions, so every sign receives unique content. Returns love, career, health, finance, overview with active transits, Moon sign, Moon phase, energy rating, lucky number, lucky color, and compatible signs. Supports date parameter for editorial scheduling. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.",
+        "description": "Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits using whole-sign house positions, so every sign receives unique content. Returns love, career, health, finance, overview with active transits, Moon sign, Moon phase, energy rating, lucky number, lucky color, and compatible signs. Content is fixed for a given date and rolls over at midnight, by default UTC. Pass date for editorial scheduling, or timezone to roll over on a local clock. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.",
         "security": [
           {
             "apiKey": []
@@ -21244,11 +21294,22 @@
               "type": "string",
               "format": "date",
               "example": "2026-04-03",
-              "description": "Forecast date in YYYY-MM-DD format. Defaults to today. Supports future and past dates for editorial scheduling."
+              "description": "Forecast date in YYYY-MM-DD format. Past and future dates are both supported, for editorial scheduling and backfill. Defaults to the current period in the timezone parameter."
             },
             "required": false,
-            "description": "Forecast date in YYYY-MM-DD format. Defaults to today. Supports future and past dates for editorial scheduling.",
+            "description": "Forecast date in YYYY-MM-DD format. Past and future dates are both supported, for editorial scheduling and backfill. Defaults to the current period in the timezone parameter.",
             "name": "date",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "America/New_York",
+              "description": "Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on each day. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. \"America/New_York\"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. \"-05:00\")."
+            },
+            "required": false,
+            "description": "Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on each day. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. \"America/New_York\"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. \"-05:00\").",
+            "name": "timezone",
             "in": "query"
           }
         ],
@@ -21581,7 +21642,7 @@
           "Western Astrology"
         ],
         "summary": "Weekly horoscope by zodiac sign - 7-day transit forecast",
-        "description": "Get weekly horoscope for any zodiac sign. Forecast covers a full 7-day period based on planetary transits with house-based content unique to each sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.",
+        "description": "Get weekly horoscope for any zodiac sign. Forecast covers a full Monday to Sunday period based on planetary transits with house-based content unique to each sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Pass any date inside a week to retrieve that week, or timezone to roll over on a local clock. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.",
         "security": [
           {
             "apiKey": []
@@ -21633,6 +21694,29 @@
             "required": false,
             "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
             "name": "lang",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-04-03",
+              "description": "Any date inside the target week, in YYYY-MM-DD format. The forecast covers the Monday to Sunday week containing it. Defaults to the current period in the timezone parameter."
+            },
+            "required": false,
+            "description": "Any date inside the target week, in YYYY-MM-DD format. The forecast covers the Monday to Sunday week containing it. Defaults to the current period in the timezone parameter.",
+            "name": "date",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "America/New_York",
+              "description": "Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on each Monday. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. \"America/New_York\"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. \"-05:00\")."
+            },
+            "required": false,
+            "description": "Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on each Monday. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. \"America/New_York\"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. \"-05:00\").",
+            "name": "timezone",
             "in": "query"
           }
         ],
@@ -21947,7 +22031,7 @@
           "Western Astrology"
         ],
         "summary": "Monthly horoscope by zodiac sign - 30-day transit forecast with key dates",
-        "description": "Get monthly horoscope for any zodiac sign with sign-specific week-by-week breakdown and real lunar phase key dates. Based on planetary transits with house activations unique to each sign, covering love, career, health, and finance for the entire month. Key dates include actual New Moon, Full Moon, and retrograde dates from ephemeris calculations. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.",
+        "description": "Get monthly horoscope for any zodiac sign with sign-specific week-by-week breakdown and real lunar phase key dates. Based on planetary transits with house activations unique to each sign, covering love, career, health, and finance for the entire month. Key dates include actual New Moon, Full Moon, and retrograde dates from ephemeris calculations. Pass any date inside a month to retrieve that month, or timezone to roll over on a local clock. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.",
         "security": [
           {
             "apiKey": []
@@ -21999,6 +22083,29 @@
             "required": false,
             "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
             "name": "lang",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-04-03",
+              "description": "Any date inside the target month, in YYYY-MM-DD format. The forecast covers the whole calendar month containing it. Defaults to the current period in the timezone parameter."
+            },
+            "required": false,
+            "description": "Any date inside the target month, in YYYY-MM-DD format. The forecast covers the whole calendar month containing it. Defaults to the current period in the timezone parameter.",
+            "name": "date",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "America/New_York",
+              "description": "Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on the 1st. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. \"America/New_York\"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. \"-05:00\")."
+            },
+            "required": false,
+            "description": "Selects which period counts as current when date is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on the 1st. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. \"America/New_York\"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. \"-05:00\").",
+            "name": "timezone",
             "in": "query"
           }
         ],
@@ -27808,11 +27915,17 @@
                     "enum": [
                       "kp-newcomb",
                       "kp-old",
-                      "lahiri"
+                      "lahiri",
+                      "custom"
                     ],
                     "default": "lahiri",
                     "example": "lahiri",
-                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. \"custom\" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                  },
+                  "ayanamsaValue": {
+                    "type": "number",
+                    "example": 24,
+                    "description": "Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source."
                   },
                   "significators": {
                     "type": "boolean",
@@ -27911,10 +28024,11 @@
                       "enum": [
                         "kp-newcomb",
                         "kp-old",
-                        "lahiri"
+                        "lahiri",
+                        "custom"
                       ],
                       "example": "lahiri",
-                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\". Echoed so a client can confirm which frame produced these dates without re-deriving it."
+                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\" or \"custom\". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads \"custom\" the ayanamsa field above carries the exact value you supplied."
                     },
                     "mahadasha": {
                       "type": "object",
@@ -29657,11 +29771,17 @@
                     "enum": [
                       "kp-newcomb",
                       "kp-old",
-                      "lahiri"
+                      "lahiri",
+                      "custom"
                     ],
                     "default": "lahiri",
                     "example": "lahiri",
-                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. \"custom\" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                  },
+                  "ayanamsaValue": {
+                    "type": "number",
+                    "example": 24,
+                    "description": "Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source."
                   },
                   "significators": {
                     "type": "boolean",
@@ -29760,10 +29880,11 @@
                       "enum": [
                         "kp-newcomb",
                         "kp-old",
-                        "lahiri"
+                        "lahiri",
+                        "custom"
                       ],
                       "example": "lahiri",
-                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\". Echoed so a client can confirm which frame produced these dates without re-deriving it."
+                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\" or \"custom\". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads \"custom\" the ayanamsa field above carries the exact value you supplied."
                     },
                     "birthDashaBalance": {
                       "type": "object",
@@ -30365,11 +30486,17 @@
                     "enum": [
                       "kp-newcomb",
                       "kp-old",
-                      "lahiri"
+                      "lahiri",
+                      "custom"
                     ],
                     "default": "lahiri",
                     "example": "lahiri",
-                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. \"custom\" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                  },
+                  "ayanamsaValue": {
+                    "type": "number",
+                    "example": 24,
+                    "description": "Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source."
                   },
                   "significators": {
                     "type": "boolean",
@@ -30456,10 +30583,11 @@
                       "enum": [
                         "kp-newcomb",
                         "kp-old",
-                        "lahiri"
+                        "lahiri",
+                        "custom"
                       ],
                       "example": "lahiri",
-                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\". Echoed so a client can confirm which frame produced these dates without re-deriving it."
+                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\" or \"custom\". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads \"custom\" the ayanamsa field above carries the exact value you supplied."
                     },
                     "mahadashaPeriod": {
                       "type": "object",
@@ -31270,11 +31398,17 @@
                     "enum": [
                       "kp-newcomb",
                       "kp-old",
-                      "lahiri"
+                      "lahiri",
+                      "custom"
                     ],
                     "default": "lahiri",
                     "example": "lahiri",
-                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. \"custom\" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                  },
+                  "ayanamsaValue": {
+                    "type": "number",
+                    "example": 24,
+                    "description": "Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source."
                   },
                   "significators": {
                     "type": "boolean",
@@ -31377,10 +31511,11 @@
                       "enum": [
                         "kp-newcomb",
                         "kp-old",
-                        "lahiri"
+                        "lahiri",
+                        "custom"
                       ],
                       "example": "lahiri",
-                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\". Echoed so a client can confirm which frame produced these dates without re-deriving it."
+                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\" or \"custom\". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads \"custom\" the ayanamsa field above carries the exact value you supplied."
                     },
                     "antardashaPeriod": {
                       "type": "object",
@@ -32248,11 +32383,17 @@
                     "enum": [
                       "kp-newcomb",
                       "kp-old",
-                      "lahiri"
+                      "lahiri",
+                      "custom"
                     ],
                     "default": "lahiri",
                     "example": "lahiri",
-                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. \"custom\" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                  },
+                  "ayanamsaValue": {
+                    "type": "number",
+                    "example": 24,
+                    "description": "Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source."
                   },
                   "significators": {
                     "type": "boolean",
@@ -32371,10 +32512,11 @@
                       "enum": [
                         "kp-newcomb",
                         "kp-old",
-                        "lahiri"
+                        "lahiri",
+                        "custom"
                       ],
                       "example": "lahiri",
-                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\". Echoed so a client can confirm which frame produced these dates without re-deriving it."
+                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\" or \"custom\". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads \"custom\" the ayanamsa field above carries the exact value you supplied."
                     },
                     "pratyantardashaPeriod": {
                       "type": "object",
@@ -33299,11 +33441,17 @@
                     "enum": [
                       "kp-newcomb",
                       "kp-old",
-                      "lahiri"
+                      "lahiri",
+                      "custom"
                     ],
                     "default": "lahiri",
                     "example": "lahiri",
-                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                    "description": "Ayanamsa system used to place the birth Moon in its nakshatra, which sets every dasha start and end date. \"lahiri\" uses Lahiri/Chitrapaksha, the traditional Vedic standard, and is the default. \"kp-newcomb\" uses the KP-Newcomb dynamic formula, matching Krishnamurti Paddhati software. \"kp-old\" uses the Krishnamurti original table from KP Reader-1. \"custom\" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. Switching frames shifts every dasha boundary by weeks, so pick the one your reference software uses."
+                  },
+                  "ayanamsaValue": {
+                    "type": "number",
+                    "example": 24,
+                    "description": "Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source."
                   },
                   "significators": {
                     "type": "boolean",
@@ -33438,10 +33586,11 @@
                       "enum": [
                         "kp-newcomb",
                         "kp-old",
-                        "lahiri"
+                        "lahiri",
+                        "custom"
                       ],
                       "example": "lahiri",
-                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\". Echoed so a client can confirm which frame produced these dates without re-deriving it."
+                      "description": "Ayanamsa system used, echoing the request field. One of \"lahiri\", \"kp-newcomb\", \"kp-old\" or \"custom\". Echoed so a client can confirm which frame produced these dates without re-deriving it. When it reads \"custom\" the ayanamsa field above carries the exact value you supplied."
                     },
                     "sookshmaPeriod": {
                       "type": "object",
@@ -38563,7 +38712,7 @@
           "Vedic Astrology"
         ],
         "summary": "Get KP-Newcomb ayanamsa - Dynamic daily calculation",
-        "description": "Get the KP-Newcomb (Krishnamurti) ayanamsa for any date, computed continuously from Newcomb precession theory rather than looked up in a preset table, so it tracks the date you ask for instead of the calendar year. This is the precession offset subtracted from a tropical longitude to obtain the sidereal one, and it is what makes a KP chart reproduce the reference software your practitioners already use. Returns the same value every KP endpoint applies internally. KP Newcomb ayanamsa API, dynamic ayanamsa calculator, Krishnamurti ayanamsa today, current KP ayanamsa",
+        "description": "Get the KP-Newcomb (Krishnamurti) ayanamsa for any instant, computed continuously from Newcomb precession theory rather than looked up in a preset table, so it tracks the exact moment you ask for instead of the calendar year. Supply date alone for midnight UTC, or add time and timezone to pin a birth moment exactly. This is the precession offset subtracted from a tropical longitude to obtain the sidereal one, and it is what makes a KP chart reproduce the reference software your practitioners already use. Returns the same value every KP endpoint applies internally. KP Newcomb ayanamsa API, dynamic ayanamsa calculator, Krishnamurti ayanamsa today, current KP ayanamsa",
         "security": [
           {
             "apiKey": []
@@ -38580,6 +38729,29 @@
             "required": false,
             "description": "Date for ayanamsa calculation in YYYY-MM-DD format. Defaults to today if not provided. Ayanamsa changes by ~0.01 degrees per month due to the precession of Earth.",
             "name": "date",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "time",
+              "example": "09:00:00",
+              "description": "Time of day in 24-hour HH:MM:SS format, interpreted in the timezone below. Omit for midnight UTC. The ayanamsa moves about 0.14 arcseconds across a day, so supplying the time matters only when reconciling a chart against reference software to the arcsecond."
+            },
+            "required": false,
+            "description": "Time of day in 24-hour HH:MM:SS format, interpreted in the timezone below. Omit for midnight UTC. The ayanamsa moves about 0.14 arcseconds across a day, so supplying the time matters only when reconciling a chart against reference software to the arcsecond.",
+            "name": "time",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": 5.5,
+              "description": "IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"), decimal hours (e.g. 5.5 for IST, -5 for EST), or a fixed UTC offset (e.g. \"+05:30\"). IANA resolved to the DST-correct offset for the given date. Applies to the time field above. Defaults to 0 (UTC)."
+            },
+            "required": false,
+            "description": "IANA name (e.g. \"Asia/Kolkata\", \"America/New_York\"), decimal hours (e.g. 5.5 for IST, -5 for EST), or a fixed UTC offset (e.g. \"+05:30\"). IANA resolved to the DST-correct offset for the given date. Applies to the time field above. Defaults to 0 (UTC).",
+            "name": "timezone",
             "in": "query"
           }
         ],
@@ -39054,6 +39226,46 @@
         "security": [
           {
             "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "general",
+                "finance"
+              ],
+              "default": "general",
+              "example": "general",
+              "description": "Which signification vocabulary the houseThemes map returns. \"general\" gives the classical bhava significations (self, wealth, siblings, home, and so on). \"finance\" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use \"finance\" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to \"general\"."
+            },
+            "required": false,
+            "description": "Which signification vocabulary the houseThemes map returns. \"general\" gives the classical bhava significations (self, wealth, siblings, home, and so on). \"finance\" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use \"finance\" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to \"general\".",
+            "name": "focus",
+            "in": "query"
           }
         ],
         "requestBody": {
@@ -39578,6 +39790,46 @@
             "apiKey": []
           }
         ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "general",
+                "finance"
+              ],
+              "default": "general",
+              "example": "general",
+              "description": "Which signification vocabulary the houseThemes map returns. \"general\" gives the classical bhava significations (self, wealth, siblings, home, and so on). \"finance\" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use \"finance\" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to \"general\"."
+            },
+            "required": false,
+            "description": "Which signification vocabulary the houseThemes map returns. \"general\" gives the classical bhava significations (self, wealth, siblings, home, and so on). \"finance\" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use \"finance\" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to \"general\".",
+            "name": "focus",
+            "in": "query"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -39880,6 +40132,46 @@
         "security": [
           {
             "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en",
+                "tr",
+                "de",
+                "es",
+                "hi",
+                "pt",
+                "fr",
+                "ru"
+              ],
+              "default": "en",
+              "example": "en",
+              "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English."
+            },
+            "required": false,
+            "description": "Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.",
+            "name": "lang",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "general",
+                "finance"
+              ],
+              "default": "general",
+              "example": "general",
+              "description": "Which signification vocabulary the houseThemes map returns. \"general\" gives the classical bhava significations (self, wealth, siblings, home, and so on). \"finance\" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use \"finance\" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to \"general\"."
+            },
+            "required": false,
+            "description": "Which signification vocabulary the houseThemes map returns. \"general\" gives the classical bhava significations (self, wealth, siblings, home, and so on). \"finance\" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use \"finance\" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to \"general\".",
+            "name": "focus",
+            "in": "query"
           }
         ],
         "requestBody": {

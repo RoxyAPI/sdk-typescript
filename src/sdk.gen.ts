@@ -345,7 +345,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Daily horoscope by zodiac sign - Transit-based forecast with house activations
      *
-     * Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits using whole-sign house positions, so every sign receives unique content. Returns love, career, health, finance, overview with active transits, Moon sign, Moon phase, energy rating, lucky number, lucky color, and compatible signs. Supports date parameter for editorial scheduling. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.
+     * Get the daily horoscope for any zodiac sign. Forecast is generated from real-time planetary transits using whole-sign house positions, so every sign receives unique content. Returns love, career, health, finance, overview with active transits, Moon sign, Moon phase, energy rating, lucky number, lucky color, and compatible signs. Content is fixed for a given date and rolls over at midnight, by default UTC. Pass date for editorial scheduling, or timezone to roll over on a local clock. Daily horoscope API, zodiac forecast, sun sign horoscope, astrology prediction.
      */
     public getDailyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignDailyData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignDailyResponses, GetAstrologyHoroscopeBySignDailyErrors, ThrowOnError>({
@@ -358,7 +358,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Weekly horoscope by zodiac sign - 7-day transit forecast
      *
-     * Get weekly horoscope for any zodiac sign. Forecast covers a full 7-day period based on planetary transits with house-based content unique to each sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.
+     * Get weekly horoscope for any zodiac sign. Forecast covers a full Monday to Sunday period based on planetary transits with house-based content unique to each sign, with love, career, health, finance guidance plus lucky days, lucky numbers, and compatible signs. Pass any date inside a week to retrieve that week, or timezone to roll over on a local clock. Weekly horoscope API, zodiac weekly forecast, astrology weekly prediction.
      */
     public getWeeklyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignWeeklyData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignWeeklyResponses, GetAstrologyHoroscopeBySignWeeklyErrors, ThrowOnError>({
@@ -371,7 +371,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Monthly horoscope by zodiac sign - 30-day transit forecast with key dates
      *
-     * Get monthly horoscope for any zodiac sign with sign-specific week-by-week breakdown and real lunar phase key dates. Based on planetary transits with house activations unique to each sign, covering love, career, health, and finance for the entire month. Key dates include actual New Moon, Full Moon, and retrograde dates from ephemeris calculations. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.
+     * Get monthly horoscope for any zodiac sign with sign-specific week-by-week breakdown and real lunar phase key dates. Based on planetary transits with house activations unique to each sign, covering love, career, health, and finance for the entire month. Key dates include actual New Moon, Full Moon, and retrograde dates from ephemeris calculations. Pass any date inside a month to retrieve that month, or timezone to roll over on a local clock. Monthly horoscope API, zodiac monthly forecast, astrology monthly prediction.
      */
     public getMonthlyHoroscope<ThrowOnError extends boolean = false>(options: Options<GetAstrologyHoroscopeBySignMonthlyData, ThrowOnError>) {
         return (options.client ?? this.client).get<GetAstrologyHoroscopeBySignMonthlyResponses, GetAstrologyHoroscopeBySignMonthlyErrors, ThrowOnError>({
@@ -939,7 +939,7 @@ export class VedicAstrology extends HeyApiClient {
     /**
      * Get KP-Newcomb ayanamsa - Dynamic daily calculation
      *
-     * Get the KP-Newcomb (Krishnamurti) ayanamsa for any date, computed continuously from Newcomb precession theory rather than looked up in a preset table, so it tracks the date you ask for instead of the calendar year. This is the precession offset subtracted from a tropical longitude to obtain the sidereal one, and it is what makes a KP chart reproduce the reference software your practitioners already use. Returns the same value every KP endpoint applies internally. KP Newcomb ayanamsa API, dynamic ayanamsa calculator, Krishnamurti ayanamsa today, current KP ayanamsa
+     * Get the KP-Newcomb (Krishnamurti) ayanamsa for any instant, computed continuously from Newcomb precession theory rather than looked up in a preset table, so it tracks the exact moment you ask for instead of the calendar year. Supply date alone for midnight UTC, or add time and timezone to pin a birth moment exactly. This is the precession offset subtracted from a tropical longitude to obtain the sidereal one, and it is what makes a KP chart reproduce the reference software your practitioners already use. Returns the same value every KP endpoint applies internally. KP Newcomb ayanamsa API, dynamic ayanamsa calculator, Krishnamurti ayanamsa today, current KP ayanamsa
      */
     public getKpAyanamsa<ThrowOnError extends boolean = false>(options?: Options<GetVedicAstrologyKpAyanamsaData, ThrowOnError>) {
         return (options?.client ?? this.client).get<GetVedicAstrologyKpAyanamsaResponses, GetVedicAstrologyKpAyanamsaErrors, ThrowOnError>({

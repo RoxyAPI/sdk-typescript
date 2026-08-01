@@ -223,13 +223,22 @@ const { data } = await roxy.astrology.calculateCompatibility({
 });
 
 // Daily horoscope by zodiac sign - Transit-based forecast with house activations
-const { data } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' }, query: { date: '2026-04-03' } });
+const { data } = await roxy.astrology.getDailyHoroscope({
+  path: { sign: 'aries' },
+  query: { date: '2026-04-03', timezone: 'America/New_York' },
+});
 
 // Weekly horoscope by zodiac sign - 7-day transit forecast
-const { data } = await roxy.astrology.getWeeklyHoroscope({ path: { sign: 'aries' } });
+const { data } = await roxy.astrology.getWeeklyHoroscope({
+  path: { sign: 'aries' },
+  query: { date: '2026-04-03', timezone: 'America/New_York' },
+});
 
 // Monthly horoscope by zodiac sign - 30-day transit forecast with key dates
-const { data } = await roxy.astrology.getMonthlyHoroscope({ path: { sign: 'aries' } });
+const { data } = await roxy.astrology.getMonthlyHoroscope({
+  path: { sign: 'aries' },
+  query: { date: '2026-04-03', timezone: 'America/New_York' },
+});
 
 // Planetary Return Chart - Saturn return, Jupiter return, and inner planet cycles
 const { data } = await roxy.astrology.generatePlanetaryReturn({
@@ -457,6 +466,7 @@ const { data } = await roxy.vedicAstrology.getCurrentDasha({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
   },
@@ -472,6 +482,7 @@ const { data } = await roxy.vedicAstrology.getMajorDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
   },
@@ -488,6 +499,7 @@ const { data } = await roxy.vedicAstrology.getSubDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
   },
@@ -504,6 +516,7 @@ const { data } = await roxy.vedicAstrology.getPratyantardashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
   },
@@ -524,6 +537,7 @@ const { data } = await roxy.vedicAstrology.getSookshmaDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
   },
@@ -545,6 +559,7 @@ const { data } = await roxy.vedicAstrology.getPranaDashas({
     longitude: 77.209,
     timezone: 5.5,
     ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
   },
@@ -642,7 +657,9 @@ const { data } = await roxy.vedicAstrology.detectYogas({
 });
 
 // Get KP-Newcomb ayanamsa - Dynamic daily calculation
-const { data } = await roxy.vedicAstrology.getKpAyanamsa({ query: { date: '2025-12-26' } });
+const { data } = await roxy.vedicAstrology.getKpAyanamsa({
+  query: { date: '2025-12-26', time: '09:00:00', timezone: 5.5 },
+});
 
 // Get KP planetary positions with sub-lords
 const { data } = await roxy.vedicAstrology.getKpPlanets({
@@ -660,6 +677,7 @@ const { data } = await roxy.vedicAstrology.getKpPlanets({
 
 // Get KP Placidus house cusps with sub-lords
 const { data } = await roxy.vedicAstrology.getKpCusps({
+  query: { focus: 'general' },
   body: {
     date: '1990-07-04',
     time: '10:12:00',
@@ -688,6 +706,7 @@ const { data } = await roxy.vedicAstrology.generateKpChart({
 
 // Get KP ruling planets with optional significators
 const { data } = await roxy.vedicAstrology.getKpRulingPlanets({
+  query: { focus: 'general' },
   body: {
     latitude: 28.6139,
     longitude: 77.209,
@@ -701,6 +720,7 @@ const { data } = await roxy.vedicAstrology.getKpRulingPlanets({
 
 // Get KP ruling planets with significators at intervals
 const { data } = await roxy.vedicAstrology.getKpRulingInterval({
+  query: { focus: 'general' },
   body: {
     startDatetime: '2026-02-03T00:00:00Z',
     endDatetime: '2026-02-03T01:00:00Z',
