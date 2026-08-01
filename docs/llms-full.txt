@@ -67,7 +67,11 @@ const { data } = await roxy.astrology.getPlanetaryPositions({
 
 // Get current moon phase - Lunar phase calculator with zodiac sign
 const { data } = await roxy.astrology.getCurrentMoonPhase({
-  query: { date: '2025-12-18', time: '12:00:00', timezone: 0 },
+  query: {
+    date: '2025-12-18',
+    time: '12:00:00',
+    timezone: 'America/New_York',
+  },
 });
 
 // Get upcoming moon phases - Next new moon, full moon, quarters
@@ -394,6 +398,7 @@ const { data } = await roxy.vedicAstrology.generateBirthChart({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    avasthaInfo: true,
   },
 });
 
@@ -640,7 +645,7 @@ const { data } = await roxy.vedicAstrology.checkSadhesati({
 });
 
 // List all planetary yogas - 300+ Vedic Yoga Glossary
-const { data } = await roxy.vedicAstrology.listYogas();
+const { data } = await roxy.vedicAstrology.listYogas({ query: { family: 'akriti' } });
 
 // Get yoga details by ID - Vedic Yoga Glossary Entry
 const { data } = await roxy.vedicAstrology.getYoga({ path: { id: 'gajakesari' } });
@@ -658,7 +663,11 @@ const { data } = await roxy.vedicAstrology.detectYogas({
 
 // Get KP-Newcomb ayanamsa - Dynamic daily calculation
 const { data } = await roxy.vedicAstrology.getKpAyanamsa({
-  query: { date: '2025-12-26', time: '09:00:00', timezone: 5.5 },
+  query: {
+    date: '2025-12-26',
+    time: '09:00:00',
+    timezone: 'Asia/Kolkata',
+  },
 });
 
 // Get KP planetary positions with sub-lords

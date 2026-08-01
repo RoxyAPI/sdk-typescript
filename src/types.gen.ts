@@ -2903,9 +2903,17 @@ export type BirthChartResponse = {
          */
         quality: 'Positive' | 'Negative' | 'Both';
         /**
-         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not, and Nabhasa cases where the yoga matched its own rule but a stronger family outranked it under the classical precedence norms. Read `evidence` to tell those apart.
+         * Classical grouping, ALWAYS present on a detection verdict: one of the four Nabhasa families (asraya, dala, akriti, sankhya) or classical for the twelve single-combination yogas such as Gajakesari and the Pancha Mahapurusha. Group the verdict list on this key to render a Nabhasa result the way the tradition arranges it. Never translated, so grouping works identically under any lang.
+         */
+        family: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
+        /**
+         * True if every classical condition for the yoga is satisfied by the given chart. False means one of TWO different things: the rule failed, or the rule held and a stronger family outranked it. Read `suppressedBy` to tell those apart, which is exact and locale-independent; `evidence` says the same thing in English prose.
          */
         present: boolean;
+        /**
+         * Set ONLY when this yoga matched its own classical rule and was then silenced by a higher-ranking family, so `present` is false for a reason a practitioner reads very differently from a failed rule. Names the family that took precedence, under the four classical norms: Akriti outranks Asraya, and Akriti, Asraya and Dala each outrank Sankhya. Absent means the rule genuinely did not hold.
+         */
+        suppressedBy?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
         /**
          * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya.
          */
@@ -2933,11 +2941,11 @@ export type BirthChartResponse = {
              */
             nakshatra: {
                 /**
-                 * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 arcminutes each. Determines dasha lord and behavioral qualities.
+                 * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 minutes each. Determines dasha lord and behavioral qualities.
                  */
                 name: string;
                 /**
-                 * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 arcminutes. Pada determines Navamsa sign and refines personality traits.
+                 * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 minutes. Pada determines Navamsa sign and refines personality traits.
                  */
                 pada: number;
                 /**
@@ -2957,6 +2965,41 @@ export type BirthChartResponse = {
              * Bhava (house) number 1-12, counted whole-sign from the Lagna (house 1 is the Lagna rashi; Lagna itself is house 1). Present on the D1 birth chart; divisional charts omit it.
              */
             house?: number;
+            /**
+             * Localized readings for this graha avastha states, present only when avasthaInfo true was sent. Each key mirrors the state field of the same name and carries a short meaning plus a one-sentence classical interpretation, so a client can label Yuva or Swapna without a second lookup call.
+             */
+            avasthaInfo?: {
+                awastha?: {
+                    /**
+                     * One or two word gloss of the state, suitable for a table cell beside the graha.
+                     */
+                    meaning: string;
+                    /**
+                     * Single-sentence classical reading of what the state does to the graha results, sourced from BPHS ch. 45, Saravali ch. 5 and Phaladeepika ch. 9. Localized by the lang query parameter.
+                     */
+                    interpretation: string;
+                };
+                jagradadi?: {
+                    /**
+                     * One or two word gloss of the state, suitable for a table cell beside the graha.
+                     */
+                    meaning: string;
+                    /**
+                     * Single-sentence classical reading of what the state does to the graha results, sourced from BPHS ch. 45, Saravali ch. 5 and Phaladeepika ch. 9. Localized by the lang query parameter.
+                     */
+                    interpretation: string;
+                };
+                deeptadi?: {
+                    /**
+                     * One or two word gloss of the state, suitable for a table cell beside the graha.
+                     */
+                    meaning: string;
+                    /**
+                     * Single-sentence classical reading of what the state does to the graha results, sourced from BPHS ch. 45, Saravali ch. 5 and Phaladeepika ch. 9. Localized by the lang query parameter.
+                     */
+                    interpretation: string;
+                };
+            };
             /**
              * Baladi avastha, the planetary age-state set by the graha degree within its sign: Bala (infant), Kumara (child), Yuva (adult, strongest results), Vriddha (old), Mrita (dead, weakest). Bands run forward in odd signs and reversed in even signs. D1 birth chart only.
              */
@@ -2994,6 +3037,10 @@ export type BirthChartRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Set true to include a localized meaning and one-sentence classical interpretation beside each graha avastha state, under avasthaInfo on that graha in meta. Defaults to false, so an existing integration is byte-identical until it opts in. Saves a second call to GET /avasthas and the client-side join that would otherwise be needed to turn Yuva or Swapna into readable text.
+     */
+    avasthaInfo?: boolean;
 };
 
 export type NavamsaResponse = {
@@ -3023,11 +3070,11 @@ export type NavamsaResponse = {
                  */
                 nakshatra: {
                     /**
-                     * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 arcminutes each. Determines dasha lord and behavioral qualities.
+                     * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 minutes each. Determines dasha lord and behavioral qualities.
                      */
                     name: string;
                     /**
-                     * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 arcminutes. Pada determines Navamsa sign and refines personality traits.
+                     * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 minutes. Pada determines Navamsa sign and refines personality traits.
                      */
                     pada: number;
                     /**
@@ -3187,11 +3234,11 @@ export type DivisionalChartResponse = {
                  */
                 nakshatra: {
                     /**
-                     * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 arcminutes each. Determines dasha lord and behavioral qualities.
+                     * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 minutes each. Determines dasha lord and behavioral qualities.
                      */
                     name: string;
                     /**
-                     * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 arcminutes. Pada determines Navamsa sign and refines personality traits.
+                     * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 minutes. Pada determines Navamsa sign and refines personality traits.
                      */
                     pada: number;
                     /**
@@ -3448,11 +3495,11 @@ export type PlanetaryPositionsResponse = {
          */
         nakshatra: {
             /**
-             * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 arcminutes each.
+             * Nakshatra (lunar mansion) the planet occupies. One of 27 Vedic nakshatras spanning 13 degrees 20 minutes each.
              */
             name: string;
             /**
-             * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 arcminutes. Determines Navamsa sign.
+             * Nakshatra pada (quarter, 1-4). Each nakshatra divides into 4 padas of 3 degrees 20 minutes. Determines Navamsa sign.
              */
             pada: number;
             /**
@@ -3759,6 +3806,10 @@ export type YogaDetail = {
      * Overall nature. Auspicious yogas (Pancha Mahapurusha, Gajakesari) bestow benefits; inauspicious yogas (Kemadruma) indicate challenges; Both denotes context-dependent effects.
      */
     quality: 'Positive' | 'Negative' | 'Both';
+    /**
+     * Nabhasa family this yoga belongs to, present only on the 32 Nabhasa distribution yogas: asraya (3, sign modality), dala (2, benefic or malefic kendra tenancy), akriti (20, bhava shape) and sankhya (7, count of occupied rasis). Absent on every other glossary row, which is most of the catalog, since those are single-combination yogas outside the Nabhasa scheme. Group or filter the catalog on this key; it is never translated.
+     */
+    family?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
 };
 
 export type YogaDetectResponse = {
@@ -3787,9 +3838,17 @@ export type YogaDetectResponse = {
          */
         quality: 'Positive' | 'Negative' | 'Both';
         /**
-         * True if every classical condition for the yoga is satisfied by the given chart. False if any rule fails, including "almost-present" cases where dignity is met but kendra/aspect is not, and Nabhasa cases where the yoga matched its own rule but a stronger family outranked it under the classical precedence norms. Read `evidence` to tell those apart.
+         * Classical grouping, ALWAYS present on a detection verdict: one of the four Nabhasa families (asraya, dala, akriti, sankhya) or classical for the twelve single-combination yogas such as Gajakesari and the Pancha Mahapurusha. Group the verdict list on this key to render a Nabhasa result the way the tradition arranges it. Never translated, so grouping works identically under any lang.
+         */
+        family: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
+        /**
+         * True if every classical condition for the yoga is satisfied by the given chart. False means one of TWO different things: the rule failed, or the rule held and a stronger family outranked it. Read `suppressedBy` to tell those apart, which is exact and locale-independent; `evidence` says the same thing in English prose.
          */
         present: boolean;
+        /**
+         * Set ONLY when this yoga matched its own classical rule and was then silenced by a higher-ranking family, so `present` is false for a reason a practitioner reads very differently from a failed rule. Names the family that took precedence, under the four classical norms: Akriti outranks Asraya, and Akriti, Asraya and Dala each outrank Sankhya. Absent means the rule genuinely did not hold.
+         */
+        suppressedBy?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
         /**
          * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya.
          */
@@ -4018,6 +4077,10 @@ export type KpCuspsResponse = {
     houseThemes: {
         [key: string]: Array<string>;
     };
+    /**
+     * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+     */
+    focus: 'general' | 'finance';
 };
 
 export type KpCuspsRequest = {
@@ -4370,6 +4433,10 @@ export type KpChartResponse = {
     houseThemes: {
         [key: string]: Array<string>;
     };
+    /**
+     * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+     */
+    focus: 'general' | 'finance';
 };
 
 export type KpChartRequest = {
@@ -4479,6 +4546,10 @@ export type KpRulingPlanetsResponse = {
     houseThemes?: {
         [key: string]: Array<string>;
     };
+    /**
+     * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+     */
+    focus?: 'general' | 'finance';
 };
 
 export type KpRulingPlanetsIntervalResponse = {
@@ -4675,6 +4746,10 @@ export type KpRulingPlanetsIntervalResponse = {
     houseThemes: {
         [key: string]: Array<string>;
     };
+    /**
+     * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+     */
+    focus: 'general' | 'finance';
 };
 
 export type KpSublordChangesResponse = {
@@ -13969,6 +14044,10 @@ export type PostVedicAstrologyDashaCurrentResponses = {
             [key: string]: Array<string>;
         };
         /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus?: 'general' | 'finance';
+        /**
          * Birth Moon nakshatra number (1-27). This nakshatra determines the starting dasha lord in the Vimshottari 120-year cycle.
          */
         moonNakshatra: number;
@@ -14784,6 +14863,10 @@ export type PostVedicAstrologyDashaMajorResponses = {
             [key: string]: Array<string>;
         };
         /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus?: 'general' | 'finance';
+        /**
          * Birth Moon nakshatra number (1-27) that determines the Vimshottari starting point.
          */
         moonNakshatra: number;
@@ -15102,6 +15185,10 @@ export type PostVedicAstrologyDashaSubByMahadashaResponses = {
         houseThemes?: {
             [key: string]: Array<string>;
         };
+        /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus?: 'general' | 'finance';
         /**
          * Ruling planet of the requested Mahadasha period.
          */
@@ -15488,6 +15575,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaResponses = {
         houseThemes?: {
             [key: string]: Array<string>;
         };
+        /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus?: 'general' | 'finance';
         /**
          * Ruling planet of the requested Mahadasha period.
          */
@@ -15890,6 +15981,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaRe
         houseThemes?: {
             [key: string]: Array<string>;
         };
+        /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus?: 'general' | 'finance';
         /**
          * Ruling planet of the requested Mahadasha period.
          */
@@ -16308,6 +16403,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
         houseThemes?: {
             [key: string]: Array<string>;
         };
+        /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus?: 'general' | 'finance';
         /**
          * Ruling planet of the requested Mahadasha period.
          */
@@ -18229,6 +18328,10 @@ export type GetVedicAstrologyYogaData = {
          * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Filter the catalog to one Nabhasa family: asraya (3), dala (2), akriti (20) or sankhya (7). Omit for the full catalog. `classical` is accepted but matches nothing here, because it is a detection-verdict value for single-combination yogas rather than a catalog grouping.
+         */
+        family?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
     };
     url: '/vedic-astrology/yoga';
 };
@@ -18343,20 +18446,24 @@ export type GetVedicAstrologyYogaResponses = {
      */
     200: {
         /**
-         * Array of all planetary yogas with basic identifiers. Use GET /yogas/:id for formation rules, effects, and quality classification.
+         * Array of planetary yogas with basic identifiers, narrowed by `family` when that filter is supplied. Use GET /yoga/{id} for formation rules, effects, and quality classification.
          */
         yogas: Array<{
             /**
-             * Unique yoga identifier in lowercase kebab-case. Use this to fetch full details via GET /yogas/:id.
+             * Unique yoga identifier in lowercase kebab-case. Use this to fetch full details via GET /yoga/{id}.
              */
             id: string;
             /**
              * Traditional Sanskrit name of the planetary yoga combination.
              */
             name: string;
+            /**
+             * Nabhasa family, present only on the 32 Nabhasa distribution yogas and absent on every other catalog row. Never translated, so it groups identically under any lang.
+             */
+            family?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
         }>;
         /**
-         * Total count of planetary yogas in the database. Includes Raj Yogas, Dhan Yogas, Pancha Mahapurusha Yogas, Nabhasa Yogas, and more.
+         * Number of yogas in this response, which is the filtered count when `family` is supplied and the full catalog size otherwise. Includes Raj Yogas, Dhan Yogas, Pancha Mahapurusha Yogas, Nabhasa Yogas, and more.
          */
         total: number;
     };
@@ -23089,9 +23196,9 @@ export type PostForecastTimelineResponses = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             * Decimal UTC offset the forecast was computed with, resolved from whatever the request sent. An IANA name is resolved to the DST-correct offset for the birth date, so this is the literal number applied, never the name.
              */
-            timezone: number | string;
+            timezone: number;
             /**
              * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
              */
@@ -23351,9 +23458,9 @@ export type PostForecastTransitsResponses = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             * Decimal UTC offset the forecast was computed with, resolved from whatever the request sent. An IANA name is resolved to the DST-correct offset for the birth date, so this is the literal number applied, never the name.
              */
-            timezone: number | string;
+            timezone: number;
             /**
              * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
              */
@@ -23634,9 +23741,9 @@ export type PostForecastSignificantDatesResponses = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             * Decimal UTC offset the forecast was computed with, resolved from whatever the request sent. An IANA name is resolved to the DST-correct offset for the birth date, so this is the literal number applied, never the name.
              */
-            timezone: number | string;
+            timezone: number;
             /**
              * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
              */
@@ -23917,9 +24024,9 @@ export type PostForecastDigestResponses = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             * Decimal UTC offset the forecast was computed with, resolved from whatever the request sent. An IANA name is resolved to the DST-correct offset for the birth date, so this is the literal number applied, never the name.
              */
-            timezone: number | string;
+            timezone: number;
             /**
              * Birth latitude in decimal degrees. Optional and does not affect the timeline. Defaults to 0.
              */
@@ -32686,6 +32793,10 @@ export type PostTarotYesNoResponses = {
          * The querent question that was asked, if one was provided.
          */
         question?: string;
+        /**
+         * The seed used for this draw, echoed back when one was supplied. Present only if the request carried a seed. Makes a cached or forwarded response self describing, so a reading can be reproduced or shared without the original request beside it.
+         */
+        seed?: string;
         /**
          * Tarot-derived answer. Yes = upright card supports a positive outcome. No = reversed card suggests obstacles. Maybe = inherently ambiguous card drawn (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) signaling pause, reflection, or shifting circumstances.
          */
