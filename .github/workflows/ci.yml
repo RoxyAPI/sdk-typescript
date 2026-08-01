@@ -22,7 +22,12 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      # Hermetic: regenerates from the committed spec, so this verifies that the committed
+      # generated code still reproduces from it, with no network dependency. Refreshing the
+      # spec itself is the release workflow's job.
       - name: Codegen drift check
+        env:
+          ROXYAPI_SPEC_FILE: specs/openapi.json
         run: |
           bun run generate
           git diff --exit-code -- specs/openapi.json src/client.gen.ts src/sdk.gen.ts src/types.gen.ts src/client src/core \

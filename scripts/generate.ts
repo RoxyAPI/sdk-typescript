@@ -4,7 +4,7 @@
  * Run with: bun run generate
  */
 import { execSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const SPEC_URL = 'https://roxyapi.com/api/v2/openapi.json';
 const SPEC_PATH = 'specs/openapi.json';
@@ -30,8 +30,28 @@ async function fetchSpec(url: string, attempts = 5): Promise<string> {
 	}
 }
 
-console.log('Fetching OpenAPI spec from', SPEC_URL);
-const spec = JSON.parse(await fetchSpec(SPEC_URL));
+/**
+ * Load the spec from disk when `ROXYAPI_SPEC_FILE` is set, from the API otherwise.
+ *
+ * @remarks
+ * Reading from a file keeps generation offline and byte-reproducible, which is what the codegen
+ * drift check in CI relies on.
+ */
+async function loadSpec(): Promise<string> {
+	const file = process.env.ROXYAPI_SPEC_FILE;
+	if (file) {
+		console.log(
+			'Reading OpenAPI spec from',
+			file,
+			'(offline, ROXYAPI_SPEC_FILE)',
+		);
+		return readFileSync(file, 'utf8');
+	}
+	console.log('Fetching OpenAPI spec from', SPEC_URL);
+	return fetchSpec(SPEC_URL);
+}
+
+const spec = JSON.parse(await loadSpec());
 
 // Patch server URL to absolute production URL so the generated default client
 // works out of the box without users specifying baseUrl
