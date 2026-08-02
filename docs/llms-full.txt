@@ -400,7 +400,10 @@ const { data } = await roxy.vedicAstrology.generateBirthChart({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     avasthaInfo: true,
+    modernPlanets: true,
   },
 });
 
@@ -412,6 +415,8 @@ const { data } = await roxy.vedicAstrology.generateNavamsa({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -423,6 +428,8 @@ const { data } = await roxy.vedicAstrology.generateDivisionalChart({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     division: 10,
   },
 });
@@ -444,6 +451,8 @@ const { data } = await roxy.vedicAstrology.calculateGunMilan({
       longitude: 77.209,
       timezone: 5.5,
     },
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -455,6 +464,8 @@ const { data } = await roxy.vedicAstrology.getPlanetPositions({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -621,6 +632,8 @@ const { data } = await roxy.vedicAstrology.checkManglikDosha({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -632,6 +645,8 @@ const { data } = await roxy.vedicAstrology.checkKalsarpaDosha({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -643,6 +658,8 @@ const { data } = await roxy.vedicAstrology.checkSadhesati({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -660,6 +677,8 @@ const { data } = await roxy.vedicAstrology.detectYogas({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -782,6 +801,22 @@ const { data } = await roxy.vedicAstrology.getKpPlanetsInterval({
   },
 });
 
+// Cast a KP horary (Prashna) chart from a number 1-249 - KP Horary API
+const { data } = await roxy.vedicAstrology.castKpHoraryChart({
+  query: { focus: 'general' },
+  body: {
+    horaryNumber: 108,
+    date: '2026-03-08',
+    time: '14:30:00',
+    latitude: 19.076,
+    longitude: 72.8777,
+    timezone: 5.5,
+    ayanamsa: 'kp-newcomb',
+    ayanamsaValue: 24,
+    nodeType: 'mean',
+  },
+});
+
 // Get planetary aspects (Drishti) - Mutual aspects between all planets
 const { data } = await roxy.vedicAstrology.calculateDrishti({
   body: {
@@ -878,6 +913,8 @@ const { data } = await roxy.vedicAstrology.getUpagrahaPositions({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -889,6 +926,8 @@ const { data } = await roxy.vedicAstrology.calculateAshtakavarga({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -900,6 +939,8 @@ const { data } = await roxy.vedicAstrology.calculateShadbala({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -917,6 +958,8 @@ const { data } = await roxy.vedicAstrology.calculateArudhaPadas({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -928,6 +971,8 @@ const { data } = await roxy.vedicAstrology.calculateCharaKarakas({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
     scheme: 'eight',
   },
 });
@@ -941,6 +986,8 @@ const { data } = await roxy.vedicAstrology.calculateBhavaBala({
     latitude: 28.6139,
     longitude: 77.209,
     timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
   },
 });
 
@@ -952,6 +999,18 @@ const { data } = await roxy.vedicAstrology.calculateBhavChalit({
     time: '10:12:00',
     latitude: 28.6139,
     longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
+  },
+});
+
+// Heliacal rising and setting (udaya and asta) - Graha Asta Calculator API
+const { data } = await roxy.vedicAstrology.getHeliacalVisibility({
+  body: {
+    date: '2026-07-25',
+    latitude: 19.076,
+    longitude: 72.8777,
     timezone: 5.5,
   },
 });

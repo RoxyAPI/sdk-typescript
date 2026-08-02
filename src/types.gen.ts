@@ -1006,7 +1006,7 @@ export type AstrocartographyResponse = {
             /**
              * Absolute latitude in degrees beyond which the body never crosses the horizon, so the line has no points past it. Null when the line spans the full sampled range.
              */
-            circumpolarBeyond: number;
+            circumpolarBeyond: number | null;
             /**
              * Plain language meaning of this rising or setting planetary line for relocation, suitable for chart reports and AI agents.
              */
@@ -1032,7 +1032,7 @@ export type AstrocartographyResponse = {
             /**
              * Absolute latitude in degrees beyond which the body never crosses the horizon, so the line has no points past it. Null when the line spans the full sampled range.
              */
-            circumpolarBeyond: number;
+            circumpolarBeyond: number | null;
             /**
              * Plain language meaning of this rising or setting planetary line for relocation, suitable for chart reports and AI agents.
              */
@@ -2826,6 +2826,69 @@ export type BirthChartResponse = {
         }>;
     };
     /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
+    /**
+     * Uranus, Neptune and Pluto, present only when modernPlanets true was sent. Deliberately separate from meta and deliberately without dignity, avastha, combustion or aspect fields: those are constructs of the nine-graha system and the modern planets rule no sign, so no classical value exists for them. Order is always Uranus, Neptune, Pluto.
+     */
+    modernPlanets?: Array<{
+        /**
+         * Modern planet name. These three are outside the classical Navagraha and are returned only when modernPlanets true is sent.
+         */
+        planet: 'Uranus' | 'Neptune' | 'Pluto';
+        /**
+         * Sanskrit name Indian software prints for this body: Arun for Uranus, Varun for Neptune, Yam for Pluto. Transliterated rather than translated, the same treatment as rashi and nakshatra lord names, so it is identical in every locale.
+         */
+        sanskritName: 'Arun' | 'Varun' | 'Yam';
+        /**
+         * Sidereal longitude in degrees (0-360), in the same ayanamsa frame as every other position in this response.
+         */
+        longitude: number;
+        /**
+         * Zodiac sign (rashi) the body occupies.
+         */
+        rashi: string;
+        /**
+         * Degrees advanced into the sign, 0 to 30. This is the figure a chart displays beside the sign.
+         */
+        degreeInRashi: number;
+        /**
+         * Nakshatra placement. Reported because it is purely positional; it does not imply the body participates in Vimshottari dasha, which is built on the Moon alone.
+         */
+        nakshatra: {
+            /**
+             * Nakshatra (lunar mansion, 1 of 27) the body occupies.
+             */
+            name: string;
+            /**
+             * Nakshatra pada (quarter, 1-4).
+             */
+            pada: number;
+            /**
+             * Nakshatra index (1-27) starting from Ashwini.
+             */
+            key: number;
+            /**
+             * Vimshottari ruling planet of this nakshatra.
+             */
+            lord: 'Ketu' | 'Venus' | 'Sun' | 'Moon' | 'Mars' | 'Rahu' | 'Jupiter' | 'Saturn' | 'Mercury';
+        };
+        /**
+         * True when the body appears to move backward. All three are retrograde for roughly 40 percent of each year, so this is the normal case rather than the exception.
+         */
+        isRetrograde: boolean;
+    }>;
+    /**
      * The twelve bhavas (houses) in order, each with its classical name and significations. Houses are counted whole-sign from the Lagna.
      */
     houses: Array<{
@@ -3059,9 +3122,21 @@ export type BirthChartRequest = {
      */
     timezone?: number | string;
     /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+    /**
      * Set true to include a localized meaning and one-sentence classical interpretation beside each graha avastha state, under avasthaInfo on that graha in meta. Defaults to false, so an existing integration is byte-identical until it opts in. Saves a second call to GET /avasthas and the client-side join that would otherwise be needed to turn Yuva or Swapna into readable text.
      */
     avasthaInfo?: boolean;
+    /**
+     * Set true to also return Uranus, Neptune and Pluto, under the Sanskrit names Arun, Varun and Yam that Indian software prints for them. They arrive in a separate modernPlanets array, NOT inside meta, because classical Jyotish is defined over nine grahas: the moderns rule no sign, so they have no dignity, avastha, combustion or aspect strength and it would be fabrication to report one. Each carries longitude, rashi, degree in sign, nakshatra with pada and lord, and retrograde status. Defaults to false, so an existing integration is byte-identical until it opts in.
+     */
+    modernPlanets?: boolean;
 };
 
 export type NavamsaResponse = {
@@ -3171,6 +3246,19 @@ export type NavamsaResponse = {
         [key: string]: unknown;
     };
     /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
+    /**
      * Planets that are Vargottama (same sign in D1 and D9)
      */
     vargottama: Array<string>;
@@ -3201,6 +3289,14 @@ export type NavamsaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type DivisionalChartResponse = {
@@ -3228,6 +3324,19 @@ export type DivisionalChartResponse = {
          * Life areas this divisional chart reveals.
          */
         significance: string;
+    };
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
     };
     /**
      * Divisional chart showing planetary positions across 12 rashi houses plus a meta lookup. Same structure as birth chart and navamsa responses.
@@ -3362,12 +3471,33 @@ export type DivisionalChartRequest = {
      */
     timezone?: number | string;
     /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+    /**
      * Divisional chart number. Each division reveals a specific life area. Supported: 2 (Hora, wealth), 3 (Drekkana, siblings), 4 (Chaturthamsa, property), 7 (Saptamsa, children), 9 (Navamsa, marriage), 10 (Dasamsa, career), 12 (Dwadasamsa, parents), 16 (Shodasamsa, vehicles), 20 (Vimsamsa, spirituality), 24 (Chaturvimsamsa, education), 27 (Bhamsa, strength), 30 (Trimsamsa, misfortunes), 40 (Khavedamsa, merit), 45 (Akshavedamsa, character), 60 (Shashtiamsa, past life karma).
      */
     division: number;
 };
 
 export type CompatibilityResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Total Ashtakoot Gun Milan score out of 36. Scores above 18 are considered compatible for marriage. Higher scores indicate stronger marital harmony.
      */
@@ -3487,6 +3617,14 @@ export type CompatibilityRequest = {
          */
         timezone?: number | string;
     };
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type PlanetaryPositionsResponse = {
@@ -3566,7 +3704,7 @@ export type PlanetaryPositionsResponse = {
          */
         isRetrograde: boolean;
         /**
-         * Whether the planet is combust (asta, moudhya). A planet is combust when too close to the Sun, weakening its significations. Combustion orbs vary by planet: Moon 12 deg, Mars 17 deg, Mercury 14 deg (12 deg if retrograde), Jupiter 11 deg, Venus 10 deg (8 deg if retrograde), Saturn 15 deg. Sun, Rahu, Ketu, and Lagna are never combust. Based on Surya Siddhanta combustion orbs.
+         * Whether the planet is combust (asta, moudhya). A planet is combust when too close to the Sun, weakening its significations. Limits per Surya Siddhanta: Moon 12 deg, Mars 17 deg, Mercury 14 deg (12 deg if retrograde), Jupiter 11 deg, Venus 10 deg (8 deg if retrograde), Saturn 15 deg. Compared against the difference in ecliptic longitude, which is the standard interpretive convention and matches what other Vedic software reports. It is a chart judgement and not a statement about naked-eye visibility, which additionally depends on the observer latitude: for that use the heliacal endpoint, which applies the same limits in the classical degrees of time. The field is omitted entirely for Sun, Rahu, Ketu and Lagna, since the question does not apply to them rather than the answer being no.
          */
         isCombust?: boolean;
         /**
@@ -3601,9 +3739,30 @@ export type PlanetaryPositionsRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type ManglikResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Whether Manglik dosha (Kuja dosha) is present based on Mars placement from Lagna
      */
@@ -3668,9 +3827,30 @@ export type ManglikRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type KalsarpaResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Whether Kalsarpa dosha (Kalsarpa yoga) is present, all planets hemmed between Rahu-Ketu axis
      */
@@ -3743,9 +3923,30 @@ export type KalsarpaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type SadhesatiResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Whether Sade Sati is currently active, Saturn transiting 12th, 1st, or 2nd house from natal Moon
      */
@@ -3804,6 +4005,14 @@ export type SadhesatiRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type YogaDetail = {
@@ -3876,6 +4085,19 @@ export type YogaDetectResponse = {
         evidence?: string;
     }>;
     /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
+    /**
      * Count of yogas where present === true in this chart. Range 0-44, though real charts sit in the low single digits: the Nabhasa families are mutually constrained by the precedence norms, and most shape yogas are rare.
      */
     total: number;
@@ -3927,6 +4149,14 @@ export type YogaDetectRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 export type KpAyanamsaResponse = {
@@ -5089,6 +5319,290 @@ export type KpPlanetsIntervalRequest = {
     nodeType?: 'mean' | 'true';
 };
 
+/**
+ * A complete KP horary (Prashna) chart: the Ascendant from the number, the cusps and planets from the moment of the question, plus ruling planets and four-level significators.
+ */
+export type KpHoraryResponse = {
+    /**
+     * The number that was asked for, echoed so a stored chart is self describing.
+     */
+    horaryNumber: number;
+    /**
+     * UTC instant the chart was cast for, resolved from the date, time and timezone.
+     */
+    questionTime: string;
+    /**
+     * Sidereal frame used, echoed back.
+     */
+    ayanamsaType: string;
+    /**
+     * Degrees subtracted from every tropical longitude to produce this chart. Compare it against your reference software before treating a placement difference as a disagreement.
+     */
+    ayanamsaDegrees: number;
+    /**
+     * The Ascendant the horary number produced. This is the ONLY part of the chart that comes from the number; everything else comes from the sky at the moment of the question.
+     */
+    ascendant: {
+        /**
+         * Sidereal longitude of the horary Ascendant, taken as the MIDPOINT of the sub division the number names.
+         */
+        longitude: number;
+        /**
+         * Degrees into the sign, 0 to 30, which is what a chart displays.
+         */
+        degreeInSign: number;
+        /**
+         * Zodiac sign (rashi) of this point.
+         */
+        sign: string;
+        /**
+         * Nakshatra (star) this point falls in.
+         */
+        star: string;
+        /**
+         * Nakshatra lord (star lord), the second level of the KP hierarchy.
+         */
+        starLord: string;
+        /**
+         * Sub lord, the decisive level in KP. A cusp sub lord is what answers the question: it is read for whether the matter is promised, before any timing is attempted.
+         */
+        subLord: string;
+        /**
+         * KP horary number 1 to 249 of the sub division holding this point. Matches the standard published KP table.
+         */
+        kpNumber: number;
+        /**
+         * Sidereal longitude where this numbered sub division begins.
+         */
+        spanFrom: number;
+        /**
+         * Sidereal longitude where it ends. The Ascendant sits midway between this and spanFrom.
+         */
+        spanTo: number;
+    };
+    /**
+     * Twelve Placidus cusps, house 1 first. House 1 is the horary Ascendant; the other eleven follow from the house frame that Ascendant implies at this latitude.
+     */
+    cusps: Array<{
+        /**
+         * House (bhava) number 1 to 12.
+         */
+        house: number;
+        /**
+         * Sidereal longitude of the cusp.
+         */
+        longitude: number;
+        /**
+         * Zodiac sign (rashi) of this point.
+         */
+        sign: string;
+        /**
+         * Nakshatra (star) this point falls in.
+         */
+        star: string;
+        /**
+         * Nakshatra lord (star lord), the second level of the KP hierarchy.
+         */
+        starLord: string;
+        /**
+         * Sub lord, the decisive level in KP. A cusp sub lord is what answers the question: it is read for whether the matter is promised, before any timing is attempted.
+         */
+        subLord: string;
+        /**
+         * KP horary number 1 to 249 of the sub division holding this point. Matches the standard published KP table.
+         */
+        kpNumber: number;
+    }>;
+    /**
+     * The nine grahas at the moment of the question, placed against the horary cusps. These come from the real sky, not from the number.
+     */
+    planets: Array<{
+        /**
+         * Graha name.
+         */
+        planet: string;
+        /**
+         * Sidereal longitude at the moment of the question.
+         */
+        longitude: number;
+        /**
+         * Placidus house the graha occupies in this horary chart, counted against the cusps above rather than by whole sign.
+         */
+        house: number;
+        /**
+         * Retrograde motion flag.
+         */
+        isRetrograde: boolean;
+        /**
+         * Sub-sub lord, the fourth KP level, used to refine timing.
+         */
+        subSubLord: string;
+        /**
+         * Zodiac sign (rashi) of this point.
+         */
+        sign: string;
+        /**
+         * Nakshatra (star) this point falls in.
+         */
+        star: string;
+        /**
+         * Nakshatra lord (star lord), the second level of the KP hierarchy.
+         */
+        starLord: string;
+        /**
+         * Sub lord, the decisive level in KP. A cusp sub lord is what answers the question: it is read for whether the matter is promised, before any timing is attempted.
+         */
+        subLord: string;
+        /**
+         * KP horary number 1 to 249 of the sub division holding this point. Matches the standard published KP table.
+         */
+        kpNumber: number;
+    }>;
+    /**
+     * Ruling planets at the moment of the question. NOTE the lagna values here are from the TIME-based ascendant, which is the classical ruling-planet definition, not from the horary number.
+     */
+    rulingPlanets: {
+        /**
+         * Lord of the Hindu weekday, counted from sunrise.
+         */
+        dayLord: string;
+        /**
+         * Sign lord of the Moon.
+         */
+        moonSignLord: string;
+        /**
+         * Star lord of the Moon.
+         */
+        moonStarLord: string;
+        /**
+         * Sub lord of the Moon.
+         */
+        moonSublord: string;
+        /**
+         * Sub-sub lord of the Moon.
+         */
+        moonSubSublord: string;
+        /**
+         * Sign lord of the ascendant at the question moment.
+         */
+        lagnaSignLord: string;
+        /**
+         * Star lord of that ascendant.
+         */
+        lagnaStarLord: string;
+        /**
+         * Sub lord of that ascendant.
+         */
+        lagnaSublord: string;
+        /**
+         * Sub-sub lord of that ascendant.
+         */
+        lagnaSubSublord: string;
+        /**
+         * The distinct ruling planets in KP order of strength. They validate the chart: when they repeat the significators of the houses the question needs, the judgment is considered reliable.
+         */
+        rulingPlanets: Array<string>;
+    };
+    /**
+     * KP significators for event prediction and timing. Shows which planets signify each house (house-wise) and which houses each planet signifies (planet-wise). Strength order: Level 1 (planets in star of occupant) > Level 2 (occupants) > Level 3 (planets in star of owner) > Level 4 (house owner).
+     */
+    significators: {
+        houseWise: Array<{
+            /**
+             * House number 1-12
+             */
+            house: number;
+            significators: Array<{
+                /**
+                 * KP significator strength level (1-4). L1: planets in star of occupant (strongest). L2: occupant itself. L3: planets in star of owner. L4: sign owner. Lower number = stronger signification for this house.
+                 */
+                level: number;
+                /**
+                 * Human-readable label for this KP significator level.
+                 */
+                description: string;
+                /**
+                 * Planets signifying this house at this strength level.
+                 */
+                planets: Array<string>;
+            }>;
+            /**
+             * All significators in order of strength
+             */
+            all: Array<string>;
+        }>;
+        planetWise: Array<{
+            /**
+             * Vedic graha (planet) being analyzed for its house significations.
+             */
+            planet: string;
+            signifies: Array<{
+                /**
+                 * KP significator strength level (1-4). L1 strongest, L4 weakest.
+                 */
+                level: number;
+                /**
+                 * House numbers this planet signifies at this strength level.
+                 */
+                houses: Array<number>;
+            }>;
+            /**
+             * All houses signified in order of strength
+             */
+            allHouses: Array<number>;
+        }>;
+    };
+    /**
+     * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
+     */
+    houseThemes: {
+        [key: string]: Array<string>;
+    };
+    /**
+     * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+     */
+    focus: 'general' | 'finance';
+};
+
+export type KpHoraryRequest = {
+    /**
+     * Horary number from 1 to 249, given by the querent while focused on their question. It maps to one of the 249 KP sub divisions of the zodiac, and that division sets the Ascendant of the chart. The querent should give the first number that comes to mind and use it once for that question; the astrologer never chooses it. Numbers outside 1 to 249 are rejected rather than wrapped, because a wrapped number would silently answer a different question.
+     */
+    horaryNumber: number;
+    /**
+     * Date the question was taken up for judgment, YYYY-MM-DD. Not a birth date: a horary chart needs no birth details at all, which is the point of the method.
+     */
+    date: string;
+    /**
+     * Time the question was taken up for judgment, 24-hour HH:MM:SS. In KP practice this is the moment the astrologer receives and understands the question, not the moment the querent first thought of it. It sets every planetary position and all twelve cusps except the Ascendant.
+     */
+    time: string;
+    /**
+     * Latitude where the question is judged, decimal degrees. The house cusps are Placidus and therefore latitude dependent, so this is the place of judgment, not the querent birthplace.
+     */
+    latitude: number;
+    /**
+     * Longitude where the question is judged, decimal degrees.
+     */
+    longitude: number;
+    /**
+     * Timezone: IANA name (e.g. "Asia/Kolkata") OR decimal hours from UTC. Defaults to 5.5.
+     */
+    timezone?: number | string;
+    /**
+     * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula (most common for KP). "kp-old" uses the Krishnamurti original table. "lahiri" uses Lahiri/Chitrapaksha ayanamsa matching most traditional Vedic software. "raman" uses the B.V. Raman ayanamsa, about 1.45 degrees below Lahiri. "custom" allows providing your own value via ayanamsaValue. Defaults to "kp-newcomb".
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+    /**
+     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     */
+    nodeType?: 'mean' | 'true';
+};
+
 export type RashiListResponse = Array<{
     /**
      * Unique slug identifier for the rashi. Used in URL paths and cross-references.
@@ -5260,6 +5774,19 @@ export type NakshatraResponse = {
  */
 export type UpagrahaResponse = {
     /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
+    /**
      * Time-based upagrahas derived from the 8-part division of day or night. Gulika and Mandi are from Saturn segment, others from Sun, Mars, Mercury, Jupiter segments. Positions depend on birth time, location, and weekday.
      */
     timeBased: Array<{
@@ -5348,12 +5875,33 @@ export type UpagrahaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 /**
  * Complete Ashtakavarga analysis for a birth chart
  */
 export type AshtakavargaResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Individual planetary strength grids (Bhinnashtakavarga). Eight entries: one for each of the 7 classical planets plus Lagna. Each entry shows how many of the 8 contributors (7 planets + Lagna) give benefic points to that planet in each of the 12 signs.
      */
@@ -5462,12 +6010,116 @@ export type AshtakavargaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 /**
  * Complete Shadbala (six-fold planetary strength) analysis for a birth chart per Brihat Parashara Hora Shastra (BPHS).
  */
 export type ShadbalaResponse = {
+    /**
+     * Localized name and one-line meaning for each of the six Shadbala components, keyed by the same field names each planet entry uses. Join it to render a readable strength breakdown in any of the eight supported languages instead of showing six untranslated Sanskrit terms.
+     */
+    balaThemes: {
+        /**
+         * Localized label and meaning for one Shadbala component.
+         */
+        sthanaBala: {
+            /**
+             * Localized name of this Shadbala component, suitable for a table header or a bar label.
+             */
+            name: string;
+            /**
+             * One-line localized explanation of what this component measures.
+             */
+            meaning: string;
+        };
+        /**
+         * Localized label and meaning for one Shadbala component.
+         */
+        digBala: {
+            /**
+             * Localized name of this Shadbala component, suitable for a table header or a bar label.
+             */
+            name: string;
+            /**
+             * One-line localized explanation of what this component measures.
+             */
+            meaning: string;
+        };
+        /**
+         * Localized label and meaning for one Shadbala component.
+         */
+        kalaBala: {
+            /**
+             * Localized name of this Shadbala component, suitable for a table header or a bar label.
+             */
+            name: string;
+            /**
+             * One-line localized explanation of what this component measures.
+             */
+            meaning: string;
+        };
+        /**
+         * Localized label and meaning for one Shadbala component.
+         */
+        chestaBala: {
+            /**
+             * Localized name of this Shadbala component, suitable for a table header or a bar label.
+             */
+            name: string;
+            /**
+             * One-line localized explanation of what this component measures.
+             */
+            meaning: string;
+        };
+        /**
+         * Localized label and meaning for one Shadbala component.
+         */
+        naisargikaBala: {
+            /**
+             * Localized name of this Shadbala component, suitable for a table header or a bar label.
+             */
+            name: string;
+            /**
+             * One-line localized explanation of what this component measures.
+             */
+            meaning: string;
+        };
+        /**
+         * Localized label and meaning for one Shadbala component.
+         */
+        drikBala: {
+            /**
+             * Localized name of this Shadbala component, suitable for a table header or a bar label.
+             */
+            name: string;
+            /**
+             * One-line localized explanation of what this component measures.
+             */
+            meaning: string;
+        };
+    };
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Shadbala analysis for all 7 classical planets. Ordered: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn. Each entry contains all 6 strength components, total strength in virupas and Rupas, Ishta/Kashta Phala, minimum required threshold, strength ratio, and relative rank.
      */
@@ -5552,12 +6204,33 @@ export type ShadbalaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 /**
  * The twelve Arudha padas of a birth chart, computed per the Jaimini rule with the classical exception applied.
  */
 export type ArudhaResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Zodiac sign of the Ascendant (Lagna), which anchors the twelve bhavas the padas are derived from.
      */
@@ -5646,12 +6319,33 @@ export type ArudhaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 /**
  * Chara Karakas for a birth chart: the movable significators of Jaimini astrology, ranked by how far each graha has advanced into its sign.
  */
 export type CharaKarakaResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * Scheme the ranking used, echoed back so a cached or logged response is self describing.
      */
@@ -5733,6 +6427,14 @@ export type CharaKarakaRequest = {
      */
     timezone?: number | string;
     /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+    /**
      * Which Chara Karaka scheme to rank. "eight" includes Rahu, counting its degree in reverse because it moves retrograde, and returns eight offices including Pitrikaraka. "seven" ranks only the seven classical grahas and drops Pitrikaraka. Ketu is excluded from both, since it always mirrors the Rahu degree exactly. The two schemes can produce a different Atmakaraka for the same chart, so select the one your reference software uses. Defaults to "eight".
      */
     scheme?: 'seven' | 'eight';
@@ -5742,6 +6444,19 @@ export type CharaKarakaRequest = {
  * Complete Bhava Bala (house strength) analysis per Brihat Parashara Hora Shastra, with a localized house-meaning legend.
  */
 export type BhavaBalaResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * House frame the bhavas were built on. Always sripati: Bhava Bala is defined on unequal bhava madhyas, not on whole signs.
      */
@@ -5824,12 +6539,33 @@ export type BhavaBalaRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
      */
     timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
 };
 
 /**
  * Bhav Chalit (Chalit Kundli): every graha placed by unequal Sripati bhava, with the whole-sign placement beside it for comparison.
  */
 export type BhavChalitResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
     /**
      * House frame used to build the bhavas. Always sripati for the Chalit chart.
      */
@@ -5939,6 +6675,126 @@ export type BhavChalitRequest = {
     longitude: number;
     /**
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+     */
+    timezone?: number | string;
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+};
+
+/**
+ * Heliacal rising and setting status of the six visible grahas.
+ */
+export type HeliacalResponse = {
+    /**
+     * Local calendar date the verdicts were read for, echoed from the request.
+     */
+    date: string;
+    /**
+     * One entry per visible graha, in classical order. A graha is omitted only when no horizon crossing exists for it at this latitude on this day.
+     */
+    grahas: Array<{
+        /**
+         * Graha name. Only the six with a visible body appear: Moon, Mars, Mercury, Jupiter, Venus and Saturn. The Sun cannot be lost in his own glare, and Rahu and Ketu are computed points with nothing to see.
+         */
+        graha: string;
+        /**
+         * Whether the graha clears the Sun glare on this day. False is the state a practitioner calls asta or combust, during which classical muhurta withholds auspicious ceremonies, most strictly marriage while Jupiter or Venus is invisible.
+         */
+        visible: boolean;
+        /**
+         * Horizon this graha is currently judged at. West means it sets after the Sun and is an evening object, east that it rises before him and is a morning one.
+         */
+        horizon: 'east' | 'west';
+        /**
+         * Separation from the Sun in degrees of TIME (kalamsa), measured along the equator between the two bodies horizon crossings. This is the quantity Surya Siddhanta actually compares against the limit, and it is not the same as the difference of ecliptic longitudes: the two diverge by roughly 3 degrees at Mumbai and by more than 15 further north, because it accounts for the angle the ecliptic makes with the local horizon.
+         */
+        timeDegrees: number;
+        /**
+         * The limit in degrees of time this graha must clear to be seen, per Surya Siddhanta ch. IX vv.6-8 and ch. X.1: Moon 12, Jupiter 11, Saturn 15, Mars 17, Venus 10 or 8, Mercury 14 or 12. Larger means the graha is fainter and needs more distance from the Sun.
+         */
+        kalamsa: number;
+        /**
+         * Whether the graha is retrograde, which for Mercury and Venus tightens the limit (Venus 10 to 8, Mercury 14 to 12). Retrograde puts them near inferior conjunction where they are far closer to Earth, so the larger brighter disk survives closer to the Sun.
+         */
+        retrograde: boolean;
+        /**
+         * Plain angular separation of the two ecliptic longitudes, in degrees. Returned beside timeDegrees so the two measures can be compared: this is what a combustion flag on a birth chart uses, and the gap between them is precisely what a location-aware heliacal calculation adds.
+         */
+        longitudeSeparation: number;
+        /**
+         * The event that produced the current state, or null when none falls inside the search horizon (up to about one synodic period, so Mars can legitimately have none).
+         */
+        lastEvent: {
+            /**
+             * Udaya is heliacal rising, the graha re-emerging from the Sun rays and becoming visible again. Asta (also called lopa, moudhya or moudyami) is heliacal setting, the graha disappearing into them. Stable Sanskrit keys, never translated.
+             */
+            type: 'udaya' | 'asta';
+            /**
+             * Horizon the event happens at. East means it is read before sunrise, so the graha is a morning object; west means after sunset, an evening object. A graha crosses to the other horizon as it passes the Sun, which is why an asta and the udaya that follows it are usually on opposite horizons.
+             */
+            horizon: 'east' | 'west';
+            /**
+             * Local civil datetime of the event (YYYY-MM-DDTHH:MM:SS), being the moment the graha itself crosses the horizon on the day its verdict changes. That instant, rather than sunrise or sunset, is what published Asta tables print.
+             */
+            datetime: string;
+            /**
+             * Separation from the Sun in degrees of time on the event day, measured the way the classical rule requires. Sits just either side of kalamsa, since that crossing is what defines the event.
+             */
+            timeDegrees: number;
+            /**
+             * The limit that was crossed. Can differ from the current reading limit for Mercury and Venus, whose limit tightens when they are retrograde, so an asta entered while retrograde may be left at a different threshold.
+             */
+            kalamsa: number;
+        } | null;
+        /**
+         * The event that will end the current state, or null when none falls inside the search horizon. For an invisible graha this is the udaya a practitioner is waiting for, so it answers when Guru Asta or Shukra Asta lifts.
+         */
+        nextEvent: {
+            /**
+             * Udaya is heliacal rising, the graha re-emerging from the Sun rays and becoming visible again. Asta (also called lopa, moudhya or moudyami) is heliacal setting, the graha disappearing into them. Stable Sanskrit keys, never translated.
+             */
+            type: 'udaya' | 'asta';
+            /**
+             * Horizon the event happens at. East means it is read before sunrise, so the graha is a morning object; west means after sunset, an evening object. A graha crosses to the other horizon as it passes the Sun, which is why an asta and the udaya that follows it are usually on opposite horizons.
+             */
+            horizon: 'east' | 'west';
+            /**
+             * Local civil datetime of the event (YYYY-MM-DDTHH:MM:SS), being the moment the graha itself crosses the horizon on the day its verdict changes. That instant, rather than sunrise or sunset, is what published Asta tables print.
+             */
+            datetime: string;
+            /**
+             * Separation from the Sun in degrees of time on the event day, measured the way the classical rule requires. Sits just either side of kalamsa, since that crossing is what defines the event.
+             */
+            timeDegrees: number;
+            /**
+             * The limit that was crossed. Can differ from the current reading limit for Mercury and Venus, whose limit tightens when they are retrograde, so an asta entered while retrograde may be left at a different threshold.
+             */
+            kalamsa: number;
+        } | null;
+    }>;
+};
+
+export type HeliacalRequest = {
+    /**
+     * Local calendar date to judge, in YYYY-MM-DD format. There is deliberately no time field: heliacal visibility is a once-a-day verdict read at that day sunrise or sunset, so a clock time could only pick a different day.
+     */
+    date: string;
+    /**
+     * Observer latitude in decimal degrees, restricted to -60 to 60. Visibility depends on the observer, unlike the longitude orb every chart API reports, because the angle the ecliptic makes with the horizon decides how long a graha lingers after the Sun. Beyond this band the classical rule stops describing solar glare and starts describing polar horizon geometry, so it is declined rather than answered wrongly.
+     */
+    latitude: number;
+    /**
+     * Observer longitude in decimal degrees. Sets local sunrise and sunset, which are the instants the verdict is read at. Example: Mumbai 72.8777, Delhi 77.2090, London -0.1278.
+     */
+    longitude: number;
+    /**
+     * Timezone: IANA name (e.g. "Asia/Kolkata", "Europe/London") OR decimal hours from UTC. Fixes which local day the date refers to, and every datetime in the response is returned in it. Defaults to 5.5.
      */
     timezone?: number | string;
 };
@@ -9306,7 +10162,7 @@ export type PostAstrologyTransitAspectsResponses = {
                  * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
-            };
+            } | null;
             /**
              * Transit aspect counts grouped by aspect type (conjunction, trine, square, opposition, sextile, etc.). Useful for quickly assessing the transit weather.
              */
@@ -10921,7 +11777,7 @@ export type PostAstrologyCompatibilityScoreResponses = {
             /**
              * Dominant element shared by both charts, or null if dominant elements differ.
              */
-            sharedElement: string;
+            sharedElement: string | null;
             /**
              * How the elemental balance between charts shapes the relationship dynamic.
              */
@@ -12452,7 +13308,7 @@ export type PostAstrologyFixedStarsData = {
         /**
          * Conjunction orb in degrees, the maximum separation for a star to count as conjunct a chart point. Defaults to 1, maximum 3. Widen it to surface looser contacts or tighten it for only the closest hits.
          */
-        orb?: number;
+        orb?: number | null;
     };
     url: '/astrology/fixed-stars';
 };
@@ -13442,7 +14298,7 @@ export type PostVedicAstrologyBirthChartError = PostVedicAstrologyBirthChartErro
 
 export type PostVedicAstrologyBirthChartResponses = {
     /**
-     * D1 Rashi birth chart with all 12 houses, 9 grahas plus Lagna, combustion analysis (Surya Siddhanta orbs), planetary war detection, bhava interpretations, and a meta lookup keyed by planet name.
+     * D1 Rashi birth chart with all 12 houses, 9 grahas plus Lagna, combustion analysis (Surya Siddhanta limits, applied as the standard ecliptic longitude orb), planetary war detection, bhava interpretations, and a meta lookup keyed by planet name.
      */
     200: BirthChartResponse;
 };
@@ -17348,11 +18204,11 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
         /**
          * Moonrise time in the requested timezone. Can be null if Moon does not rise on this date.
          */
-        moonrise: string;
+        moonrise: string | null;
         /**
          * Moonset time in the requested timezone. Can be null if Moon does not set on this date.
          */
-        moonset: string;
+        moonset: string | null;
         /**
          * Moon sign (Chandra Rashi) at sunrise. Central to Vedic astrology. determines daily emotional tone, Chandrabalam, and Tarabalam.
          */
@@ -17576,7 +18432,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              * Period end time in ISO 8601 format. Timezone-adjusted based on the input timezone offset.
              */
             end: string;
-        };
+        } | null;
         /**
          * Brahma Muhurta, sacred pre-dawn period approximately 96 minutes before sunrise (14th of 15 night muhurtas). Considered the best time for meditation, mantra japa, Vedic study, and spiritual sadhana. Referenced in Ashtanga Hridaya and Dharmashastra texts.
          */
@@ -17628,7 +18484,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              * Period end time in ISO 8601 format. Timezone-adjusted based on the input timezone offset.
              */
             end: string;
-        };
+        } | null;
         /**
          * Pratah Sandhya, morning twilight junction period for Sandhyavandanam prayer. Spans 3 night ghatis before sunrise to sunrise. Duration varies by location and season based on ratrimana (night duration). One of the three daily Sandhya prayer times prescribed in Dharmashastra.
          */
@@ -17641,7 +18497,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              * Period end time in ISO 8601 format. Timezone-adjusted based on the input timezone offset.
              */
             end: string;
-        };
+        } | null;
         /**
          * Sayahna Sandhya, evening twilight junction period for Sandhyavandanam prayer. Spans sunset to 3 night ghatis after sunset. Duration varies by location and season based on ratrimana (night duration). One of the three daily Sandhya prayer times prescribed in Dharmashastra.
          */
@@ -17654,7 +18510,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              * Period end time in ISO 8601 format. Timezone-adjusted based on the input timezone offset.
              */
             end: string;
-        };
+        } | null;
         /**
          * Dur Muhurta (Dur Muhurtam), inauspicious muhurta periods determined by the weekday. The daytime is divided into 15 muhurtas from sunrise to sunset. Specific muhurta numbers are inauspicious each weekday per Muhurta Chintamani. Each period lasts ~48 minutes. Most days have 2 Dur Muhurtas, Wednesday and Sunday have 1. Avoid initiating important activities during these periods.
          */
@@ -17731,15 +18587,15 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
             /**
              * Panchaka dosha, set by the weekday the period BEGINS (not the nakshatra): Roga (Sunday, disease), Raja (Monday, government), Agni (Tuesday, fire), Chora (Friday, theft), Mrityu (Saturday, death). Null when Panchaka begins on Wednesday or Thursday (no dosha) or when no Panchaka touches this date.
              */
-            type: string;
+            type: string | null;
             /**
              * When the Panchaka period starts (Moon enters 300 degrees, Dhanishta 3rd pada). May predate this date when Panchaka is already running. Null when no Panchaka is in force or begins on this date. In requested timezone.
              */
-            startsAt: string;
+            startsAt: string | null;
             /**
              * When the Panchaka period ends (Moon exits Revati at 360 degrees), about five days after it starts. Null when no Panchaka. In requested timezone.
              */
-            endsAt: string;
+            endsAt: string | null;
         };
         /**
          * Bhadra (Vishti Karana), the 7th movable karana, avoided for all auspicious activities. Bhadra recurs roughly every 3 to 5 days and lasts about half a tithi. active is true whenever a Bhadra is attributed to this date; startsAt and endsAt give the window, which may end on the next calendar day.
@@ -17752,11 +18608,11 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
             /**
              * When the Bhadra (Vishti) period that begins on this date starts. Null when no Bhadra begins on this date. In requested timezone.
              */
-            startsAt: string;
+            startsAt: string | null;
             /**
              * When the Bhadra (Vishti) period that begins on this date ends. May fall on the next calendar day. Null when no Bhadra begins on this date. In requested timezone.
              */
-            endsAt: string;
+            endsAt: string | null;
         };
         /**
          * Panchang element transition times. exact timing of when each element (tithi, yoga, karana, nakshatra, Moon sign) changes. Calculated using binary search for ~1 minute precision. Essential for precise muhurta determination and panchang calendars.
@@ -18220,7 +19076,12 @@ export type PostVedicAstrologyPanchangHoraResponse = PostVedicAstrologyPanchangH
 export type PostVedicAstrologyDoshaManglikData = {
     body?: ManglikRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/dosha/manglik';
 };
 
@@ -18340,7 +19201,12 @@ export type PostVedicAstrologyDoshaManglikResponse = PostVedicAstrologyDoshaMang
 export type PostVedicAstrologyDoshaKalsarpaData = {
     body?: KalsarpaRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/dosha/kalsarpa';
 };
 
@@ -18460,7 +19326,12 @@ export type PostVedicAstrologyDoshaKalsarpaResponse = PostVedicAstrologyDoshaKal
 export type PostVedicAstrologyDoshaSadhesatiData = {
     body?: SadhesatiRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/dosha/sadhesati';
 };
 
@@ -20187,6 +21058,135 @@ export type PostVedicAstrologyKpPlanetsIntervalResponses = {
 
 export type PostVedicAstrologyKpPlanetsIntervalResponse = PostVedicAstrologyKpPlanetsIntervalResponses[keyof PostVedicAstrologyKpPlanetsIntervalResponses];
 
+export type PostVedicAstrologyKpHoraryData = {
+    body?: KpHoraryRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
+    };
+    url: '/vedic-astrology/kp/horary';
+};
+
+export type PostVedicAstrologyKpHoraryErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpHoraryError = PostVedicAstrologyKpHoraryErrors[keyof PostVedicAstrologyKpHoraryErrors];
+
+export type PostVedicAstrologyKpHoraryResponses = {
+    /**
+     * Horary chart with the Ascendant from the number, Placidus cusps, planets at the question moment, ruling planets, and four-level significators.
+     */
+    200: KpHoraryResponse;
+};
+
+export type PostVedicAstrologyKpHoraryResponse = PostVedicAstrologyKpHoraryResponses[keyof PostVedicAstrologyKpHoraryResponses];
+
 export type PostVedicAstrologyAspectsData = {
     body?: {
         /**
@@ -20970,7 +21970,7 @@ export type PostVedicAstrologyTransitResponses = {
          */
         natalPlanets: Array<{
             /**
-             * Planet name (Sun through Ketu plus Lagna).
+             * Graha name, Sun through Ketu. The Lagna is not one of these entries; it is a house frame rather than a body, and the natal house numbers on every entry are counted from it.
              */
             name: string;
             /**
@@ -20987,7 +21987,7 @@ export type PostVedicAstrologyTransitResponses = {
             house: number;
         }>;
         /**
-         * Current planetary positions overlaid on the natal chart with house placements and aspects.
+         * Current planetary positions overlaid on the natal chart with house placements, aspects, and the Gochara Kaksha verdict for each graha.
          */
         transitingPlanets: Array<{
             /**
@@ -21023,6 +22023,35 @@ export type PostVedicAstrologyTransitResponses = {
                  */
                 orb: number;
             }>;
+            /**
+             * Gochara Kaksha: the ashtakavarga-qualified reading of this transit. The sign says where a graha is, this says whether the exact stretch it currently occupies is one its own Bhinnashtakavarga supports, which is the classical way of refining a transit verdict from sign-level to under four degrees.
+             */
+            kaksha: {
+                /**
+                 * Kaksha number 1-8 within the current sign. Each sign divides into eight kakshas of 3 degrees 45 minutes, crossed in order, so this is how far through the sign the graha has travelled.
+                 */
+                number: number;
+                /**
+                 * Graha ruling this kaksha. The eight lords run Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon, Lagna from the start of every sign, ordered by how long each takes to cross a sign.
+                 */
+                lord: string;
+                /**
+                 * Degree within the sign where this kaksha begins (0, 3.75, 7.5 and so on).
+                 */
+                startDegree: number;
+                /**
+                 * Degree within the sign where this kaksha ends.
+                 */
+                endDegree: number;
+                /**
+                 * Whether this kaksha lord gave the transiting graha a bindu in the sign being transited, which is the Gochara Kaksha verdict: true reads as a favourable stretch of the transit, false as an unfavourable one. Null means the question does not apply rather than that the answer is no, because Rahu and Ketu have no Bhinnashtakavarga to read. Never render null as unfavourable.
+                 */
+                bindu: boolean | null;
+                /**
+                 * Bindus the transiting graha holds in this whole sign, 0-8, or null for Rahu and Ketu. Context for the verdict, since the same kaksha reads differently in a sign worth 7 than in one worth 1.
+                 */
+                binduCount: number | null;
+            };
         }>;
         /**
          * Highlighted transits from slow-moving planets (Jupiter, Saturn, Rahu, Ketu), most impactful for Gochar analysis.
@@ -22579,7 +23608,12 @@ export type PostVedicAstrologyAshtakavargaResponse = PostVedicAstrologyAshtakava
 export type PostVedicAstrologyShadbalaData = {
     body?: ShadbalaRequest;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/shadbala';
 };
 
@@ -23517,6 +24551,126 @@ export type PostVedicAstrologyBhavChalitResponses = {
 };
 
 export type PostVedicAstrologyBhavChalitResponse = PostVedicAstrologyBhavChalitResponses[keyof PostVedicAstrologyBhavChalitResponses];
+
+export type PostVedicAstrologyHeliacalData = {
+    body?: HeliacalRequest;
+    path?: never;
+    query?: never;
+    url: '/vedic-astrology/heliacal';
+};
+
+export type PostVedicAstrologyHeliacalErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyHeliacalError = PostVedicAstrologyHeliacalErrors[keyof PostVedicAstrologyHeliacalErrors];
+
+export type PostVedicAstrologyHeliacalResponses = {
+    /**
+     * Heliacal visibility and the surrounding udaya and asta events for each graha.
+     */
+    200: HeliacalResponse;
+};
+
+export type PostVedicAstrologyHeliacalResponse = PostVedicAstrologyHeliacalResponses[keyof PostVedicAstrologyHeliacalResponses];
 
 export type PostForecastTimelineData = {
     body?: {
@@ -26674,7 +27828,7 @@ export type GetHumanDesignGatesByNumberData = {
         /**
          * Gate number from 1 to 64.
          */
-        number: number;
+        number: number | null;
     };
     query?: {
         /**
@@ -31085,7 +32239,7 @@ export type PostNumerologyChartResponses = {
                 /**
                  * Age when this phase ends. Null for the 4th Pinnacle (lasts rest of life).
                  */
-                endAge: number;
+                endAge: number | null;
                 /**
                  * Meaning and interpretation for this Pinnacle number.
                  */
@@ -31127,7 +32281,7 @@ export type PostNumerologyChartResponses = {
                 /**
                  * Age when this period ends. Null for the 4th Challenge.
                  */
-                endAge: number;
+                endAge: number | null;
                 /**
                  * Meaning and resolution guidance for this Challenge number.
                  */
@@ -31865,7 +33019,7 @@ export type PostNumerologyChaldeanResponses = {
             /**
              * The interpretable compound number (10 to 52), the hidden influence behind the name, or null when the total resolves below 10.
              */
-            compound: number;
+            compound: number | null;
             /**
              * The single-digit root (1 to 9), the outward expression. Chaldean does not preserve master numbers.
              */
@@ -31885,7 +33039,7 @@ export type PostNumerologyChaldeanResponses = {
                 /**
                  * Classical symbolic title from Cheiro, or null when the number has no named symbol.
                  */
-                name: string;
+                name: string | null;
                 /**
                  * Overall tenor of the compound. "mixed" covers conditional numbers that are fortunate only alongside a favorable single number or in a specific domain.
                  */
@@ -31898,7 +33052,7 @@ export type PostNumerologyChaldeanResponses = {
                  * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
                  */
                 sameAs?: number;
-            };
+            } | null;
         };
         /**
          * The Soul Urge number from the vowels, revealing inner desire. Root may be 0 when the name has no vowels.
@@ -31911,7 +33065,7 @@ export type PostNumerologyChaldeanResponses = {
             /**
              * The interpretable compound number (10 to 52), the hidden influence behind the name, or null when the total resolves below 10.
              */
-            compound: number;
+            compound: number | null;
             /**
              * The single-digit root (1 to 9), the outward expression. Chaldean does not preserve master numbers.
              */
@@ -31931,7 +33085,7 @@ export type PostNumerologyChaldeanResponses = {
                 /**
                  * Classical symbolic title from Cheiro, or null when the number has no named symbol.
                  */
-                name: string;
+                name: string | null;
                 /**
                  * Overall tenor of the compound. "mixed" covers conditional numbers that are fortunate only alongside a favorable single number or in a specific domain.
                  */
@@ -31944,7 +33098,7 @@ export type PostNumerologyChaldeanResponses = {
                  * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
                  */
                 sameAs?: number;
-            };
+            } | null;
         };
         /**
          * The Personality number from the consonants, revealing the outer impression. Root may be 0 when the name has no consonants.
@@ -31957,7 +33111,7 @@ export type PostNumerologyChaldeanResponses = {
             /**
              * The interpretable compound number (10 to 52), the hidden influence behind the name, or null when the total resolves below 10.
              */
-            compound: number;
+            compound: number | null;
             /**
              * The single-digit root (1 to 9), the outward expression. Chaldean does not preserve master numbers.
              */
@@ -31977,7 +33131,7 @@ export type PostNumerologyChaldeanResponses = {
                 /**
                  * Classical symbolic title from Cheiro, or null when the number has no named symbol.
                  */
-                name: string;
+                name: string | null;
                 /**
                  * Overall tenor of the compound. "mixed" covers conditional numbers that are fortunate only alongside a favorable single number or in a specific domain.
                  */
@@ -31990,7 +33144,7 @@ export type PostNumerologyChaldeanResponses = {
                  * For numbers 33 to 52, the lower compound in the same series whose meaning this number shares.
                  */
                 sameAs?: number;
-            };
+            } | null;
         };
         numberMeaning: {
             /**
@@ -32164,7 +33318,7 @@ export type GetNumerologyCompoundNumberByNumberResponses = {
         /**
          * Classical symbolic title from Cheiro, or null when none is given.
          */
-        name: string;
+        name: string | null;
         /**
          * Overall tenor of the number. "mixed" marks conditional numbers, fortunate only with a favorable single number or in one domain.
          */
@@ -32342,7 +33496,7 @@ export type PostNumerologyDualResponses = {
             /**
              * Chaldean compound number (10 to 52), the hidden influence, or null.
              */
-            compound: number;
+            compound: number | null;
             /**
              * Chaldean root (1 to 9).
              */
@@ -32378,7 +33532,7 @@ export type PostNumerologyDualResponses = {
                 /**
                  * Symbolic title.
                  */
-                name: string;
+                name: string | null;
                 /**
                  * Tenor of the compound.
                  */
@@ -32391,7 +33545,7 @@ export type PostNumerologyDualResponses = {
                  * Series equivalent for 33 to 52.
                  */
                 sameAs?: number;
-            };
+            } | null;
         };
         /**
          * True when both systems reduce to the same single-digit energy (Pythagorean number reduced to one digit equals the Chaldean root). Agreement is read as a name whose vibrations are in harmony.
@@ -32543,7 +33697,7 @@ export type PostNumerologyBusinessNameResponses = {
         /**
          * Chaldean compound number (10 to 52), the hidden influence, or null.
          */
-        compound: number;
+        compound: number | null;
         /**
          * Single-digit business root (1 to 9), the outward commercial expression.
          */
@@ -32583,7 +33737,7 @@ export type PostNumerologyBusinessNameResponses = {
             /**
              * Symbolic title, if any.
              */
-            name: string;
+            name: string | null;
             /**
              * Tenor of the compound.
              */
@@ -32596,7 +33750,7 @@ export type PostNumerologyBusinessNameResponses = {
              * Series equivalent for 33 to 52.
              */
             sameAs?: number;
-        };
+        } | null;
         /**
          * One-line plain-language verdict for the business name.
          */
@@ -32621,7 +33775,7 @@ export type GetTarotCardsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
         /**
          * Filter by arcana type. Major arcana (0-21) represents life lessons and spiritual themes. Minor arcana (Ace-King in 4 suits) represents daily situations and practical matters.
          */
@@ -32633,7 +33787,7 @@ export type GetTarotCardsData = {
         /**
          * Filter by card number. Major Arcana: 0 (The Fool) through 21 (The World). Minor Arcana: 1 (Ace) through 14 (King). Combine with arcana or suit filters for precise results.
          */
-        number?: number;
+        number?: number | null;
     };
     url: '/tarot/cards';
 };
@@ -34884,7 +36038,7 @@ export type PostBiorhythmCriticalDaysResponses = {
         /**
          * Date where all 3 primary cycles cross zero simultaneously. Extremely rare event. Null if none found in range.
          */
-        tripleCriticalDay: string;
+        tripleCriticalDay: string | null;
     };
 };
 
@@ -36000,7 +37154,7 @@ export type GetIchingHexagramsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/iching/hexagrams';
 };
@@ -36999,7 +38153,7 @@ export type GetCrystalsZodiacBySignData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/crystals/zodiac/{sign}';
 };
@@ -37144,11 +38298,11 @@ export type GetCrystalsZodiacBySignResponses = {
             /**
              * URL to crystal photograph for visual identification.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Primary colors of this crystal variety. Null when color data is unavailable.
              */
-            colors: Array<string>;
+            colors: Array<string> | null;
         }>;
     };
 };
@@ -37175,7 +38329,7 @@ export type GetCrystalsChakraByChakraData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/crystals/chakra/{chakra}';
 };
@@ -37320,11 +38474,11 @@ export type GetCrystalsChakraByChakraResponses = {
             /**
              * URL to crystal photograph for visual identification.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Primary colors of this crystal variety. Null when color data is unavailable.
              */
-            colors: Array<string>;
+            colors: Array<string> | null;
         }>;
     };
 };
@@ -37351,7 +38505,7 @@ export type GetCrystalsElementByElementData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/crystals/element/{element}';
 };
@@ -37496,11 +38650,11 @@ export type GetCrystalsElementByElementResponses = {
             /**
              * URL to crystal photograph for visual identification.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Primary colors of this crystal variety. Null when color data is unavailable.
              */
-            colors: Array<string>;
+            colors: Array<string> | null;
         }>;
     };
 };
@@ -37660,11 +38814,11 @@ export type GetCrystalsBirthstoneByMonthResponses = {
             /**
              * URL to crystal photograph for visual identification.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Primary colors of this crystal variety. Null when color data is unavailable.
              */
-            colors: Array<string>;
+            colors: Array<string> | null;
         }>;
     };
 };
@@ -37690,7 +38844,7 @@ export type GetCrystalsSearchData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/crystals/search';
 };
@@ -37835,11 +38989,11 @@ export type GetCrystalsSearchResponses = {
             /**
              * URL to crystal photograph for visual identification.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Primary colors of this crystal variety. Null when color data is unavailable.
              */
-            colors: Array<string>;
+            colors: Array<string> | null;
         }>;
     };
 };
@@ -38012,7 +39166,7 @@ export type GetCrystalsPairingsByIdResponses = {
             /**
              * URL to paired crystal photograph.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Brief overview of the paired crystal.
              */
@@ -38024,7 +39178,7 @@ export type GetCrystalsPairingsByIdResponses = {
             /**
              * Healing property keywords for the paired crystal. Null when keyword data is unavailable.
              */
-            keywords: Array<string>;
+            keywords: Array<string> | null;
         }>;
     };
 };
@@ -38180,7 +39334,7 @@ export type PostCrystalsDailyResponses = {
         /**
          * URL to crystal photograph. Use for daily crystal card display and visual features.
          */
-        imageUrl: string;
+        imageUrl: string | null;
         /**
          * Overview of the crystal covering primary healing purpose and benefits.
          */
@@ -38192,7 +39346,7 @@ export type PostCrystalsDailyResponses = {
         /**
          * Zodiac signs this crystal is traditionally associated with. Null when zodiac data is unavailable.
          */
-        zodiacSigns: Array<string>;
+        zodiacSigns: Array<string> | null;
         /**
          * Positive affirmation aligned with the selected crystal. Use for daily affirmation features and meditation guidance.
          */
@@ -38334,7 +39488,7 @@ export type GetCrystalsRandomResponses = {
         /**
          * URL to crystal photograph for visual display.
          */
-        imageUrl: string;
+        imageUrl: string | null;
         /**
          * Overview of the crystal covering primary healing purpose and benefits.
          */
@@ -38346,7 +39500,7 @@ export type GetCrystalsRandomResponses = {
         /**
          * Zodiac signs this crystal is traditionally associated with. Null when zodiac data is unavailable.
          */
-        zodiacSigns: Array<string>;
+        zodiacSigns: Array<string> | null;
         /**
          * Positive affirmation aligned with the selected crystal energy.
          */
@@ -38649,7 +39803,7 @@ export type GetCrystalsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/crystals';
 };
@@ -38790,11 +39944,11 @@ export type GetCrystalsResponses = {
             /**
              * URL to crystal photograph for visual identification.
              */
-            imageUrl: string;
+            imageUrl: string | null;
             /**
              * Primary colors of this crystal variety. Null when color data is unavailable.
              */
-            colors: Array<string>;
+            colors: Array<string> | null;
             /**
              * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
              */
@@ -38955,7 +40109,7 @@ export type GetCrystalsByIdResponses = {
         /**
          * URL to a high-quality crystal photograph. Use for visual crystal guides, product listings, and crystal identification features.
          */
-        imageUrl: string;
+        imageUrl: string | null;
         /**
          * Overview of the crystal covering its primary healing purpose, spiritual significance, and key benefits.
          */
@@ -38967,7 +40121,7 @@ export type GetCrystalsByIdResponses = {
             /**
              * Spiritual and metaphysical healing properties including energy work, meditation benefits, and higher consciousness connections. Null when spiritual interpretation is unavailable.
              */
-            spiritual: string;
+            spiritual: string | null;
             /**
              * Emotional healing properties including stress relief, relationship support, and emotional balance benefits.
              */
@@ -38975,7 +40129,7 @@ export type GetCrystalsByIdResponses = {
             /**
              * Physical healing associations traditionally attributed to this crystal in crystal healing practice. Null when physical healing data is unavailable.
              */
-            physical: string;
+            physical: string | null;
         };
         /**
          * Chakra energy centers this crystal resonates with. One of: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
@@ -38984,19 +40138,19 @@ export type GetCrystalsByIdResponses = {
         /**
          * Zodiac signs this crystal is traditionally associated with. Null when zodiac data is unavailable. Useful for personalized crystal recommendations based on birth chart.
          */
-        zodiacSigns: Array<string>;
+        zodiacSigns: Array<string> | null;
         /**
          * Ruling planet or celestial body associated with this crystal in astrological tradition. Null when planetary association is unavailable.
          */
-        planet: string;
+        planet: string | null;
         /**
          * Elemental associations (Earth, Water, Fire, Air, Storm) connecting the crystal to natural forces and energy types. Null when elemental data is unavailable.
          */
-        elements: Array<string>;
+        elements: Array<string> | null;
         /**
          * Primary colors of this crystal variety. Null when color data is unavailable. Useful for color-based crystal selection and filtering.
          */
-        colors: Array<string>;
+        colors: Array<string> | null;
         /**
          * Mohs hardness scale rating (1-10). Indicates durability for jewelry use. Quartz family is 7, Diamond is 10, Selenite is 2.
          */
@@ -39008,11 +40162,11 @@ export type GetCrystalsByIdResponses = {
         /**
          * Keywords capturing the core healing properties and spiritual themes of this crystal. The count varies by stone, from a single keyword up to twenty. Null when keyword data is unavailable.
          */
-        keywords: Array<string>;
+        keywords: Array<string> | null;
         /**
          * Birth month (1-12) if this crystal is a traditional birthstone. Null if not a birthstone. January is 1, December is 12.
          */
-        birthMonth: number;
+        birthMonth: number | null;
         /**
          * Positive affirmation aligned with this crystal energy. Use for meditation, journaling, or daily affirmation features.
          */
@@ -39045,7 +40199,7 @@ export type GetDreamsSymbolsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/dreams/symbols';
 };
@@ -39751,7 +40905,7 @@ export type GetAngelNumbersNumbersData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
         /**
          * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome or alternating patterns like 1212, 717. "master" returns 11, 22, 33. "root" returns single digits 0-9. "compound" returns mixed sequences with no pure pattern like 911, 1122.
          */
@@ -40347,7 +41501,7 @@ export type GetAngelNumbersLookupResponses = {
              * Actionable steps when you see this number.
              */
             actionSteps: Array<string>;
-        };
+        } | null;
         /**
          * The foundational meaning of this number based on its digit root. Every number reduces to a root digit (0-9) or master number (11, 22, 33), which provides the base interpretation even for unknown sequences.
          */
@@ -40397,7 +41551,7 @@ export type GetAngelNumbersLookupResponses = {
              * Affirmation for the root digit.
              */
             affirmation: string;
-        };
+        } | null;
         /**
          * Present only when the context query parameter is supplied. A short reading layered on top of the meaning that accounts for WHERE the number was seen (clock, receipt, license plate, phone, address, price), since the place of a sighting shifts its emphasis.
          */
@@ -40634,7 +41788,7 @@ export type GetLocationSearchData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/location/search';
 };
@@ -40817,7 +41971,7 @@ export type GetLocationCountriesData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/location/countries';
 };
@@ -40985,7 +42139,7 @@ export type GetLocationCountriesByIso2Data = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number;
+        offset?: number | null;
     };
     url: '/location/countries/{iso2}';
 };
