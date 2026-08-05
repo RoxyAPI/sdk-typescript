@@ -894,9 +894,9 @@ export class VedicAstrology extends HeyApiClient {
     }
     
     /**
-     * List all planetary yogas - 300+ Vedic Yoga Glossary
+     * List all planetary yogas - 301 entry Vedic Yoga Glossary
      *
-     * Browse the 300+ entry Vedic planetary-yoga glossary. Returns id and name for every cataloged yoga (Raja, Dhana, Pancha Mahapurusha, Nabhasa, Chandra-Mangala, and more). This is a dictionary lookup, not chart-driven detection: it does not inspect a birth chart. Use GET /yoga/{id} for the full glossary entry, or POST /yoga/detect to run all 44 detection rules against a specific kundli. Ideal for yoga-browser UIs, search, and progressive data loading.
+     * Browse the 301-entry Vedic planetary-yoga glossary. Returns id and name for every cataloged yoga (Raja, Dhana, Pancha Mahapurusha, Nabhasa, Chandra-Mangala, and more). This is a dictionary lookup, not chart-driven detection: it does not inspect a birth chart. Use GET /yoga/{id} for the full glossary entry, or POST /yoga/detect to run all 44 detection rules against a specific kundli. Ideal for yoga-browser UIs, search, and progressive data loading.
      */
     public listYogas<ThrowOnError extends boolean = false>(options?: Options<GetVedicAstrologyYogaData, ThrowOnError>): RequestResult<GetVedicAstrologyYogaResponses, GetVedicAstrologyYogaErrors, ThrowOnError> {
         return (options?.client ?? this.client).get<GetVedicAstrologyYogaResponses, GetVedicAstrologyYogaErrors, ThrowOnError>({

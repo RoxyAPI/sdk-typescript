@@ -2967,7 +2967,7 @@ export type BirthChartResponse = {
      */
     yogas?: Array<{
         /**
-         * Glossary id (lowercase, kebab-case) matching an entry in the 300-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
+         * Glossary id (lowercase, kebab-case) matching an entry in the 301-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
          */
         id: string;
         /**
@@ -4017,7 +4017,7 @@ export type SadhesatiRequest = {
 
 export type YogaDetail = {
     /**
-     * Glossary id (lowercase, kebab-case) matching an entry in the 300-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
+     * Glossary id (lowercase, kebab-case) matching an entry in the 301-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
      */
     id: string;
     /**
@@ -4048,7 +4048,7 @@ export type YogaDetectResponse = {
      */
     yogas: Array<{
         /**
-         * Glossary id (lowercase, kebab-case) matching an entry in the 300-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
+         * Glossary id (lowercase, kebab-case) matching an entry in the 301-entry planetary-yoga catalog. Use with GET /yoga/{id} to retrieve the full glossary text.
          */
         id: string;
         /**
@@ -35055,11 +35055,11 @@ export type PostTarotSpreadsLoveResponse = PostTarotSpreadsLoveResponses[keyof P
 export type PostTarotSpreadsCareerData = {
     body: {
         /**
-         * Optional querent question to focus the career spread. It is echoed back on the reading and gives the five career positions their context. Omit for general work and vocation guidance.
+         * Optional querent question to focus the career spread. It is echoed back on the reading and gives the seven career positions their context. Omit for general work and vocation guidance.
          */
         question?: string;
         /**
-         * Optional seed for reproducible results. The same seed always draws the same five cards into the same career positions, which is what lets a reading be shared or re-rendered. Omit for a random draw.
+         * Optional seed for reproducible results. The same seed always draws the same seven cards into the same career positions, which is what lets a reading be shared or re-rendered. Omit for a random draw.
          */
         seed?: string;
     };
