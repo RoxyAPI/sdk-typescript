@@ -9849,6 +9849,10 @@ export type PostAstrologyTransitAspectsData = {
          * Minimum aspect strength threshold (0-100). Higher values return only tighter, more potent aspects. Useful for filtering out wide-orb aspects.
          */
         minStrength?: number;
+        /**
+         * House system used to divide the natal chart into 12 houses. Every house number in the response is read against these natal cusps, for the natal bodies and the transiting bodies alike. Placidus (default) is time sensitive and the most widely used in Western astrology. Whole Sign assigns one sign per house. Equal divides into 30 degree segments from the Ascendant. Koch emphasizes higher latitudes. Quadrant systems fall back to Whole Sign above the polar circle.
+         */
+        houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
     };
     path?: never;
     query?: {
@@ -9974,7 +9978,11 @@ export type PostAstrologyTransitAspectsResponses = {
          */
         transitDate: string;
         /**
-         * Current transiting positions in the tropical zodiac. All 14 celestial bodies: the 10 classical planets (Sun through Pluto), the lunar nodes, Chiron, and Black Moon Lilith.
+         * House system actually used for the natal cusps behind every house number in this response. Differs from the requested system only above the polar circle, where quadrant systems fall back to Whole Sign.
+         */
+        houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
+        /**
+         * Current transiting positions in the tropical zodiac, each placed in the natal house it is passing through. All 14 celestial bodies: the 10 classical planets (Sun through Pluto), the lunar nodes, Chiron, and Black Moon Lilith.
          */
         transitPlanets: Array<{
             /**
@@ -9998,7 +10006,7 @@ export type PostAstrologyTransitAspectsResponses = {
              */
             degree: number;
             /**
-             * House placement (1-12). Determined by the selected house system and birth location.
+             * Natal house (1-12) this transiting body is currently passing through, read against the natal house cusps. This is the life area the transit activates, so it is driven by the natal birth time and location rather than by the transit moment.
              */
             house: number;
             /**
@@ -10011,7 +10019,7 @@ export type PostAstrologyTransitAspectsResponses = {
             isRetrograde: boolean;
         }>;
         /**
-         * Natal (birth chart) planetary positions used as the baseline for transit aspect comparison.
+         * Natal (birth chart) planetary positions used as the baseline for transit aspect comparison, each placed in its natal house.
          */
         natalPlanets: Array<{
             /**

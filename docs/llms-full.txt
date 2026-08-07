@@ -158,6 +158,7 @@ const { data } = await roxy.astrology.calculateTransitAspects({
     planets: ['Jupiter', 'Saturn', 'Pluto'],
     aspectTypes: ['CONJUNCTION', 'OPPOSITION', 'TRINE', 'SQUARE'],
     minStrength: 50,
+    houseSystem: 'placidus',
   },
 });
 
@@ -1020,7 +1021,7 @@ const { data } = await roxy.vedicAstrology.getHeliacalVisibility({
 
 ## Forecast — `roxy.forecast`
 
-Merge upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm critical days, and...
+Forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm...
 
 ```typescript
 // Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
@@ -1667,7 +1668,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 ## Location and Timezone — `roxy.location`
 
-City search and geocoding API with 23,000+ cities across 240+ countries, returning latitude, longitude, IANA timezone...
+Location and timezone API with city search and geocoding across 23,000+ cities in 240+ countries, returning latitude,...
 
 ```typescript
 // Search cities worldwide - Geocoding autocomplete with coordinates and timezone
