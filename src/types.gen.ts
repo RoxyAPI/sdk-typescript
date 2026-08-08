@@ -35,9 +35,13 @@ export type NatalChartResponse = {
      */
     planets: Array<{
         /**
-         * Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
+         * Planet or point name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
          */
         name: string;
+        /**
+         * Planet or point name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Tropical ecliptic longitude in degrees (0-360).
          */
@@ -47,9 +51,13 @@ export type NatalChartResponse = {
          */
         latitude: number;
         /**
-         * Tropical zodiac sign this planet occupies.
+         * Tropical zodiac sign this planet occupies. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the zodiac sign (0-29.999).
          */
@@ -97,9 +105,13 @@ export type NatalChartResponse = {
          */
         longitude: number;
         /**
-         * Zodiac sign on this house cusp.
+         * Zodiac sign on this house cusp. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name on this cusp in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the zodiac sign (0-29.999).
          */
@@ -114,17 +126,29 @@ export type NatalChartResponse = {
      */
     aspects: Array<{
         /**
-         * First planet in the aspect pair.
+         * First planet in the aspect pair. Always English, whatever the lang parameter says. Use planet1Localized for anything a reader sees.
          */
         planet1: string;
         /**
-         * Second planet in the aspect pair.
+         * First planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        planet1Localized?: string;
+        /**
+         * Second planet in the aspect pair. Always English, whatever the lang parameter says. Use planet2Localized for anything a reader sees.
          */
         planet2: string;
         /**
-         * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.).
+         * Second planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        planet2Localized?: string;
+        /**
+         * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.). Always English, whatever the lang parameter says. Use typeLocalized for anything a reader sees.
          */
         type: string;
+        /**
+         * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        typeLocalized?: string;
         /**
          * Exact angle of this aspect type in degrees.
          */
@@ -227,9 +251,13 @@ export type NatalChartResponse = {
      */
     ascendant: {
         /**
-         * Zodiac sign on the Ascendant (rising sign).
+         * Zodiac sign on the Ascendant (rising sign). Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Ascendant sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the Ascendant sign (0-29.999).
          */
@@ -244,9 +272,13 @@ export type NatalChartResponse = {
      */
     midheaven: {
         /**
-         * Zodiac sign on the Midheaven (MC).
+         * Zodiac sign on the Midheaven (MC). Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Midheaven sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the Midheaven sign (0-29.999).
          */
@@ -276,6 +308,10 @@ export type NatalChartResponse = {
          * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
          */
         sect: 'day' | 'night';
+        /**
+         * Part of Fortune sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
     };
     /**
      * Vertex. The western intersection of the prime vertical with the ecliptic, often read as a point of fated encounters and turning-point relationships. The opposite point is the Anti-Vertex.
@@ -293,23 +329,39 @@ export type NatalChartResponse = {
          * Absolute ecliptic longitude of the Vertex (0-360).
          */
         longitude: number;
+        /**
+         * Vertex sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
     };
     /**
      * Chart summary with dominant element, modality, retrograde planets, and distribution analysis.
      */
     summary: {
         /**
-         * Most represented element in the chart (Fire, Earth, Air, Water).
+         * Most represented element in the chart (Fire, Earth, Air, Water). Always English, whatever the lang parameter says. Use dominantElementLocalized for anything a reader sees.
          */
         dominantElement: string;
         /**
-         * Most represented modality in the chart (Cardinal, Fixed, Mutable).
+         * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        dominantElementLocalized?: string;
+        /**
+         * Most represented modality in the chart (Cardinal, Fixed, Mutable). Always English, whatever the lang parameter says. Use dominantModalityLocalized for anything a reader sees.
          */
         dominantModality: string;
         /**
-         * Planets in retrograde motion at the time of birth.
+         * Modality name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        dominantModalityLocalized?: string;
+        /**
+         * Planets in retrograde motion at the time of birth. Always English, whatever the lang parameter says. Use retrogradePlanetsLocalized for anything a reader sees.
          */
         retrogradePlanets: Array<string>;
+        /**
+         * The same retrograde bodies in the requested language, for display only. Index aligned with retrogradePlanets, so entry n of one names entry n of the other. Present only when lang is set to a language other than English, since in English it would repeat retrogradePlanets exactly.
+         */
+        retrogradePlanetsLocalized?: Array<string>;
         /**
          * Count of planets in each element. Shows elemental emphasis in the personality.
          */
@@ -484,17 +536,29 @@ export type AspectsResponse = {
      */
     aspects: Array<{
         /**
-         * First planet in the aspect pair.
+         * First planet in the aspect pair. Always English, whatever the lang parameter says. Use planet1Localized for anything a reader sees.
          */
         planet1: string;
         /**
-         * Second planet in the aspect pair.
+         * First planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        planet1Localized?: string;
+        /**
+         * Second planet in the aspect pair. Always English, whatever the lang parameter says. Use planet2Localized for anything a reader sees.
          */
         planet2: string;
         /**
-         * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.).
+         * Second planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        planet2Localized?: string;
+        /**
+         * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.). Always English, whatever the lang parameter says. Use typeLocalized for anything a reader sees.
          */
         type: string;
+        /**
+         * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        typeLocalized?: string;
         /**
          * Exact angle defining this aspect type in degrees.
          */
@@ -761,9 +825,13 @@ export type TransitsResponse = {
      */
     transitPlanets: Array<{
         /**
-         * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
+         * Planet name (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith). Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The lunar nodes are the mean node; software using the true node may show node positions up to 1.75 degrees different.
          */
         name: string;
+        /**
+         * Planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Tropical ecliptic longitude in degrees (0-360). Primary coordinate for sign and aspect calculation.
          */
@@ -773,9 +841,13 @@ export type TransitsResponse = {
          */
         latitude: number;
         /**
-         * Tropical zodiac sign the planet currently occupies. Changes when longitude crosses a 30-degree boundary.
+         * Tropical zodiac sign the planet currently occupies. Changes when longitude crosses a 30-degree boundary. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the current zodiac sign (0-29.999). Indicates how far into the sign the planet has progressed.
          */
@@ -794,17 +866,29 @@ export type TransitsResponse = {
      */
     transitAspects?: Array<{
         /**
-         * Transiting planet forming the aspect.
+         * Transiting planet forming the aspect. Always English, whatever the lang parameter says. Use transitPlanetLocalized for anything a reader sees.
          */
         transitPlanet: string;
         /**
-         * Natal planet being aspected.
+         * Transiting planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        transitPlanetLocalized?: string;
+        /**
+         * Natal planet being aspected. Always English, whatever the lang parameter says. Use natalPlanetLocalized for anything a reader sees.
          */
         natalPlanet: string;
         /**
-         * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.).
+         * Natal planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        natalPlanetLocalized?: string;
+        /**
+         * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.). Always English, whatever the lang parameter says. Use typeLocalized for anything a reader sees.
          */
         type: string;
+        /**
+         * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        typeLocalized?: string;
         /**
          * Exact angle of this aspect type in degrees.
          */
@@ -1108,6 +1192,10 @@ export type RelocationChartResponse = {
          * Degree within the zodiac sign on this cusp (0-29.999).
          */
         degree: number;
+        /**
+         * Zodiac sign name on this cusp in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
     }>;
     /**
      * House system used for the relocated chart (placidus, whole-sign, equal, or koch). Quadrant systems fall back to whole-sign above the polar circle.
@@ -1118,9 +1206,13 @@ export type RelocationChartResponse = {
      */
     ascendant: {
         /**
-         * Tropical zodiac sign on this relocated angle.
+         * Tropical zodiac sign on this relocated angle. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name on this angle in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the zodiac sign on this angle (0-29.999).
          */
@@ -1135,9 +1227,13 @@ export type RelocationChartResponse = {
      */
     midheaven: {
         /**
-         * Tropical zodiac sign on this relocated angle.
+         * Tropical zodiac sign on this relocated angle. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name on this angle in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree within the zodiac sign on this angle (0-29.999).
          */
@@ -1163,6 +1259,10 @@ export type RelocationChartResponse = {
          * Absolute ecliptic longitude of the Vertex (0-360).
          */
         longitude: number;
+        /**
+         * Vertex sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
     };
     /**
      * How relocation reshapes the chart: Ascendant shift, planets that change house, angular planets, and the move geometry from the birthplace.
@@ -1177,9 +1277,13 @@ export type RelocationChartResponse = {
          */
         planetsChangedHouse: Array<{
             /**
-             * Body that occupies a different house after relocation.
+             * Body that occupies a different house after relocation. Always English, whatever the lang parameter says. Use planetLocalized for anything a reader sees.
              */
             planet: string;
+            /**
+             * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planetLocalized?: string;
             /**
              * House this body occupied in the birthplace chart (1-12).
              */
@@ -1190,9 +1294,13 @@ export type RelocationChartResponse = {
             relocatedHouse: number;
         }>;
         /**
-         * Bodies within three degrees of a relocated angle (Ascendant, Imum Coeli, Descendant, or Midheaven), where their influence is strongest at this location.
+         * Bodies within three degrees of a relocated angle (Ascendant, Imum Coeli, Descendant, or Midheaven), where their influence is strongest at this location. Always English, whatever the lang parameter says. Use angularPlanetsLocalized for anything a reader sees.
          */
         angularPlanets: Array<string>;
+        /**
+         * The same angular bodies in the requested language, for display only. Index aligned with angularPlanets. Present only when lang is set to a language other than English.
+         */
+        angularPlanetsLocalized?: Array<string>;
         /**
          * Great-circle distance from the birthplace to the new location in kilometers.
          */
@@ -1246,6 +1354,14 @@ export type RelocationPlanet = {
      * Whether the planet appears to move backward from Earth perspective. Retrograde periods signal review and introspection.
      */
     isRetrograde: boolean;
+    /**
+     * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+     */
+    nameLocalized?: string;
+    /**
+     * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+     */
+    signLocalized?: string;
     /**
      * Relocated placement interpretation. The planet keeps its natal sign, so this reads its meaning through the new house it occupies at this location.
      */
@@ -1845,17 +1961,25 @@ export type ProgressionsResponse = {
      */
     planets: Array<{
         /**
-         * Body name in canonical English. One of the 10 classical planets, the lunar nodes, Chiron, or Black Moon Lilith.
+         * Body name in canonical English. One of the 10 classical planets, the lunar nodes, Chiron, or Black Moon Lilith. Unchanged by the lang parameter, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
          */
         name: string;
+        /**
+         * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Progressed tropical ecliptic longitude in degrees (0 to 360).
          */
         longitude: number;
         /**
-         * Tropical zodiac sign the progressed body falls in.
+         * Tropical zodiac sign the progressed body falls in. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree of the progressed body within its zodiac sign (0 to 29.999).
          */
@@ -1886,9 +2010,13 @@ export type ProgressionsResponse = {
          */
         longitude: number;
         /**
-         * Tropical zodiac sign the progressed angle falls in.
+         * Tropical zodiac sign the progressed angle falls in. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name on this angle in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree of the progressed angle within its zodiac sign (0 to 29.999).
          */
@@ -1903,9 +2031,13 @@ export type ProgressionsResponse = {
          */
         longitude: number;
         /**
-         * Tropical zodiac sign the progressed angle falls in.
+         * Tropical zodiac sign the progressed angle falls in. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
          */
         sign: string;
+        /**
+         * Zodiac sign name on this angle in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signLocalized?: string;
         /**
          * Degree of the progressed angle within its zodiac sign (0 to 29.999).
          */
@@ -8347,6 +8479,191 @@ export type PostAstrologyPlanetsResponses = {
 
 export type PostAstrologyPlanetsResponse = PostAstrologyPlanetsResponses[keyof PostAstrologyPlanetsResponses];
 
+export type PostAstrologyPlanetsMonthlyData = {
+    body?: {
+        /**
+         * Year for the monthly ephemeris (1900-2100). Defaults to the current year (UTC).
+         */
+        year?: number;
+        /**
+         * Month number (1-12) for the ephemeris. Defaults to the current month (UTC).
+         */
+        month?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/planets/monthly';
+};
+
+export type PostAstrologyPlanetsMonthlyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyPlanetsMonthlyError = PostAstrologyPlanetsMonthlyErrors[keyof PostAstrologyPlanetsMonthlyErrors];
+
+export type PostAstrologyPlanetsMonthlyResponses = {
+    /**
+     * Monthly ephemeris data
+     */
+    200: {
+        /**
+         * Year of the ephemeris. Echoes the year that was requested, or the current UTC year when it was omitted.
+         */
+        year: number;
+        /**
+         * Month of the ephemeris. Echoes the month that was requested, or the current UTC month when it was omitted.
+         */
+        month: number;
+        /**
+         * Daily planetary position entries for the entire month.
+         */
+        days: Array<{
+            /**
+             * Date in YYYY-MM-DD format.
+             */
+            date: string;
+            /**
+             * Tropical positions of all 14 Western bodies on this date at noon UTC.
+             */
+            positions: Array<{
+                /**
+                 * Body name, one of the 14 bodies Western astrology reads: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, South Node, Chiron, Black Moon Lilith. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
+                 */
+                planet: string;
+                /**
+                 * Body name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet exactly.
+                 */
+                planetLocalized?: string;
+                /**
+                 * Tropical ecliptic longitude in degrees (0-360), measured from the vernal equinox. This is the Western zodiac, not the sidereal one, so the two differ by the ayanamsa of roughly 24 degrees.
+                 */
+                longitude: number;
+                /**
+                 * Tropical zodiac sign the body occupies on this date. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use signLocalized for anything a reader sees.
+                 */
+                sign: string;
+                /**
+                 * Zodiac sign name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat sign exactly.
+                 */
+                signLocalized?: string;
+                /**
+                 * Degrees traversed within the current sign (0-30). Useful for precise transit tracking and for printing a position as sign plus degree.
+                 */
+                degreeInSign: number;
+                /**
+                 * Whether the body is in apparent retrograde motion on this date. The lunar nodes are always retrograde and Black Moon Lilith is always direct.
+                 */
+                isRetrograde: boolean;
+            }>;
+        }>;
+    };
+};
+
+export type PostAstrologyPlanetsMonthlyResponse = PostAstrologyPlanetsMonthlyResponses[keyof PostAstrologyPlanetsMonthlyResponses];
+
 export type GetAstrologyMoonPhaseCurrentData = {
     body?: never;
     path?: never;
@@ -9044,38 +9361,58 @@ export type PostAstrologySynastryResponses = {
              */
             ascendant: {
                 /**
-                 * Ascendant (rising sign) of this person.
+                 * Ascendant (rising sign) of this person. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
                  */
                 sign: string;
+                /**
+                 * Ascendant sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                signLocalized?: string;
                 /**
                  * Degree within the Ascendant sign (0-29.999).
                  */
                 degree: number;
             };
             /**
-             * Sun sign (zodiac sign) of this person. Core identity and ego expression.
+             * Sun sign (zodiac sign) of this person. Core identity and ego expression. Always English, whatever the lang parameter says. Use sunSignLocalized for anything a reader sees.
              */
             sunSign: string;
             /**
-             * Moon sign of this person. Emotional nature and inner needs.
+             * Sun sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            sunSignLocalized?: string;
+            /**
+             * Moon sign of this person. Emotional nature and inner needs. Always English, whatever the lang parameter says. Use moonSignLocalized for anything a reader sees.
              */
             moonSign: string;
+            /**
+             * Moon sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            moonSignLocalized?: string;
             /**
              * Planet positions for person 1, enough to render this side of a dual wheel without a second request. Per-planet interpretations are not repeated here; call the natal chart endpoint for an individual reading.
              */
             planets: Array<{
                 /**
-                 * Planet or point name. Matches the names used in interAspects.
+                 * Planet or point name. Matches the names used in interAspects. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
                  */
                 name: string;
+                /**
+                 * Planet or point name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
                 /**
                  * Ecliptic longitude in degrees (0-360) measured from 0 Aries. This is the value a wheel plots.
                  */
                 longitude: number;
                 /**
-                 * Zodiac sign containing the planet.
+                 * Zodiac sign containing the planet. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
                  */
                 sign: string;
+                /**
+                 * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                signLocalized?: string;
                 /**
                  * Degree within the sign (0-29.999).
                  */
@@ -9103,38 +9440,58 @@ export type PostAstrologySynastryResponses = {
              */
             ascendant: {
                 /**
-                 * Ascendant (rising sign) of this person.
+                 * Ascendant (rising sign) of this person. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
                  */
                 sign: string;
+                /**
+                 * Ascendant sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                signLocalized?: string;
                 /**
                  * Degree within the Ascendant sign (0-29.999).
                  */
                 degree: number;
             };
             /**
-             * Sun sign (zodiac sign) of this person. Core identity and ego expression.
+             * Sun sign (zodiac sign) of this person. Core identity and ego expression. Always English, whatever the lang parameter says. Use sunSignLocalized for anything a reader sees.
              */
             sunSign: string;
             /**
-             * Moon sign of this person. Emotional nature and inner needs.
+             * Sun sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            sunSignLocalized?: string;
+            /**
+             * Moon sign of this person. Emotional nature and inner needs. Always English, whatever the lang parameter says. Use moonSignLocalized for anything a reader sees.
              */
             moonSign: string;
+            /**
+             * Moon sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            moonSignLocalized?: string;
             /**
              * Planet positions for person 2, enough to render this side of a dual wheel without a second request. Per-planet interpretations are not repeated here; call the natal chart endpoint for an individual reading.
              */
             planets: Array<{
                 /**
-                 * Planet or point name. Matches the names used in interAspects.
+                 * Planet or point name. Matches the names used in interAspects. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
                  */
                 name: string;
+                /**
+                 * Planet or point name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
                 /**
                  * Ecliptic longitude in degrees (0-360) measured from 0 Aries. This is the value a wheel plots.
                  */
                 longitude: number;
                 /**
-                 * Zodiac sign containing the planet.
+                 * Zodiac sign containing the planet. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
                  */
                 sign: string;
+                /**
+                 * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                signLocalized?: string;
                 /**
                  * Degree within the sign (0-29.999).
                  */
@@ -9158,17 +9515,29 @@ export type PostAstrologySynastryResponses = {
          */
         interAspects: Array<{
             /**
-             * Planet from person 1 chart.
+             * Planet from person 1 chart. Always English, whatever the lang parameter says. Use planet1Localized for anything a reader sees.
              */
             planet1: string;
             /**
-             * Planet from person 2 chart.
+             * Person 1 planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planet1Localized?: string;
+            /**
+             * Planet from person 2 chart. Always English, whatever the lang parameter says. Use planet2Localized for anything a reader sees.
              */
             planet2: string;
             /**
-             * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.).
+             * Person 2 planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planet2Localized?: string;
+            /**
+             * Aspect type (CONJUNCTION, OPPOSITION, TRINE, SQUARE, SEXTILE, etc.). Always English, whatever the lang parameter says. Use typeLocalized for anything a reader sees.
              */
             type: string;
+            /**
+             * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            typeLocalized?: string;
             /**
              * Exact angle of this aspect type in degrees.
              */
@@ -10017,6 +10386,14 @@ export type PostAstrologyTransitAspectsResponses = {
              * Whether the planet appears to move backward from Earth perspective. Retrograde periods signal review and introspection.
              */
             isRetrograde: boolean;
+            /**
+             * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            signLocalized?: string;
         }>;
         /**
          * Natal (birth chart) planetary positions used as the baseline for transit aspect comparison, each placed in its natal house.
@@ -10054,6 +10431,14 @@ export type PostAstrologyTransitAspectsResponses = {
              * Whether the planet appears to move backward from Earth perspective. Retrograde periods signal review and introspection.
              */
             isRetrograde: boolean;
+            /**
+             * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Zodiac sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            signLocalized?: string;
         }>;
         /**
          * Transit-to-natal aspects with interpretations, strength ratings, and guidance. Each aspect represents a transiting planet forming a geometric angle to a natal planet.
@@ -10091,6 +10476,18 @@ export type PostAstrologyTransitAspectsResponses = {
              * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
              */
             interpretation: 'harmonious' | 'challenging' | 'neutral';
+            /**
+             * First planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planet1Localized?: string;
+            /**
+             * Second planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planet2Localized?: string;
+            /**
+             * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            typeLocalized?: string;
             transitInterpretation?: {
                 /**
                  * Narrative interpretation of this transit aspect and its life impact.
@@ -10170,6 +10567,18 @@ export type PostAstrologyTransitAspectsResponses = {
                  * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
+                /**
+                 * First planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                planet1Localized?: string;
+                /**
+                 * Second planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                planet2Localized?: string;
+                /**
+                 * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                typeLocalized?: string;
             } | null;
             /**
              * Transit aspect counts grouped by aspect type (conjunction, trine, square, opposition, sextile, etc.). Useful for quickly assessing the transit weather.
@@ -14816,20 +15225,25 @@ export type PostVedicAstrologyPlanetaryPositionsResponse = PostVedicAstrologyPla
 export type PostVedicAstrologyPlanetaryPositionsMonthlyData = {
     body?: {
         /**
-         * Year for monthly ephemeris (1900-2100).
+         * Year for monthly ephemeris (1900-2100). Defaults to the current year (UTC).
          */
-        year: number;
+        year?: number;
         /**
-         * Month number (1-12) for ephemeris.
+         * Month number (1-12) for ephemeris. Defaults to the current month (UTC).
          */
-        month: number;
+        month?: number;
         /**
          * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/planetary-positions/monthly';
 };
 
@@ -14943,11 +15357,11 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyResponses = {
      */
     200: {
         /**
-         * Year of the ephemeris.
+         * Year of the ephemeris. Echoes the year that was requested, or the current UTC year when it was omitted.
          */
         year: number;
         /**
-         * Month of the ephemeris.
+         * Month of the ephemeris. Echoes the month that was requested, or the current UTC month when it was omitted.
          */
         month: number;
         /**
@@ -14963,17 +15377,25 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyResponses = {
              */
             positions: Array<{
                 /**
-                 * Planet name, one of the Navagraha (Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu).
+                 * Planet name, one of the Navagraha (Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu). Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
                  */
                 planet: string;
+                /**
+                 * Planet name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet exactly. Rahu and Ketu are rendered as the lunar nodes they are, so Spanish returns Nodo Norte and Nodo Sur while Hindi returns their Sanskrit names.
+                 */
+                planetLocalized?: string;
                 /**
                  * Sidereal ecliptic longitude in degrees (0-360) using Lahiri ayanamsa.
                  */
                 longitude: number;
                 /**
-                 * Zodiac sign (rashi) the planet occupies on this date.
+                 * Zodiac sign (rashi) the planet occupies on this date. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use signLocalized for anything a reader sees.
                  */
                 sign: string;
+                /**
+                 * Zodiac sign name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat sign exactly.
+                 */
+                signLocalized?: string;
                 /**
                  * Degrees traversed within the current sign (0-30). Useful for precise transit tracking.
                  */
@@ -21433,13 +21855,13 @@ export type PostVedicAstrologyAspectsResponse = PostVedicAstrologyAspectsRespons
 export type PostVedicAstrologyAspectsMonthlyData = {
     body?: {
         /**
-         * Year for monthly analysis (1900-2100).
+         * Year for monthly analysis (1900-2100). Defaults to the current year (UTC).
          */
-        year: number;
+        year?: number;
         /**
-         * Month number (1-12).
+         * Month number (1-12). Defaults to the current month (UTC).
          */
-        month: number;
+        month?: number;
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
@@ -21450,7 +21872,12 @@ export type PostVedicAstrologyAspectsMonthlyData = {
         coordinateSystem?: 'sidereal' | 'tropical';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/aspects/monthly';
 };
 
@@ -21564,11 +21991,11 @@ export type PostVedicAstrologyAspectsMonthlyResponses = {
      */
     200: {
         /**
-         * Year of the aspect analysis.
+         * Year of the aspect analysis. Echoes the year that was requested, or the current UTC year when it was omitted.
          */
         year: number;
         /**
-         * Month of the aspect analysis.
+         * Month of the aspect analysis. Echoes the month that was requested, or the current UTC month when it was omitted.
          */
         month: number;
         /**
@@ -21580,13 +22007,21 @@ export type PostVedicAstrologyAspectsMonthlyResponses = {
          */
         events: Array<{
             /**
-             * First planet forming the aspect. One of the Navagraha, Sun through Ketu.
+             * First planet forming the aspect. One of the Navagraha, Sun through Ketu. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planet1Localized for anything a reader sees.
              */
             planet1: string;
             /**
-             * Second planet forming the aspect.
+             * First planet name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet1 exactly.
+             */
+            planet1Localized?: string;
+            /**
+             * Second planet forming the aspect. Always English, whatever the lang parameter says. Use planet2Localized for anything a reader sees.
              */
             planet2: string;
+            /**
+             * Second planet name in the requested language, for display. Present only when lang is set to a language other than English.
+             */
+            planet2Localized?: string;
             /**
              * Aspect type. major: conjunction (0 deg), opposition (180 deg), trine (120 deg), square (90 deg), sextile (60 deg). Minor: vigintile (18 deg), semi-sextile (30 deg), undecile (32.73 deg), semi-quintile (36 deg), novile (40 deg), semi-square (45 deg), septile (51.43 deg), quintile (72 deg), binovile (80 deg), centile (100 deg), biseptile (102.86 deg), tredecile (108 deg), sesqui-square (135 deg), bi-quintile (144 deg), quincunx (150 deg), triseptile (154.29 deg), quadranovile (160 deg).
              */
@@ -21628,13 +22063,13 @@ export type PostVedicAstrologyAspectsMonthlyResponse = PostVedicAstrologyAspects
 export type PostVedicAstrologyAspectsLunarData = {
     body?: {
         /**
-         * Year for monthly analysis (1900-2100).
+         * Year for monthly analysis (1900-2100). Defaults to the current year (UTC).
          */
-        year: number;
+        year?: number;
         /**
-         * Month number (1-12).
+         * Month number (1-12). Defaults to the current month (UTC).
          */
-        month: number;
+        month?: number;
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
@@ -21645,7 +22080,12 @@ export type PostVedicAstrologyAspectsLunarData = {
         coordinateSystem?: 'sidereal' | 'tropical';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/aspects/lunar';
 };
 
@@ -21759,11 +22199,11 @@ export type PostVedicAstrologyAspectsLunarResponses = {
      */
     200: {
         /**
-         * Year of the lunar aspect analysis.
+         * Year of the lunar aspect analysis. Echoes the year that was requested, or the current UTC year when it was omitted.
          */
         year: number;
         /**
-         * Month of the lunar aspect analysis.
+         * Month of the lunar aspect analysis. Echoes the month that was requested, or the current UTC month when it was omitted.
          */
         month: number;
         /**
@@ -21775,9 +22215,13 @@ export type PostVedicAstrologyAspectsLunarResponses = {
          */
         events: Array<{
             /**
-             * Planet that the Moon forms an aspect with.
+             * Planet that the Moon forms an aspect with. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
              */
             planet: string;
+            /**
+             * Planet name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet exactly.
+             */
+            planetLocalized?: string;
             /**
              * Aspect type. major: conjunction, opposition, trine, square, sextile. Minor: vigintile, semi-sextile, undecile, semi-quintile, novile, semi-square, septile, quintile, binovile, centile, biseptile, tredecile, sesqui-square, bi-quintile, quincunx, triseptile, quadranovile.
              */
@@ -22090,13 +22534,13 @@ export type PostVedicAstrologyTransitResponse = PostVedicAstrologyTransitRespons
 export type PostVedicAstrologyTransitMonthlyData = {
     body?: {
         /**
-         * Year for monthly transit analysis (1900-2100).
+         * Year for monthly transit analysis (1900-2100). Defaults to the current year (UTC).
          */
-        year: number;
+        year?: number;
         /**
-         * Month number (1-12) for transit analysis.
+         * Month number (1-12) for transit analysis. Defaults to the current month (UTC).
          */
-        month: number;
+        month?: number;
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
@@ -22107,7 +22551,12 @@ export type PostVedicAstrologyTransitMonthlyData = {
         coordinateSystem?: 'sidereal' | 'tropical';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/transit/monthly';
 };
 
@@ -22221,25 +22670,37 @@ export type PostVedicAstrologyTransitMonthlyResponses = {
      */
     200: {
         /**
-         * Year of the monthly transit analysis.
+         * Year of the monthly transit analysis. Echoes the year that was requested, or the current UTC year when it was omitted.
          */
         year: number;
         /**
-         * Month of the monthly transit analysis.
+         * Month of the monthly transit analysis. Echoes the month that was requested, or the current UTC month when it was omitted.
          */
         month: number;
+        /**
+         * Timezone offset from UTC in hours that the event dates and times are reported in. Echoes the requested timezone.
+         */
+        timezone: number;
         /**
          * Planetary positions at the beginning of the month (day 1, 00:00 UTC).
          */
         startingPositions: Array<{
             /**
-             * Planet (graha) name. One of the 9 Navagraha used in Vedic transit (Gochar) analysis.
+             * Planet (graha) name. One of the 9 Navagraha used in Vedic transit (Gochar) analysis. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
              */
             planet: string;
             /**
-             * Zodiac sign (rashi) the planet occupies at the start of the month.
+             * Planet name in the requested language, for display. Present only when lang is set to a language other than English.
+             */
+            planetLocalized?: string;
+            /**
+             * Zodiac sign (rashi) the planet occupies at the start of the month. Always English. Use signLocalized for anything a reader sees.
              */
             sign: string;
+            /**
+             * Zodiac sign name in the requested language, for display. Present only when lang is set to a language other than English.
+             */
+            signLocalized?: string;
             /**
              * Sidereal longitude at the start of the month.
              */
@@ -22250,17 +22711,29 @@ export type PostVedicAstrologyTransitMonthlyResponses = {
          */
         transitEvents: Array<{
             /**
-             * Planet that changes sign (rashi) during this month. One of the Navagraha: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu.
+             * Planet that changes sign (rashi) during this month. One of the Navagraha: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
              */
             planet: string;
             /**
-             * Zodiac sign the planet is leaving (previous rashi).
+             * Planet name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet exactly.
+             */
+            planetLocalized?: string;
+            /**
+             * Zodiac sign the planet is leaving (previous rashi). Always English. Use fromSignLocalized for anything a reader sees.
              */
             fromSign: string;
             /**
-             * Zodiac sign the planet is entering (new rashi transit).
+             * Name of the sign being left, in the requested language, for display. Present only when lang is set to a language other than English.
+             */
+            fromSignLocalized?: string;
+            /**
+             * Zodiac sign the planet is entering (new rashi transit). Always English. Use toSignLocalized for anything a reader sees.
              */
             toSign: string;
+            /**
+             * Name of the sign being entered, in the requested language, for display. Present only when lang is set to a language other than English.
+             */
+            toSignLocalized?: string;
             /**
              * Date of the sign change (YYYY-MM-DD). Adjusted to requested timezone.
              */
@@ -22482,20 +22955,25 @@ export type PostVedicAstrologyParallelsResponse = PostVedicAstrologyParallelsRes
 export type PostVedicAstrologyParallelsMonthlyData = {
     body?: {
         /**
-         * Year for monthly parallel analysis (1900-2100).
+         * Year for monthly parallel analysis (1900-2100). Defaults to the current year (UTC).
          */
-        year: number;
+        year?: number;
         /**
-         * Month number (1-12) for parallel analysis.
+         * Month number (1-12) for parallel analysis. Defaults to the current month (UTC).
          */
-        month: number;
+        month?: number;
         /**
          * Timezone offset from UTC in hours. Output times are converted to this timezone. Defaults to 0 (UTC).
          */
         timezone?: number | string;
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
     url: '/vedic-astrology/parallels/monthly';
 };
 
@@ -22609,11 +23087,11 @@ export type PostVedicAstrologyParallelsMonthlyResponses = {
      */
     200: {
         /**
-         * Year of the parallel analysis.
+         * Year of the parallel analysis. Echoes the year that was requested, or the current UTC year when it was omitted.
          */
         year: number;
         /**
-         * Month of the parallel analysis.
+         * Month of the parallel analysis. Echoes the month that was requested, or the current UTC month when it was omitted.
          */
         month: number;
         /**
@@ -22621,13 +23099,21 @@ export type PostVedicAstrologyParallelsMonthlyResponses = {
          */
         events: Array<{
             /**
-             * First planet in the parallel or contraparallel pair.
+             * First planet in the parallel or contraparallel pair. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planet1Localized for anything a reader sees.
              */
             planet1: string;
             /**
-             * Second planet in the pair.
+             * First planet name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet1 exactly.
+             */
+            planet1Localized?: string;
+            /**
+             * Second planet in the pair. Always English, whatever the lang parameter says. Use planet2Localized for anything a reader sees.
              */
             planet2: string;
+            /**
+             * Second planet name in the requested language, for display. Present only when lang is set to a language other than English.
+             */
+            planet2Localized?: string;
             /**
              * Parallel = same declination (acts like conjunction in strength). Contraparallel = opposite declination (acts like opposition).
              */

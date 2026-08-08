@@ -65,6 +65,9 @@ const { data } = await roxy.astrology.getPlanetaryPositions({
   },
 });
 
+// Monthly Ephemeris - Daily tropical planetary positions for a month
+const { data } = await roxy.astrology.getMonthlyTropicalEphemeris({ body: { year: 2026, month: 8 } });
+
 // Get current moon phase - Lunar phase calculator with zodiac sign
 const { data } = await roxy.astrology.getCurrentMoonPhase({
   query: {
