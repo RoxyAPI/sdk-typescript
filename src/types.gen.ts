@@ -399,6 +399,10 @@ export type NatalChartRequest = {
      */
     timezone: number | string;
     /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
+    /**
      * House system for dividing the chart into 12 houses. Placidus (default) is most popular in Western astrology and time-sensitive. Whole Sign assigns one sign per house (simpler, ancient). Equal houses divide chart into 30° segments from Ascendant. Koch emphasizes houses in high latitudes.
      */
     houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
@@ -805,6 +809,10 @@ export type AspectPatternsRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
+    /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
 };
 
 export type TransitsResponse = {
@@ -972,6 +980,10 @@ export type TransitsRequest = {
      */
     timezone?: number | string;
     /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
+    /**
      * Optional natal chart data to compare transits against
      */
     natalChart?: {
@@ -1029,9 +1041,13 @@ export type AstrocartographyResponse = {
      */
     lines: Array<{
         /**
-         * Celestial body this set of planetary lines belongs to.
+         * Celestial body this set of planetary lines belongs to. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
          */
         planet: string;
+        /**
+         * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        planetLocalized?: string;
         /**
          * Unicode astronomical symbol for this body.
          */
@@ -1323,7 +1339,7 @@ export type RelocationChartResponse = {
 
 export type RelocationPlanet = {
     /**
-     * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+     * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
      */
     name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
     /**
@@ -1447,9 +1463,13 @@ export type LocalSpaceResponse = {
      */
     bodies: Array<{
         /**
-         * Body name (Sun, Moon, Mercury through Pluto, plus North Node, Chiron, or Black Moon Lilith when requested). Localized when a translation exists.
+         * Body name (Sun, Moon, Mercury through Pluto, plus North Node, Chiron, or Black Moon Lilith when requested). Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
          */
         planet: string;
+        /**
+         * Body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        planetLocalized?: string;
         /**
          * Unicode astronomical symbol for this body.
          */
@@ -1570,9 +1590,13 @@ export type FixedStarsResponse = {
          */
         conjunctions: Array<{
             /**
-             * Natal point conjunct this star: a planet name, or the chart angles MC and ASC. Planet names are localized to the requested language.
+             * Natal point conjunct this star: a planet name, or the chart angles MC and ASC. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use pointLocalized for anything a reader sees.
              */
             point: string;
+            /**
+             * Natal point name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            pointLocalized?: string;
             /**
              * Tropical ecliptic longitude of the natal point in degrees (0-360).
              */
@@ -1592,9 +1616,13 @@ export type FixedStarsResponse = {
          */
         star: string;
         /**
-         * Natal point conjunct the star: a localized planet name, or the chart angles MC and ASC.
+         * Natal point conjunct the star: a planet name, or the chart angles MC and ASC. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use pointLocalized for anything a reader sees.
          */
         point: string;
+        /**
+         * Natal point name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        pointLocalized?: string;
         /**
          * Angular separation in degrees between the star and the natal point.
          */
@@ -1645,13 +1673,17 @@ export type ArabicLotsResponse = {
      */
     lots: Array<{
         /**
-         * Stable machine identifier for the lot (fortune, spirit, eros, necessity, courage, victory, nemesis). Use this for lookups; the name field carries the localized display label.
+         * Stable machine identifier for the lot (fortune, spirit, eros, necessity, courage, victory, nemesis). Use this for lookups.
          */
         id: string;
         /**
-         * Display name of the lot, localized to the requested language.
+         * Name of the lot. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
          */
         name: string;
+        /**
+         * Lot name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Absolute tropical ecliptic longitude of the lot in degrees (0 to 360).
          */
@@ -1701,6 +1733,10 @@ export type ArabicLotsRequest = {
      */
     timezone: number | string;
     /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
+    /**
      * House system used to place the Sun, which determines the chart sect (day when the Sun is above the horizon, night when below) and therefore which lot formula applies. Placidus (default), Whole Sign, Equal, or Koch.
      */
     houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
@@ -1741,9 +1777,13 @@ export type AsteroidsResponse = {
      */
     asteroids: Array<{
         /**
-         * Display name of the asteroid, localized to the requested language.
+         * Name of the asteroid: Ceres, Pallas, Juno, or Vesta. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
          */
         name: string;
+        /**
+         * Asteroid name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Absolute tropical ecliptic longitude of the asteroid in degrees (0 to 360).
          */
@@ -1805,6 +1845,10 @@ export type AsteroidsRequest = {
      */
     timezone: number | string;
     /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
+    /**
      * House system used to assign each asteroid to a natal house. Placidus (default), Whole Sign, Equal, or Koch. Above the polar circle, quadrant systems fall back to Whole Sign and the echoed houseSystem reports the system actually used.
      */
     houseSystem?: 'placidus' | 'whole-sign' | 'equal' | 'koch';
@@ -1845,9 +1889,13 @@ export type LilithResponse = {
      */
     lilith: Array<{
         /**
-         * Which lunar apogee this entry describes, localized to the requested language. The mean variant is the smoothed average apogee; the true variant is the instantaneous osculating apogee.
+         * Which lunar apogee this entry describes. The mean variant is the smoothed average apogee; the true variant is the instantaneous osculating apogee. Always one of these two English literals, whatever the lang parameter says, so it stays safe to compare against in code. Use variantLocalized for anything a reader sees.
          */
-        variant: string;
+        variant: 'mean' | 'true';
+        /**
+         * Apogee variant label in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        variantLocalized?: string;
         /**
          * Absolute tropical ecliptic longitude of the apogee in degrees (0 to 360).
          */
@@ -1912,6 +1960,10 @@ export type LilithRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
+    /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
     /**
      * House system used to place each Lilith variant in a house. Placidus (default), Whole Sign, Equal, or Koch.
      */
@@ -2071,6 +2123,10 @@ export type ProgressionsRequest = {
      */
     timezone: number | string;
     /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
+    /**
      * Date to progress the chart to, in YYYY-MM-DD format. Usually today or a forecast date. The day-for-a-year key turns the elapsed years since birth into the same number of ephemeris days after the birth moment.
      */
     targetDate: string;
@@ -2119,9 +2175,13 @@ export type SolarArcResponse = {
      */
     directed: Array<{
         /**
-         * Name of the directed point, localized to the requested language. This covers the planets and the two angles, the Ascendant and the Midheaven, alike.
+         * Name of the directed point, covering the planets and the two angles, the Ascendant and the Midheaven, alike. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
          */
         name: string;
+        /**
+         * Directed point name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Absolute tropical ecliptic longitude of the point in the natal chart, in degrees (0 to 360).
          */
@@ -2166,6 +2226,10 @@ export type SolarArcRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
+    /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
     /**
      * Date to direct the chart to, in YYYY-MM-DD format. Every natal point is advanced by the solar arc accumulated from birth to this date, about one degree for each year of life.
      */
@@ -2262,6 +2326,10 @@ export type ProfectionsRequest = {
      * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
      */
     timezone: number | string;
+    /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+     */
+    nodeType?: 'mean' | 'true';
     /**
      * Date whose profection year you want, in YYYY-MM-DD format. The completed whole years from the birth date to this date select the profected house and sign. Must fall on or after the birth date.
      */
@@ -4409,7 +4477,7 @@ export type KpPlanetsRequest = {
      */
     ayanamsaValue?: number;
     /**
-     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
 };
@@ -4867,7 +4935,7 @@ export type KpChartRequest = {
      */
     ayanamsaValue?: number;
     /**
-     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
 };
@@ -5241,7 +5309,7 @@ export type KpSublordChangesRequest = {
      */
     ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman';
     /**
-     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
 };
@@ -5320,7 +5388,7 @@ export type KpRasiChangesRequest = {
      */
     ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman';
     /**
-     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
 };
@@ -5446,7 +5514,7 @@ export type KpPlanetsIntervalRequest = {
      */
     ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman';
     /**
-     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
 };
@@ -5730,7 +5798,7 @@ export type KpHoraryRequest = {
      */
     ayanamsaValue?: number;
     /**
-     * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
 };
@@ -7506,9 +7574,13 @@ export type GetAstrologySignsResponses = {
          */
         symbol?: string;
         /**
-         * Elemental classification: Fire, Earth, Air, or Water.
+         * Elemental classification: fire, earth, air, or water. Always one of these four English literals, whatever the lang parameter says, so it stays safe to compare against in code. Use elementLocalized for anything a reader sees.
          */
         element: 'fire' | 'earth' | 'air' | 'water';
+        /**
+         * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        elementLocalized?: string;
         /**
          * Tropical zodiac date range for this sign.
          */
@@ -7687,17 +7759,29 @@ export type GetAstrologySignsByIdResponses = {
          */
         symbolName: string;
         /**
-         * Elemental classification: Fire, Earth, Air, or Water. Determines temperament and compatibility group.
+         * Elemental classification: fire, earth, air, or water. Determines temperament and compatibility group. Always one of these four English literals, whatever the lang parameter says, so it stays safe to compare against in code. Use elementLocalized for anything a reader sees.
          */
         element: 'fire' | 'earth' | 'air' | 'water';
         /**
-         * Quality/modality: Cardinal (initiating), Fixed (sustaining), or Mutable (adapting).
+         * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        elementLocalized?: string;
+        /**
+         * Quality/modality: cardinal (initiating), fixed (sustaining), or mutable (adapting). Always one of these three English literals, whatever the lang parameter says, so it stays safe to compare against in code. Use modalityLocalized for anything a reader sees.
          */
         modality: 'cardinal' | 'fixed' | 'mutable';
         /**
-         * Traditional ruling planet that governs this sign.
+         * Modality name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        modalityLocalized?: string;
+        /**
+         * Traditional ruling planet that governs this sign. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use rulingPlanetLocalized for anything a reader sees.
          */
         rulingPlanet: string;
+        /**
+         * Ruling planet name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        rulingPlanetLocalized?: string;
         /**
          * Tropical zodiac date range for this sign.
          */
@@ -8272,6 +8356,10 @@ export type PostAstrologyPlanetsData = {
          * Time in 24-hour HH:MM:SS format for precise calculations. Moon moves ~13° per day, so time matters for accurate lunar position. Use 12:00:00 (noon) as default if exact time not needed.
          */
         time: string;
+        /**
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+         */
+        nodeType?: 'mean' | 'true';
         /**
          * Observer latitude in decimal degrees (-90 to 90). While planetary longitudes are geocentric (same worldwide), this is needed for house calculations if extending functionality. For basic ephemeris, use 0 as default.
          */
@@ -9194,6 +9282,10 @@ export type PostAstrologySynastryData = {
              */
             timezone: number | string;
             /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
+            /**
              * Optional display name for this person. Included in the response for easy identification.
              */
             name?: string;
@@ -9219,6 +9311,10 @@ export type PostAstrologySynastryData = {
              * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
+            /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
             /**
              * Optional display name for this person. Included in the response for easy identification.
              */
@@ -10197,6 +10293,10 @@ export type PostAstrologyTransitAspectsData = {
              * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
+            /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
         };
         /**
          * Transit date in YYYY-MM-DD format. Defaults to current date if omitted. Use future dates for predictive transit analysis.
@@ -10351,11 +10451,57 @@ export type PostAstrologyTransitAspectsResponses = {
          */
         houseSystem: 'placidus' | 'whole-sign' | 'equal' | 'koch';
         /**
+         * The twelve NATAL house cusps that every house number in this response is read against, in the house system named by houseSystem. Same shape as the natal-chart houses array, so a bi-wheel can be drawn with real house sectors from this one response instead of pairing it with a second call.
+         */
+        houses: Array<{
+            /**
+             * House number (1-12). Each house governs specific life themes in Western astrology.
+             */
+            number: number;
+            /**
+             * Ecliptic longitude of this house cusp in degrees (0-360).
+             */
+            longitude: number;
+            /**
+             * Zodiac sign on this house cusp. Colors the themes of this life area.
+             */
+            sign: string;
+            /**
+             * Degree within the zodiac sign on this cusp (0-29.999).
+             */
+            degree: number;
+            /**
+             * Zodiac sign name on this cusp in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            signLocalized?: string;
+        }>;
+        /**
+         * The natal Ascendant (rising sign): the eastern horizon at birth, and the left-hand horizon a chart wheel is oriented to. Reported alongside the cusps because the two are not the same longitude in every house system: Whole Sign puts the first cusp at 0 degrees of the rising sign, which can sit most of a sign away from the Ascendant itself.
+         */
+        ascendant: {
+            /**
+             * Tropical zodiac sign on the natal Ascendant. Always English, whatever the lang parameter says. Use signLocalized for anything a reader sees.
+             */
+            sign: string;
+            /**
+             * Ascendant sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            signLocalized?: string;
+            /**
+             * Degree within the Ascendant sign (0-29.999).
+             */
+            degree: number;
+            /**
+             * Absolute ecliptic longitude of the natal Ascendant in degrees (0-360).
+             */
+            longitude: number;
+        };
+        /**
          * Current transiting positions in the tropical zodiac, each placed in the natal house it is passing through. All 14 celestial bodies: the 10 classical planets (Sun through Pluto), the lunar nodes, Chiron, and Black Moon Lilith.
          */
         transitPlanets: Array<{
             /**
-             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
              */
             name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
@@ -10400,7 +10546,7 @@ export type PostAstrologyTransitAspectsResponses = {
          */
         natalPlanets: Array<{
             /**
-             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
              */
             name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
@@ -10488,7 +10634,10 @@ export type PostAstrologyTransitAspectsResponses = {
              * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
              */
             typeLocalized?: string;
-            transitInterpretation?: {
+            /**
+             * Rich interpretation of the transit aspect: narrative summary, timing, impact assessment, practical guidance, and keywords.
+             */
+            transitInterpretation: {
                 /**
                  * Narrative interpretation of this transit aspect and its life impact.
                  */
@@ -10579,6 +10728,31 @@ export type PostAstrologyTransitAspectsResponses = {
                  * Aspect type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
                  */
                 typeLocalized?: string;
+                /**
+                 * Rich interpretation of the transit aspect: narrative summary, timing, impact assessment, practical guidance, and keywords.
+                 */
+                transitInterpretation: {
+                    /**
+                     * Narrative interpretation of this transit aspect and its life impact.
+                     */
+                    summary: string;
+                    /**
+                     * When this transit is most active and how long its influence lasts, localized. The bucket follows the speed of the transiting body: a few hours for the Moon, a few days for the Sun, Mercury, Venus and Mars, one to two weeks for Jupiter, several weeks for Saturn, and an extended period for Uranus, Neptune and Pluto.
+                     */
+                    timing: string;
+                    /**
+                     * Strength and nature of this transit effect — constructive, challenging, or neutral.
+                     */
+                    impact: string;
+                    /**
+                     * Practical advice for working with this transit energy.
+                     */
+                    guidance: string;
+                    /**
+                     * Key themes activated by this transit aspect.
+                     */
+                    keywords: Array<string>;
+                };
             } | null;
             /**
              * Transit aspect counts grouped by aspect type (conjunction, trine, square, opposition, sextile, etc.). Useful for quickly assessing the transit weather.
@@ -10801,11 +10975,11 @@ export type PostAstrologySolarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
                  */
                 name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
@@ -11182,11 +11356,11 @@ export type PostAstrologyLunarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
                  */
                 name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
@@ -11384,6 +11558,10 @@ export type PostAstrologyCompositeChartData = {
              * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
+            /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
         };
         /**
          * Second person birth details (date, time, location, timezone).
@@ -11409,6 +11587,10 @@ export type PostAstrologyCompositeChartData = {
              * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
+            /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
         };
         /**
          * House system for the composite chart. Placidus (default), Whole Sign, Equal, or Koch.
@@ -11589,7 +11771,7 @@ export type PostAstrologyCompositeChartResponses = {
          */
         compositePlanets: Array<{
             /**
-             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+             * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
              */
             name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
             /**
@@ -11778,6 +11960,10 @@ export type PostAstrologyCompatibilityScoreData = {
              * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
+            /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
         };
         /**
          * Second person birth details. Compared against person1 to evaluate inter-chart aspects and compatibility.
@@ -11803,6 +11989,10 @@ export type PostAstrologyCompatibilityScoreData = {
              * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
              */
             timezone: number | string;
+            /**
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+             */
+            nodeType?: 'mean' | 'true';
         };
     };
     path?: never;
@@ -13096,11 +13286,11 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
                  */
                 name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
@@ -13290,6 +13480,10 @@ export type PostAstrologyAstrocartographyData = {
          * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
          */
         timezone: number | string;
+        /**
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -13715,6 +13909,10 @@ export type PostAstrologyFixedStarsData = {
          * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the DST-correct offset for the given date, so you can pass `cities[0].timezone` from /location/search directly.
          */
         timezone: number | string;
+        /**
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is what most Western software reports (Astrolabe, Cafe Astrology, TimePassages), which is why it is the default here; astro-seek and the Steven Forrest evolutionary school use mean, so pass "mean" to match those. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+         */
+        nodeType?: 'mean' | 'true';
     };
     path?: never;
     query?: {
@@ -20835,7 +21033,7 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
          */
         birthTime?: string;
         /**
-         * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -20997,7 +21195,7 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
          */
         ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman';
         /**
-         * Lunar node type for Rahu and Ketu positions. "mean" uses the smooth mean node (traditional Vedic astrology default). "true" uses the osculating node with perturbation corrections, oscillating up to 1.5 degrees from mean with a 173-day period. Impacts KP sub-lord assignments in narrow boundary cases. Defaults to "mean".
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -22410,6 +22608,19 @@ export type PostVedicAstrologyTransitResponses = {
      */
     200: {
         /**
+         * The zodiac frame every longitude in this response was computed in, so a cached or forwarded payload is self describing. Sidereal requests report the Lahiri ayanamsa, read at the birth instant; the transit positions use the same named frame resolved at their own instant, which moves by about 50 arcseconds a year. A tropical request reports "tropical" with 0 degrees subtracted, which is the one case a Vedic table can otherwise be rendered in the wrong zodiac with nothing on screen saying so.
+         */
+        frame: {
+            /**
+             * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+             */
+            ayanamsa: string;
+            /**
+             * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+             */
+            ayanamsaDegrees: number;
+        };
+        /**
          * Birth datetime used for the natal chart, echoed as the local civil date and time supplied in the request (YYYY-MM-DDTHH:MM:SS). Combine it with the timezone field to recover the UTC instant.
          */
         birthDatetime: string;
@@ -22455,11 +22666,15 @@ export type PostVedicAstrologyTransitResponses = {
              */
             sign: string;
             /**
-             * Which natal house (whole-sign bhava from the Lagna) this planet is currently transiting through. Key for Gochar predictions.
+             * Which natal house (whole-sign bhava counted from the Lagna) this graha is currently transiting through. This is the Lagna reading of the transit, which is what a transit chart drawn over the birth chart shows. For the house classical Gochara is judged from, read houseFromMoon instead.
              */
             natalHouse: number;
             /**
-             * Aspects formed between this transiting planet and natal planets.
+             * Which house this graha is transiting counted from the natal Moon sign (Janma Rashi), 1-12 whole-sign and counted inclusively, so the Moon sign itself is 1. This is the number classical Gochara is reckoned in: Phaladeepika chapter 26 opens by saying that of all the Lagnas only the Moon Lagna matters for transit results, and the Vedha and Ashtakavarga transit rules are counted from the Moon throughout. The reference sign is the sign of the Moon entry in natalPlanets, so a client can label the column without a second request.
+             */
+            houseFromMoon: number;
+            /**
+             * Degree-based angular aspects between this transiting graha and the natal grahas. Western vocabulary, kept for callers who read a chart that way; drishtiToNatal is the Vedic answer to the same question.
              */
             aspectsToNatal: Array<{
                 /**
@@ -22467,11 +22682,32 @@ export type PostVedicAstrologyTransitResponses = {
                  */
                 natalPlanet: string;
                 /**
-                 * Aspect type: conjunction, opposition, trine, square, or sextile.
+                 * Degree-based angular aspect between the two longitudes: conjunction, opposition, trine, square, or sextile. This is the Western aspect vocabulary and it is offered for charts read that way. Parashari jyotish has no sextile, square or trine, so for the Vedic reading use drishtiToNatal, which reports graha drishti by house count.
                  */
                 aspectType: string;
                 /**
                  * Angular distance from exact aspect in degrees. Smaller orb = stronger influence.
+                 */
+                orb: number;
+            }>;
+            /**
+             * Graha drishti cast by this transiting graha onto the natal grahas, the Vedic reading of transit-to-natal aspects. Rahu and Ketu cast none. Empty when this graha reaches no occupied natal sign.
+             */
+            drishtiToNatal: Array<{
+                /**
+                 * Natal graha receiving the drishti from this transiting graha.
+                 */
+                natalPlanet: string;
+                /**
+                 * Which house the drishti falls on, counted whole-sign and inclusively from the transiting graha. Every graha aspects the 7th; Mars adds the 4th and 8th, Jupiter the 5th and 9th, Saturn the 3rd and 10th. Same vocabulary the /aspects endpoint returns, so the two can be compared directly.
+                 */
+                aspectType: 'conjunction' | '7th' | '4th' | '8th' | '5th' | '9th' | '3rd' | '10th';
+                /**
+                 * Drishti strength as a percentage. Full and special aspects are 100; the partial quarter, half and three-quarter sights are not reported.
+                 */
+                strength: number;
+                /**
+                 * Gap between the two degrees-in-sign, in degrees. Graha drishti is whole-sign and does not depend on this, so read it as how exact the sight is inside the pair of rashis rather than as a condition for the aspect.
                  */
                 orb: number;
             }>;
@@ -22514,17 +22750,25 @@ export type PostVedicAstrologyTransitResponses = {
              */
             planet: string;
             /**
-             * Human-readable transit summary.
+             * Human-readable transit summary, naming the rashi being transited and both house readings: from the Lagna, then from the natal Moon.
              */
             description: string;
             /**
-             * Natal house being transited by this slow planet.
+             * Natal house being transited by this slow graha, counted whole-sign from the Lagna. Mirrors natalHouse on the matching transitingPlanets entry.
              */
             natalHouse: number;
             /**
-             * Notable aspects to natal planets from this slow-moving transiting planet.
+             * House being transited by this slow graha counted from the natal Moon sign (Janma Rashi), the classical Gochara reference. Mirrors houseFromMoon on the matching transitingPlanets entry.
+             */
+            houseFromMoon: number;
+            /**
+             * Notable degree-based angular aspects to natal planets from this slow-moving transiting planet, in Western vocabulary.
              */
             aspects: Array<string>;
+            /**
+             * Graha drishti this slow-moving transiting graha casts on the natal grahas, the Vedic reading. Empty for Rahu and Ketu, which cast none.
+             */
+            drishti: Array<string>;
         }>;
     };
 };
@@ -26570,11 +26814,11 @@ export type PostForecastSolarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
              */
             planets: Array<{
                 /**
-                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee).
+                 * Body name. One of the 10 classical planets (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto), the lunar nodes (North Node, South Node), Chiron, or Black Moon Lilith (the mean lunar apogee). The nodes follow the request `nodeType`, which defaults to the true (osculating) node; pass "mean" for the smoothed node. The two differ by up to about 1.8 degrees and no other body is affected.
                  */
                 name: 'Sun' | 'Moon' | 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn' | 'Uranus' | 'Neptune' | 'Pluto' | 'North Node' | 'South Node' | 'Chiron' | 'Black Moon Lilith';
                 /**
@@ -26735,7 +26979,7 @@ export type PostHumanDesignBodygraphData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -26859,9 +27103,13 @@ export type PostHumanDesignBodygraphResponses = {
      */
     200: {
         /**
-         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
+         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use typeLocalized for anything a reader sees.
          */
         type: string;
+        /**
+         * Energy type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        typeLocalized?: string;
         /**
          * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
          */
@@ -26871,29 +27119,45 @@ export type PostHumanDesignBodygraphResponses = {
          */
         aura: string;
         /**
-         * The aura strategy for engaging life correctly for this type.
+         * The aura strategy for engaging life correctly for this type. Always English, whatever the lang parameter says. Use strategyLocalized for anything a reader sees.
          */
         strategy: string;
+        /**
+         * Strategy name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        strategyLocalized?: string;
         /**
          * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
          */
         strategyDescription: string;
         /**
-         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
+         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use authorityLocalized for anything a reader sees.
          */
         authority: string;
+        /**
+         * Inner authority name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        authorityLocalized?: string;
         /**
          * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart, so this is the field to lean on when grounding a reading.
          */
         authorityDescription: string;
         /**
-         * The signature feeling of living in alignment with the type.
+         * The signature feeling of living in alignment with the type. Always English, whatever the lang parameter says. Use signatureLocalized for anything a reader sees.
          */
         signature: string;
         /**
-         * The not-self theme, the recurring feeling that signals being out of alignment.
+         * Signature theme name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signatureLocalized?: string;
+        /**
+         * The not-self theme, the recurring feeling that signals being out of alignment. Always English, whatever the lang parameter says. Use notSelfLocalized for anything a reader sees.
          */
         notSelf: string;
+        /**
+         * Not-self theme name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        notSelfLocalized?: string;
         /**
          * Profile in conscious/unconscious form from the Personality Sun line over the Design Sun line.
          */
@@ -26924,9 +27188,13 @@ export type PostHumanDesignBodygraphResponses = {
          */
         profileDescription: string;
         /**
-         * Definition type from the number of connected components among defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
+         * Definition type from the number of connected components among defined centers. One of None, Single, Split, Triple Split, Quadruple Split. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use definitionLocalized for anything a reader sees.
          */
         definition: string;
+        /**
+         * Definition type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        definitionLocalized?: string;
         /**
          * How energy flows through the defined centers in this configuration, and what the configuration needs. For a split, this is where the bridging gates of other people matter.
          */
@@ -26946,9 +27214,13 @@ export type PostHumanDesignBodygraphResponses = {
              */
             gates: Array<number>;
             /**
-             * Cross angle. One of Right Angle, Juxtaposition, Left Angle.
+             * Cross angle. One of Right Angle, Juxtaposition, Left Angle. Always English, whatever the lang parameter says. Use angleLocalized for anything a reader sees.
              */
             angle: string;
+            /**
+             * Cross angle name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            angleLocalized?: string;
             /**
              * Short code for the angle. One of RAX, JXT, LAX.
              */
@@ -26971,9 +27243,13 @@ export type PostHumanDesignBodygraphResponses = {
              */
             id: string;
             /**
-             * Display name of the center.
+             * Display name of the center. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
              */
             name: string;
+            /**
+             * Center name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
             /**
              * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
              */
@@ -27016,13 +27292,21 @@ export type PostHumanDesignBodygraphResponses = {
              */
             gateB: number;
             /**
-             * Name of the defined channel.
+             * Name of the defined channel. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
             /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             * Channel name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal. Always English, whatever the lang parameter says. Use circuitLocalized for anything a reader sees.
              */
             circuit: string;
+            /**
+             * Circuit family name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            circuitLocalized?: string;
             /**
              * The two centers this channel connects and defines.
              */
@@ -27041,9 +27325,13 @@ export type PostHumanDesignBodygraphResponses = {
          */
         gates: Array<{
             /**
-             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Always English, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on. Use planetLocalized for anything a reader sees.
              */
             planet: string;
+            /**
+             * Activating body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planetLocalized?: string;
             /**
              * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
              */
@@ -27057,9 +27345,13 @@ export type PostHumanDesignBodygraphResponses = {
              */
             line: number;
             /**
-             * Human Design keynote name of the gate, describing its bodygraph function.
+             * Human Design keynote name of the gate, describing its bodygraph function. Always English, whatever the lang parameter says. Use gateNameLocalized for anything a reader sees.
              */
             gateName: string;
+            /**
+             * Gate keynote name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            gateNameLocalized?: string;
             /**
              * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
              */
@@ -27118,7 +27410,7 @@ export type PostHumanDesignConnectionData = {
              */
             longitude?: number;
             /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
              */
             nodeType?: 'mean' | 'true';
         };
@@ -27147,7 +27439,7 @@ export type PostHumanDesignConnectionData = {
              */
             longitude?: number;
             /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
              */
             nodeType?: 'mean' | 'true';
         };
@@ -27288,21 +27580,33 @@ export type PostHumanDesignConnectionResponses = {
              */
             gateB: number;
             /**
-             * Name of the channel whose connection dynamic is reported.
+             * Name of the channel whose connection dynamic is reported. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
             /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             * Channel name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal. Always English, whatever the lang parameter says. Use circuitLocalized for anything a reader sees.
              */
             circuit: string;
+            /**
+             * Circuit family name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            circuitLocalized?: string;
             /**
              * The two centers this channel connects in the bodygraph.
              */
             centers: Array<string>;
             /**
-             * Connection dynamic for this channel. Electromagnetic means each person holds one of the two gates and the channel completes only together, the classic point of attraction. Dominance means one person holds both gates and the other holds neither, a one-way conditioning. Compromise means one person holds both gates and the other holds a single hanging gate. Companionship means both people independently hold both gates, a shared and familiar frequency.
+             * Connection dynamic for this channel. Electromagnetic means each person holds one of the two gates and the channel completes only together, the classic point of attraction. Dominance means one person holds both gates and the other holds neither, a one-way conditioning. Compromise means one person holds both gates and the other holds a single hanging gate. Companionship means both people independently hold both gates, a shared and familiar frequency. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use dynamicLocalized for anything a reader sees.
              */
             dynamic: string;
+            /**
+             * Connection dynamic name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            dynamicLocalized?: string;
             /**
              * Which of the channel two gates person A holds, from one to both.
              */
@@ -27321,9 +27625,13 @@ export type PostHumanDesignConnectionResponses = {
              */
             id: string;
             /**
-             * Display name of the center.
+             * Display name of the center. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
+            /**
+             * Center name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
             /**
              * Whether the center is defined in the combined connection bodygraph, where a channel counts as defined when the two people together hold both of its gates.
              */
@@ -27334,9 +27642,13 @@ export type PostHumanDesignConnectionResponses = {
             definedBy: Array<string>;
         }>;
         /**
-         * Definition of the combined connection bodygraph from connected components among its defined centers. One of None, Single, Split, Triple Split, Quadruple Split.
+         * Definition of the combined connection bodygraph from connected components among its defined centers. One of None, Single, Split, Triple Split, Quadruple Split. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use combinedDefinitionLocalized for anything a reader sees.
          */
         combinedDefinition: string;
+        /**
+         * Combined definition name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        combinedDefinitionLocalized?: string;
         /**
          * Count of each connection dynamic across all connected channels.
          */
@@ -27390,7 +27702,7 @@ export type PostHumanDesignPentaData = {
              */
             longitude?: number;
             /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
              */
             nodeType?: 'mean' | 'true';
         }>;
@@ -27531,13 +27843,21 @@ export type PostHumanDesignPentaResponses = {
              */
             gateB: number;
             /**
-             * Name of the Penta channel. One of The Alpha, Inspiration, The Prodigal, Rhythm, The Beat, Discovery.
+             * Name of the Penta channel. One of The Alpha, Inspiration, The Prodigal, Rhythm, The Beat, Discovery. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
             /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             * Penta channel name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal. Always English, whatever the lang parameter says. Use circuitLocalized for anything a reader sees.
              */
             circuit: string;
+            /**
+             * Circuit family name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            circuitLocalized?: string;
             /**
              * Position of the channel in the Penta. upper channels run from the G Center to the Throat and carry the leadership and how-the-group-presents roles. lower channels run from the G Center to the Sacral and carry the managed, generative, resource roles.
              */
@@ -27568,9 +27888,13 @@ export type PostHumanDesignPentaResponses = {
              */
             gate: number;
             /**
-             * Human Design keynote name of the gate, describing the role it brings to the group.
+             * Human Design keynote name of the gate, describing the role it brings to the group. Always English, whatever the lang parameter says. Use gateNameLocalized for anything a reader sees.
              */
             gateName: string;
+            /**
+             * Gate keynote name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            gateNameLocalized?: string;
             /**
              * Whether at least one member holds this gate. A gate held by nobody is a gap that conditions the group to compensate for the missing role.
              */
@@ -27633,7 +27957,7 @@ export type PostHumanDesignTransitData = {
              */
             longitude?: number;
             /**
-             * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+             * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
              */
             nodeType?: 'mean' | 'true';
         };
@@ -27782,9 +28106,13 @@ export type PostHumanDesignTransitResponses = {
          */
         activations: Array<{
             /**
-             * Transiting body whose current position lands on this gate. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             * Transiting body whose current position lands on this gate. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Always English, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on. Use bodyLocalized for anything a reader sees.
              */
             body: string;
+            /**
+             * Transiting body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            bodyLocalized?: string;
             /**
              * Human Design gate number from 1 to 64 this transiting body currently sits in.
              */
@@ -27794,9 +28122,13 @@ export type PostHumanDesignTransitResponses = {
              */
             line: number;
             /**
-             * Human Design keynote name of the gate the transiting body activates.
+             * Human Design keynote name of the gate the transiting body activates. Always English, whatever the lang parameter says. Use gateNameLocalized for anything a reader sees.
              */
             gateName: string;
+            /**
+             * Gate keynote name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            gateNameLocalized?: string;
             /**
              * Cross-reference to the I-Ching hexagram that shares this gate number.
              */
@@ -27824,21 +28156,33 @@ export type PostHumanDesignTransitResponses = {
              */
             gateB: number;
             /**
-             * Name of the channel the transit temporarily completes.
+             * Name of the channel the transit temporarily completes. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
             /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             * Channel name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal. Always English, whatever the lang parameter says. Use circuitLocalized for anything a reader sees.
              */
             circuit: string;
+            /**
+             * Circuit family name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            circuitLocalized?: string;
             /**
              * The two centers this channel connects and temporarily defines.
              */
             centers: Array<string>;
             /**
-             * How the transit completes the channel. personal means the natal chart already holds one gate and the transit supplies the other, the classic electromagnetic completion. educational means both gates are open in the natal chart and the transit supplies both at once.
+             * How the transit completes the channel. personal means the natal chart already holds one gate and the transit supplies the other, the classic electromagnetic completion. educational means both gates are open in the natal chart and the transit supplies both at once. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use kindLocalized for anything a reader sees.
              */
             kind: string;
+            /**
+             * Completion kind name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            kindLocalized?: string;
             /**
              * Gate or gates of this channel the natal chart already holds. Empty for an educational channel.
              */
@@ -27857,9 +28201,13 @@ export type PostHumanDesignTransitResponses = {
              */
             id: string;
             /**
-             * Display name of the center.
+             * Display name of the center. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
+            /**
+             * Center name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
             /**
              * Always true. The center is open in the natal chart and temporarily defined by a transit-completed channel for the duration of the transit.
              */
@@ -27897,7 +28245,7 @@ export type PostHumanDesignTypeData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -28021,9 +28369,13 @@ export type PostHumanDesignTypeResponses = {
      */
     200: {
         /**
-         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector.
+         * Human Design energy type. One of Manifestor, Generator, Manifesting Generator, Projector, Reflector. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use typeLocalized for anything a reader sees.
          */
         type: string;
+        /**
+         * Energy type name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        typeLocalized?: string;
         /**
          * What the aura of this type does and how it is designed to engage life. The grounding text for the type label, so a consuming agent does not have to supply the meaning itself.
          */
@@ -28033,29 +28385,45 @@ export type PostHumanDesignTypeResponses = {
          */
         aura: string;
         /**
-         * The aura strategy for engaging life correctly for this type.
+         * The aura strategy for engaging life correctly for this type. Always English, whatever the lang parameter says. Use strategyLocalized for anything a reader sees.
          */
         strategy: string;
+        /**
+         * Strategy name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        strategyLocalized?: string;
         /**
          * How to actually apply the strategy. The strategy field alone is a bare label such as Respond or Inform; this is the operating instruction behind it.
          */
         strategyDescription: string;
         /**
-         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar.
+         * Inner authority for decision making. One of Emotional, Sacral, Splenic, Ego, Self-Projected, Mental, Lunar. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use authorityLocalized for anything a reader sees.
          */
         authority: string;
+        /**
+         * Inner authority name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        authorityLocalized?: string;
         /**
          * How the decision is made, the timing it requires, and the characteristic trap. Inner authority is the most actionable output of a Human Design chart.
          */
         authorityDescription: string;
         /**
-         * The signature feeling of living in alignment.
+         * The signature feeling of living in alignment. Always English, whatever the lang parameter says. Use signatureLocalized for anything a reader sees.
          */
         signature: string;
         /**
-         * The not-self theme that signals being out of alignment.
+         * Signature theme name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        signatureLocalized?: string;
+        /**
+         * The not-self theme that signals being out of alignment. Always English, whatever the lang parameter says. Use notSelfLocalized for anything a reader sees.
          */
         notSelf: string;
+        /**
+         * Not-self theme name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        notSelfLocalized?: string;
         /**
          * Profile from the Personality Sun line over the Design Sun line.
          */
@@ -28088,7 +28456,7 @@ export type PostHumanDesignGatesData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -28216,9 +28584,13 @@ export type PostHumanDesignGatesResponses = {
          */
         personality: Array<{
             /**
-             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Always English, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on. Use planetLocalized for anything a reader sees.
              */
             planet: string;
+            /**
+             * Activating body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planetLocalized?: string;
             /**
              * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
              */
@@ -28232,9 +28604,13 @@ export type PostHumanDesignGatesResponses = {
              */
             line: number;
             /**
-             * Human Design keynote name of the gate, describing its bodygraph function.
+             * Human Design keynote name of the gate, describing its bodygraph function. Always English, whatever the lang parameter says. Use gateNameLocalized for anything a reader sees.
              */
             gateName: string;
+            /**
+             * Gate keynote name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            gateNameLocalized?: string;
             /**
              * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
              */
@@ -28266,9 +28642,13 @@ export type PostHumanDesignGatesResponses = {
          */
         design: Array<{
             /**
-             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto.
+             * Activating body. One of Sun, Earth, Moon, North Node, South Node, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Always English, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on. Use planetLocalized for anything a reader sees.
              */
             planet: string;
+            /**
+             * Activating body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            planetLocalized?: string;
             /**
              * Chart side. personality is the conscious birth-moment activation, design is the unconscious activation 88 degrees of solar arc before birth.
              */
@@ -28282,9 +28662,13 @@ export type PostHumanDesignGatesResponses = {
              */
             line: number;
             /**
-             * Human Design keynote name of the gate, describing its bodygraph function.
+             * Human Design keynote name of the gate, describing its bodygraph function. Always English, whatever the lang parameter says. Use gateNameLocalized for anything a reader sees.
              */
             gateName: string;
+            /**
+             * Gate keynote name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            gateNameLocalized?: string;
             /**
              * Bodygraph function of the gate: what it does in the center it sits in and the channel it forms. This is NOT the meaning of the I-Ching hexagram that shares its number. They share a number, not a definition.
              */
@@ -28460,17 +28844,25 @@ export type GetHumanDesignGatesByNumberResponses = {
          */
         number: number;
         /**
-         * Human Design keynote name of the gate.
+         * Human Design keynote name of the gate. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
          */
         name: string;
+        /**
+         * Gate keynote name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Center the gate sits in.
          */
         center: string;
         /**
-         * Display name of the center.
+         * Display name of the center. Always English, whatever the lang parameter says. Use centerNameLocalized for anything a reader sees.
          */
         centerName: string;
+        /**
+         * Center name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        centerNameLocalized?: string;
         /**
          * The I-Ching hexagram that shares this gate number.
          */
@@ -28493,9 +28885,13 @@ export type GetHumanDesignGatesByNumberResponses = {
              */
             gate: number;
             /**
-             * Name of the shared channel.
+             * Name of the shared channel. Always English, whatever the lang parameter says. Use channelLocalized for anything a reader sees.
              */
             channel: string;
+            /**
+             * Channel name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            channelLocalized?: string;
         }>;
     };
 };
@@ -28525,7 +28921,7 @@ export type PostHumanDesignChannelsData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -28661,13 +29057,21 @@ export type PostHumanDesignChannelsResponses = {
              */
             gateB: number;
             /**
-             * Name of the defined channel.
+             * Name of the defined channel. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
             /**
-             * Circuit family of the channel. One of Individual, Collective, Tribal.
+             * Channel name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Circuit family of the channel. One of Individual, Collective, Tribal. Always English, whatever the lang parameter says. Use circuitLocalized for anything a reader sees.
              */
             circuit: string;
+            /**
+             * Circuit family name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            circuitLocalized?: string;
             /**
              * The two centers this channel connects and defines.
              */
@@ -28717,7 +29121,7 @@ export type PostHumanDesignCentersData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -28849,9 +29253,13 @@ export type PostHumanDesignCentersResponses = {
              */
             id: string;
             /**
-             * Display name of the center.
+             * Display name of the center. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
              */
             name: string;
+            /**
+             * Center name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
             /**
              * Whether the center is defined. A defined center is a consistent source of energy or awareness; an undefined center is open and conditioned by others.
              */
@@ -29021,9 +29429,13 @@ export type GetHumanDesignCentersByIdResponses = {
          */
         id: string;
         /**
-         * Display name of the center.
+         * Display name of the center. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
          */
         name: string;
+        /**
+         * Center name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
         /**
          * Whether this is a motor center.
          */
@@ -29068,7 +29480,7 @@ export type PostHumanDesignProfileData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -29239,7 +29651,7 @@ export type PostHumanDesignVariablesData = {
          */
         longitude?: number;
         /**
-         * Lunar node convention for the North and South Node activations. Leave unset (or "true") for the standard Human Design chart: "true" is the osculating node used by professional Human Design software (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against. Pass "mean" to match a calculator that uses the smoothed mean node (the traditional Western-astrology default, common in free chart tools). The two agree on almost every chart; they diverge by up to ~1.75 degrees only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority, or definition. If another calculator shows a different type, it is likely using the mean node: pass "mean" to match it.
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node activations. True is what professional Human Design software uses (HumanDesign.ai, Total Human Design) and is the value RoxyAPI verifies against, so leave it unset for a standard chart. It matters only when a node sits on a gate boundary, where the choice can move a node gate and, rarely, change the completed channels and therefore the type, authority or definition. If another calculator shows a different type, it is almost certainly using the mean node: pass "mean" to match it. Defaults to "true".
          */
         nodeType?: 'mean' | 'true';
     };
@@ -29371,17 +29783,29 @@ export type PostHumanDesignVariablesResponses = {
              */
             key: string;
             /**
-             * Arrow name. Determination is the top-left arrow governing the Primary Health System and digestion, Environment the bottom-left arrow, Perspective the bottom-right arrow also called View, and Motivation the top-right arrow.
+             * Arrow name. Determination is the top-left arrow governing the Primary Health System and digestion, Environment the bottom-left arrow, Perspective the bottom-right arrow also called View, and Motivation the top-right arrow. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
              */
             name: string;
             /**
-             * Which half of the advanced layer the arrow belongs to. Primary Health System covers the body-side Determination and Environment arrows, Rave Psychology covers the mind-side Perspective and Motivation arrows.
+             * Arrow name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Which half of the advanced layer the arrow belongs to. Primary Health System covers the body-side Determination and Environment arrows, Rave Psychology covers the mind-side Perspective and Motivation arrows. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use layerLocalized for anything a reader sees.
              */
             layer: string;
             /**
-             * Position of the arrow at the head of the bodygraph. One of Top left, Bottom left, Top right, Bottom right.
+             * Layer name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            layerLocalized?: string;
+            /**
+             * Position of the arrow at the head of the bodygraph. One of Top left, Bottom left, Top right, Bottom right. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use positionLocalized for anything a reader sees.
              */
             position: string;
+            /**
+             * Arrow position name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            positionLocalized?: string;
             /**
              * The single activation, body and chart side, that this arrow is derived from.
              */
@@ -29412,13 +29836,21 @@ export type PostHumanDesignVariablesResponses = {
              */
             direction: string;
             /**
-             * Name of the Color theme for this arrow, for example a determination family such as Touch, an environment such as Mountains, a perspective such as Personal, or a motivation such as Hope.
+             * Name of the Color theme for this arrow, for example a determination family such as Touch, an environment such as Mountains, a perspective such as Personal, or a motivation such as Hope. Always English, whatever the lang parameter says. Use colorLabelLocalized for anything a reader sees.
              */
             colorLabel: string;
             /**
-             * Keynote of the arrow direction for this arrow, for example Active or Passive for Determination, Focused or Peripheral for Perspective.
+             * Color theme name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            colorLabelLocalized?: string;
+            /**
+             * Keynote of the arrow direction for this arrow, for example Active or Passive for Determination, Focused or Peripheral for Perspective. Always English, whatever the lang parameter says. Use directionLabelLocalized for anything a reader sees.
              */
             directionLabel: string;
+            /**
+             * Arrow direction keynote in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            directionLabelLocalized?: string;
             /**
              * What this arrow is and what it governs.
              */
@@ -29440,17 +29872,25 @@ export type PostHumanDesignVariablesResponses = {
              */
             directionMeaning: string;
             /**
-             * Name of the Base. Informational only: the Base is finer than any civil birth time can resolve.
+             * Name of the Base. Informational only: the Base is finer than any civil birth time can resolve. Always English, whatever the lang parameter says. Use baseNameLocalized for anything a reader sees.
              */
             baseName: string;
+            /**
+             * Base name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            baseNameLocalized?: string;
             /**
              * Cognition, the strongest sense, read off the Determination Tone. Present on the determination arrow ONLY: no authority supports reading Cognition from the other three arrows, so it is omitted rather than invented.
              */
             cognition?: {
                 /**
-                 * Name of the Cognition, the strongest sense. One of six read off the Determination Tone: Smell, Taste, Outer Vision, Inner Vision, Feeling, Touch.
+                 * Name of the Cognition, the strongest sense. One of six read off the Determination Tone: Smell, Taste, Outer Vision, Inner Vision, Feeling, Touch. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use labelLocalized for anything a reader sees.
                  */
                 label: string;
+                /**
+                 * Cognition name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                labelLocalized?: string;
                 /**
                  * How this Cognition discriminates what is correct for the body, and the conditions that sharpen it. Renderable as the Cognition paragraph of a Variables or Primary Health System report.
                  */
@@ -42272,7 +42712,7 @@ export type GetLocationSearchData = {
     path?: never;
     query: {
         /**
-         * City name to search for. Accepts bare city ("berlin"), city plus country ("berlin germany"), or comma-qualified ("berlin, germany", "springfield, illinois") for disambiguation. Matches against city name, province/state, or combined "city country" queries. Case-insensitive with partial matching (e.g. "ber" matches Berlin, Bern, Bergen).
+         * Place to search for, written the way a person would. Accepts a bare city (berlin), a city plus country (berlin germany), a comma-qualified place (richfield, utah), a fully qualified place (richfield, utah, united states), or a historic name (bombay, peking, constantinople). Commas are optional, and a qualifier the dataset spells differently, such as USA for United States, still resolves. Matched against city name, alternate names, state or province, and country. Add the state or country whenever the name is common, since that is what separates the six Springfields, and Richfield, Utah from Richfield, Minnesota.
          */
         q: string;
         /**
@@ -42393,11 +42833,11 @@ export type GetLocationSearchError = GetLocationSearchErrors[keyof GetLocationSe
 
 export type GetLocationSearchResponses = {
     /**
-     * Matching cities sorted by relevance (prefix match first) then population
+     * Matching places, best match first, with coordinates, IANA timezone and UTC offset
      */
     200: {
         /**
-         * Total number of cities matching the search query.
+         * Number of places matching the query across all pages, not the number returned in this response. Greater than 1 means the name is ambiguous, so show province and country and let the user confirm before using the result for a chart.
          */
         total: number;
         /**
@@ -42405,11 +42845,11 @@ export type GetLocationSearchResponses = {
          */
         limit: number;
         /**
-         * Number of cities skipped. Use with limit for pagination.
+         * Number of places skipped. Use with limit to page through results.
          */
         offset: number;
         /**
-         * City results for the current page, sorted by relevance (prefix match first) then population.
+         * Matching places for the current page, best match first. Ordered by match quality, then population within equal quality: an exact name beats a qualified name such as richfield, utah, which beats a name merely starting with the query, which beats an incidental match on state or country. Take the first entry when total is 1, otherwise disambiguate on province and country.
          */
         cities: Array<{
             /**
@@ -42417,7 +42857,7 @@ export type GetLocationSearchResponses = {
              */
             city: string;
             /**
-             * State, province, canton, or administrative region. Helps disambiguate cities with the same name across regions (e.g. Springfield IL vs Springfield MO).
+             * State, province, canton, or administrative region. Show it whenever more than one result comes back: it is what separates Richfield, Utah from Richfield, Minnesota, and the six US Springfields from each other. Empty for the small number of places with no administrative division recorded.
              */
             province: string;
             /**
@@ -42437,15 +42877,15 @@ export type GetLocationSearchResponses = {
              */
             longitude: number;
             /**
-             * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Use with JavaScript Date, Luxon, day.js, or any date library for accurate local time conversion.
+             * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Always present. Pass THIS, not the numeric offset, into any chart or panchang request for a past date: the calculation endpoints resolve it to the offset that was actually in force on that date, including historical daylight saving. Also works directly with JavaScript Date, Luxon, day.js, or any date library.
              */
             timezone: string;
             /**
-             * Current UTC offset in decimal hours, automatically adjusted for daylight saving time. Pass directly as the timezone parameter in astrology API endpoints. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
+             * UTC offset in decimal hours for TODAY at this place, already adjusted for daylight saving. Convenient for displaying local time now. For a birth date or any past date use the `timezone` field instead, since the offset in force then may differ. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
              */
             utcOffset: number;
             /**
-             * City population estimate from geographic databases. Larger cities rank higher in search results, ensuring major metropolitan areas appear first in autocomplete suggestions.
+             * Population estimate for the place. Breaks ties between results of equal match quality, so among several places matching equally well the largest leads. It never outranks a better match, which is why a small town still wins when its name is typed exactly. May be 0 for a hamlet or administrative seat that carries no published figure.
              */
             population: number;
         }>;
@@ -42580,7 +43020,7 @@ export type GetLocationCountriesResponses = {
      */
     200: {
         /**
-         * Total number of countries available.
+         * Total number of countries with at least one place in the dataset.
          */
         total: number;
         /**
@@ -42608,7 +43048,7 @@ export type GetLocationCountriesResponses = {
              */
             iso3: string;
             /**
-             * Number of searchable cities available for this country. Useful for showing coverage in UI or deciding whether to offer city search for a given country.
+             * Number of searchable places in this country, including small towns and administrative seats. Useful for showing coverage in a UI or sizing a dependent city dropdown.
              */
             cityCount: number;
         }>;
@@ -42748,7 +43188,7 @@ export type GetLocationCountriesByIso2Responses = {
      */
     200: {
         /**
-         * Total number of cities available for this country.
+         * Total number of places available for this country across all pages.
          */
         total: number;
         /**
@@ -42768,7 +43208,7 @@ export type GetLocationCountriesByIso2Responses = {
              */
             city: string;
             /**
-             * State, province, canton, or administrative region. Helps disambiguate cities with the same name across regions (e.g. Springfield IL vs Springfield MO).
+             * State, province, canton, or administrative region. Show it whenever more than one result comes back: it is what separates Richfield, Utah from Richfield, Minnesota, and the six US Springfields from each other. Empty for the small number of places with no administrative division recorded.
              */
             province: string;
             /**
@@ -42788,15 +43228,15 @@ export type GetLocationCountriesByIso2Responses = {
              */
             longitude: number;
             /**
-             * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Use with JavaScript Date, Luxon, day.js, or any date library for accurate local time conversion.
+             * IANA timezone identifier following the tz database standard (e.g. Europe/Berlin, America/New_York, Asia/Tokyo). Always present. Pass THIS, not the numeric offset, into any chart or panchang request for a past date: the calculation endpoints resolve it to the offset that was actually in force on that date, including historical daylight saving. Also works directly with JavaScript Date, Luxon, day.js, or any date library.
              */
             timezone: string;
             /**
-             * Current UTC offset in decimal hours, automatically adjusted for daylight saving time. Pass directly as the timezone parameter in astrology API endpoints. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
+             * UTC offset in decimal hours for TODAY at this place, already adjusted for daylight saving. Convenient for displaying local time now. For a birth date or any past date use the `timezone` field instead, since the offset in force then may differ. Examples: 1 for CET, 2 for CEST, -5 for EST, 5.5 for IST, 5.75 for Nepal.
              */
             utcOffset: number;
             /**
-             * City population estimate from geographic databases. Larger cities rank higher in search results, ensuring major metropolitan areas appear first in autocomplete suggestions.
+             * Population estimate for the place. Breaks ties between results of equal match quality, so among several places matching equally well the largest leads. It never outranks a better match, which is why a small town still wins when its name is typed exactly. May be 0 for a hamlet or administrative seat that carries no published figure.
              */
             population: number;
         }>;

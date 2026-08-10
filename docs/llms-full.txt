@@ -50,6 +50,7 @@ const { data } = await roxy.astrology.generateNatalChart({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     houseSystem: 'placidus',
   },
 });
@@ -59,6 +60,7 @@ const { data } = await roxy.astrology.getPlanetaryPositions({
   body: {
     date: '2025-12-18',
     time: '12:00:00',
+    nodeType: 'true',
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
@@ -92,6 +94,7 @@ const { data } = await roxy.astrology.calculateSynastry({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
       name: 'Alex',
     },
     person2: {
@@ -100,6 +103,7 @@ const { data } = await roxy.astrology.calculateSynastry({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
       name: 'Alex',
     },
     houseSystem: 'placidus',
@@ -143,7 +147,12 @@ const { data } = await roxy.astrology.detectAspectPatterns({
 
 // Calculate planetary transits - Current transits with natal chart comparison
 const { data } = await roxy.astrology.calculateTransits({
-  body: { date: '2025-12-19', time: '12:00:00', timezone: 0 },
+  body: {
+    date: '2025-12-19',
+    time: '12:00:00',
+    timezone: 0,
+    nodeType: 'true',
+  },
 });
 
 // Transit Aspects - Detailed transit-to-natal aspect analysis with interpretations
@@ -155,6 +164,7 @@ const { data } = await roxy.astrology.calculateTransitAspects({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
     },
     transitDate: '2026-02-03',
     transitTime: '12:00:00',
@@ -200,6 +210,7 @@ const { data } = await roxy.astrology.generateCompositeChart({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
     },
     person2: {
       date: '1990-07-15',
@@ -207,6 +218,7 @@ const { data } = await roxy.astrology.generateCompositeChart({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
     },
     houseSystem: 'placidus',
   },
@@ -221,6 +233,7 @@ const { data } = await roxy.astrology.calculateCompatibility({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
     },
     person2: {
       date: '1990-07-15',
@@ -228,6 +241,7 @@ const { data } = await roxy.astrology.calculateCompatibility({
       latitude: 40.7128,
       longitude: -74.006,
       timezone: -5,
+      nodeType: 'true',
     },
   },
 });
@@ -273,6 +287,7 @@ const { data } = await roxy.astrology.generateAstrocartography({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
   },
 });
 
@@ -311,6 +326,7 @@ const { data } = await roxy.astrology.generateFixedStars({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
   },
 });
 
@@ -322,6 +338,7 @@ const { data } = await roxy.astrology.calculateArabicLots({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     houseSystem: 'placidus',
   },
 });
@@ -334,6 +351,7 @@ const { data } = await roxy.astrology.generateAsteroids({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     houseSystem: 'placidus',
   },
 });
@@ -346,6 +364,7 @@ const { data } = await roxy.astrology.generateLilith({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     houseSystem: 'placidus',
   },
 });
@@ -358,6 +377,7 @@ const { data } = await roxy.astrology.generateProgressions({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     targetDate: '2025-07-15',
   },
 });
@@ -370,6 +390,7 @@ const { data } = await roxy.astrology.generateSolarArc({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     targetDate: '2025-07-15',
   },
 });
@@ -382,6 +403,7 @@ const { data } = await roxy.astrology.generateProfections({
     latitude: 40.7128,
     longitude: -74.006,
     timezone: -5,
+    nodeType: 'true',
     targetDate: '2025-08-04',
     houseSystem: 'placidus',
   },
@@ -1671,7 +1693,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 ## Location and Timezone — `roxy.location`
 
-Location and timezone API with city search and geocoding across 23,000+ cities in 240+ countries, returning latitude,...
+Location and timezone API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude...
 
 ```typescript
 // Search cities worldwide - Geocoding autocomplete with coordinates and timezone
