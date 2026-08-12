@@ -75,6 +75,10 @@ export type NatalChartResponse = {
          */
         isRetrograde: boolean;
         /**
+         * Essential dignity of this body in the sign it occupies: domicile (the sign it rules, its strongest placement), exaltation (honoured and amplified), detriment (opposite its rulership, where it struggles), fall (opposite its exaltation, where it is weakened), or peregrine (in none of its own dignity signs). Absent for the lunar nodes, Chiron and Black Moon Lilith, which rule no sign and therefore hold no dignity at all, so an absent field and peregrine are different answers. Derived by sign only, so triplicity, bounds and face are not considered. Always English, whatever the lang parameter says, so it stays safe to compare against in code. The four dignity signs behind it are published per body by GET /planet-meanings/{id}.
+         */
+        dignity?: 'domicile' | 'exaltation' | 'detriment' | 'fall' | 'peregrine';
+        /**
          * Planet-in-sign-in-house interpretation. Narrative analysis of what this placement means in the natal chart.
          */
         interpretation?: {
@@ -166,9 +170,22 @@ export type NatalChartResponse = {
          */
         strength: number;
         /**
-         * Aspect nature: harmonious, challenging, or neutral.
+         * Aspect nature: harmonious, challenging, or neutral. Always English, whatever the lang parameter says, because it is an identifier to compare and style on. Read aspectInterpretation for the sentence a reader sees.
          */
         interpretation: string;
+        /**
+         * Narrative interpretation of this aspect for this chart. The reference description of the aspect TYPE is not repeated per row, use GET or POST /astrology/aspects for that card.
+         */
+        aspectInterpretation: {
+            /**
+             * One-sentence read of THIS pair: which two bodies, how tight the aspect is, whether it is applying or separating, and how it is classified. Translated in place, so it arrives in the requested language.
+             */
+            summary: string;
+            /**
+             * Themes this aspect activates between the two bodies. Translated in place, so they arrive in the requested language.
+             */
+            keywords: Array<string>;
+        };
     }>;
     /**
      * Detected multi-planet aspect configurations (Grand Trine, Kite, T-Square, Grand Cross, Yod, Mystic Rectangle, Stellium). Grand Cross suppresses contained T-Squares, Kite suppresses underlying Grand Trine.
@@ -580,7 +597,7 @@ export type AspectsResponse = {
          */
         strength: number;
         /**
-         * Aspect nature: harmonious, challenging, or neutral.
+         * Aspect nature for this pair: harmonious, challenging, or neutral. Always English, whatever the lang parameter says, because it is an identifier to compare and style on. This is the field to branch on; meaning.nature is the reference card characterisation of the aspect type and is translated for display.
          */
         interpretation: string;
         /**
@@ -609,7 +626,7 @@ export type AspectsResponse = {
              */
             keywords: Array<string>;
             /**
-             * Aspect nature classification.
+             * How this aspect type is characterised in its reference card, in the requested language, exactly like the name, description and keywords beside it. This is a property of the aspect TYPE, so branch on the aspect-level interpretation field instead, which is always English and is the classification applied to this particular pair.
              */
             nature: string;
         };
@@ -9676,7 +9693,7 @@ export type PostAstrologySynastryResponses = {
                  */
                 keywords: Array<string>;
                 /**
-                 * Aspect nature classification.
+                 * How this aspect type is characterised in its reference card, in the requested language, exactly like the name, description and keywords beside it. Branch on the aspect-level interpretation field instead, which is always English.
                  */
                 nature: string;
                 /**
@@ -10619,7 +10636,7 @@ export type PostAstrologyTransitAspectsResponses = {
              */
             strength: number;
             /**
-             * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+             * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
              */
             interpretation: 'harmonious' | 'challenging' | 'neutral';
             /**
@@ -10713,7 +10730,7 @@ export type PostAstrologyTransitAspectsResponses = {
                  */
                 strength: number;
                 /**
-                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
                 /**
@@ -11069,7 +11086,7 @@ export type PostAstrologySolarReturnResponses = {
                  */
                 strength: number;
                 /**
-                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
@@ -11450,7 +11467,7 @@ export type PostAstrologyLunarReturnResponses = {
                  */
                 strength: number;
                 /**
-                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
@@ -11908,7 +11925,7 @@ export type PostAstrologyCompositeChartResponses = {
              */
             strength: number;
             /**
-             * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+             * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
              */
             interpretation: 'harmonious' | 'challenging' | 'neutral';
         }>;
@@ -13380,7 +13397,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                  */
                 strength: number;
                 /**
-                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
@@ -26908,7 +26925,7 @@ export type PostForecastSolarReturnResponses = {
                  */
                 strength: number;
                 /**
-                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies.
+                 * Aspect nature. Harmonious (trine, sextile) flows easily. Challenging (square, opposition) creates tension and growth. Neutral (conjunction) blends energies. Always English, whatever the lang parameter says: it is an identifier consumers switch and style on. Use interpretationLocalized for anything a reader sees.
                  */
                 interpretation: 'harmonious' | 'challenging' | 'neutral';
             }>;
