@@ -4261,7 +4261,7 @@ export type YogaDetail = {
 
 export type YogaDetectResponse = {
     /**
-     * Array of 44 detected yogas, always the full set so a caller can render absent verdicts too. Every entry carries a `present` boolean and a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent); filter on present === true for active yogas. Evidence text names the rule that triggered or failed, or the precedence norm that outranked it.
+     * Array of 48 detected yogas, always the full set so a caller can render absent verdicts too. Every entry carries a `present` boolean and a `quality` (Positive, Negative, or Both = auspicious, inauspicious, or context-dependent); filter on present === true for active yogas. Evidence text names the rule that triggered or failed, or the precedence norm that outranked it.
      */
     yogas: Array<{
         /**
@@ -4315,7 +4315,7 @@ export type YogaDetectResponse = {
         ayanamsaDegrees: number;
     };
     /**
-     * Count of yogas where present === true in this chart. Range 0-44, though real charts sit in the low single digits: the Nabhasa families are mutually constrained by the precedence norms, and most shape yogas are rare.
+     * Count of yogas where present === true in this chart. Range 0-48, though real charts sit in the low single digits: the Nabhasa families are mutually constrained by the precedence norms, and most shape yogas are rare.
      */
     total: number;
     /**
@@ -7456,6 +7456,148 @@ export type DreamSymbol = {
      */
     meaning: string;
 };
+
+export type GetLanguagesFieldLabelsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/languages/field-labels';
+};
+
+export type GetLanguagesFieldLabelsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetLanguagesFieldLabelsError = GetLanguagesFieldLabelsErrors[keyof GetLanguagesFieldLabelsErrors];
+
+export type GetLanguagesFieldLabelsResponses = {
+    /**
+     * Form labels resolved for the requested language
+     */
+    200: {
+        /**
+         * Language these labels resolved to. Echoes the `lang` query parameter, or `en` when it is omitted.
+         */
+        lang: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Label per request field or parameter name. Keys are the wire names used in request bodies and query parameters, such as `birthDate`, `timezone` or `houseSystem`.
+         */
+        fields: {
+            [key: string]: string;
+        };
+        /**
+         * Label per selectable option, keyed `{fieldName}.{value}` so the same value can read differently under different fields. For example `nodeType.mean` and `houseSystem.whole-sign`. Split on the first dot: the field name is before it, and everything after it is the value you send back unchanged.
+         */
+        enums: {
+            [key: string]: string;
+        };
+    };
+};
+
+export type GetLanguagesFieldLabelsResponse = GetLanguagesFieldLabelsResponses[keyof GetLanguagesFieldLabelsResponses];
 
 export type GetAstrologySignsData = {
     body?: never;
@@ -20505,7 +20647,7 @@ export type PostVedicAstrologyYogaDetectError = PostVedicAstrologyYogaDetectErro
 
 export type PostVedicAstrologyYogaDetectResponses = {
     /**
-     * List of 44 classical yogas with present/absent verdicts and classical-text evidence.
+     * List of 48 classical yogas with present/absent verdicts and classical-text evidence.
      */
     200: YogaDetectResponse;
 };

@@ -10,7 +10,7 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 ```
 
 <!-- BEGIN:LANGS -->
-**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, forecast, humanDesign, numerology, tarot, biorhythm, iching, crystals, angelNumbers. English-only: dreams, location, usage, languages. Languages without translations yet fall back to English.
+**Multi-language responses.** Interpretations are available in 8 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, forecast, humanDesign, numerology, tarot, biorhythm, iching, crystals, angelNumbers, languages. English-only: dreams, location, usage. Languages without translations yet fall back to English.
 <!-- END:LANGS -->
 
 ```typescript
@@ -1724,6 +1724,9 @@ const { data } = await roxy.usage.getUsageStats();
 List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint
 
 ```typescript
+// Get field labels for a language
+const { data } = await roxy.languages.getFieldLabels();
+
 // List supported response languages
 const { data } = await roxy.languages.listLanguages();
 ```
