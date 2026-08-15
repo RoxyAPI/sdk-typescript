@@ -609,6 +609,20 @@ const { data } = await roxy.vedicAstrology.getPranaDashas({
   },
 });
 
+// Daily Reading - Composed Gochara, Panchanga and Dasha for one native on one day
+const { data } = await roxy.vedicAstrology.getVedicDailyReading({
+  query: { focus: 'general' },
+  body: {
+    birthDate: '1984-11-03',
+    birthTime: '01:35:00',
+    latitude: 28.8944,
+    longitude: 76.5894,
+    timezone: 5.5,
+    date: '2026-06-21',
+    nodeType: 'mean',
+  },
+});
+
 // Get basic Panchang - Tithi Nakshatra Yoga Karana Calculator
 const { data } = await roxy.vedicAstrology.getBasicPanchang({
   body: {

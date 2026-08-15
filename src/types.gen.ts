@@ -322,6 +322,10 @@ export type NatalChartResponse = {
          */
         longitude: number;
         /**
+         * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+         */
+        house: number;
+        /**
          * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
          */
         sect: 'day' | 'night';
@@ -346,6 +350,10 @@ export type NatalChartResponse = {
          * Absolute ecliptic longitude of the Vertex (0-360).
          */
         longitude: number;
+        /**
+         * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+         */
+        house: number;
         /**
          * Vertex sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
          */
@@ -1082,11 +1090,11 @@ export type AstrocartographyResponse = {
          */
         mc: {
             /**
-             * Constant geographic longitude of this vertical meridian line in decimal degrees. The body culminates (MC) or anti-culminates (IC) along it, so plot it as a straight north to south line.
+             * Constant geographic longitude of this vertical meridian line in decimal degrees. The body culminates (MC) along it, so plot it as a straight north to south line.
              */
             longitude: number;
             /**
-             * Plain language meaning of this meridian planetary line for relocation, suitable for chart reports and AI agents.
+             * Plain language meaning of this Midheaven planetary line for relocation, suitable for chart reports and AI agents.
              */
             interpretation: string;
         };
@@ -1095,11 +1103,11 @@ export type AstrocartographyResponse = {
          */
         ic: {
             /**
-             * Constant geographic longitude of this vertical meridian line in decimal degrees. The body culminates (MC) or anti-culminates (IC) along it, so plot it as a straight north to south line.
+             * Constant geographic longitude of this vertical meridian line in decimal degrees. The body anti-culminates (IC) along it, so plot it as a straight north to south line.
              */
             longitude: number;
             /**
-             * Plain language meaning of this meridian planetary line for relocation, suitable for chart reports and AI agents.
+             * Plain language meaning of this Imum Coeli planetary line for relocation, suitable for chart reports and AI agents.
              */
             interpretation: string;
         };
@@ -1108,7 +1116,7 @@ export type AstrocartographyResponse = {
          */
         ascendant: {
             /**
-             * Sampled geographic points tracing this rising or setting line from 70 South to 70 North. Join them in latitude order to draw the curved planetary line on a world map.
+             * Sampled geographic points tracing this rising line from 70 South to 70 North. Join them in latitude order to draw the curved planetary line on a world map.
              */
             points: Array<{
                 /**
@@ -1116,7 +1124,7 @@ export type AstrocartographyResponse = {
                  */
                 latitude: number;
                 /**
-                 * Geographic longitude in decimal degrees where the body sits exactly on the horizon at this latitude.
+                 * Geographic longitude in decimal degrees where the body sits exactly on the eastern (rising) horizon at this latitude.
                  */
                 longitude: number;
             }>;
@@ -1125,7 +1133,7 @@ export type AstrocartographyResponse = {
              */
             circumpolarBeyond: number | null;
             /**
-             * Plain language meaning of this rising or setting planetary line for relocation, suitable for chart reports and AI agents.
+             * Plain language meaning of this rising (Ascendant) planetary line for relocation, suitable for chart reports and AI agents.
              */
             interpretation: string;
         };
@@ -1134,7 +1142,7 @@ export type AstrocartographyResponse = {
          */
         descendant: {
             /**
-             * Sampled geographic points tracing this rising or setting line from 70 South to 70 North. Join them in latitude order to draw the curved planetary line on a world map.
+             * Sampled geographic points tracing this setting line from 70 South to 70 North. Join them in latitude order to draw the curved planetary line on a world map.
              */
             points: Array<{
                 /**
@@ -1142,7 +1150,7 @@ export type AstrocartographyResponse = {
                  */
                 latitude: number;
                 /**
-                 * Geographic longitude in decimal degrees where the body sits exactly on the horizon at this latitude.
+                 * Geographic longitude in decimal degrees where the body sits exactly on the western (setting) horizon at this latitude.
                  */
                 longitude: number;
             }>;
@@ -1151,7 +1159,7 @@ export type AstrocartographyResponse = {
              */
             circumpolarBeyond: number | null;
             /**
-             * Plain language meaning of this rising or setting planetary line for relocation, suitable for chart reports and AI agents.
+             * Plain language meaning of this setting (Descendant) planetary line for relocation, suitable for chart reports and AI agents.
              */
             interpretation: string;
         };
@@ -1292,6 +1300,10 @@ export type RelocationChartResponse = {
          * Absolute ecliptic longitude of the Vertex (0-360).
          */
         longitude: number;
+        /**
+         * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+         */
+        house: number;
         /**
          * Vertex sign name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
          */
@@ -11249,6 +11261,10 @@ export type PostAstrologySolarReturnResponses = {
                  */
                 longitude: number;
                 /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
+                /**
                  * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
                  */
                 sect: 'day' | 'night';
@@ -11269,6 +11285,10 @@ export type PostAstrologySolarReturnResponses = {
                  * Absolute ecliptic longitude of the Vertex (0-360).
                  */
                 longitude: number;
+                /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
             };
         };
         /**
@@ -11630,6 +11650,10 @@ export type PostAstrologyLunarReturnResponses = {
                  */
                 longitude: number;
                 /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
+                /**
                  * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
                  */
                 sect: 'day' | 'night';
@@ -11650,6 +11674,10 @@ export type PostAstrologyLunarReturnResponses = {
                  * Absolute ecliptic longitude of the Vertex (0-360).
                  */
                 longitude: number;
+                /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
             };
         };
         /**
@@ -13560,6 +13588,10 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                  */
                 longitude: number;
                 /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
+                /**
                  * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
                  */
                 sect: 'day' | 'night';
@@ -13580,6 +13612,10 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                  * Absolute ecliptic longitude of the Vertex (0-360).
                  */
                 longitude: number;
+                /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
             };
         };
         /**
@@ -18544,6 +18580,729 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
 };
 
 export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponse = PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponses[keyof PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBySookshmaResponses];
+
+export type PostVedicAstrologyDailyData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Fixes the Janma Rashi and Janma Nakshatra every part of this reading is counted from, and the natal Ashtakavarga the bindu gate reads.
+         */
+        birthDate: string;
+        /**
+         * Birth time in HH:MM:SS format (24-hour). The Moon moves about half a degree an hour, so an error here moves the Janma Rashi and Janma Nakshatra and therefore every gochara house count, the tarabala and the chandrabala in this response.
+         */
+        birthTime: string;
+        /**
+         * Birth location latitude in decimal degrees. Sets the natal house cusps behind the Ashtakavarga scorecard and the KP significators, and the sunrise that opens the panchanga day.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local sidereal time for the natal cusps and the sunrise the reading is composed at.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "Asia/Kolkata", "America/New_York") OR decimal hours from UTC (e.g. -5 for EST, 5.5 for IST). IANA strings are resolved to the DST-correct offset for the date being read. Interprets the birth time and the civil date below. Defaults to 5.5.
+         */
+        timezone?: number | string;
+        /**
+         * Civil date to read, in YYYY-MM-DD format. Defaults to today (UTC). The panchanga day it names runs from sunrise at the birth coordinates to the next sunrise, not from midnight, so a reading for this date covers the night that follows it.
+         */
+        date?: string;
+        /**
+         * Lunar node type for Rahu and Ketu. "mean" uses the smooth mean node, which is the traditional Vedic default and what printed panchangs use. "true" uses the osculating node, which swings up to 1.5 degrees either side of mean and can therefore move a node into a different rashi and change its gochara house. Defaults to "mean".
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        /**
+         * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
+         */
+        focus?: 'general' | 'finance';
+    };
+    url: '/vedic-astrology/daily';
+};
+
+export type PostVedicAstrologyDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyDailyError = PostVedicAstrologyDailyErrors[keyof PostVedicAstrologyDailyErrors];
+
+export type PostVedicAstrologyDailyResponses = {
+    /**
+     * Daily reading composed successfully
+     */
+    200: {
+        /**
+         * Every sidereal frame behind this reading, so a cached or forwarded payload is self describing and no number sits under a label it did not come from. TWO ayanamsas are in play by design: positions are Lahiri, and the Placidus cusps plus the KP significators are KP-Newcomb, which is the frame KP owns and the split a practitioner actually works in. The two differ by about 0.09 degrees, which is under a third of a KP sub-lord span and enough to move a placement near a boundary, so the reading declares which produced what rather than leaving a caller to guess. THREE entries for two ayanamsas, because Lahiri is read at two instants: the birth moment and the sunrise of the day being read, roughly half a degree apart on a chart forty years old, six times the gap between the two ayanamsas themselves. There is no ayanamsa request field on this route and there will not be one, since a single selector cannot honour two frames and accepting it would promise something the composition cannot deliver.
+         */
+        frames: {
+            /**
+             * Lahiri at the birth instant. Produces the natal Moon this whole reading is counted from, the Vimshottari balance, and the natal graha rows of the Ashtakavarga scorecard the bindu gate reads.
+             */
+            natal: {
+                /**
+                 * Sidereal frame this part of the reading was cast in. Always "lahiri" here: it is not a caller choice, because the composition runs two frames at once and a single request field could only ever name one of them.
+                 */
+                ayanamsa: string;
+                /**
+                 * Degrees actually subtracted from every tropical longitude this frame produced. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+                 */
+                ayanamsaDegrees: number;
+                /**
+                 * ISO instant the ayanamsa was read at. Part of the value, not metadata: an ayanamsa moves about 50.3 arcseconds a year, so the same frame read at a birth in 1984 and at a transit in 2026 differs by more than half a degree.
+                 */
+                at: string;
+                /**
+                 * Response sections this frame is a determinant of, as paths into this payload. One of subject, grahas, panchanga, tara, chandrabala, dasha, areas.finance. A section appears under EVERY frame that feeds it, which is why grahas is listed three times: the transiting longitudes and the natal Moon they are counted from are both Lahiri read at different instants, while the Ashtakavarga Lagna row behind binduCount and kaksha is KP-Newcomb. Exactly two sections belong to one frame alone, subject to the natal frame and panchanga to the transit frame.
+                 */
+                governs: Array<'subject' | 'grahas' | 'panchanga' | 'tara' | 'chandrabala' | 'dasha' | 'areas.finance'>;
+            };
+            /**
+             * Lahiri at sunrise on the day being read. Produces every transiting longitude and every panchanga limb. Inside one day precession moves it 0.14 arcseconds, so this one value speaks for every limb resolved between the two sunrises.
+             */
+            transit: {
+                /**
+                 * Sidereal frame this part of the reading was cast in. Always "lahiri" here: it is not a caller choice, because the composition runs two frames at once and a single request field could only ever name one of them.
+                 */
+                ayanamsa: string;
+                /**
+                 * Degrees actually subtracted from every tropical longitude this frame produced. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+                 */
+                ayanamsaDegrees: number;
+                /**
+                 * ISO instant the ayanamsa was read at. Part of the value, not metadata: an ayanamsa moves about 50.3 arcseconds a year, so the same frame read at a birth in 1984 and at a transit in 2026 differs by more than half a degree.
+                 */
+                at: string;
+                /**
+                 * Response sections this frame is a determinant of, as paths into this payload. One of subject, grahas, panchanga, tara, chandrabala, dasha, areas.finance. A section appears under EVERY frame that feeds it, which is why grahas is listed three times: the transiting longitudes and the natal Moon they are counted from are both Lahiri read at different instants, while the Ashtakavarga Lagna row behind binduCount and kaksha is KP-Newcomb. Exactly two sections belong to one frame alone, subject to the natal frame and panchanga to the transit frame.
+                 */
+                governs: Array<'subject' | 'grahas' | 'panchanga' | 'tara' | 'chandrabala' | 'dasha' | 'areas.finance'>;
+            };
+            /**
+             * KP-Newcomb, read at UTC midnight of the birth date. Produces the Placidus cusps behind the Ashtakavarga Lagna row and the KP significators behind the finance area, exactly as every KP route on this API computes them.
+             */
+            kp: {
+                /**
+                 * Sidereal frame this part of the reading was cast in. Always "kp-newcomb" here: it is not a caller choice, because the composition runs two frames at once and a single request field could only ever name one of them.
+                 */
+                ayanamsa: string;
+                /**
+                 * Degrees actually subtracted from every tropical longitude this frame produced. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+                 */
+                ayanamsaDegrees: number;
+                /**
+                 * ISO instant the ayanamsa was read at. Part of the value, not metadata: an ayanamsa moves about 50.3 arcseconds a year, so the same frame read at a birth in 1984 and at a transit in 2026 differs by more than half a degree.
+                 */
+                at: string;
+                /**
+                 * Response sections this frame is a determinant of, as paths into this payload. One of subject, grahas, panchanga, tara, chandrabala, dasha, areas.finance. A section appears under EVERY frame that feeds it, which is why grahas is listed three times: the transiting longitudes and the natal Moon they are counted from are both Lahiri read at different instants, while the Ashtakavarga Lagna row behind binduCount and kaksha is KP-Newcomb. Exactly two sections belong to one frame alone, subject to the natal frame and panchanga to the transit frame.
+                 */
+                governs: Array<'subject' | 'grahas' | 'panchanga' | 'tara' | 'chandrabala' | 'dasha' | 'areas.finance'>;
+            };
+        };
+        /**
+         * Civil date this reading covers, echoing the request field or the UTC date it defaulted to.
+         */
+        date: string;
+        /**
+         * ISO instant the panchanga day begins, which is SUNRISE at the birth coordinates and not midnight. Every limb below is resolved at this instant. Where the Sun does not rise, local noon is used instead and the substitution is named in degraded rather than applied silently.
+         */
+        dayStart: string;
+        /**
+         * ISO instant the panchanga day ends, which is the next sunrise.
+         */
+        dayEnd: string;
+        /**
+         * The two natal reference points this whole reading is counted from, plus the longitude they come from.
+         */
+        subject: {
+            /**
+             * Natal Moon rashi, the reference point every gochara house count in this response is taken from. Always English.
+             */
+            janmaRashi: string;
+            /**
+             * Natal Moon nakshatra, the reference point the tarabala is counted from. Canonical Sanskrit.
+             */
+            janmaNakshatra: string;
+            /**
+             * Janma Nakshatra number 1 to 27, counted from Ashwini.
+             */
+            janmaNakshatraNumber: number;
+            /**
+             * Sidereal longitude of the natal Moon in degrees. The single value both reference points are derived from, so any disagreement with a reference chart can be traced to its source rather than to a verdict.
+             */
+            moonLongitude: number;
+        };
+        /**
+         * The four panchanga limbs, each resolved at sunrise and each carrying the instant it gives way, so a client can label the whole day rather than asserting one value for it.
+         */
+        panchanga: {
+            /**
+             * Weekday of the panchanga day. The Hindu vara runs sunrise to sunrise, so it can differ from the civil weekday of the same date before dawn. Always English.
+             */
+            vara: string;
+            /**
+             * The same weekday under its Sanskrit name.
+             */
+            varaSanskrit: string;
+            /**
+             * Lunar fortnight at sunrise: Shukla for the waxing half, Krishna for the waning half.
+             */
+            paksha: string;
+            /**
+             * Tithi (lunar day) running at sunrise, with the instant it ends. The tithi is the 12-degree step of the Moon away from the Sun, so its length varies through the month.
+             */
+            tithi: {
+                /**
+                 * tithi number in its own cycle, resolved at sunrise.
+                 */
+                number: number;
+                /**
+                 * Name of the tithi running at sunrise. Canonical Sanskrit, so it stays safe to compare against in code.
+                 */
+                name: string;
+                /**
+                 * ISO instant this tithi ends. Read from the same transition search POST /panchang/detailed publishes, never recomputed here, so the two endpoints cannot disagree about when the event happens.
+                 */
+                validTo: string;
+                /**
+                 * The tithi that follows, so the rest of the day can be labelled without a second request.
+                 */
+                next: string;
+                /**
+                 * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+                 */
+                timescale: 'hours' | 'days' | 'months' | 'years';
+            };
+            /**
+             * Nakshatra the Moon occupies at sunrise, with the instant it ends. This is the sky-wide limb; for what it means to THIS native, read the tara array.
+             */
+            nakshatra: {
+                /**
+                 * nakshatra number in its own cycle, resolved at sunrise.
+                 */
+                number: number;
+                /**
+                 * Name of the nakshatra running at sunrise. Canonical Sanskrit, so it stays safe to compare against in code.
+                 */
+                name: string;
+                /**
+                 * ISO instant this nakshatra ends. Read from the same transition search POST /panchang/detailed publishes, never recomputed here, so the two endpoints cannot disagree about when the event happens.
+                 */
+                validTo: string;
+                /**
+                 * The nakshatra that follows, so the rest of the day can be labelled without a second request.
+                 */
+                next: string;
+                /**
+                 * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+                 */
+                timescale: 'hours' | 'days' | 'months' | 'years';
+            };
+            /**
+             * Nitya yoga running at sunrise, with the instant it ends. The 27 yogas step through the combined longitude of the Sun and the Moon.
+             */
+            yoga: {
+                /**
+                 * yoga number in its own cycle, resolved at sunrise.
+                 */
+                number: number;
+                /**
+                 * Name of the yoga running at sunrise. Canonical Sanskrit, so it stays safe to compare against in code.
+                 */
+                name: string;
+                /**
+                 * ISO instant this yoga ends. Read from the same transition search POST /panchang/detailed publishes, never recomputed here, so the two endpoints cannot disagree about when the event happens.
+                 */
+                validTo: string;
+                /**
+                 * The yoga that follows, so the rest of the day can be labelled without a second request.
+                 */
+                next: string;
+                /**
+                 * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+                 */
+                timescale: 'hours' | 'days' | 'months' | 'years';
+            };
+            /**
+             * Karana running at sunrise, with the instant it ends. A karana is half a tithi, which is why it is the fastest of the four limbs.
+             */
+            karana: {
+                /**
+                 * karana number in its own cycle, resolved at sunrise.
+                 */
+                number: number;
+                /**
+                 * Name of the karana running at sunrise. Canonical Sanskrit, so it stays safe to compare against in code.
+                 */
+                name: string;
+                /**
+                 * ISO instant this karana ends. Read from the same transition search POST /panchang/detailed publishes, never recomputed here, so the two endpoints cannot disagree about when the event happens.
+                 */
+                validTo: string;
+                /**
+                 * The karana that follows, so the rest of the day can be labelled without a second request.
+                 */
+                next: string;
+                /**
+                 * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+                 */
+                timescale: 'hours' | 'days' | 'months' | 'years';
+            };
+        };
+        /**
+         * All nine transiting grahas, each with its four gate results and the ONE state they produced. The gates run in the order the sources give them: house from the natal Moon, then vedha, then the bindu gate, then the nullifiers of Phaladeepika XXVI.30 to XXVI.32. Obstruction is terminal, so a blocked transit is never rescued by the gates that follow it.
+         */
+        grahas: Array<{
+            /**
+             * Graha name, Sun through Ketu. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            graha: string;
+            /**
+             * Rashi this graha is transiting on the day being read. Always English.
+             */
+            sign: string;
+            /**
+             * Sidereal longitude of the transiting graha in degrees, 0 to 360, Lahiri frame.
+             */
+            longitude: number;
+            /**
+             * House this graha transits counted whole-sign and inclusively from the natal Moon rashi (Janma Rashi), so the Moon rashi itself is 1. This is the reference classical Gochara is reckoned in: Phaladeepika XXVI.1 opens the transit chapter by saying that of all the Lagnas only the Moon Lagna matters for transit results. A reading counted from the Lagna instead answers a different question and every verdict below would be wrong.
+             */
+            houseFromMoon: number;
+            /**
+             * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+             */
+            timescale: 'hours' | 'days' | 'months' | 'years';
+            /**
+             * Gate 1. Whether houseFromMoon is on this graha classical favourable list (Phaladeepika XXVI.2). The baseline verdict, before vedha, bindus or the nullifiers have had their say.
+             */
+            favourable: boolean;
+            /**
+             * Gate 1 evidence: the whole favourable list for this graha, so the baseline verdict can be checked in place without a second request or a table lookup.
+             */
+            favourableHouses: Array<number>;
+            /**
+             * Gate 2. The house whose occupation by another graha cancels this transit (Phaladeepika XXVI.3-8). Null when the transit is not favourable to begin with, since there is nothing for an obstruction to cancel.
+             */
+            vedhaHouse: number | null;
+            /**
+             * Gate 2. Grahas actually standing in vedhaHouse, with the mutual exemptions already applied. Empty when nothing obstructs. A non-empty list makes the state "obstructed", which is a THIRD outcome rather than a smaller number: the texts cancel the promised good outright rather than discounting it.
+             */
+            obstructedBy: Array<string>;
+            /**
+             * Gate 2. Grahas that cannot obstruct this one however they transit, from the two mutual exemptions the texts name: the Sun and Saturn do not obstruct each other, and neither do the Moon and Mercury.
+             */
+            vedhaExempt: Array<string>;
+            /**
+             * Gate 3. Bindus this graha holds in the whole sign it is transiting, 0 to 8, or null for Rahu and Ketu, which have no Bhinnashtakavarga and therefore SKIP this gate entirely rather than scoring zero. The gate reads the number two ways: a favourable house carrying fewer than 4 bindus under delivers, and an unfavourable house carrying a strict majority of the eight contributors, 5 or more, is turned good by Phaladeepika XXVI.41. Exactly 4 fires neither rule, which is the literal reading of both phrasings rather than a rounding choice. WHOSE READING THE NUMBER IS, stated because generalising it is ours: B.V. Raman prints 4 once and prints it about the MOON, then generalises the PRINCIPLE to every graha in the next sentence without repeating any number, and Phaladeepika XXVI.41 is general across grahas and also states no number. Applying 4 to all nine bodies is RoxyAPI reading the general rule through the one worked example the author gave it, and it is not a universally stated classical threshold.
+             */
+            binduCount: number | null;
+            /**
+             * Gochara Kaksha: the ashtakavarga-qualified reading of this transit. The sign says where a graha is, this says whether the exact stretch it currently occupies is one its own Bhinnashtakavarga supports, which is the classical way of refining a transit verdict from sign-level to under four degrees.
+             */
+            kaksha: {
+                /**
+                 * Kaksha number 1-8 within the current sign. Each sign divides into eight kakshas of 3 degrees 45 minutes, crossed in order, so this is how far through the sign the graha has travelled.
+                 */
+                number: number;
+                /**
+                 * Graha ruling this kaksha. The eight lords run Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon, Lagna from the start of every sign, ordered by how long each takes to cross a sign.
+                 */
+                lord: string;
+                /**
+                 * Degree within the sign where this kaksha begins (0, 3.75, 7.5 and so on).
+                 */
+                startDegree: number;
+                /**
+                 * Degree within the sign where this kaksha ends.
+                 */
+                endDegree: number;
+                /**
+                 * Whether this kaksha lord gave the transiting graha a bindu in the sign being transited, which is the Gochara Kaksha verdict: true reads as a favourable stretch of the transit, false as an unfavourable one. Null means the question does not apply rather than that the answer is no, because Rahu and Ketu have no Bhinnashtakavarga to read. Never render null as unfavourable.
+                 */
+                bindu: boolean | null;
+                /**
+                 * Bindus the transiting graha holds in this whole sign, 0-8, or null for Rahu and Ketu. Context for the verdict, since the same kaksha reads differently in a sign worth 7 than in one worth 1.
+                 */
+                binduCount: number | null;
+            };
+            /**
+             * Gate 4. Dignity of the graha in the sign it is transiting, or null for Rahu and Ketu which have none. Feeds the Phaladeepika XXVI.31 shield ("exalted" or "own" does no harm in an untoward bhava) and the XXVI.32 weakness ("debilitated" or "enemy" voids a good transit). One of exalted, own, debilitated, enemy, neutral.
+             */
+            dignity: 'exalted' | 'own' | 'debilitated' | 'enemy' | 'neutral' | null;
+            /**
+             * Gate 4. Whether the graha is combust at the transit moment, or null for the Sun and the two nodes where the question does not arise at all. Combustion voids a good transit under Phaladeepika XXVI.32 and aggravates a bad one.
+             */
+            combust: boolean | null;
+            /**
+             * Gate 4. Transiting natural benefics casting graha drishti on this graha. Under Phaladeepika XXVI.30 a benefic sight on a BAD result is what voids it. Read as drishti from the other TRANSITING grahas, which is a school choice this endpoint makes and states: the sloka sits between the vedha rules and the rules about the transiting graha own condition.
+             */
+            aspectedByBenefic: Array<string>;
+            /**
+             * Gate 4. Transiting natural malefics casting graha drishti on this graha. A malefic sight on a GOOD result voids it under Phaladeepika XXVI.30. Rahu and Ketu never appear here: they cast no drishti in this package, which is its own documented school choice, although they can be aspected.
+             */
+            aspectedByMalefic: Array<string>;
+            /**
+             * Gate 4. Transiting natural enemies of this graha casting graha drishti on it. Phaladeepika XXVI.30 voids the result either way for an enemy sight, whichever direction the baseline verdict pointed.
+             */
+            aspectedByEnemy: Array<string>;
+            /**
+             * The single outcome the four gates produced for this graha, and the only field the score counts. "favourable" is the house list holding with nothing cancelling it, "underdelivered" is a favourable house below the bindu delivery floor, "obstructed" is vedha, "void" is an aspect, a dignity shield or a weakness emptying the result of effect, "aggravated" is the one compounding rule in the chapter, and "unfavourable" is a house that was never on the list. Canonical English machine values: every one is a classical outcome word rather than an invented label, which is why none carries a translated sibling.
+             */
+            state: 'favourable' | 'underdelivered' | 'obstructed' | 'void' | 'aggravated' | 'unfavourable';
+            /**
+             * The rule that decided the state, named so a verdict can be checked against its sloka without leaving the payload.
+             */
+            stateSource: string;
+        }>;
+        /**
+         * Tarabala for THIS native, as an array of windows rather than one value, because the Moon can change nakshatra inside a panchanga day and the reference panchangs print two windows when it does. Three windows happen and are returned when they do. One entry means the tara held all day.
+         */
+        tara: Array<{
+            /**
+             * ISO instant this tarabala window opens.
+             */
+            validFrom: string;
+            /**
+             * ISO instant this tarabala window closes, which is when the Moon changes nakshatra.
+             */
+            validTo: string;
+            /**
+             * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+             */
+            timescale: 'hours' | 'days' | 'months' | 'years';
+            /**
+             * Nakshatra the Moon occupies during this window. Canonical Sanskrit.
+             */
+            moonNakshatra: string;
+            /**
+             * Tara number 1 to 9, counted inclusively from the Janma Nakshatra to the Moon nakshatra and folded by 9.
+             */
+            number: number;
+            /**
+             * Name of the tara this native gets during this window, from the 9-tara cycle Janma through Parama Mitra. A Sanskrit proper noun and a canonical machine value, which is why the favourability is a separate field rather than something a caller has to infer from the word.
+             */
+            name: 'Janma' | 'Sampat' | 'Vipat' | 'Kshema' | 'Pratyari' | 'Sadhaka' | 'Vadha' | 'Mitra' | 'Parama Mitra';
+            /**
+             * Where this tara falls in the three-way classical reading. Taras 2, 4, 6, 8 and 9 are favourable, 3, 5 and 7 are not, and the 1st (Janma) is neither.
+             */
+            quality: 'favourable' | 'unfavourable' | 'neutral';
+        }>;
+        /**
+         * Chandrabala for THIS native, windowed for the same reason as the tarabala: the Moon can change rashi inside the panchanga day. Ashtama Chandra is a separate flag on each window.
+         */
+        chandrabala: Array<{
+            /**
+             * ISO instant this chandrabala window opens.
+             */
+            validFrom: string;
+            /**
+             * ISO instant this chandrabala window closes, which is when the Moon changes rashi.
+             */
+            validTo: string;
+            /**
+             * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+             */
+            timescale: 'hours' | 'days' | 'months' | 'years';
+            /**
+             * Rashi the Moon occupies during this window. Always English.
+             */
+            moonSign: string;
+            /**
+             * House the Moon rashi makes from the Janma Rashi, counted whole-sign and inclusively, so the Janma Rashi itself is 1. This is the number chandrabala is read off.
+             */
+            houseFromMoon: number;
+            /**
+             * Whether the Moon stands in one of the rashis that give this native chandrabala during this window.
+             */
+            favourable: boolean;
+            /**
+             * The Moon in the 8th from the Janma Rashi. Its OWN flag, printed beside chandrabala rather than folded into it, exactly as the reference panchangs print it. Folding it in would let a caller read one boolean and miss the warning the source deliberately separates.
+             */
+            ashtamaChandra: boolean;
+        }>;
+        /**
+         * The running Vimshottari chain at sunrise, outermost first, three levels deep. This is the frame the day is read inside, and it is also what the finance area reads the significators off. Empty for a chart whose cycle cannot be resolved.
+         */
+        dasha: Array<{
+            /**
+             * Which Vimshottari level this period is. Only mahadasha, antardasha, pratyantardasha are carried: the sookshma and prana lords turn over in hours and minutes, so embedding them would advertise a day-long cache lifetime over a value that is already stale. Use POST /dasha/current for those two.
+             */
+            level: 'mahadasha' | 'antardasha' | 'pratyantardasha';
+            /**
+             * Graha ruling this period. Always English.
+             */
+            lord: string;
+            /**
+             * ISO instant this period begins.
+             */
+            startDate: string;
+            /**
+             * ISO instant this period ends.
+             */
+            endDate: string;
+            /**
+             * How long this component holds one verdict. Present on every component because this reading joins two genres classical literature keeps in separate books: a gochara verdict lasts as long as the graha stays in a rashi, which is years for Saturn, while a tarabala changes overnight. Without it a Saturn verdict that reads identically for nine hundred days would sit under one date field beside a limb that turns over at dawn.
+             */
+            timescale: 'hours' | 'days' | 'months' | 'years';
+        }>;
+        /**
+         * Life areas carried as a TYPED closed set rather than an open map, so every generated SDK knows which keys exist. Finance ships alone in this version, because an area is a named classical house group with a citation and not a life category invented for a dropdown. Widening it later adds a key and breaks nothing.
+         */
+        areas: {
+            /**
+             * The finance area: the positive house group 2, 5, 11 netted against the negative group 6, 8, 12, read off the lords of the running dasha, bhukti and antara, because that is the KP rule for when a matter fructifies, plus the natal basis the day is read against. ALWAYS AN OBJECT. Above latitude 66.56 the six netted members are null, because the Placidus cusps behind the significators have no solution there, while natal is still populated because it is a property of the birth chart and needs no cusps; the reading also still carries its gochara, panchanga and dasha and names the omission in degraded. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and the 6th house is the live disagreement, since some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship.
+             */
+            finance: {
+                /**
+                 * Share of the running lords six-house connections that land on the positive group, 0 to 100, rounded. A COUNT, so positive and negative below reproduce it in one division: round(positive / (positive + negative) * 100). Zero when the running lords reach none of the six houses, which is an ABSENCE of connection rather than a negative verdict. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and the 6th house is the live disagreement, since some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship.
+                 */
+                score: number | null;
+                /**
+                 * The band the finance score falls in, on the same ladder as the top-level verdict so the two can never disagree about what a word means: "very-strong" at 75 and above, "strong" at 50 and above, "moderate" at 25 and above, "weak" below 25. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score.
+                 */
+                band: 'very-strong' | 'strong' | 'moderate' | 'weak' | null;
+                /**
+                 * How many connections land on the positive house group 2, 5, 11, which KP reads as accumulated wealth, speculation and gains. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score.
+                 */
+                positive: number | null;
+                /**
+                 * How many connections land on the negative house group 6, 8, 12, which KP reads as debt, sudden loss and expenditure. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score.
+                 */
+                negative: number | null;
+                /**
+                 * Every positive-group connection, strongest KP level first. These are the specific lord-to-house links the score is made of, so the number can be audited rather than trusted. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score.
+                 */
+                drivers: Array<{
+                    /**
+                     * The running dasha lord making this connection. A lord holding two of the three levels is listed once per house rather than twice, so nothing here is a hidden weight.
+                     */
+                    graha: string;
+                    /**
+                     * The finance house this lord reaches. One of the positive group 2, 5, 11 or the negative group 6, 8, 12.
+                     */
+                    house: number;
+                    /**
+                     * Strongest KP significator level at which this lord reaches this house, 1 to 4. Level 1 is a planet in the constellation of the occupant, 2 the occupant, 3 a planet in the constellation of the house owner, 4 the house owner. Strongest level per house wins, which is step 1 of the published grading rule the dasha routes already use.
+                     */
+                    level: number;
+                    /**
+                     * The KP letter for that level, on the standard A to D significator grading. A is the strongest connection.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Which of the running levels this graha rules. Carries the fact that one lord holds more than one level without letting it count twice.
+                     */
+                    dashaLevels: Array<'mahadasha' | 'antardasha' | 'pratyantardasha'>;
+                }> | null;
+                /**
+                 * Every negative-group connection, strongest KP level first. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score.
+                 */
+                cautions: Array<{
+                    /**
+                     * The running dasha lord making this connection. A lord holding two of the three levels is listed once per house rather than twice, so nothing here is a hidden weight.
+                     */
+                    graha: string;
+                    /**
+                     * The finance house this lord reaches. One of the positive group 2, 5, 11 or the negative group 6, 8, 12.
+                     */
+                    house: number;
+                    /**
+                     * Strongest KP significator level at which this lord reaches this house, 1 to 4. Level 1 is a planet in the constellation of the occupant, 2 the occupant, 3 a planet in the constellation of the house owner, 4 the house owner. Strongest level per house wins, which is step 1 of the published grading rule the dasha routes already use.
+                     */
+                    level: number;
+                    /**
+                     * The KP letter for that level, on the standard A to D significator grading. A is the strongest connection.
+                     */
+                    grade: 'A' | 'B' | 'C' | 'D';
+                    /**
+                     * Which of the running levels this graha rules. Carries the fact that one lord holds more than one level without letting it count twice.
+                     */
+                    dashaLevels: Array<'mahadasha' | 'antardasha' | 'pratyantardasha'>;
+                }> | null;
+                /**
+                 * The natal basis of this area: whether the chart is wealthy AT ALL, as the four classical wealth and poverty verdicts dhana, daridra, lakshmi, dhanamalika, each with the evidence that decided it. A PROPERTY OF THE BIRTH CHART AND NOT OF THE DAY, so it is the same block on every date this native is ever read for, which is exactly why it is CONTEXT rather than a term: it deliberately does not enter score, verdict, tally or evaluated, above or here. Folding a constant into a per-day number would shift every day by the identical amount, carrying no information into the only comparison those numbers support, and it would break the published closed form that makes the top-level score reproducible by hand from grahas alone. Read it as the standing question the day is being read against. The verdicts are the same ones POST /yoga/detect and POST /birth-chart return for this chart, computed in the Lahiri natal frame rather than in the KP-Newcomb frame the significators above use. PRESENT AT EVERY LATITUDE, including above the polar circle: these verdicts need only whole-sign houses from the Lagna, so nothing about them depends on the cusps the KP members above lose there.
+                 */
+                natal: Array<{
+                    /**
+                     * Glossary id of the verdict, one of dhana, daridra, lakshmi, dhanamalika. Use it with GET /yoga/{id} for the full glossary entry, which carries the description and the classical result in every supported language. Canonical English, so it stays safe to switch on in code.
+                     */
+                    id: string;
+                    /**
+                     * Classical Sanskrit name of the combination. Canonical whatever the lang parameter says, exactly as the yoga endpoints return it.
+                     */
+                    name: string;
+                    /**
+                     * Which way a present verdict points, carried because three of the four are wealth combinations and Daridra is a poverty one, so present alone does not tell a client whether to read it as support or as pressure. Canonical English machine value.
+                     */
+                    quality: 'Positive' | 'Negative' | 'Both';
+                    /**
+                     * Whether the combination is on this chart. False means every rule in the family was evaluated and none held, which is a real answer rather than a missing one, and the evidence beside it names the full denominator.
+                     */
+                    present: boolean;
+                    /**
+                     * Why the verdict reads the way it does: every rule that matched, named by its own glossary id and its verse, with the exact condition it matched on, then the scope of the family. This is what makes the verdict checkable against a text rather than a label to be trusted, and it is also where the two excluded rules are declared: daridra-8 and daridra-9 rest on a single authority and are barred from deciding a verdict, though both still ship through GET /yoga/{id}. English in every language, like the per-graha stateSource, because it is provenance rather than display copy.
+                     */
+                    evidence: string;
+                }>;
+            };
+        };
+        /**
+         * How much of the transiting sky supports this native today: supportive grahas divided by grahas evaluated, as a percentage, rounded. HAND REPRODUCIBLE FROM THIS RESPONSE ALONE, with no weights to publish and none to defend. STEP 1, count the grahas whose state is one of favourable; the tally array has that count already. STEP 2, divide by evaluated and round. Worked example: 2 supportive out of 9 evaluated scores round(2 / 9 * 100) = 22. The other states (underdelivered, obstructed, void, aggravated, unfavourable) count for nothing, because each of them is the tradition saying the promised good was reduced, cancelled or emptied. WHY IT IS A COUNT AND NOT A SUM: the tradition does not add these limbs up. Phaladeepika XXVI.41 makes a high bindu count an OVERRIDE that turns even the 6th, 8th and 12th good, and XXVI.30 to XXVI.32 make aspect, dignity and combustion NULLIFIERS, so a weighted sum would be a different mathematical object and could not carry those citations. The GATES are classical, the COUNTING is the RoxyAPI convention, and this sentence is where we say which is which. HOW TO READ THE NUMBER: it runs low by construction and that is the correct answer rather than a defect. Nine bodies casting drishti means almost every transiting graha is aspected by something, and the sloka voids the result when it is, so most days land in the bottom half and a high score is rare and therefore meaningful. Read it as a rare-high scale, not as a mark out of 100: 22 is an ordinary day, not a failing one. And it measures SUPPORT, never OUTCOME. It says how much of the sky backs this native today, never whether the day is good for a particular matter, which depends on the matter being judged.
+         */
+        score: number;
+        /**
+         * The band the score falls in: "very-strong" at 75 and above, "strong" at 50 and above, "moderate" at 25 and above, "weak" below 25. The four WORDS are the shipped KP significator band words, reused so nothing new has to be translated. The EDGES are the RoxyAPI convention and are quartiles, because no authority bands a day and quartiles are the least arbitrary division of a percentage into four named steps. Read it with the same expectation the score carries: the gates cancel far more often than they deliver, so the lower bands are the common case.
+         */
+        verdict: 'very-strong' | 'strong' | 'moderate' | 'weak';
+        /**
+         * The full per-state count, always all six states including the zeros. This is the WHOLE input to the score, which is what makes the number reproducible by hand, and it is also what lets a caller who reads the states differently compute their own figure from this response instead of asking for a second one.
+         */
+        tally: Array<{
+            /**
+             * One of the six outcomes a transiting graha can reach.
+             */
+            state: 'favourable' | 'underdelivered' | 'obstructed' | 'void' | 'aggravated' | 'unfavourable';
+            /**
+             * How many of the evaluated grahas reached that state.
+             */
+            count: number;
+        }>;
+        /**
+         * How many grahas were put through the gates, which is the denominator of the score. Rahu and Ketu are included: they skip the bindu gate because they have no Bhinnashtakavarga, and a skipped gate is not a failed one, so they still reach a state through the other three.
+         */
+        evaluated: number;
+        /**
+         * Components this request could not supply, named rather than silently defaulted. Empty on an ordinary reading. A polar chart degrades through here instead of failing, so the caller still gets the gochara, the panchanga, the dasha and the natal basis of the finance area, and is told exactly what is missing.
+         */
+        degraded: Array<{
+            /**
+             * Which part of the reading this location or date could not supply. "areas.finance.score" names the KP net by the member it is read through: the finance area itself always ships and its natal block is always populated, and it is the six netted members that are null.
+             */
+            component: 'dayStart' | 'dayEnd' | 'areas.finance.score';
+            /**
+             * Why it could not: "sun-does-not-rise" for a day with no sunrise at these coordinates, "polar-latitude" above 66.56 degrees where the Placidus cusps have no solution.
+             */
+            reason: 'sun-does-not-rise' | 'polar-latitude';
+        }>;
+        /**
+         * Significations of each of the twelve bhavas (houses), keyed by house number 1 to 12, as short keywords. Bhava 1 is the Lagna (self, body, vitality), 2 wealth and speech, 4 home and mother, 7 marriage and partnership, 10 career and status, 11 gains. Use it to label the house numbers returned elsewhere in the response: a Vimshottari dasha period signifying houses 2, 7 and 8, or a KP significator carrying houses 11 and 6, becomes readable text without a separate lookup call. Returned once per response rather than repeated per period, and localized by the lang query parameter alongside every other interpretation field.
+         */
+        houseThemes: {
+            [key: string]: Array<string>;
+        };
+        /**
+         * Which signification vocabulary produced the houseThemes keywords in this response, echoing the focus query parameter. Always present, and "general" when the parameter was omitted. Read it to label a rendered house legend, or to tell two cached responses apart when only one asked for the finance lens.
+         */
+        focus: 'general' | 'finance';
+    };
+};
+
+export type PostVedicAstrologyDailyResponse = PostVedicAstrologyDailyResponses[keyof PostVedicAstrologyDailyResponses];
 
 export type PostVedicAstrologyPanchangBasicData = {
     body?: {
@@ -27088,6 +27847,10 @@ export type PostForecastSolarReturnResponses = {
                  */
                 longitude: number;
                 /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
+                /**
                  * Chart sect used for the calculation. Day (diurnal) when the Sun is above the horizon, night (nocturnal) when below. Day charts use Ascendant plus Moon minus Sun, night charts use Ascendant plus Sun minus Moon.
                  */
                 sect: 'day' | 'night';
@@ -27108,6 +27871,10 @@ export type PostForecastSolarReturnResponses = {
                  * Absolute ecliptic longitude of the Vertex (0-360).
                  */
                 longitude: number;
+                /**
+                 * House containing this point, resolved against the same cusps as `planets[].house` and using the requested house system. Read this field rather than inferring a house from the sign: the two disagree whenever a house spans more than one sign, which is most of the time outside Whole Sign.
+                 */
+                house: number;
             };
         };
     };
