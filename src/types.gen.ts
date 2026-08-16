@@ -12008,7 +12008,7 @@ export type PostAstrologyCompositeChartResponses = {
             };
         }>;
         /**
-         * Composite house cusps. Each house represents shared life areas in the relationship.
+         * Composite house cusps, each the midpoint of the two natal cusps. Each house represents shared life areas in the relationship.
          */
         compositeHouses: Array<{
             /**
@@ -30737,11 +30737,15 @@ export type PostHumanDesignVariablesResponses = {
              */
             activation: {
                 /**
-                 * Activating body whose substructure feeds this arrow. Determination and Motivation come from the Sun, Environment and Perspective from the North Node.
+                 * Activating body whose substructure feeds this arrow. Determination and Motivation come from the Sun, Environment and Perspective from the North Node. Always English, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on. Use planetLocalized for anything a reader sees.
                  */
                 planet: string;
                 /**
-                 * Chart side of the activation. Determination and Environment come from the design side, Perspective and Motivation from the personality side.
+                 * Activating body name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                planetLocalized?: string;
+                /**
+                 * Chart side of the activation. Determination and Environment come from the design side, Perspective and Motivation from the personality side. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
                  */
                 side: string;
             };

@@ -356,7 +356,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Composite Chart - Midpoint relationship chart with interpretations
      *
-     * Generate a composite chart by calculating midpoints between two natal charts. The composite chart represents the relationship as a single entity, showing its core identity, emotional bond, communication style, and growth direction. Returns composite planetary positions, house cusps, Ascendant, Midheaven, aspects, and relationship interpretation. Composite chart API, midpoint chart calculator, relationship astrology, couple chart analysis.
+     * Generate a composite chart by calculating midpoints between two natal charts. The composite chart represents the relationship as a single entity, showing its core identity, emotional bond, communication style, and growth direction. Uses the midpoint method: planets, angles and house cusps are each the midpoint of the two natal values, so the Ascendant always sits on the first cusp. Returns composite planetary positions, house cusps, Ascendant, Midheaven, aspects, and relationship interpretation. Composite chart API, midpoint chart calculator, relationship astrology, couple chart analysis.
      */
     public generateCompositeChart<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyCompositeChartData, ThrowOnError>): RequestResult<PostAstrologyCompositeChartResponses, PostAstrologyCompositeChartErrors, ThrowOnError> {
         return (options?.client ?? this.client).post<PostAstrologyCompositeChartResponses, PostAstrologyCompositeChartErrors, ThrowOnError>({
