@@ -133,6 +133,11 @@ const { data } = await roxy.astrology.calculateAspects({
   },
 });
 
+// Monthly Aspects - Tropical aspect calendar for an entire month
+const { data } = await roxy.astrology.getMonthlyTropicalAspects({
+  body: { year: 2026, month: 3, timezone: -5, nodeType: 'true' },
+});
+
 // Detect aspect patterns - Grand Trine, Kite, T-Square, Grand Cross, Yod, Mystic Rectangle, Stellium
 const { data } = await roxy.astrology.detectAspectPatterns({
   query: { strictOrbs: 'false', include: '' },
@@ -153,6 +158,11 @@ const { data } = await roxy.astrology.calculateTransits({
     timezone: 0,
     nodeType: 'true',
   },
+});
+
+// Monthly Transits - Tropical sign ingresses for an entire month
+const { data } = await roxy.astrology.getMonthlyTropicalTransits({
+  body: { year: 2026, month: 3, timezone: -5, nodeType: 'true' },
 });
 
 // Transit Aspects - Detailed transit-to-natal aspect analysis with interpretations
