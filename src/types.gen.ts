@@ -7030,7 +7030,7 @@ export type HeliacalRequest = {
 
 export type BasicCard = {
     /**
-     * Unique card identifier in kebab-case (e.g. fool, ace-of-cups, queen-of-swords).
+     * Unique card identifier in kebab-case, with no leading article on Major Arcana (e.g. fool, star, ace-of-cups, queen-of-swords). This is the canonical form, whatever spelling was requested.
      */
     id: string;
     /**
@@ -7057,7 +7057,7 @@ export type BasicCard = {
 
 export type Card = {
     /**
-     * Unique card identifier in kebab-case (e.g. fool, ace-of-cups, queen-of-swords).
+     * Unique card identifier in kebab-case, with no leading article on Major Arcana (e.g. fool, star, ace-of-cups, queen-of-swords). This is the canonical form, whatever spelling was requested.
      */
     id: string;
     /**
@@ -8174,7 +8174,7 @@ export type GetAstrologyPlanetMeaningsByIdData = {
     body?: never;
     path: {
         /**
-         * Planet ID (lowercase, e.g., sun, moon, mercury) or display name (case-insensitive, e.g., Sun, MOON).
+         * Planet ID (lowercase, e.g., sun, moon, mercury) or display name (case-insensitive, e.g., Sun, MOON). Spaces, hyphens and underscores are interchangeable, so the two lunar nodes answer to north-node and south-node as well as to their ids north node and south node, and Black Moon Lilith answers to black-moon-lilith as well as to lilith.
          */
         id: string;
     };
@@ -11381,6 +11381,402 @@ export type PostAstrologyTransitAspectsResponses = {
 };
 
 export type PostAstrologyTransitAspectsResponse = PostAstrologyTransitAspectsResponses[keyof PostAstrologyTransitAspectsResponses];
+
+export type PostAstrologyParallelsMonthlyData = {
+    body?: {
+        /**
+         * Year for the declination calendar (1900-2100). Defaults to the current year (UTC).
+         */
+        year?: number;
+        /**
+         * Month number (1-12). Defaults to the current month (UTC).
+         */
+        month?: number;
+        /**
+         * Timezone offset from UTC in hours. Event dates and times are reported in this zone, which is what makes a published calendar read correctly for its audience. Defaults to 0 (UTC).
+         */
+        timezone?: number | string;
+        /**
+         * How far from exact still counts, in degrees. The traditional orb for a declination contact is tighter than for a zodiacal aspect because declination changes slowly. Defaults to 1.5.
+         */
+        orb?: number;
+        /**
+         * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the North and South Node. True is the osculating node and the default, because it is what most Western chart software reports; mean is the smoothed node preferred by several evolutionary schools, so pass "mean" to match one. Nothing else in the chart changes, and the two agree on the sign except when the node sits within about 1.8 degrees of a cusp. Defaults to "true".
+         */
+        nodeType?: 'mean' | 'true';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/parallels/monthly';
+};
+
+export type PostAstrologyParallelsMonthlyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyParallelsMonthlyError = PostAstrologyParallelsMonthlyErrors[keyof PostAstrologyParallelsMonthlyErrors];
+
+export type PostAstrologyParallelsMonthlyResponses = {
+    /**
+     * Monthly declination calendar calculated successfully
+     */
+    200: {
+        /**
+         * Year of the calendar. Echoes the year requested, or the current UTC year when it was omitted.
+         */
+        year: number;
+        /**
+         * Month of the calendar. Echoes the month requested, or the current UTC month when it was omitted.
+         */
+        month: number;
+        /**
+         * Timezone the event dates and times are reported in. Echoes the request.
+         */
+        timezone: number;
+        /**
+         * Orb in degrees that was applied. Echoes the request.
+         */
+        orb: number;
+        /**
+         * Every declination contact in the month, in chronological order across all body pairs.
+         */
+        events: Array<{
+            /**
+             * First body in the contact. Always canonical English whatever the lang parameter says, so it stays safe to compare against in code. Use planet1Localized for anything a reader sees.
+             */
+            planet1: string;
+            /**
+             * First body in the requested language. Present only when lang is supplied.
+             */
+            planet1Localized?: string;
+            /**
+             * Second body in the contact. Always canonical English.
+             */
+            planet2: string;
+            /**
+             * Second body in the requested language. Present only when lang is supplied.
+             */
+            planet2Localized?: string;
+            /**
+             * parallel means both bodies stand at the same declination, the same distance north or south of the celestial equator, and reads much like a conjunction. contraparallel means equal and opposite declinations, one as far north as the other is south, and reads much like an opposition. Neither depends on how far apart the two bodies are along the zodiac, which is what makes them worth tracking alongside ordinary aspects.
+             */
+            type: 'parallel' | 'contraparallel';
+            /**
+             * Date the contact is closest to exact, in the requested timezone (YYYY-MM-DD).
+             */
+            date: string;
+            /**
+             * Time the contact is closest to exact, in the requested timezone (HH:MM).
+             */
+            time: string;
+            /**
+             * Combined timestamp of closest approach, in the requested timezone.
+             */
+            datetime: string;
+            /**
+             * Distance from exact in degrees at the reported instant. Effectively zero for a contact that perfects inside the month, and larger only where the pair turns before reaching exact.
+             */
+            orb: number;
+            /**
+             * Geocentric declination of the first body at the reported instant, in degrees. Positive is north of the celestial equator, negative south.
+             */
+            declination1: number;
+            /**
+             * Geocentric declination of the second body at the reported instant, in degrees.
+             */
+            declination2: number;
+        }>;
+    };
+};
+
+export type PostAstrologyParallelsMonthlyResponse = PostAstrologyParallelsMonthlyResponses[keyof PostAstrologyParallelsMonthlyResponses];
+
+export type PostAstrologyEclipticCrossingsData = {
+    body?: {
+        /**
+         * Year to scan for node passages (1900-2100).
+         */
+        year: number;
+        /**
+         * Timezone offset from UTC in hours. Crossing dates and times are reported in this zone. Defaults to 0 (UTC).
+         */
+        timezone?: number | string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+    };
+    url: '/astrology/ecliptic-crossings';
+};
+
+export type PostAstrologyEclipticCrossingsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAstrologyEclipticCrossingsError = PostAstrologyEclipticCrossingsErrors[keyof PostAstrologyEclipticCrossingsErrors];
+
+export type PostAstrologyEclipticCrossingsResponses = {
+    /**
+     * Node passages calculated successfully
+     */
+    200: {
+        /**
+         * Year that was scanned. Echoes the request.
+         */
+        year: number;
+        /**
+         * Timezone the dates and times are reported in. Echoes the request.
+         */
+        timezone: number;
+        /**
+         * Every node passage in the year, in chronological order across all bodies. The fast bodies dominate: a slow body can go years or decades between node passages, so an absent planet means it did not cross that year rather than that it was not checked.
+         */
+        events: Array<{
+            /**
+             * Body making the crossing. Always canonical English whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
+             */
+            planet: string;
+            /**
+             * Body name in the requested language. Present only when lang is supplied.
+             */
+            planetLocalized?: string;
+            /**
+             * ascending is the crossing from south of the ecliptic to north, at the body north node. descending is the reverse, at its south node.
+             */
+            direction: 'ascending' | 'descending';
+            /**
+             * Date of the crossing in the requested timezone (YYYY-MM-DD).
+             */
+            date: string;
+            /**
+             * Time of the crossing in the requested timezone (HH:MM).
+             */
+            time: string;
+            /**
+             * Combined crossing timestamp in the requested timezone.
+             */
+            datetime: string;
+            /**
+             * Tropical ecliptic longitude of the body at the crossing, in degrees. This is the only value in the response that depends on the zodiac frame.
+             */
+            longitude: number;
+            /**
+             * Tropical sign the body occupies at the crossing. Canonical English.
+             */
+            sign: string;
+            /**
+             * Sign in the requested language. Present only when lang is supplied.
+             */
+            signLocalized?: string;
+        }>;
+    };
+};
+
+export type PostAstrologyEclipticCrossingsResponse = PostAstrologyEclipticCrossingsResponses[keyof PostAstrologyEclipticCrossingsResponses];
 
 export type PostAstrologySolarReturnData = {
     body?: {
@@ -19600,11 +19996,11 @@ export type PostVedicAstrologyDailyResponses = {
          */
         areas: {
             /**
-             * The finance area: the positive house group 2, 5, 11 netted against the negative group 6, 8, 12, read off the lords of the running dasha, bhukti and antara, because that is the KP rule for when a matter fructifies, plus the natal basis the day is read against. ALWAYS AN OBJECT. Above latitude 66.56 the six netted members are null, because the Placidus cusps behind the significators have no solution there, while natal is still populated because it is a property of the birth chart and needs no cusps; the reading also still carries its gochara, panchanga and dasha and names the omission in degraded. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and the 6th house is the live disagreement, since some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship.
+             * The finance area: the positive house group 2, 5, 11 netted against the negative group 6, 8, 12, read off the lords of the running dasha, bhukti and antara, because that is the KP rule for when a matter fructifies, plus the natal basis the day is read against. ALWAYS AN OBJECT. Above latitude 66.56 the six netted members are null, because the Placidus cusps behind the significators have no solution there, while natal is still populated because it is a property of the birth chart and needs no cusps; the reading also still carries its gochara, panchanga and dasha and names the omission in degraded. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and TWO houses are live disagreements rather than one. The 6th: some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. The 5th: it is named as a speculative GAIN house in the same KP sources that elsewhere call it a negation house, reading it as the 12th from the 6th and therefore loss of earning capacity, and both readings appear in one publication. The 1st is treated as a negation house by some authors on the same logic, as the 12th from the 2nd, and is not on either side here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship.
              */
             finance: {
                 /**
-                 * Share of the running lords six-house connections that land on the positive group, 0 to 100, rounded. A COUNT, so positive and negative below reproduce it in one division: round(positive / (positive + negative) * 100). Zero when the running lords reach none of the six houses, which is an ABSENCE of connection rather than a negative verdict. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and the 6th house is the live disagreement, since some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship.
+                 * Share of the running lords six-house connections that land on the positive group, 0 to 100, rounded. A COUNT, so positive and negative below reproduce it in one division: round(positive / (positive + negative) * 100). Zero when the running lords reach none of the six houses, which is an ABSENCE of connection rather than a negative verdict. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and TWO houses are live disagreements rather than one. The 6th: some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. The 5th: it is named as a speculative GAIN house in the same KP sources that elsewhere call it a negation house, reading it as the 12th from the 6th and therefore loss of earning capacity, and both readings appear in one publication. The 1st is treated as a negation house by some authors on the same logic, as the 12th from the 2nd, and is not on either side here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship.
                  */
                 score: number | null;
                 /**
@@ -36235,7 +36631,7 @@ export type GetTarotCardsByIdData = {
     body?: never;
     path: {
         /**
-         * Unique card identifier in kebab-case. Major arcana: "fool", "magician", "death", etc. Minor arcana: "ace-of-cups", "seven-of-wands", "queen-of-swords", "king-of-pentacles", etc.
+         * Card identifier. Major arcana: "fool", "magician", "death". Minor arcana: "ace-of-cups", "seven-of-wands", "queen-of-swords", "king-of-pentacles". Casing and separators are flexible, so "Fool" and "ACE_OF_CUPS" both resolve, and a leading definite article is optional, so "the-star" resolves to "star". The canonical form, and the one every response echoes, is kebab-case with no article.
          */
         id: string;
     };

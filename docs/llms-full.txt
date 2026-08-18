@@ -185,6 +185,20 @@ const { data } = await roxy.astrology.calculateTransitAspects({
   },
 });
 
+// Monthly Parallels - Declination contacts for an entire month
+const { data } = await roxy.astrology.getMonthlyDeclinationParallels({
+  body: {
+    year: 2026,
+    month: 3,
+    timezone: -5,
+    orb: 1.5,
+    nodeType: 'true',
+  },
+});
+
+// Ecliptic Crossings - Node passages for a whole year
+const { data } = await roxy.astrology.getPlanetaryNodePassages({ body: { year: 2026, timezone: -5 } });
+
 // Solar Return Chart - Annual birthday forecast with relocated chart
 const { data } = await roxy.astrology.generateSolarReturn({
   body: {
