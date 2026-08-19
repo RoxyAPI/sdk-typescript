@@ -9685,9 +9685,13 @@ export type PostAstrologySynastryResponses = {
                  */
                 degree: number;
                 /**
-                 * House this planet occupies in the person 1 chart (1-12).
+                 * House this planet occupies in the person 1 chart (1-12). This is the placement in this person OWN chart. For the house overlay a synastry reading is built on, read houseInOtherChart.
                  */
                 house: number;
+                /**
+                 * Which of person 2 houses this planet of person 1 falls into (1-12), counted on that person cusps in the same house system. This is the house OVERLAY, the half of synastry the inter-aspects do not cover: an aspect says two bodies are in relationship, an overlay says which area of the other person life this body lands in. Both people get their own overlay, so person 2 planets carry the reverse reading.
+                 */
+                houseInOtherChart: number;
                 /**
                  * True when the planet is retrograde at this moment.
                  */
@@ -9764,9 +9768,13 @@ export type PostAstrologySynastryResponses = {
                  */
                 degree: number;
                 /**
-                 * House this planet occupies in the person 2 chart (1-12).
+                 * House this planet occupies in the person 2 chart (1-12). This is the placement in this person OWN chart. For the house overlay a synastry reading is built on, read houseInOtherChart.
                  */
                 house: number;
+                /**
+                 * Which of person 1 houses this planet of person 2 falls into (1-12), counted on that person cusps in the same house system. This is the house OVERLAY, the half of synastry the inter-aspects do not cover: an aspect says two bodies are in relationship, an overlay says which area of the other person life this body lands in. Both people get their own overlay, so person 1 planets carry the reverse reading.
+                 */
+                houseInOtherChart: number;
                 /**
                  * True when the planet is retrograde at this moment.
                  */
@@ -38264,9 +38272,9 @@ export type PostBiorhythmReadingResponses = {
                  */
                 rawValue: number;
                 /**
-                 * Current phase of the cycle. One of: peak, high, rising, critical_ascending, critical_descending, falling, low, trough.
+                 * Current phase of the cycle. One of: peak, high, rising, critical_ascending, critical_descending, falling, low, trough. Canonical English whatever the lang parameter says, so it stays safe to compare against in code; phaseLabel carries the reader-facing form and IS translated.
                  */
-                phase: string;
+                phase: 'peak' | 'high' | 'rising' | 'critical_ascending' | 'critical_descending' | 'falling' | 'low' | 'trough';
                 /**
                  * Human-readable phase name for display in UIs, dashboards, and reports.
                  */
@@ -38288,9 +38296,9 @@ export type PostBiorhythmReadingResponses = {
                  */
                 daysUntilCritical: number;
                 /**
-                 * Short-term direction of the cycle. One of: rising, falling, peaking, bottoming.
+                 * Short-term direction of the cycle, which is its SLOPE rather than its band, so it moves independently of phase. One of: rising, falling, peaking, bottoming. Canonical English, like phase.
                  */
-                trend: string;
+                trend: 'rising' | 'falling' | 'peaking' | 'bottoming';
                 /**
                  * Editorial 2-3 sentence reading specific to this cycle at its current phase position.
                  */
@@ -38302,9 +38310,9 @@ export type PostBiorhythmReadingResponses = {
          */
         energyRating: number;
         /**
-         * Summary phase label. One of: high_energy, mixed, recovery, critical.
+         * Summary phase across every cycle for the day. One of: high_energy, mixed, recovery, critical.
          */
-        overallPhase: string;
+        overallPhase: 'high_energy' | 'mixed' | 'recovery' | 'critical';
         /**
          * Editorial 3-5 sentence reading combining all cycle states into a coherent daily assessment.
          */
@@ -38320,15 +38328,15 @@ export type PostBiorhythmReadingResponses = {
             /**
              * Which cycle is at or near zero crossing.
              */
-            cycle: string;
+            cycle: 'physical' | 'emotional' | 'intellectual' | 'intuitive' | 'aesthetic' | 'awareness' | 'spiritual' | 'passion' | 'mastery' | 'wisdom';
             /**
-             * Alert type. zero_crossing when a cycle crosses zero, approaching_critical when within 1 day of zero.
+             * Alert type. One of: zero_crossing. Raised once for the whole critical band, when the cycle sits within 9 points of zero in either direction.
              */
-            type: string;
+            type: 'zero_crossing';
             /**
              * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
              */
-            direction: string;
+            direction: 'ascending' | 'descending';
             /**
              * Specific advisory text for this critical alert.
              */
@@ -38716,9 +38724,9 @@ export type PostBiorhythmCriticalDaysResponses = {
              */
             date: string;
             /**
-             * Which primary cycle crosses zero on this date.
+             * Which primary cycle crosses zero on this date. One of: physical, emotional, intellectual. Only the three primary cycles are scanned; the secondary and composite cycles are not.
              */
-            cycle: string;
+            cycle: 'physical' | 'emotional' | 'intellectual';
             /**
              * Cycle period in days.
              */
@@ -38726,11 +38734,11 @@ export type PostBiorhythmCriticalDaysResponses = {
             /**
              * Whether the cycle is rising through zero (ascending) or falling through zero (descending).
              */
-            direction: string;
+            direction: 'ascending' | 'descending';
             /**
-             * How many primary cycles are critical on this date. single, double, or triple.
+             * How many primary cycles are critical on this date. One of: single, double, triple.
              */
-            severity: string;
+            severity: 'single' | 'double' | 'triple';
             /**
              * Advisory text explaining the significance of this critical day and recommended precautions.
              */
@@ -38933,9 +38941,9 @@ export type PostBiorhythmCompatibilityResponses = {
                  */
                 alignment: number;
                 /**
-                 * Alignment phase. One of: in_sync, complementary, neutral, opposing.
+                 * How the two people's cycles sit against each other. One of: in_sync, complementary, neutral, opposing. This is a PAIR alignment and shares no values with the single-person cycle phase.
                  */
-                phase: string;
+                phase: 'in_sync' | 'complementary' | 'neutral' | 'opposing';
                 /**
                  * Human-readable description of how this cycle alignment affects the relationship.
                  */
@@ -39127,7 +39135,7 @@ export type PostBiorhythmPhasesResponses = {
                 /**
                  * Current phase identifier.
                  */
-                phase: string;
+                phase: 'peak' | 'high' | 'rising' | 'critical_ascending' | 'critical_descending' | 'falling' | 'low' | 'trough';
                 /**
                  * Human-readable phase label.
                  */
@@ -39147,7 +39155,7 @@ export type PostBiorhythmPhasesResponses = {
                 /**
                  * Short-term direction: rising, falling, peaking, or bottoming.
                  */
-                trend: string;
+                trend: 'rising' | 'falling' | 'peaking' | 'bottoming';
             };
         };
         /**
@@ -39302,14 +39310,14 @@ export type PostBiorhythmDailyResponses = {
          */
         energyRating: number;
         /**
-         * Summary phase. One of: high_energy, mixed, recovery, critical.
+         * Summary phase across every cycle for the day. One of: high_energy, mixed, recovery, critical.
          */
-        overallPhase: string;
+        overallPhase: 'high_energy' | 'mixed' | 'recovery' | 'critical';
         spotlight: {
             /**
-             * Which primary cycle is featured as the daily spotlight.
+             * Which primary cycle is featured as the daily spotlight. One of: physical, emotional, intellectual.
              */
-            cycle: string;
+            cycle: 'physical' | 'emotional' | 'intellectual';
             /**
              * Current value of the spotlight cycle (-100 to 100).
              */
@@ -39317,7 +39325,7 @@ export type PostBiorhythmDailyResponses = {
             /**
              * Current phase of the spotlight cycle.
              */
-            phase: string;
+            phase: 'peak' | 'high' | 'rising' | 'critical_ascending' | 'critical_descending' | 'falling' | 'low' | 'trough';
             /**
              * Personalized message about the spotlight cycle and what it means for today.
              */
@@ -45143,7 +45151,7 @@ export type GetUsageResponses = {
          */
         plan: string;
         /**
-         * Billable requests counted against the current calendar month. Read from the same counter the rate limiter enforces on, so it never reports a rosier number than the limit that will 429 you. Cached responses still count.
+         * Billable requests counted against the current calendar month. The quota window is the UTC calendar month and resets on the 1st at 12:00 AM UTC, never on your renewal date, so an annual plan refills every month and a plan bought mid month still refills on the 1st. Read from the same counter the rate limiter enforces on, so it never reports a rosier number than the limit that will 429 you. Cached responses still count.
          */
         usedThisMonth: number;
         /**
@@ -45151,7 +45159,7 @@ export type GetUsageResponses = {
          */
         requestsPerMonth: number;
         /**
-         * Requests left before the monthly allowance is exhausted, floored at zero. Equal to requestsPerMonth minus usedThisMonth.
+         * Requests left before the monthly allowance is exhausted, floored at zero. Equal to requestsPerMonth minus usedThisMonth. Refills at the calendar month rollover, whose exact instant every API response carries as a Unix timestamp in the X-RateLimit-Reset header.
          */
         remainingThisMonth: number;
         /**
@@ -45163,7 +45171,7 @@ export type GetUsageResponses = {
          */
         status: string;
         /**
-         * ISO 8601 timestamp when the current billing period ends. A renewal extends this date in place. API access survives a cancelled or suspended status until this moment passes.
+         * ISO 8601 timestamp when the current billing period ends. A renewal extends this date in place. API access survives a cancelled or suspended status until this moment passes. This is a BILLING date, not a quota date: the monthly allowance resets on the 1st of each month independently of it.
          */
         endDate: string;
     };
