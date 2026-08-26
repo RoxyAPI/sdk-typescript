@@ -15,7 +15,7 @@ TypeScript SDK for astrology, Vedic astrology, numerology, tarot, and more.
 
 One API key. Fully typed. Verified against NASA JPL Horizons.
 
-The fastest way to add natal charts, daily horoscopes, synastry, Vedic kundli, tarot spreads, numerology, human design bodygraphs, and transit forecasts to Node.js apps, backends, and AI agents. 12+ domains behind a single [Roxy](https://roxyapi.com) subscription, interpretations in eight languages.
+The fastest way to add natal charts, daily horoscopes, synastry, Vedic kundli, tarot spreads, numerology, human design bodygraphs, and transit forecasts to Node.js apps, backends, and AI agents. 14+ domains behind a single [Roxy](https://roxyapi.com) subscription, interpretations in 10+ languages.
 
 ## Install
 
@@ -261,7 +261,54 @@ const { data: timeline } = await roxy.forecast.generateTimeline({
 // timeline.events[0].date, timeline.events[0].domain, timeline.events[0].description, timeline.events[0].significance
 ```
 
-### 7. Biorhythm API (daily check-in, forecast, compatibility)
+### 7. Chinese astrology API (BaZi four pillars, zodiac sign)
+
+BaZi (Four Pillars of Destiny), the twelve-animal zodiac, and the lunisolar calendar with its almanac. The school splits that make two calculators disagree are typed request parameters with named defaults, echoed back in a `conventions` object on every response, so a chart can be reproduced rather than guessed at. The zodiac routes answer the high-volume consumer questions; BaZi and the almanac are where an app goes deeper.
+
+```typescript
+// BaZi Four Pillars. The anchor call: the rest of the domain reads off these four pillars.
+// `timezone` takes the IANA name, resolved to the DST-correct offset for the birth date.
+const { data: bazi } = await roxy.chineseAstrology.generateBaziChart({
+  body: { date: '1990-07-04', time: '10:12:00', timezone: 'America/New_York' },
+});
+// bazi.pillars[n].position ('year' | 'month' | 'day' | 'hour'), .stem.element, .branch.animal
+// bazi.pillars[n].tenGod.name, .hiddenStems, .naYin
+// bazi.dayMaster.element, bazi.zodiacAnimal, bazi.fiveElements, bazi.conventions, bazi.summary
+
+// Chinese zodiac sign. Defaults `yearBoundary` to 'lunar-new-year', the folk rule people mean
+// when they say which animal they are. Pass 'li-chun' to match the classical BaZi boundary.
+const { data: sign } = await roxy.chineseAstrology.calculateZodiacAnimal({
+  body: { date: '1990-07-04' },
+});
+// sign.animal.name ('Horse'), sign.animal.element ('Fire'), sign.animal.polarity
+// sign.element is the YEAR STEM element ('Metal'), not the element of the animal
+// sign.yearPillar, sign.interpretation
+```
+
+### 8. Feng shui API (Kua number, flying star chart)
+
+Kua numbers with the full Eight Mansions map ranked best to worst, Xuan Kong flying star natal charts for any of the nine periods and 24 mountains, annual and monthly star plates, and the four annual afflictions with exact degree spans. Chinese years resolve at Li Chun, computed astronomically rather than assumed, so the annual charts change over on the real boundary.
+
+```typescript
+// Kua number: one birth date and a gender gives the personal directions everything else reads off.
+const { data: kua } = await roxy.fengShui.calculateKuaNumber({
+  body: { date: '1990-07-04', gender: 'female' },
+});
+// kua.kua (8), kua.group ('east' | 'west'), kua.trigram.english ('Mountain')
+// kua.sectors[n].direction, .starName, .nature ('auspicious' | 'inauspicious'), .rank, .domain
+
+// Flying star natal chart. Period plus facing gives the nine palaces with base, mountain
+// and water stars. Send `facing` (a mountain id like 'bing' or a compass label like 'S2')
+// or `facingDegrees`, not neither.
+const { data: chart } = await roxy.fengShui.generateFlyingStarChart({
+  body: { period: 9, facing: 'S2' },
+});
+// chart.facing.label ('S2'), chart.sitting.label, chart.structure.name ('Double Star at Sitting')
+// chart.palaces[n].palace, .base, .mountain, .water, .reading
+// chart.mountainCenterStar, chart.waterCenterStar, chart.straddling
+```
+
+### 9. Biorhythm API (daily check-in, forecast, compatibility)
 
 Zero competition domain. Steady search volume with the top Google result being a static calculator page. Pure land-grab for wellness, productivity, sports, and couples apps.
 
@@ -277,7 +324,7 @@ const { data: forecast } = await roxy.biorhythm.getForecast({
 });
 ```
 
-### 8. I Ching API (daily hexagram, coin cast, 64-hexagram catalog)
+### 10. I Ching API (daily hexagram, coin cast, 64-hexagram catalog)
 
 Meditation apps, decision-making tools, and wisdom chatbots. `i ching API` and `hexagram API` are the keywords.
 
@@ -291,7 +338,7 @@ const { data: hexagrams } = await roxy.iching.listHexagrams({});
 // hexagrams.hexagrams has 64 entries
 ```
 
-### 9. Crystals API (by zodiac, by chakra, birthstone)
+### 11. Crystals API (by zodiac, by chakra, birthstone)
 
 Crystal retail and metaphysical shops use these to build "crystals for [sign]" and "[chakra] chakra stones" pages.
 
@@ -307,7 +354,7 @@ const { data: byChakra } = await roxy.crystals.getCrystalsByChakra({ path: { cha
 const { data: birthstone } = await roxy.crystals.getBirthstones({ path: { month: 4 } });
 ```
 
-### 10. Dream interpretation API (symbol dictionary, search)
+### 12. Dream interpretation API (symbol dictionary, search)
 
 Thousands of dream symbols. `dream meaning` is among the highest-volume spiritual searches on Google. Journal apps, AI therapy chatbots, and self-discovery products are the buyers.
 
@@ -321,7 +368,7 @@ const { data: results } = await roxy.dreams.searchDreamSymbols({ query: { q: 'fl
 // results.symbols is an array of matching symbols
 ```
 
-### 11. Angel Numbers API (1111, 222, 333 meanings plus universal lookup)
+### 13. Angel Numbers API (1111, 222, 333 meanings plus universal lookup)
 
 Gen Z spiritual-tok fuel. `111 meaning`, `222 meaning`, `333 angel number` are evergreen viral queries with massive shareability.
 
@@ -383,7 +430,7 @@ const roxy = new Roxy({ client });
 
 ## Multi-language responses
 
-Interpretations and editorial text are available in eight languages: English (`en`), Turkish (`tr`), German (`de`), Spanish (`es`), French (`fr`), Hindi (`hi`), Portuguese (`pt`), Russian (`ru`). Pass `query: { lang }` on any supported endpoint:
+Interpretations and editorial text are available in 10 languages: English (`en`), Turkish (`tr`), German (`de`), Spanish (`es`), French (`fr`), Hindi (`hi`), Portuguese (`pt`), Russian (`ru`), Chinese Simplified (`zh-Hans`), Chinese Traditional (`zh-Hant`). Pass `query: { lang }` on any supported endpoint:
 
 ```typescript
 const { data } = await roxy.tarot.getDailyCard({
@@ -392,7 +439,7 @@ const { data } = await roxy.tarot.getDailyCard({
 });
 ```
 
-Supported: `astrology`, `vedicAstrology`, `numerology`, `tarot`, `biorhythm`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`. Untranslated fields fall back to English.
+Supported: `astrology`, `vedicAstrology`, `forecast`, `humanDesign`, `chineseAstrology`, `fengShui`, `numerology`, `tarot`, `biorhythm`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`. The two Chinese scripts (`zh-Hans`, `zh-Hant`) currently ship on Chinese astrology and feng shui; every other domain answers those codes in English per field. Untranslated fields fall back to English.
 
 ## Error handling
 

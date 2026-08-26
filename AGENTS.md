@@ -1,6 +1,6 @@
 # @roxyapi/sdk - Agent Guide
 
-TypeScript SDK for RoxyAPI. 12+ domains (Western astrology, Vedic astrology, numerology, tarot, human design, forecast, biorhythm, I Ching, crystals, dreams, angel numbers, location) plus utility namespaces (usage, languages). One API key, fully typed, zero runtime dependencies.
+TypeScript SDK for RoxyAPI. 14+ domains (Western astrology, Vedic astrology, forecast, human design, Chinese astrology, feng shui, numerology, tarot, biorhythm, I Ching, crystals, dreams, angel numbers, location) plus utility namespaces (usage, languages). One API key, fully typed, zero runtime dependencies.
 
 > Before writing any code with this SDK, read `docs/llms-full.txt` in this package for the complete method reference with examples.
 
@@ -59,7 +59,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.languages` | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
-**Total:** 160+ endpoints across 12+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
+**Total:** 209+ endpoints across 14+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
 
 ## Quality guidelines for agents
 
@@ -122,7 +122,7 @@ await roxy.numerology.calculateLifePath({
 });
 ```
 
-Supported: `astrology`, `vedicAstrology`, `numerology`, `tarot`, `biorhythm`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`, `languages`. To list supported codes at runtime, call `roxy.languages.listLanguages()`.
+Supported: `astrology`, `vedicAstrology`, `forecast`, `humanDesign`, `chineseAstrology`, `fengShui`, `numerology`, `tarot`, `biorhythm`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`, `languages`. The two Chinese scripts (`zh-Hans`, `zh-Hant`) currently ship on Chinese astrology and feng shui; every other domain answers those codes in English per field. To list supported codes at runtime, call `roxy.languages.listLanguages()`.
 
 ### Error handling
 
@@ -153,7 +153,7 @@ console.log(data.sign, data.overview);
 
 ## Common tasks
 
-Ordered by domain priority (Western, Vedic, Numerology, Tarot, Biorhythm, I Ching, Crystals, Dreams, Angel Numbers, Location, Usage, Languages).
+Ordered by domain priority (Western, Vedic, Forecast, Human Design, Chinese Astrology, Feng Shui, Numerology, Tarot, Biorhythm, I Ching, Crystals, Dreams, Angel Numbers, Location, Usage, Languages).
 
 | Task | Code |
 |------|------|
