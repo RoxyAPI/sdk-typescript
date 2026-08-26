@@ -803,7 +803,7 @@ export type AspectPatternsResponse = {
      */
     options: {
         /**
-         * Whether the strict (Pontopia-style) orb budget was used. False uses industry-standard orbs (8 for major aspects, 9 for square, 6 for sextile, 3 for quincunx).
+         * Whether the tight orb budget was used. False uses the standard pattern-detection orbs (8 degrees for major aspects, 9 for square, 6 for sextile, 3 for quincunx).
          */
         strictOrbs: boolean;
         /**
@@ -7474,9 +7474,9 @@ export type GetLanguagesFieldLabelsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/languages/field-labels';
 };
@@ -7593,7 +7593,7 @@ export type GetLanguagesFieldLabelsResponses = {
         /**
          * Language these labels resolved to. Echoes the `lang` query parameter, or `en` when it is omitted.
          */
-        lang: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Label per request field or parameter name. Keys are the wire names used in request bodies and query parameters, such as `birthDate`, `timezone` or `houseSystem`.
          */
@@ -7616,9 +7616,9 @@ export type GetAstrologySignsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/signs';
 };
@@ -7784,9 +7784,9 @@ export type GetAstrologySignsByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/signs/{id}';
 };
@@ -7855,7 +7855,7 @@ export type GetAstrologySignsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -8021,9 +8021,9 @@ export type GetAstrologyPlanetMeaningsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/planet-meanings';
 };
@@ -8180,9 +8180,9 @@ export type GetAstrologyPlanetMeaningsByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/planet-meanings/{id}';
 };
@@ -8251,7 +8251,7 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -8397,9 +8397,9 @@ export type PostAstrologyNatalChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/natal-chart';
 };
@@ -8547,9 +8547,9 @@ export type PostAstrologyPlanetsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/planets';
 };
@@ -8752,9 +8752,9 @@ export type PostAstrologyPlanetsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/planets/monthly';
 };
@@ -8928,9 +8928,9 @@ export type GetAstrologyMoonPhaseCurrentData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Date in YYYY-MM-DD format. Defaults to today if omitted.
          */
@@ -9123,9 +9123,9 @@ export type GetAstrologyMoonPhaseUpcomingData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Start date in YYYY-MM-DD format. Defaults to today if omitted.
          */
@@ -9279,9 +9279,9 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/moon-phase/calendar/{year}/{month}';
 };
@@ -9499,9 +9499,9 @@ export type PostAstrologySynastryData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/synastry';
 };
@@ -9943,9 +9943,9 @@ export type PostAstrologyHousesData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/houses';
 };
@@ -10068,9 +10068,9 @@ export type PostAstrologyAspectsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/aspects';
 };
@@ -10210,9 +10210,9 @@ export type PostAstrologyAspectsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/aspects/monthly';
 };
@@ -10413,11 +10413,11 @@ export type PostAstrologyAspectPatternsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
-         * Use tighter orbs (Pontopia "optimal" recommendations). Truthy values (true, 1, yes, on; case-insensitive) narrow trine to 5, square to 5, sextile to 4, quincunx to 2. Defaults to false (industry-standard orbs).
+         * Use tighter orbs, so only closely formed patterns are reported. Truthy values (true, 1, yes, on; case-insensitive) narrow trine to 5 degrees, square to 5, sextile to 4, quincunx to 2. Defaults to false, the standard pattern-detection orbs.
          */
         strictOrbs?: string;
         /**
@@ -10546,9 +10546,9 @@ export type PostAstrologyTransitsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/transits';
 };
@@ -10688,9 +10688,9 @@ export type PostAstrologyTransitsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/transits/monthly';
 };
@@ -10950,9 +10950,9 @@ export type PostAstrologyTransitAspectsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/transit-aspects';
 };
@@ -11271,7 +11271,7 @@ export type PostAstrologyTransitAspectsResponses = {
                  */
                 timing: string;
                 /**
-                 * Strength and nature of this transit effect — constructive, challenging, or neutral.
+                 * Strength and nature of this transit effect: constructive, challenging, or neutral.
                  */
                 impact: string;
                 /**
@@ -11285,7 +11285,7 @@ export type PostAstrologyTransitAspectsResponses = {
             };
         }>;
         /**
-         * Statistical summary of all transit aspects. The harmonious-to-challenging ratio reveals the overall transit weather — whether the current period favors ease or demands effort.
+         * Statistical summary of all transit aspects. The harmonious-to-challenging ratio reveals the overall transit weather, meaning whether the current period favors ease or demands effort.
          */
         summary: {
             /**
@@ -11301,11 +11301,11 @@ export type PostAstrologyTransitAspectsResponses = {
              */
             challenging: number;
             /**
-             * Count of neutral aspects (conjunction, minor aspects). Conjunctions blend energies — the outcome depends on the planets involved.
+             * Count of neutral aspects (conjunction, minor aspects). Conjunctions blend energies, so the outcome depends on the planets involved.
              */
             neutral: number;
             /**
-             * The tightest aspect by orb. This is the most potent transit currently active — the one most likely to be felt.
+             * The tightest aspect by orb. This is the most potent transit currently active, and the one most likely to be felt.
              */
             strongest: {
                 /**
@@ -11365,7 +11365,7 @@ export type PostAstrologyTransitAspectsResponses = {
                      */
                     timing: string;
                     /**
-                     * Strength and nature of this transit effect — constructive, challenging, or neutral.
+                     * Strength and nature of this transit effect: constructive, challenging, or neutral.
                      */
                     impact: string;
                     /**
@@ -11416,9 +11416,9 @@ export type PostAstrologyParallelsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/parallels/monthly';
 };
@@ -11616,9 +11616,9 @@ export type PostAstrologyEclipticCrossingsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/ecliptic-crossings';
 };
@@ -11820,9 +11820,9 @@ export type PostAstrologySolarReturnData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/solar-return';
 };
@@ -12213,9 +12213,9 @@ export type PostAstrologyLunarReturnData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/lunar-return';
 };
@@ -12636,9 +12636,9 @@ export type PostAstrologyCompositeChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/composite-chart';
 };
@@ -13034,9 +13034,9 @@ export type PostAstrologyCompatibilityScoreData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/compatibility-score';
 };
@@ -13520,9 +13520,9 @@ export type GetAstrologyHoroscopeBySignDailyData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Forecast date in YYYY-MM-DD format. Past and future dates are both supported, for editorial scheduling and backfill. Defaults to the current period in the timezone parameter.
          */
@@ -13719,9 +13719,9 @@ export type GetAstrologyHoroscopeBySignWeeklyData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Any date inside the target week, in YYYY-MM-DD format. The forecast covers the Monday to Sunday week containing it. Defaults to the current period in the timezone parameter.
          */
@@ -13902,9 +13902,9 @@ export type GetAstrologyHoroscopeBySignMonthlyData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Any date inside the target month, in YYYY-MM-DD format. The forecast covers the whole calendar month containing it. Defaults to the current period in the timezone parameter.
          */
@@ -14143,9 +14143,9 @@ export type PostAstrologyPlanetaryReturnsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/planetary-returns';
 };
@@ -14493,7 +14493,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
              */
             summary: string;
             /**
-             * Key life themes activated during this return cycle. Focus areas vary by planet — Jupiter brings expansion, Saturn brings structure and responsibility.
+             * Key life themes activated during this return cycle. Focus areas vary by planet: Jupiter brings expansion, Saturn brings structure and responsibility.
              */
             keyThemes: Array<string>;
         };
@@ -14532,9 +14532,9 @@ export type PostAstrologyAstrocartographyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Optional comma separated list of extra bodies to plot beyond the ten classical planets. Allowed values: north-node, chiron, lilith. north-node is the mean lunar node. Unknown values are ignored. Defaults to none.
          */
@@ -14661,9 +14661,9 @@ export type PostAstrologyRelocationChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/relocation-chart';
 };
@@ -14807,9 +14807,9 @@ export type PostAstrologyLocalSpaceData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Optional comma-separated extra bodies to add beyond the 10 classical planets. Allowed values: north-node, chiron, lilith. north-node is the mean lunar node. Omit to return the 10 classical planets only.
          */
@@ -14961,9 +14961,9 @@ export type PostAstrologyFixedStarsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Conjunction orb in degrees, the maximum separation for a star to count as conjunct a chart point. Defaults to 1, maximum 3. Widen it to surface looser contacts or tighten it for only the closest hits.
          */
@@ -15090,9 +15090,9 @@ export type PostAstrologyArabicLotsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/arabic-lots';
 };
@@ -15215,9 +15215,9 @@ export type PostAstrologyAsteroidsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/asteroids';
 };
@@ -15340,9 +15340,9 @@ export type PostAstrologyLilithData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/lilith';
 };
@@ -15465,9 +15465,9 @@ export type PostAstrologyProgressionsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/progressions';
 };
@@ -15590,9 +15590,9 @@ export type PostAstrologySolarArcData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/solar-arc';
 };
@@ -15715,9 +15715,9 @@ export type PostAstrologyProfectionsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/astrology/profections';
 };
@@ -15840,9 +15840,9 @@ export type PostVedicAstrologyBirthChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -15969,9 +15969,9 @@ export type PostVedicAstrologyNavamsaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/navamsa';
 };
@@ -16094,9 +16094,9 @@ export type PostVedicAstrologyDivisionalChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/divisional-chart';
 };
@@ -16219,9 +16219,9 @@ export type PostVedicAstrologyCompatibilityData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/compatibility';
 };
@@ -16344,9 +16344,9 @@ export type PostVedicAstrologyPlanetaryPositionsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/planetary-positions';
 };
@@ -16482,9 +16482,9 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/planetary-positions/monthly';
 };
@@ -16695,9 +16695,9 @@ export type PostVedicAstrologyDashaCurrentData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -17514,9 +17514,9 @@ export type PostVedicAstrologyDashaMajorData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -17837,9 +17837,9 @@ export type PostVedicAstrologyDashaSubByMahadashaData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -18227,9 +18227,9 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -18633,9 +18633,9 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaDa
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -19055,9 +19055,9 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -19464,9 +19464,9 @@ export type PostVedicAstrologyDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -20179,9 +20179,9 @@ export type PostVedicAstrologyPanchangBasicData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/panchang/basic';
 };
@@ -20434,9 +20434,9 @@ export type PostVedicAstrologyPanchangDetailedData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/panchang/detailed';
 };
@@ -21473,9 +21473,9 @@ export type PostVedicAstrologyDoshaManglikData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/dosha/manglik';
 };
@@ -21598,9 +21598,9 @@ export type PostVedicAstrologyDoshaKalsarpaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/dosha/kalsarpa';
 };
@@ -21723,9 +21723,9 @@ export type PostVedicAstrologyDoshaSadhesatiData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/dosha/sadhesati';
 };
@@ -21848,9 +21848,9 @@ export type GetVedicAstrologyYogaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Filter the catalog to one Nabhasa family: asraya (3), dala (2), akriti (20) or sankhya (7). Omit for the full catalog. `classical` is accepted but matches nothing here, because it is a detection-verdict value for single-combination yogas rather than a catalog grouping.
          */
@@ -22004,9 +22004,9 @@ export type GetVedicAstrologyYogaByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/yoga/{id}';
 };
@@ -22075,7 +22075,7 @@ export type GetVedicAstrologyYogaByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -22142,9 +22142,9 @@ export type PostVedicAstrologyYogaDetectData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/yoga/detect';
 };
@@ -22520,9 +22520,9 @@ export type PostVedicAstrologyKpCuspsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -22649,9 +22649,9 @@ export type PostVedicAstrologyKpChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -22807,9 +22807,9 @@ export type PostVedicAstrologyKpRulingPlanetsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -22969,9 +22969,9 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -23458,9 +23458,9 @@ export type PostVedicAstrologyKpHoraryData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -23839,9 +23839,9 @@ export type PostVedicAstrologyAspectsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/aspects/monthly';
 };
@@ -24047,9 +24047,9 @@ export type PostVedicAstrologyAspectsLunarData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/aspects/lunar';
 };
@@ -24564,9 +24564,9 @@ export type PostVedicAstrologyTransitMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/transit/monthly';
 };
@@ -24981,9 +24981,9 @@ export type PostVedicAstrologyParallelsMonthlyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/parallels/monthly';
 };
@@ -25339,9 +25339,9 @@ export type GetVedicAstrologyRashisData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/rashis';
 };
@@ -25469,9 +25469,9 @@ export type GetVedicAstrologyRashisByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/rashis/{id}';
 };
@@ -25540,7 +25540,7 @@ export type GetVedicAstrologyRashisByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -25607,9 +25607,9 @@ export type GetVedicAstrologyNakshatrasData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/nakshatras';
 };
@@ -25737,9 +25737,9 @@ export type GetVedicAstrologyNakshatrasByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/nakshatras/{id}';
 };
@@ -25808,7 +25808,7 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -26115,9 +26115,9 @@ export type PostVedicAstrologyShadbalaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/shadbala';
 };
@@ -26240,9 +26240,9 @@ export type GetVedicAstrologyAvasthasData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Return only the states of one system: "baladi" (5), "jagradadi" (3) or "deeptadi" (9). Omit for all 17.
          */
@@ -26395,9 +26395,9 @@ export type GetVedicAstrologyAvasthasByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/avasthas/{id}';
 };
@@ -26466,7 +26466,7 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -26554,9 +26554,9 @@ export type PostVedicAstrologyArudhaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/arudha';
 };
@@ -26679,9 +26679,9 @@ export type PostVedicAstrologyCharaKarakasData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/vedic-astrology/chara-karakas';
 };
@@ -26804,9 +26804,9 @@ export type PostVedicAstrologyBhavaBalaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -26933,9 +26933,9 @@ export type PostVedicAstrologyBhavChalitData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Which signification vocabulary the houseThemes map returns. "general" gives the classical bhava significations (self, wealth, siblings, home, and so on). "finance" gives the money reading of the same twelve bhavas, so house 2 returns income and savings, 5 speculation and risk appetite, 8 sudden money and leverage, 11 gains and profits, and 12 expenses and capital outflow. Use "finance" for wealth, income, business and market timing questions in Krishnamurti Paddhati, where the significator house groups 2, 6, 10, 11 for earned income and 5, 8, 11 for speculation are read against a running dasha. Defaults to "general".
          */
@@ -27241,9 +27241,9 @@ export type PostForecastTimelineData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/forecast/timeline';
 };
@@ -27503,9 +27503,9 @@ export type PostForecastTransitsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/forecast/transits';
 };
@@ -27786,9 +27786,9 @@ export type PostForecastSignificantDatesData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/forecast/significant-dates';
 };
@@ -28069,9 +28069,9 @@ export type PostForecastDigestData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/forecast/digest';
 };
@@ -28389,9 +28389,9 @@ export type PostForecastSolarReturnData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/forecast/solar-return';
 };
@@ -28761,9 +28761,9 @@ export type PostHumanDesignBodygraphData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/bodygraph';
 };
@@ -29222,9 +29222,9 @@ export type PostHumanDesignConnectionData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/connection';
 };
@@ -29485,9 +29485,9 @@ export type PostHumanDesignPentaData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/penta';
 };
@@ -29748,9 +29748,9 @@ export type PostHumanDesignTransitData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/transit';
 };
@@ -30027,9 +30027,9 @@ export type PostHumanDesignTypeData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/type';
 };
@@ -30238,9 +30238,9 @@ export type PostHumanDesignGatesData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/gates';
 };
@@ -30485,9 +30485,9 @@ export type GetHumanDesignGatesByNumberData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/gates/{number}';
 };
@@ -30556,7 +30556,7 @@ export type GetHumanDesignGatesByNumberErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -30703,9 +30703,9 @@ export type PostHumanDesignChannelsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/channels';
 };
@@ -30903,9 +30903,9 @@ export type PostHumanDesignCentersData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/centers';
 };
@@ -31083,9 +31083,9 @@ export type GetHumanDesignCentersByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/centers/{id}';
 };
@@ -31262,9 +31262,9 @@ export type PostHumanDesignProfileData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/profile';
 };
@@ -31433,9 +31433,9 @@ export type PostHumanDesignVariablesData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/human-design/variables';
 };
@@ -31697,6 +31697,8344 @@ export type PostHumanDesignVariablesResponses = {
 
 export type PostHumanDesignVariablesResponse = PostHumanDesignVariablesResponses[keyof PostHumanDesignVariablesResponses];
 
+export type PostChineseAstrologyBaziChartData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+         */
+        longitude?: number;
+        /**
+         * Which instant starts the sexagenary DAY, which only matters for a birth between 23:00 and 23:59. "midnight" is the classical position of the Ming compendium San Ming Tong Hui: the day turns at 00:00 and 23:00 to 23:59 is the late zi hour of the day that is ending, so the hour stem is taken from that day. "early-zi" turns the whole day at 23:00, the practice in Hong Kong, Taiwan and much of South East Asia. "split-zi" is the compromise most software implements and the default here: the day still turns at 00:00, but the hour stem is taken from the next day. The three give three different answers for a late-evening birth and identical answers for every other birth.
+         */
+        dayBoundary?: 'split-zi' | 'midnight' | 'early-zi';
+        /**
+         * Which instant starts the sexagenary YEAR. "li-chun" is Beginning of Spring, around 4 February, and is the classical rule every BaZi text uses, so it is the default on this endpoint. "lunar-new-year" is the folk rule people mean when they say which animal they are, and it falls between late January and late February. The two disagree for any birth in the weeks between them: 14 February 2026 is a Wood Snake year under lunar-new-year and a Fire Horse year under li-chun.
+         */
+        yearBoundary?: 'li-chun' | 'lunar-new-year';
+        /**
+         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         */
+        hourClock?: 'clock' | 'local-mean' | 'solar';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/bazi/chart';
+};
+
+export type PostChineseAstrologyBaziChartErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyBaziChartError = PostChineseAstrologyBaziChartErrors[keyof PostChineseAstrologyBaziChartErrors];
+
+export type PostChineseAstrologyBaziChartResponses = {
+    /**
+     * Four pillars, Day Master, element balance, interactions, and the conventions
+     */
+    200: {
+        /**
+         * Echo of the birth moment the chart was computed from.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+             */
+            time: string;
+            /**
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             */
+            timezone: number;
+            /**
+             * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+             */
+            longitude?: number;
+        };
+        /**
+         * The three school conventions this result was computed under. Returned on every BaZi response so a chart is self-describing: two calculators can produce different pillars for one birth and both be correct, and this object says which reading you are holding.
+         */
+        conventions: {
+            /**
+             * Day-boundary school actually applied. Echoes the request, or the default when it was omitted. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            dayBoundary: 'split-zi' | 'midnight' | 'early-zi';
+            /**
+             * Year-boundary school actually applied. Echoes the request, or the default when it was omitted.
+             */
+            yearBoundary: 'li-chun' | 'lunar-new-year';
+            /**
+             * Hour clock actually applied. Echoes the request, or the default when omitted.
+             */
+            hourClock: 'clock' | 'local-mean' | 'solar';
+        };
+        /**
+         * The four pillars, year first. Each carries its stem, its branch, the hidden stems stored in the branch, the Ten God relation to the Day Master, and the Na Yin sound element of the pair.
+         */
+        pillars: Array<{
+            /**
+             * Which of the four pillars this is. One of year, month, day, hour. The year pillar reads ancestry and early life, the month career and parents, the day the self and the partner, the hour later life and children.
+             */
+            position: string;
+            /**
+             * Pillar identifier, the stem id and the branch id joined by a hyphen. Always English pinyin, whatever the lang parameter says.
+             */
+            id: string;
+            /**
+             * Position of this pillar in the sexagenary cycle, 1 to 60, where jia-zi is 1. The cycle runs stems and branches together, which is why only 60 of the 120 possible pairings occur.
+             */
+            number: number;
+            /**
+             * The Heavenly Stem of this pillar.
+             */
+            stem: {
+                /**
+                 * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                 */
+                id: string;
+                /**
+                 * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the stem. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                 */
+                element: string;
+                /**
+                 * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                 */
+                polarity: string;
+            };
+            /**
+             * The Earthly Branch of this pillar.
+             */
+            branch: {
+                /**
+                 * Earthly Branch identifier. One of zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai. Always English pinyin, whatever the lang parameter says. Note that "wu" is also a stem identifier: they never share a field, so a branch id is only ever read out of a branch position.
+                 */
+                id: string;
+                /**
+                 * The branch in hanzi. Identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the branch. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Zodiac animal of the branch. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig. Always English, whatever the lang parameter says. Use animalLocalized for anything a reader sees.
+                 */
+                animal: string;
+                /**
+                 * Zodiac animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                animalLocalized?: string;
+                /**
+                 * Five-phase element of the branch. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                 */
+                element: string;
+                /**
+                 * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity of the branch, yang or yin.
+                 */
+                polarity: string;
+            };
+            /**
+             * Relation the pillar STEM holds to the Day Master. The day pillar carries day-master instead, because the day stem is the reference point every other position is measured from rather than a relation to itself.
+             */
+            tenGod: {
+                /**
+                 * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                 */
+                id: string;
+                /**
+                 * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                 */
+                name: string;
+                /**
+                 * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
+                /**
+                 * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the relation. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                 */
+                category: string;
+                /**
+                 * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                 */
+                keynote: string;
+            };
+            /**
+             * Stems stored inside the branch, principal first. These carry the qi a branch holds without showing it, and they are where a Day Master finds a root.
+             */
+            hiddenStems: Array<{
+                /**
+                 * The stem stored in the branch.
+                 */
+                stem: {
+                    /**
+                     * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                     */
+                    id: string;
+                    /**
+                     * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the stem. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                     */
+                    element: string;
+                    /**
+                     * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    elementLocalized?: string;
+                    /**
+                     * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                     */
+                    polarity: string;
+                };
+                /**
+                 * Rank of this stem inside the branch, by the classical day-count that divides a thirty-day month 18, 9 and 3 days between the stems a branch holds. principal is the first-ranked stem and always matches the branch element; middle is the second-ranked; residual is the third. A branch holds one to three, always returned in rank order. What each rank CONTAINS depends on the branch family: on a storage branch the second-ranked stem is the seasonal carryover from the month before and the third is the stem that branch stores as the close of its trine, while on a growth branch the second-ranked stem is the one beginning its long-life phase there and the third is the carryover. Some schools name the same three positions by that function rather than by rank, which swaps the second and third labels on the four storage branches, so compare on rank rather than assuming a name.
+                 */
+                role: string;
+                /**
+                 * Relation this hidden stem holds to the Day Master.
+                 */
+                tenGod: {
+                    /**
+                     * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                     */
+                    id: string;
+                    /**
+                     * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                     */
+                    name: string;
+                    /**
+                     * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    nameLocalized?: string;
+                    /**
+                     * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the relation. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                     */
+                    category: string;
+                    /**
+                     * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                     */
+                    keynote: string;
+                };
+            }>;
+            /**
+             * Na Yin sound element of the pillar, an older elemental reading assigned to each of the 30 stem-and-branch pairs. The hanzi name sits beside it in naYinChinese.
+             */
+            naYin: string;
+            /**
+             * The Na Yin name in hanzi. Identical under every lang.
+             */
+            naYinChinese: string;
+            /**
+             * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in.
+             */
+            naYinElement: string;
+        }>;
+        /**
+         * The day stem, which is the subject of the whole chart. Everything else in the response is named by what it does to this one.
+         */
+        dayMaster: {
+            /**
+             * Day stem identifier, which IS the Day Master. Always English pinyin, whatever the lang parameter says.
+             */
+            stem: string;
+            /**
+             * The Day Master stem in hanzi. Identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the Day Master stem.
+             */
+            pinyin: string;
+            /**
+             * Five-phase element of the Day Master. Every Ten God in the chart is measured from this element and this polarity. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+             */
+            element: string;
+            /**
+             * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * Polarity of the Day Master, yang or yin.
+             */
+            polarity: string;
+            /**
+             * What this particular stem is like as a Day Master, in the imagery the tradition uses to distinguish the two stems of each element. The yang and yin forms of one element behave very differently and this is where that difference lives.
+             */
+            nature: string;
+        };
+        /**
+         * Zodiac animal of the year branch, under the year boundary this request applied. Always English, whatever the lang parameter says. Use zodiacAnimalLocalized for anything a reader sees.
+         */
+        zodiacAnimal: string;
+        /**
+         * Zodiac animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        zodiacAnimalLocalized?: string;
+        /**
+         * Element balance across the eight chart characters, one entry per phase, with the reading for how represented each one is.
+         */
+        fiveElements: Array<{
+            /**
+             * Five-phase element. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+             */
+            element: string;
+            /**
+             * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * How many of the eight chart characters carry this element, counting the four stems and the four branch elements one point each. Hidden stems are deliberately not counted here: a weighted total is a different quantity and mixing the two produces a number that matches no other calculator.
+             */
+            count: number;
+            /**
+             * How represented the element is. deficient means absent from all eight characters, excess means three or more, balanced is one or two. Always English, whatever the lang parameter says.
+             */
+            level: string;
+            /**
+             * What this level of representation means for the chart.
+             */
+            reading: string;
+        }>;
+        /**
+         * Combinations, clashes, harms and punishments running between the four pillars. An empty array means the four pillars stand independently of each other, which is common and is not a defect.
+         */
+        interactions: Array<{
+            /**
+             * Kind of interaction. stem-combination and six-combination bind two positions, trine binds three, and clash, harm, punishment and stem-clash break them. Always English, whatever the lang parameter says.
+             */
+            type: string;
+            /**
+             * Identifier of the pairing itself, the member ids joined by hyphens in canonical order.
+             */
+            id: string;
+            /**
+             * The interaction named in hanzi. Identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the interaction. Identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Whether the interaction binds or breaks. harmonious for combinations and trines, challenging for clashes, harms and punishments. Always English, whatever the lang parameter says.
+             */
+            quality: string;
+            /**
+             * The chart positions taking part, in the same order as members. On a two-person reading these are prefixed with the subject, for example personA.day.
+             */
+            positions: Array<string>;
+            /**
+             * The stem or branch ids taking part, in the same order as positions.
+             */
+            members: Array<string>;
+            /**
+             * Element the formation resolves to. Present on stem combinations and on complete trines, absent on everything else. Branch six combinations deliberately carry none: the classical sources assign transformed elements to the stem pairs and not to these, and one of the six is contested between schools.
+             */
+            transformsTo?: string;
+            /**
+             * Class of a punishment, present on punishments only. ungrateful is the tiger, snake and monkey group, bullying the ox, dog and goat group, discourteous the rat and rabbit pair, and self a branch doubled against itself.
+             */
+            variety?: string;
+            /**
+             * Punishments only. True when the third branch of the group is also present in the chart, which is what a complete three-punishment means. False marks the partial case, where only two of the three are in play.
+             */
+            complete?: boolean;
+            /**
+             * What this kind of interaction does between the positions it joins.
+             */
+            meaning: string;
+        }>;
+        /**
+         * One-paragraph reading composed from the Day Master nature and the seasonal state of its element in the birth month. The narrative entry point for a chart, for a consumer that renders one block before the detail.
+         */
+        summary: string;
+    };
+};
+
+export type PostChineseAstrologyBaziChartResponse = PostChineseAstrologyBaziChartResponses[keyof PostChineseAstrologyBaziChartResponses];
+
+export type PostChineseAstrologyBaziLuckPillarsData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+         */
+        longitude?: number;
+        /**
+         * Which instant starts the sexagenary DAY, which only matters for a birth between 23:00 and 23:59. "midnight" is the classical position of the Ming compendium San Ming Tong Hui: the day turns at 00:00 and 23:00 to 23:59 is the late zi hour of the day that is ending, so the hour stem is taken from that day. "early-zi" turns the whole day at 23:00, the practice in Hong Kong, Taiwan and much of South East Asia. "split-zi" is the compromise most software implements and the default here: the day still turns at 00:00, but the hour stem is taken from the next day. The three give three different answers for a late-evening birth and identical answers for every other birth.
+         */
+        dayBoundary?: 'split-zi' | 'midnight' | 'early-zi';
+        /**
+         * Which instant starts the sexagenary YEAR. "li-chun" is Beginning of Spring, around 4 February, and is the classical rule every BaZi text uses, so it is the default on this endpoint. "lunar-new-year" is the folk rule people mean when they say which animal they are, and it falls between late January and late February. The two disagree for any birth in the weeks between them: 14 February 2026 is a Wood Snake year under lunar-new-year and a Fire Horse year under li-chun.
+         */
+        yearBoundary?: 'li-chun' | 'lunar-new-year';
+        /**
+         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         */
+        hourClock?: 'clock' | 'local-mean' | 'solar';
+        /**
+         * Subject sex, used only to pick the luck-pillar direction: a male born in a yang-stem year and a female born in a yin-stem year run forward through the sexagenary cycle, and the other two combinations run backward. It affects nothing else in the response.
+         */
+        gender: 'male' | 'female';
+        /**
+         * How many ten-year luck pillars to return, 1 to 12. Eight covers eighty years from the start age, which reaches past a normal lifetime for most start ages.
+         */
+        count?: number;
+        /**
+         * First Gregorian year of the annual pillar overlay. Omit it to leave annualPillars out of the response entirely. The annual pillar is the year the chart is currently walking through, read against the ten-year luck pillar underneath it.
+         */
+        annualFromYear?: number;
+        /**
+         * How many consecutive years the annual overlay covers, 1 to 20. Ignored unless annualFromYear is present.
+         */
+        annualYears?: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/bazi/luck-pillars';
+};
+
+export type PostChineseAstrologyBaziLuckPillarsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyBaziLuckPillarsError = PostChineseAstrologyBaziLuckPillarsErrors[keyof PostChineseAstrologyBaziLuckPillarsErrors];
+
+export type PostChineseAstrologyBaziLuckPillarsResponses = {
+    /**
+     * Luck pillar sequence with start age, direction, and optional annual overlay
+     */
+    200: {
+        /**
+         * Echo of the birth moment the chart was computed from.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+             */
+            time: string;
+            /**
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             */
+            timezone: number;
+            /**
+             * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+             */
+            longitude?: number;
+        };
+        /**
+         * The three school conventions this result was computed under. Returned on every BaZi response so a chart is self-describing: two calculators can produce different pillars for one birth and both be correct, and this object says which reading you are holding.
+         */
+        conventions: {
+            /**
+             * Day-boundary school actually applied. Echoes the request, or the default when it was omitted. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            dayBoundary: 'split-zi' | 'midnight' | 'early-zi';
+            /**
+             * Year-boundary school actually applied. Echoes the request, or the default when it was omitted.
+             */
+            yearBoundary: 'li-chun' | 'lunar-new-year';
+            /**
+             * Hour clock actually applied. Echoes the request, or the default when omitted.
+             */
+            hourClock: 'clock' | 'local-mean' | 'solar';
+        };
+        /**
+         * Echo of the sex sent, which is what selected the direction below.
+         */
+        gender: string;
+        /**
+         * Which way the sequence walks the sexagenary cycle. A male born in a yang-stem year and a female born in a yin-stem year run forward, and the other two combinations run backward. Always English, whatever the lang parameter says.
+         */
+        direction: string;
+        /**
+         * Age in whole years at which the first luck pillar begins. Counted from the birth instant to the adjacent minor solar term at three days to the year, forward for a forward direction and backward for a reverse one.
+         */
+        startAge: number;
+        /**
+         * Additional months past startAge, 0 to 11, from the remainder of the same count at one day to four months. Calculators that round the whole count to the nearest year will differ from this by up to six months.
+         */
+        startAgeMonths: number;
+        /**
+         * Days from the birth instant to the minor solar term the count ran to, before conversion. Published so the start age can be checked rather than taken on trust.
+         */
+        daysToTerm: number;
+        /**
+         * The minor solar term the count ran to. One of the twelve that also move the month pillar. Always the pinyin identifier, whatever the lang parameter says.
+         */
+        boundaryTerm: string;
+        /**
+         * The ten-year periods in order, each with the relation its stem holds to the natal Day Master.
+         */
+        luckPillars: Array<{
+            /**
+             * Position in the sequence, starting at 1 for the first ten-year period.
+             */
+            index: number;
+            /**
+             * Pillar identifier, the stem id and the branch id joined by a hyphen.
+             */
+            id: string;
+            /**
+             * Position of this pillar in the sexagenary cycle, 1 to 60. Consecutive luck pillars always differ by exactly one step, forward or backward, because the sequence walks the cycle from the birth month pillar.
+             */
+            number: number;
+            /**
+             * The Heavenly Stem of this luck pillar, with its element and polarity.
+             */
+            stem: {
+                /**
+                 * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                 */
+                id: string;
+                /**
+                 * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the stem. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                 */
+                element: string;
+                /**
+                 * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                 */
+                polarity: string;
+            };
+            /**
+             * The Earthly Branch of this luck pillar, with its animal, element and polarity.
+             */
+            branch: {
+                /**
+                 * Earthly Branch identifier. One of zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai. Always English pinyin, whatever the lang parameter says. Note that "wu" is also a stem identifier: they never share a field, so a branch id is only ever read out of a branch position.
+                 */
+                id: string;
+                /**
+                 * The branch in hanzi. Identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the branch. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Zodiac animal of the branch. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig. Always English, whatever the lang parameter says. Use animalLocalized for anything a reader sees.
+                 */
+                animal: string;
+                /**
+                 * Zodiac animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                animalLocalized?: string;
+                /**
+                 * Five-phase element of the branch. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                 */
+                element: string;
+                /**
+                 * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity of the branch, yang or yin.
+                 */
+                polarity: string;
+            };
+            /**
+             * Relation the luck pillar STEM holds to the natal Day Master. This is what tells you whether a decade supports the chart or spends it.
+             */
+            tenGod: {
+                /**
+                 * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                 */
+                id: string;
+                /**
+                 * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                 */
+                name: string;
+                /**
+                 * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
+                /**
+                 * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the relation. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                 */
+                category: string;
+                /**
+                 * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                 */
+                keynote: string;
+            };
+            /**
+             * Age in whole years at which this ten-year period begins.
+             */
+            startAge: number;
+            /**
+             * Age in whole years at which this period ends and the next one begins.
+             */
+            endAge: number;
+            /**
+             * Gregorian year this period begins, the birth year plus startAge.
+             */
+            startYear: number;
+            /**
+             * Gregorian year this period ends.
+             */
+            endYear: number;
+        }>;
+        /**
+         * Year-by-year overlay, present only when annualFromYear was sent. Each year names the luck pillar it falls inside.
+         */
+        annualPillars?: Array<{
+            /**
+             * Gregorian year.
+             */
+            year: number;
+            /**
+             * Annual pillar identifier for that year, under the year boundary applied.
+             */
+            id: string;
+            /**
+             * Position of the annual pillar in the sexagenary cycle, 1 to 60.
+             */
+            number: number;
+            /**
+             * Relation the annual pillar STEM holds to the natal Day Master.
+             */
+            tenGod: {
+                /**
+                 * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                 */
+                id: string;
+                /**
+                 * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                 */
+                name: string;
+                /**
+                 * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
+                /**
+                 * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the relation. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                 */
+                category: string;
+                /**
+                 * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                 */
+                keynote: string;
+            };
+            /**
+             * Which returned luck pillar this year falls inside, by its index. 0 means the year falls before the first luck pillar begins, in the stretch still governed by the natal chart alone.
+             */
+            luckPillarIndex: number;
+        }>;
+        /**
+         * One-paragraph reading of the sequence direction and its start.
+         */
+        summary: string;
+    };
+};
+
+export type PostChineseAstrologyBaziLuckPillarsResponse = PostChineseAstrologyBaziLuckPillarsResponses[keyof PostChineseAstrologyBaziLuckPillarsResponses];
+
+export type PostChineseAstrologyBaziDayMasterData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+         */
+        longitude?: number;
+        /**
+         * Which instant starts the sexagenary DAY, which only matters for a birth between 23:00 and 23:59. "midnight" is the classical position of the Ming compendium San Ming Tong Hui: the day turns at 00:00 and 23:00 to 23:59 is the late zi hour of the day that is ending, so the hour stem is taken from that day. "early-zi" turns the whole day at 23:00, the practice in Hong Kong, Taiwan and much of South East Asia. "split-zi" is the compromise most software implements and the default here: the day still turns at 00:00, but the hour stem is taken from the next day. The three give three different answers for a late-evening birth and identical answers for every other birth.
+         */
+        dayBoundary?: 'split-zi' | 'midnight' | 'early-zi';
+        /**
+         * Which instant starts the sexagenary YEAR. "li-chun" is Beginning of Spring, around 4 February, and is the classical rule every BaZi text uses, so it is the default on this endpoint. "lunar-new-year" is the folk rule people mean when they say which animal they are, and it falls between late January and late February. The two disagree for any birth in the weeks between them: 14 February 2026 is a Wood Snake year under lunar-new-year and a Fire Horse year under li-chun.
+         */
+        yearBoundary?: 'li-chun' | 'lunar-new-year';
+        /**
+         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         */
+        hourClock?: 'clock' | 'local-mean' | 'solar';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/bazi/day-master';
+};
+
+export type PostChineseAstrologyBaziDayMasterErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyBaziDayMasterError = PostChineseAstrologyBaziDayMasterErrors[keyof PostChineseAstrologyBaziDayMasterErrors];
+
+export type PostChineseAstrologyBaziDayMasterResponses = {
+    /**
+     * Strength verdict, contributing factors, and favorable elements
+     */
+    200: {
+        /**
+         * Echo of the birth moment the chart was computed from.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+             */
+            time: string;
+            /**
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             */
+            timezone: number;
+            /**
+             * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+             */
+            longitude?: number;
+        };
+        /**
+         * The three school conventions this result was computed under. Returned on every BaZi response so a chart is self-describing: two calculators can produce different pillars for one birth and both be correct, and this object says which reading you are holding.
+         */
+        conventions: {
+            /**
+             * Day-boundary school actually applied. Echoes the request, or the default when it was omitted. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            dayBoundary: 'split-zi' | 'midnight' | 'early-zi';
+            /**
+             * Year-boundary school actually applied. Echoes the request, or the default when it was omitted.
+             */
+            yearBoundary: 'li-chun' | 'lunar-new-year';
+            /**
+             * Hour clock actually applied. Echoes the request, or the default when omitted.
+             */
+            hourClock: 'clock' | 'local-mean' | 'solar';
+        };
+        /**
+         * The day stem whose strength is being assessed.
+         */
+        dayMaster: {
+            /**
+             * Day stem identifier. Always English pinyin, whatever the lang parameter says.
+             */
+            stem: string;
+            /**
+             * The Day Master stem in hanzi.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the Day Master stem.
+             */
+            pinyin: string;
+            /**
+             * Five-phase element of the Day Master, the element whose support is being weighed. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+             */
+            element: string;
+            /**
+             * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * Polarity of the Day Master, yang or yin.
+             */
+            polarity: string;
+            /**
+             * What this particular stem is like as a Day Master.
+             */
+            nature: string;
+        };
+        /**
+         * Strength verdict. One of very-weak, weak, balanced, strong, very-strong, banded on the composite score below: under -3 is very-weak, -3 to under -1 is weak, -1 to under 1 is balanced, 1 to under 3 is strong, 3 and above is very-strong. Always English, whatever the lang parameter says.
+         */
+        verdict: string;
+        /**
+         * Composite support score, negative for an under-supported Day Master and positive for a well-supported one. A RoxyAPI weighting of the three classical factors rather than a figure from any text, published so the verdict can be audited: the three factor contributions sum to exactly this number.
+         */
+        score: number;
+        /**
+         * State of the Day Master element in the birth month, the strongest single input. One of prosperous, supported, resting, imprisoned, dead, which render the classical five wang xiang xiu qiu si. Always English, whatever the lang parameter says; the translated reading is seasonalStateMeaning.
+         */
+        seasonalState: string;
+        /**
+         * The seasonal state in hanzi. Identical under every lang.
+         */
+        seasonalStateChinese: string;
+        /**
+         * What this seasonal state means for the chart.
+         */
+        seasonalStateMeaning: string;
+        /**
+         * How many of the four branches store a stem of the Day Master element. Zero means the day stem is rootless, which is the single most decisive finding a strength reading can return.
+         */
+        rootCount: number;
+        /**
+         * The three classical factors behind the verdict, each with what it found and what it contributed. These are the citable part of the reading; the score is our arithmetic over them.
+         */
+        factors: Array<{
+            /**
+             * Which classical factor this is. month-command is de ling, whether the birth month season backs the Day Master element. rooting is de di, whether any branch stores a stem of that element. party is de shi, whether the other three stems help or spend it. Always English, whatever the lang parameter says.
+             */
+            id: string;
+            /**
+             * Display name of the factor. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * The factor named in hanzi. Identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the factor. Identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Points this factor contributed to the composite score, positive for support and negative for drain. The three contributions sum to score, so a caller who weights the factors differently can rebuild its own total from the same findings.
+             */
+            contribution: number;
+            /**
+             * What the factor actually found in this chart, in one clause.
+             */
+            detail: string;
+        }>;
+        /**
+         * Elements that help this chart. A weak Day Master wants its own element and the one that generates it; a strong one wants the three that drain, spend, or restrain it. Empty when the verdict is balanced, because a centred chart has no categorically favourable element and the incoming luck pillar decides. Always English, whatever the lang parameter says.
+         */
+        favorableElements: Array<string>;
+        /**
+         * Elements that burden this chart, the complement of favorableElements. Also empty when the verdict is balanced.
+         */
+        unfavorableElements: Array<string>;
+        /**
+         * Element headcount across the eight characters, the plain distribution behind the weighted verdict.
+         */
+        fiveElements: Array<{
+            /**
+             * Five-phase element. Always English, whatever the lang parameter says.
+             */
+            element: string;
+            /**
+             * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * How many of the eight chart characters carry this element, four stems and four branch elements at one point each.
+             */
+            count: number;
+            /**
+             * How represented the element is. deficient is absent, excess is three or more, balanced is one or two.
+             */
+            level: string;
+            /**
+             * What this level of representation means for the chart.
+             */
+            reading: string;
+        }>;
+        /**
+         * One-paragraph reading composed from the verdict, the seasonal state, and the rooting finding.
+         */
+        summary: string;
+    };
+};
+
+export type PostChineseAstrologyBaziDayMasterResponse = PostChineseAstrologyBaziDayMasterResponses[keyof PostChineseAstrologyBaziDayMasterResponses];
+
+export type PostChineseAstrologyBaziCompatibilityData = {
+    body?: {
+        /**
+         * Birth moment of the first person. Each subject carries its own school switches, so two charts built under different conventions can still be compared.
+         */
+        personA: {
+            /**
+             * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+             */
+            longitude?: number;
+            /**
+             * Which instant starts the sexagenary DAY, which only matters for a birth between 23:00 and 23:59. "midnight" is the classical position of the Ming compendium San Ming Tong Hui: the day turns at 00:00 and 23:00 to 23:59 is the late zi hour of the day that is ending, so the hour stem is taken from that day. "early-zi" turns the whole day at 23:00, the practice in Hong Kong, Taiwan and much of South East Asia. "split-zi" is the compromise most software implements and the default here: the day still turns at 00:00, but the hour stem is taken from the next day. The three give three different answers for a late-evening birth and identical answers for every other birth.
+             */
+            dayBoundary?: 'split-zi' | 'midnight' | 'early-zi';
+            /**
+             * Which instant starts the sexagenary YEAR. "li-chun" is Beginning of Spring, around 4 February, and is the classical rule every BaZi text uses, so it is the default on this endpoint. "lunar-new-year" is the folk rule people mean when they say which animal they are, and it falls between late January and late February. The two disagree for any birth in the weeks between them: 14 February 2026 is a Wood Snake year under lunar-new-year and a Fire Horse year under li-chun.
+             */
+            yearBoundary?: 'li-chun' | 'lunar-new-year';
+            /**
+             * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+             */
+            hourClock?: 'clock' | 'local-mean' | 'solar';
+        };
+        /**
+         * Birth moment of the second person.
+         */
+        personB: {
+            /**
+             * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+             */
+            time: string;
+            /**
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+             */
+            timezone: number | string;
+            /**
+             * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+             */
+            longitude?: number;
+            /**
+             * Which instant starts the sexagenary DAY, which only matters for a birth between 23:00 and 23:59. "midnight" is the classical position of the Ming compendium San Ming Tong Hui: the day turns at 00:00 and 23:00 to 23:59 is the late zi hour of the day that is ending, so the hour stem is taken from that day. "early-zi" turns the whole day at 23:00, the practice in Hong Kong, Taiwan and much of South East Asia. "split-zi" is the compromise most software implements and the default here: the day still turns at 00:00, but the hour stem is taken from the next day. The three give three different answers for a late-evening birth and identical answers for every other birth.
+             */
+            dayBoundary?: 'split-zi' | 'midnight' | 'early-zi';
+            /**
+             * Which instant starts the sexagenary YEAR. "li-chun" is Beginning of Spring, around 4 February, and is the classical rule every BaZi text uses, so it is the default on this endpoint. "lunar-new-year" is the folk rule people mean when they say which animal they are, and it falls between late January and late February. The two disagree for any birth in the weeks between them: 14 February 2026 is a Wood Snake year under lunar-new-year and a Fire Horse year under li-chun.
+             */
+            yearBoundary?: 'li-chun' | 'lunar-new-year';
+            /**
+             * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+             */
+            hourClock?: 'clock' | 'local-mean' | 'solar';
+        };
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/bazi/compatibility';
+};
+
+export type PostChineseAstrologyBaziCompatibilityErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyBaziCompatibilityError = PostChineseAstrologyBaziCompatibilityErrors[keyof PostChineseAstrologyBaziCompatibilityErrors];
+
+export type PostChineseAstrologyBaziCompatibilityResponses = {
+    /**
+     * Both charts, the cross-chart interactions, and the compatibility score
+     */
+    200: {
+        /**
+         * Resolved chart of the first person.
+         */
+        personA: {
+            /**
+             * The four pillars of this person, year first.
+             */
+            pillars: Array<{
+                /**
+                 * Which of the four pillars this is. One of year, month, day, hour. The year pillar reads ancestry and early life, the month career and parents, the day the self and the partner, the hour later life and children.
+                 */
+                position: string;
+                /**
+                 * Pillar identifier, the stem id and the branch id joined by a hyphen. Always English pinyin, whatever the lang parameter says.
+                 */
+                id: string;
+                /**
+                 * Position of this pillar in the sexagenary cycle, 1 to 60, where jia-zi is 1. The cycle runs stems and branches together, which is why only 60 of the 120 possible pairings occur.
+                 */
+                number: number;
+                /**
+                 * The Heavenly Stem of this pillar.
+                 */
+                stem: {
+                    /**
+                     * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                     */
+                    id: string;
+                    /**
+                     * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the stem. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                     */
+                    element: string;
+                    /**
+                     * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    elementLocalized?: string;
+                    /**
+                     * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                     */
+                    polarity: string;
+                };
+                /**
+                 * The Earthly Branch of this pillar.
+                 */
+                branch: {
+                    /**
+                     * Earthly Branch identifier. One of zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai. Always English pinyin, whatever the lang parameter says. Note that "wu" is also a stem identifier: they never share a field, so a branch id is only ever read out of a branch position.
+                     */
+                    id: string;
+                    /**
+                     * The branch in hanzi. Identical under every lang.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the branch. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Zodiac animal of the branch. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig. Always English, whatever the lang parameter says. Use animalLocalized for anything a reader sees.
+                     */
+                    animal: string;
+                    /**
+                     * Zodiac animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    animalLocalized?: string;
+                    /**
+                     * Five-phase element of the branch. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                     */
+                    element: string;
+                    /**
+                     * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    elementLocalized?: string;
+                    /**
+                     * Polarity of the branch, yang or yin.
+                     */
+                    polarity: string;
+                };
+                /**
+                 * Relation the pillar STEM holds to the Day Master. The day pillar carries day-master instead, because the day stem is the reference point every other position is measured from rather than a relation to itself.
+                 */
+                tenGod: {
+                    /**
+                     * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                     */
+                    id: string;
+                    /**
+                     * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                     */
+                    name: string;
+                    /**
+                     * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    nameLocalized?: string;
+                    /**
+                     * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the relation. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                     */
+                    category: string;
+                    /**
+                     * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                     */
+                    keynote: string;
+                };
+                /**
+                 * Stems stored inside the branch, principal first. These carry the qi a branch holds without showing it, and they are where a Day Master finds a root.
+                 */
+                hiddenStems: Array<{
+                    /**
+                     * The stem stored in the branch.
+                     */
+                    stem: {
+                        /**
+                         * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                         */
+                        id: string;
+                        /**
+                         * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                         */
+                        chinese: string;
+                        /**
+                         * Tone-marked pinyin for the stem. Identical under every lang.
+                         */
+                        pinyin: string;
+                        /**
+                         * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                         */
+                        element: string;
+                        /**
+                         * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                         */
+                        elementLocalized?: string;
+                        /**
+                         * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                         */
+                        polarity: string;
+                    };
+                    /**
+                     * Rank of this stem inside the branch, by the classical day-count that divides a thirty-day month 18, 9 and 3 days between the stems a branch holds. principal is the first-ranked stem and always matches the branch element; middle is the second-ranked; residual is the third. A branch holds one to three, always returned in rank order. What each rank CONTAINS depends on the branch family: on a storage branch the second-ranked stem is the seasonal carryover from the month before and the third is the stem that branch stores as the close of its trine, while on a growth branch the second-ranked stem is the one beginning its long-life phase there and the third is the carryover. Some schools name the same three positions by that function rather than by rank, which swaps the second and third labels on the four storage branches, so compare on rank rather than assuming a name.
+                     */
+                    role: string;
+                    /**
+                     * Relation this hidden stem holds to the Day Master.
+                     */
+                    tenGod: {
+                        /**
+                         * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                         */
+                        id: string;
+                        /**
+                         * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                         */
+                        name: string;
+                        /**
+                         * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                         */
+                        nameLocalized?: string;
+                        /**
+                         * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                         */
+                        chinese: string;
+                        /**
+                         * Tone-marked pinyin for the relation. Identical under every lang.
+                         */
+                        pinyin: string;
+                        /**
+                         * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                         */
+                        category: string;
+                        /**
+                         * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                         */
+                        keynote: string;
+                    };
+                }>;
+                /**
+                 * Na Yin sound element of the pillar, an older elemental reading assigned to each of the 30 stem-and-branch pairs. The hanzi name sits beside it in naYinChinese.
+                 */
+                naYin: string;
+                /**
+                 * The Na Yin name in hanzi. Identical under every lang.
+                 */
+                naYinChinese: string;
+                /**
+                 * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in.
+                 */
+                naYinElement: string;
+            }>;
+            /**
+             * The day stem of this person.
+             */
+            dayMaster: {
+                /**
+                 * Day stem identifier for this person.
+                 */
+                stem: string;
+                /**
+                 * The Day Master stem in hanzi.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the Day Master stem.
+                 */
+                pinyin: string;
+                /**
+                 * Five-phase element of this Day Master. Always English, whatever the lang parameter says.
+                 */
+                element: string;
+                /**
+                 * Display copy of the element in the requested language. Absent for English, so an English response is unchanged.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity, yang or yin.
+                 */
+                polarity: string;
+                /**
+                 * What this stem is like as a Day Master.
+                 */
+                nature: string;
+            };
+            /**
+             * Day Master strength verdict for this person, so a reader can see which of the two chart carries more capacity. One of very-weak, weak, balanced, strong, very-strong.
+             */
+            strength: string;
+            /**
+             * The three school conventions this result was computed under. Returned on every BaZi response so a chart is self-describing: two calculators can produce different pillars for one birth and both be correct, and this object says which reading you are holding.
+             */
+            conventions: {
+                /**
+                 * Day-boundary school actually applied. Echoes the request, or the default when it was omitted. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                dayBoundary: 'split-zi' | 'midnight' | 'early-zi';
+                /**
+                 * Year-boundary school actually applied. Echoes the request, or the default when it was omitted.
+                 */
+                yearBoundary: 'li-chun' | 'lunar-new-year';
+                /**
+                 * Hour clock actually applied. Echoes the request, or the default when omitted.
+                 */
+                hourClock: 'clock' | 'local-mean' | 'solar';
+            };
+        };
+        /**
+         * Resolved chart of the second person.
+         */
+        personB: {
+            /**
+             * The four pillars of this person, year first.
+             */
+            pillars: Array<{
+                /**
+                 * Which of the four pillars this is. One of year, month, day, hour. The year pillar reads ancestry and early life, the month career and parents, the day the self and the partner, the hour later life and children.
+                 */
+                position: string;
+                /**
+                 * Pillar identifier, the stem id and the branch id joined by a hyphen. Always English pinyin, whatever the lang parameter says.
+                 */
+                id: string;
+                /**
+                 * Position of this pillar in the sexagenary cycle, 1 to 60, where jia-zi is 1. The cycle runs stems and branches together, which is why only 60 of the 120 possible pairings occur.
+                 */
+                number: number;
+                /**
+                 * The Heavenly Stem of this pillar.
+                 */
+                stem: {
+                    /**
+                     * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                     */
+                    id: string;
+                    /**
+                     * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the stem. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                     */
+                    element: string;
+                    /**
+                     * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    elementLocalized?: string;
+                    /**
+                     * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                     */
+                    polarity: string;
+                };
+                /**
+                 * The Earthly Branch of this pillar.
+                 */
+                branch: {
+                    /**
+                     * Earthly Branch identifier. One of zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai. Always English pinyin, whatever the lang parameter says. Note that "wu" is also a stem identifier: they never share a field, so a branch id is only ever read out of a branch position.
+                     */
+                    id: string;
+                    /**
+                     * The branch in hanzi. Identical under every lang.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the branch. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Zodiac animal of the branch. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig. Always English, whatever the lang parameter says. Use animalLocalized for anything a reader sees.
+                     */
+                    animal: string;
+                    /**
+                     * Zodiac animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    animalLocalized?: string;
+                    /**
+                     * Five-phase element of the branch. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                     */
+                    element: string;
+                    /**
+                     * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    elementLocalized?: string;
+                    /**
+                     * Polarity of the branch, yang or yin.
+                     */
+                    polarity: string;
+                };
+                /**
+                 * Relation the pillar STEM holds to the Day Master. The day pillar carries day-master instead, because the day stem is the reference point every other position is measured from rather than a relation to itself.
+                 */
+                tenGod: {
+                    /**
+                     * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                     */
+                    id: string;
+                    /**
+                     * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                     */
+                    name: string;
+                    /**
+                     * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                     */
+                    nameLocalized?: string;
+                    /**
+                     * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the relation. Identical under every lang.
+                     */
+                    pinyin: string;
+                    /**
+                     * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                     */
+                    category: string;
+                    /**
+                     * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                     */
+                    keynote: string;
+                };
+                /**
+                 * Stems stored inside the branch, principal first. These carry the qi a branch holds without showing it, and they are where a Day Master finds a root.
+                 */
+                hiddenStems: Array<{
+                    /**
+                     * The stem stored in the branch.
+                     */
+                    stem: {
+                        /**
+                         * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                         */
+                        id: string;
+                        /**
+                         * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                         */
+                        chinese: string;
+                        /**
+                         * Tone-marked pinyin for the stem. Identical under every lang.
+                         */
+                        pinyin: string;
+                        /**
+                         * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                         */
+                        element: string;
+                        /**
+                         * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                         */
+                        elementLocalized?: string;
+                        /**
+                         * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                         */
+                        polarity: string;
+                    };
+                    /**
+                     * Rank of this stem inside the branch, by the classical day-count that divides a thirty-day month 18, 9 and 3 days between the stems a branch holds. principal is the first-ranked stem and always matches the branch element; middle is the second-ranked; residual is the third. A branch holds one to three, always returned in rank order. What each rank CONTAINS depends on the branch family: on a storage branch the second-ranked stem is the seasonal carryover from the month before and the third is the stem that branch stores as the close of its trine, while on a growth branch the second-ranked stem is the one beginning its long-life phase there and the third is the carryover. Some schools name the same three positions by that function rather than by rank, which swaps the second and third labels on the four storage branches, so compare on rank rather than assuming a name.
+                     */
+                    role: string;
+                    /**
+                     * Relation this hidden stem holds to the Day Master.
+                     */
+                    tenGod: {
+                        /**
+                         * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+                         */
+                        id: string;
+                        /**
+                         * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                         */
+                        name: string;
+                        /**
+                         * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                         */
+                        nameLocalized?: string;
+                        /**
+                         * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                         */
+                        chinese: string;
+                        /**
+                         * Tone-marked pinyin for the relation. Identical under every lang.
+                         */
+                        pinyin: string;
+                        /**
+                         * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+                         */
+                        category: string;
+                        /**
+                         * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+                         */
+                        keynote: string;
+                    };
+                }>;
+                /**
+                 * Na Yin sound element of the pillar, an older elemental reading assigned to each of the 30 stem-and-branch pairs. The hanzi name sits beside it in naYinChinese.
+                 */
+                naYin: string;
+                /**
+                 * The Na Yin name in hanzi. Identical under every lang.
+                 */
+                naYinChinese: string;
+                /**
+                 * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in.
+                 */
+                naYinElement: string;
+            }>;
+            /**
+             * The day stem of this person.
+             */
+            dayMaster: {
+                /**
+                 * Day stem identifier for this person.
+                 */
+                stem: string;
+                /**
+                 * The Day Master stem in hanzi.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the Day Master stem.
+                 */
+                pinyin: string;
+                /**
+                 * Five-phase element of this Day Master. Always English, whatever the lang parameter says.
+                 */
+                element: string;
+                /**
+                 * Display copy of the element in the requested language. Absent for English, so an English response is unchanged.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity, yang or yin.
+                 */
+                polarity: string;
+                /**
+                 * What this stem is like as a Day Master.
+                 */
+                nature: string;
+            };
+            /**
+             * Day Master strength verdict for this person, so a reader can see which of the two chart carries more capacity. One of very-weak, weak, balanced, strong, very-strong.
+             */
+            strength: string;
+            /**
+             * The three school conventions this result was computed under. Returned on every BaZi response so a chart is self-describing: two calculators can produce different pillars for one birth and both be correct, and this object says which reading you are holding.
+             */
+            conventions: {
+                /**
+                 * Day-boundary school actually applied. Echoes the request, or the default when it was omitted. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                dayBoundary: 'split-zi' | 'midnight' | 'early-zi';
+                /**
+                 * Year-boundary school actually applied. Echoes the request, or the default when it was omitted.
+                 */
+                yearBoundary: 'li-chun' | 'lunar-new-year';
+                /**
+                 * Hour clock actually applied. Echoes the request, or the default when omitted.
+                 */
+                hourClock: 'clock' | 'local-mean' | 'solar';
+            };
+        };
+        /**
+         * How the two Day Masters stand to each other by the five-phase cycle, read from person A. peer means the same element, output means A generates B, wealth means A controls B, influence means B controls A, resource means B generates A. Always English, whatever the lang parameter says.
+         */
+        dayMasterRelation: string;
+        /**
+         * Every combination, clash, harm and punishment that crosses between the two charts, with each position prefixed by its subject. Only cross-chart pairs are searched: a three-branch formation assembled from two different people is not a formation either chart holds, so trines are not reported here.
+         */
+        interactions: Array<{
+            /**
+             * Kind of interaction. stem-combination and six-combination bind two positions, trine binds three, and clash, harm, punishment and stem-clash break them. Always English, whatever the lang parameter says.
+             */
+            type: string;
+            /**
+             * Identifier of the pairing itself, the member ids joined by hyphens in canonical order.
+             */
+            id: string;
+            /**
+             * The interaction named in hanzi. Identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the interaction. Identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Whether the interaction binds or breaks. harmonious for combinations and trines, challenging for clashes, harms and punishments. Always English, whatever the lang parameter says.
+             */
+            quality: string;
+            /**
+             * The chart positions taking part, in the same order as members. On a two-person reading these are prefixed with the subject, for example personA.day.
+             */
+            positions: Array<string>;
+            /**
+             * The stem or branch ids taking part, in the same order as positions.
+             */
+            members: Array<string>;
+            /**
+             * Element the formation resolves to. Present on stem combinations and on complete trines, absent on everything else. Branch six combinations deliberately carry none: the classical sources assign transformed elements to the stem pairs and not to these, and one of the six is contested between schools.
+             */
+            transformsTo?: string;
+            /**
+             * Class of a punishment, present on punishments only. ungrateful is the tiger, snake and monkey group, bullying the ox, dog and goat group, discourteous the rat and rabbit pair, and self a branch doubled against itself.
+             */
+            variety?: string;
+            /**
+             * Punishments only. True when the third branch of the group is also present in the chart, which is what a complete three-punishment means. False marks the partial case, where only two of the three are in play.
+             */
+            complete?: boolean;
+            /**
+             * What this kind of interaction does between the positions it joins.
+             */
+            meaning: string;
+        }>;
+        /**
+         * Compatibility score from 0 to 100. A RoxyAPI tally over the interactions listed above rather than a figure from any classical text: it starts at a neutral 50, adds for each binding interaction and subtracts for each breaking one. Recompute it yourself from the interactions array if you want a different weighting.
+         */
+        score: number;
+        /**
+         * How many of the interactions bind the two charts together.
+         */
+        harmoniousCount: number;
+        /**
+         * How many of the interactions break between them.
+         */
+        challengingCount: number;
+        /**
+         * One-paragraph reading of the balance between binding and breaking interactions.
+         */
+        summary: string;
+    };
+};
+
+export type PostChineseAstrologyBaziCompatibilityResponse = PostChineseAstrologyBaziCompatibilityResponses[keyof PostChineseAstrologyBaziCompatibilityResponses];
+
+export type PostChineseAstrologyBaziAnnualForecastData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+         */
+        time: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+         */
+        latitude?: number;
+        /**
+         * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+         */
+        longitude?: number;
+        /**
+         * Which instant starts the sexagenary DAY, which only matters for a birth between 23:00 and 23:59. "midnight" is the classical position of the Ming compendium San Ming Tong Hui: the day turns at 00:00 and 23:00 to 23:59 is the late zi hour of the day that is ending, so the hour stem is taken from that day. "early-zi" turns the whole day at 23:00, the practice in Hong Kong, Taiwan and much of South East Asia. "split-zi" is the compromise most software implements and the default here: the day still turns at 00:00, but the hour stem is taken from the next day. The three give three different answers for a late-evening birth and identical answers for every other birth.
+         */
+        dayBoundary?: 'split-zi' | 'midnight' | 'early-zi';
+        /**
+         * Which instant starts the sexagenary YEAR. "li-chun" is Beginning of Spring, around 4 February, and is the classical rule every BaZi text uses, so it is the default on this endpoint. "lunar-new-year" is the folk rule people mean when they say which animal they are, and it falls between late January and late February. The two disagree for any birth in the weeks between them: 14 February 2026 is a Wood Snake year under lunar-new-year and a Fire Horse year under li-chun.
+         */
+        yearBoundary?: 'li-chun' | 'lunar-new-year';
+        /**
+         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         */
+        hourClock?: 'clock' | 'local-mean' | 'solar';
+        /**
+         * Gregorian year to read against the natal chart. The annual pillar for that year is resolved under the same year boundary the request selected, so a li-chun reading and a lunar-new-year reading of the same calendar year can differ.
+         */
+        year: number;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/bazi/annual-forecast';
+};
+
+export type PostChineseAstrologyBaziAnnualForecastErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyBaziAnnualForecastError = PostChineseAstrologyBaziAnnualForecastErrors[keyof PostChineseAstrologyBaziAnnualForecastErrors];
+
+export type PostChineseAstrologyBaziAnnualForecastResponses = {
+    /**
+     * Annual pillar, its relation to the Day Master, and the natal interactions
+     */
+    200: {
+        /**
+         * Echo of the birth moment the chart was computed from.
+         */
+        birthData: {
+            /**
+             * Birth date in YYYY-MM-DD format. Sets the year, month and day pillars. The year pillar turns at Beginning of Spring rather than on 1 January, and the month pillar turns at each of the twelve minor solar terms rather than at a calendar month boundary.
+             */
+            date: string;
+            /**
+             * Birth time in 24-hour HH:MM:SS format. Sets the hour pillar, which is one of the four and carries the whole picture of later life and offspring. Each Earthly Branch covers two hours, so a birth within a few minutes of an odd hour can land in either. All four pillars are read in the local clock of the birth, and the day boundary is applied in that same clock; only the lunisolar calendar date itself is a world constant, fixed at UTC plus 8 so one instant has one Chinese date everywhere.
+             */
+            time: string;
+            /**
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             */
+            timezone: number;
+            /**
+             * Birth latitude in decimal degrees. Accepted for consistency with the other birth-data endpoints and does not affect any part of a BaZi chart. Defaults to 0.
+             */
+            latitude?: number;
+            /**
+             * Birth longitude in decimal degrees. Positive is East, negative is West. Required when hourClock is "local-mean" or "solar", which shift the hour branch to the sun over the birth place; omitting it in either case returns 400. Ignored when hourClock is "clock".
+             */
+            longitude?: number;
+        };
+        /**
+         * The three school conventions this result was computed under. Returned on every BaZi response so a chart is self-describing: two calculators can produce different pillars for one birth and both be correct, and this object says which reading you are holding.
+         */
+        conventions: {
+            /**
+             * Day-boundary school actually applied. Echoes the request, or the default when it was omitted. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            dayBoundary: 'split-zi' | 'midnight' | 'early-zi';
+            /**
+             * Year-boundary school actually applied. Echoes the request, or the default when it was omitted.
+             */
+            yearBoundary: 'li-chun' | 'lunar-new-year';
+            /**
+             * Hour clock actually applied. Echoes the request, or the default when omitted.
+             */
+            hourClock: 'clock' | 'local-mean' | 'solar';
+        };
+        /**
+         * Echo of the year requested, which the annual pillar below was resolved for.
+         */
+        year: number;
+        /**
+         * The sexagenary pillar of the year being read.
+         */
+        annualPillar: {
+            /**
+             * Annual pillar identifier, the stem id and the branch id joined by a hyphen.
+             */
+            id: string;
+            /**
+             * Position of the annual pillar in the sexagenary cycle, 1 to 60.
+             */
+            number: number;
+            /**
+             * Heavenly Stem of the year.
+             */
+            stem: {
+                /**
+                 * Heavenly Stem identifier. One of jia, yi, bing, ding, wu, ji, geng, xin, ren, gui. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code and to key a glyph table on.
+                 */
+                id: string;
+                /**
+                 * The stem in hanzi. Data rather than display copy, so it is identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the stem. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Five-phase element of the stem. One of Wood, Fire, Earth, Metal, Water. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                 */
+                element: string;
+                /**
+                 * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity of the stem, yang or yin. The five odd stems are yang and the five even ones are yin, and this is half of what decides every Ten God relation in the chart.
+                 */
+                polarity: string;
+            };
+            /**
+             * Earthly Branch of the year.
+             */
+            branch: {
+                /**
+                 * Earthly Branch identifier. One of zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai. Always English pinyin, whatever the lang parameter says. Note that "wu" is also a stem identifier: they never share a field, so a branch id is only ever read out of a branch position.
+                 */
+                id: string;
+                /**
+                 * The branch in hanzi. Identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the branch. Identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Zodiac animal of the branch. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig. Always English, whatever the lang parameter says. Use animalLocalized for anything a reader sees.
+                 */
+                animal: string;
+                /**
+                 * Zodiac animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                animalLocalized?: string;
+                /**
+                 * Five-phase element of the branch. Always English, whatever the lang parameter says. Use elementLocalized for anything a reader sees.
+                 */
+                element: string;
+                /**
+                 * Element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Polarity of the branch, yang or yin.
+                 */
+                polarity: string;
+            };
+            /**
+             * Na Yin sound element of the annual pillar.
+             */
+            naYin: string;
+            /**
+             * The Na Yin name in hanzi. Identical under every lang.
+             */
+            naYinChinese: string;
+        };
+        /**
+         * Zodiac animal of the year branch. Always English, whatever the lang parameter says. Use animalLocalized for anything a reader sees.
+         */
+        animal: string;
+        /**
+         * Display copy of the animal name in the requested language. Absent for English, so an English response is unchanged.
+         */
+        animalLocalized?: string;
+        /**
+         * Relation the ANNUAL STEM holds to the natal Day Master. This is the single most useful line of an annual reading: it says what the year asks of the chart.
+         */
+        tenGod: {
+            /**
+             * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+             */
+            id: string;
+            /**
+             * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the relation. Identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+             */
+            category: string;
+            /**
+             * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+             */
+            keynote: string;
+        };
+        /**
+         * Relation the principal hidden stem of the annual branch holds to the natal Day Master, the slower half of the same reading.
+         */
+        branchTenGod: {
+            /**
+             * Ten God identifier. One of friend, rob-wealth, eating-god, hurting-officer, indirect-wealth, direct-wealth, seven-killings, direct-officer, indirect-resource, direct-resource, plus day-master in the day-stem position. Always English, whatever the lang parameter says.
+             */
+            id: string;
+            /**
+             * Display name of the relation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Ten God name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the relation. Identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Which of the five cycle relations this belongs to. peer is the same element as the Day Master, output is what the Day Master generates, wealth is what it controls, influence is what controls it, resource is what generates it, and self marks the Day Master itself. Always English, whatever the lang parameter says.
+             */
+            category: string;
+            /**
+             * One-line summary of what this relation contributes, for a compact rendering that has no room for the full meaning.
+             */
+            keynote: string;
+        };
+        /**
+         * How the annual branch stands to the NATAL YEAR branch. same is the twelve-yearly return of the birth animal, the year commonly called ben ming nian. clash, harm and punishment are the three breaking relations, and none means the two branches form no structural relation at all. Always English, whatever the lang parameter says.
+         */
+        yearBranchRelation: string;
+        /**
+         * True when the year returns the birth animal, which is exactly the case where yearBranchRelation is same. Surfaced as its own boolean because it is the one relation most consumers render on its own.
+         */
+        benMingNian: boolean;
+        /**
+         * What this relation between the annual branch and the natal year branch means.
+         */
+        yearBranchRelationMeaning: string;
+        /**
+         * Every combination, clash, harm and punishment the annual pillar forms with each of the four natal pillars. Positions are named natal.year through natal.hour against annual.
+         */
+        interactions: Array<{
+            /**
+             * Kind of interaction. stem-combination and six-combination bind two positions, trine binds three, and clash, harm, punishment and stem-clash break them. Always English, whatever the lang parameter says.
+             */
+            type: string;
+            /**
+             * Identifier of the pairing itself, the member ids joined by hyphens in canonical order.
+             */
+            id: string;
+            /**
+             * The interaction named in hanzi. Identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the interaction. Identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Whether the interaction binds or breaks. harmonious for combinations and trines, challenging for clashes, harms and punishments. Always English, whatever the lang parameter says.
+             */
+            quality: string;
+            /**
+             * The chart positions taking part, in the same order as members. On a two-person reading these are prefixed with the subject, for example personA.day.
+             */
+            positions: Array<string>;
+            /**
+             * The stem or branch ids taking part, in the same order as positions.
+             */
+            members: Array<string>;
+            /**
+             * Element the formation resolves to. Present on stem combinations and on complete trines, absent on everything else. Branch six combinations deliberately carry none: the classical sources assign transformed elements to the stem pairs and not to these, and one of the six is contested between schools.
+             */
+            transformsTo?: string;
+            /**
+             * Class of a punishment, present on punishments only. ungrateful is the tiger, snake and monkey group, bullying the ox, dog and goat group, discourteous the rat and rabbit pair, and self a branch doubled against itself.
+             */
+            variety?: string;
+            /**
+             * Punishments only. True when the third branch of the group is also present in the chart, which is what a complete three-punishment means. False marks the partial case, where only two of the three are in play.
+             */
+            complete?: boolean;
+            /**
+             * What this kind of interaction does between the positions it joins.
+             */
+            meaning: string;
+        }>;
+        /**
+         * One-paragraph reading of what the year asks of this chart.
+         */
+        summary: string;
+    };
+};
+
+export type PostChineseAstrologyBaziAnnualForecastResponse = PostChineseAstrologyBaziAnnualForecastResponses[keyof PostChineseAstrologyBaziAnnualForecastResponses];
+
+export type GetChineseAstrologyZodiacAnimalsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-12, default 12.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/chinese-astrology/zodiac/animals';
+};
+
+export type GetChineseAstrologyZodiacAnimalsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyZodiacAnimalsError = GetChineseAstrologyZodiacAnimalsErrors[keyof GetChineseAstrologyZodiacAnimalsErrors];
+
+export type GetChineseAstrologyZodiacAnimalsResponses = {
+    /**
+     * The zodiac animal catalogue.
+     */
+    200: {
+        /**
+         * Total animals in the cycle. Always 12; the zodiac is a closed set.
+         */
+        total: number;
+        /**
+         * Maximum items returned for this page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped before this page.
+         */
+        offset: number;
+        /**
+         * Animals for the current page, in cycle order. Use /zodiac/animals/{id} for the full record with strengths, weaknesses, element variants and relationship partners.
+         */
+        animals: Array<{
+            /**
+             * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+             */
+            id: string;
+            /**
+             * Display name of the animal in English. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked Hanyu Pinyin for the animal name. Data rather than a translation, so it is identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Earthly Branch this animal names, as its pinyin identifier. The twelve branches are zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai, and they run in the same order as the animals. Every animal element, polarity and double-hour is a property of this branch.
+             */
+            branch: string;
+            /**
+             * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+             */
+            element: string;
+            /**
+             * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+             */
+            polarity: string;
+            /**
+             * Short trait keywords for the sign, lowercase in English. Built for tag clouds, sign cards and compatibility widgets that need a glanceable character sketch rather than a paragraph.
+             */
+            traits: Array<string>;
+        }>;
+    };
+};
+
+export type GetChineseAstrologyZodiacAnimalsResponse = GetChineseAstrologyZodiacAnimalsResponses[keyof GetChineseAstrologyZodiacAnimalsResponses];
+
+export type GetChineseAstrologyZodiacAnimalsByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Animal id, case-insensitive and punctuation-insensitive. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig. The sheep and the ram are the same animal as the goat and resolve to goat.
+         */
+        id: 'rat' | 'ox' | 'tiger' | 'rabbit' | 'dragon' | 'snake' | 'horse' | 'goat' | 'monkey' | 'rooster' | 'dog' | 'pig';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/zodiac/animals/{id}';
+};
+
+export type GetChineseAstrologyZodiacAnimalsByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyZodiacAnimalsByIdError = GetChineseAstrologyZodiacAnimalsByIdErrors[keyof GetChineseAstrologyZodiacAnimalsByIdErrors];
+
+export type GetChineseAstrologyZodiacAnimalsByIdResponses = {
+    /**
+     * Full animal profile.
+     */
+    200: {
+        /**
+         * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+         */
+        id: string;
+        /**
+         * Display name of the animal in English. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+         */
+        name: string;
+        /**
+         * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        nameLocalized?: string;
+        /**
+         * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+         */
+        chinese: string;
+        /**
+         * Tone-marked Hanyu Pinyin for the animal name. Data rather than a translation, so it is identical under every lang.
+         */
+        pinyin: string;
+        /**
+         * Earthly Branch this animal names, as its pinyin identifier. The twelve branches are zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai, and they run in the same order as the animals. Every animal element, polarity and double-hour is a property of this branch.
+         */
+        branch: string;
+        /**
+         * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+         */
+        element: string;
+        /**
+         * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        elementLocalized?: string;
+        /**
+         * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+         */
+        polarity: string;
+        /**
+         * Short trait keywords for the sign, lowercase in English. Built for tag clouds, sign cards and compatibility widgets that need a glanceable character sketch rather than a paragraph.
+         */
+        traits: Array<string>;
+        /**
+         * Character sketch of the sign, drawn from the season, the double-hour and the phase its branch occupies.
+         */
+        summary: string;
+        /**
+         * What the sign does well, as full sentences rather than keywords.
+         */
+        strengths: Array<string>;
+        /**
+         * Where the same temperament costs the sign something. Each one is the shadow of a strength above rather than an unrelated flaw.
+         */
+        weaknesses: Array<string>;
+        /**
+         * How the sign behaves toward the other eleven in general. For a specific pair, call /zodiac/compatibility/{sign1}/{sign2}.
+         */
+        compatibilitySummary: string;
+        /**
+         * The two-hour period of the day this animal branch governs. Used for the hour pillar in a Four Pillars chart, which is always read on local time.
+         */
+        hours: {
+            /**
+             * First hour of the double-hour this branch governs, on a 24-hour local clock. The zi branch starts at 23, so the cycle begins the evening before midnight.
+             */
+            start: number;
+            /**
+             * Hour the double-hour ends, exclusive, on a 24-hour local clock. Each branch governs exactly two hours.
+             */
+            end: number;
+        };
+        /**
+         * The three-harmony group (San He) this animal belongs to. Every animal belongs to exactly one.
+         */
+        trine: {
+            /**
+             * Machine id of the trine: first, second, third or fourth. Always English.
+             */
+            id: string;
+            /**
+             * Position of the trine in the order the tradition lists them, 1 to 4. Not a ranking.
+             */
+            number: number;
+            /**
+             * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+             */
+            element: string;
+            /**
+             * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * The three Earthly Branches of the trine in classical notation, in the order the texts give them.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin of the three branches.
+             */
+            pinyin: string;
+            /**
+             * The three animal ids in this trine, including the one requested. Members sit four branches apart, so the four trines partition all twelve animals with none shared and none left over.
+             */
+            members: Array<string>;
+            /**
+             * What the alliance is traditionally said to produce. The three branches combine into the element above, which is not any one member own phase.
+             */
+            theme: string;
+        };
+        /**
+         * The six-harmony partner (Liu He), traditionally called the secret friend because the support it gives arrives unasked. The element is the phase the two branches combine into, which is generally neither animal own phase.
+         */
+        secretFriend: {
+            /**
+             * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+             */
+            id: string;
+            /**
+             * Display name of the related animal in English. Always English; use nameLocalized for display.
+             */
+            name: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Simplified Chinese character for the related animal.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the related animal.
+             */
+            pinyin: string;
+            /**
+             * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+             */
+            element: string;
+            /**
+             * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+        };
+        /**
+         * The clashing animal (Liu Chong): the branch directly opposite, six positions away. The tradition reads this as the most charged pairing in the cycle and the least restful.
+         */
+        clashPartner: {
+            /**
+             * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+             */
+            id: string;
+            /**
+             * Display name of the related animal in English. Always English; use nameLocalized for display.
+             */
+            name: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Simplified Chinese character for the related animal.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the related animal.
+             */
+            pinyin: string;
+        };
+        /**
+         * The harming animal (Liu Hai). Treated as less violent than a clash and harder to spot, because it works through accumulation rather than confrontation.
+         */
+        harmPartner: {
+            /**
+             * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+             */
+            id: string;
+            /**
+             * Display name of the related animal in English. Always English; use nameLocalized for display.
+             */
+            name: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Simplified Chinese character for the related animal.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the related animal.
+             */
+            pinyin: string;
+        };
+        /**
+         * The five phase variants of this sign across the sixty-year cycle, listed over 1924 to 2043. Exactly five, always, because a branch pairs only with the five Heavenly Stems of its own polarity and those five carry one phase each. A year number here names the sexagenary year, not a calendar range: a birth in January or early February may still belong to the previous year, which is what /zodiac/sign resolves.
+         */
+        elementVariants: Array<{
+            /**
+             * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+             */
+            element: string;
+            /**
+             * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+             */
+            polarity: string;
+            /**
+             * Heavenly Stem of the year, as its pinyin identifier. The ten stems are jia, yi, bing, ding, wu, ji, geng, xin, ren, gui.
+             */
+            stem: string;
+            /**
+             * Sexagenary pillar id for this variant, stem then branch. This pair returns once every sixty years.
+             */
+            pillar: string;
+            /**
+             * Gregorian years in the published window that carry this variant. Two per variant, sixty years apart.
+             */
+            years: Array<number>;
+        }>;
+    };
+};
+
+export type GetChineseAstrologyZodiacAnimalsByIdResponse = GetChineseAstrologyZodiacAnimalsByIdResponses[keyof GetChineseAstrologyZodiacAnimalsByIdResponses];
+
+export type PostChineseAstrologyZodiacSignData = {
+    body: {
+        /**
+         * Birth date in YYYY-MM-DD format. Only the date is needed: the zodiac animal is a property of the year, so no time, timezone or place changes the answer.
+         */
+        date: string;
+        /**
+         * Which instant starts the zodiac year. lunar-new-year is the folk rule and the default on this route, because it is the rule people mean when they say what animal they are: the sign turns on Chinese New Year, between late January and late February. li-chun is the classical rule every Four Pillars text uses, turning the year at the solar term Beginning of Spring around 4 February. The two agree for roughly eleven months of every year and disagree for the weeks between them, so a 14 February 2026 birth is a Snake under lunar-new-year and a Horse under li-chun. The BaZi routes default to li-chun instead, because a chart and a folk sign are answering different questions.
+         */
+        yearBoundary?: 'lunar-new-year' | 'li-chun';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/zodiac/sign';
+};
+
+export type PostChineseAstrologyZodiacSignErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyZodiacSignError = PostChineseAstrologyZodiacSignErrors[keyof PostChineseAstrologyZodiacSignErrors];
+
+export type PostChineseAstrologyZodiacSignResponses = {
+    /**
+     * The zodiac animal for this birth date.
+     */
+    200: {
+        /**
+         * Echo of the birth date the answer was resolved from.
+         */
+        date: string;
+        /**
+         * The zodiac animal for this date. The element on this block is the animal own fixed branch phase, which for a Horse is always Fire. The year phase is the sibling element field below.
+         */
+        animal: {
+            /**
+             * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+             */
+            id: string;
+            /**
+             * Display name of the animal in English. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+             */
+            chinese: string;
+            /**
+             * Tone-marked Hanyu Pinyin for the animal name. Data rather than a translation, so it is identical under every lang.
+             */
+            pinyin: string;
+            /**
+             * Earthly Branch this animal names, as its pinyin identifier. The twelve branches are zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai, and they run in the same order as the animals. Every animal element, polarity and double-hour is a property of this branch.
+             */
+            branch: string;
+            /**
+             * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+             */
+            element: string;
+            /**
+             * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+             */
+            polarity: string;
+        };
+        /**
+         * The sexagenary year the date falls in, under the resolved boundary. Stem and branch together repeat once every sixty years.
+         */
+        yearPillar: {
+            /**
+             * Sexagenary year pillar id, Heavenly Stem then Earthly Branch. Always English pinyin.
+             */
+            id: string;
+            /**
+             * Position of this pillar in the sixty-year sexagenary cycle, 1 to 60, where jia-zi is 1.
+             */
+            number: number;
+            /**
+             * Heavenly Stem of the year, as its pinyin identifier.
+             */
+            stem: string;
+            /**
+             * Earthly Branch of the year, as its pinyin identifier. This is the branch the animal names.
+             */
+            branch: string;
+        };
+        /**
+         * Five Element phase of the year Heavenly Stem. This is what distinguishes a Metal Horse from a Fire Horse and it changes every two years. It is NOT the animal own fixed phase, which sits on the animal block above. Always English so it stays safe to compare against.
+         */
+        element: string;
+        /**
+         * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        elementLocalized?: string;
+        /**
+         * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+         */
+        polarity: string;
+        /**
+         * Composed reading of the sign under its year phase. The sign contributes the temperament and the phase contributes the register.
+         */
+        interpretation: string;
+        /**
+         * The school parameters this answer was computed under, echoed so the result is self-describing.
+         */
+        conventions: {
+            /**
+             * The year boundary actually applied, whether it was requested or defaulted. Store this beside any sign you persist: the same date resolves to two different animals under the two schools, and a sign with no convention recorded cannot be reproduced.
+             */
+            yearBoundary: string;
+        };
+    };
+};
+
+export type PostChineseAstrologyZodiacSignResponse = PostChineseAstrologyZodiacSignResponses[keyof PostChineseAstrologyZodiacSignResponses];
+
+export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Data = {
+    body?: never;
+    path: {
+        /**
+         * First animal id, case-insensitive. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+         */
+        sign1: 'rat' | 'ox' | 'tiger' | 'rabbit' | 'dragon' | 'snake' | 'horse' | 'goat' | 'monkey' | 'rooster' | 'dog' | 'pig';
+        /**
+         * Second animal id, case-insensitive. The relation is symmetric, so swapping the two returns the same relationship and the same score, with the reading written from the first sign point of view.
+         */
+        sign2: 'rat' | 'ox' | 'tiger' | 'rabbit' | 'dragon' | 'snake' | 'horse' | 'goat' | 'monkey' | 'rooster' | 'dog' | 'pig';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/zodiac/compatibility/{sign1}/{sign2}';
+};
+
+export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Error = GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors[keyof GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors];
+
+export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Responses = {
+    /**
+     * Compatibility between the two signs.
+     */
+    200: {
+        /**
+         * The two signs compared, in the order they were requested. Always one object, never an array.
+         */
+        signs: {
+            first: {
+                /**
+                 * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+                 */
+                id: string;
+                /**
+                 * Display name of the animal in English. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+                 */
+                name: string;
+                /**
+                 * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
+                /**
+                 * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked Hanyu Pinyin for the animal name. Data rather than a translation, so it is identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Earthly Branch this animal names, as its pinyin identifier. The twelve branches are zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai, and they run in the same order as the animals. Every animal element, polarity and double-hour is a property of this branch.
+                 */
+                branch: string;
+                /**
+                 * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+                 */
+                element: string;
+                /**
+                 * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+                 */
+                polarity: string;
+            };
+            second: {
+                /**
+                 * Stable machine identifier for the animal. Always English and lowercase, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees. The twelve ids are rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+                 */
+                id: string;
+                /**
+                 * Display name of the animal in English. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+                 */
+                name: string;
+                /**
+                 * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                nameLocalized?: string;
+                /**
+                 * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked Hanyu Pinyin for the animal name. Data rather than a translation, so it is identical under every lang.
+                 */
+                pinyin: string;
+                /**
+                 * Earthly Branch this animal names, as its pinyin identifier. The twelve branches are zi, chou, yin, mao, chen, si, wu, wei, shen, you, xu, hai, and they run in the same order as the animals. Every animal element, polarity and double-hour is a property of this branch.
+                 */
+                branch: string;
+                /**
+                 * Fixed Five Element (Wu Xing) phase of the animal own branch: Wood, Fire, Earth, Metal or Water. This never changes for a sign. It is NOT the year phase that makes a Metal Rat differ from a Water Rat, which comes from the year Heavenly Stem. Always English so it stays safe to compare against and to key colours off.
+                 */
+                element: string;
+                /**
+                 * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                elementLocalized?: string;
+                /**
+                 * Yin or yang polarity of the branch. The twelve branches alternate, starting yang at zi, so the six odd-numbered animals are yang and the six even-numbered are yin.
+                 */
+                polarity: string;
+            };
+        };
+        /**
+         * Which of the six classical branch relations the pair stands in. One of secret-friend (Liu He, the six harmonies), trine (San He, the three harmonies), same (both signs share a branch), neutral (no formal relation), harm (Liu Hai) or clash (Liu Chong, branches six apart). Exactly one applies to any pair, because no two of the conditions can hold at once. Always English so it stays safe to switch on.
+         */
+        relationship: string;
+        /**
+         * Display name of the relation in English. Always English; use relationshipNameLocalized for anything a reader sees.
+         */
+        relationshipName: string;
+        /**
+         * Branch relation name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        relationshipNameLocalized?: string;
+        /**
+         * Classical name of the relation in simplified Chinese.
+         */
+        relationshipChinese: string;
+        /**
+         * Tone-marked pinyin of the classical relation name.
+         */
+        relationshipPinyin: string;
+        /**
+         * Compatibility score out of 100 for this relation. Fixed per relation rather than per pair, because the branch relation is what the tradition actually rates: 92 for a six-harmony pair, 85 for a trine, 65 for two of the same sign, 60 for no relation, 40 for a harm and 30 for a clash.
+         */
+        score: number;
+        /**
+         * Coarse band the score falls in: excellent, strong, workable, challenging or difficult. Built for badges and filters that should not hard-code score thresholds.
+         */
+        verdict: string;
+        /**
+         * The Five Element phase the two branches combine into. Present only for a trine or a six-harmony pair, which are the two relations that combine; absent otherwise. This is generally neither animal own phase, which is the point of the combination.
+         */
+        sharedElement?: string;
+        /**
+         * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        sharedElementLocalized?: string;
+        /**
+         * Composed reading of the pair. The branch relation supplies the shape and the two temperaments supply the substance, so the reading is specific to this pair without being authored for it.
+         */
+        summary: string;
+        /**
+         * What the pair has going for it, drawn from what each sign does well. Favourable relations contribute from both signs; the rest from the first.
+         */
+        strengths: Array<string>;
+        /**
+         * Where the pair is most likely to grind, drawn from each sign own weaknesses. Difficult relations contribute from both signs; the rest from the first.
+         */
+        frictions: Array<string>;
+        /**
+         * The one thing worth doing differently, specific to this relation rather than generic relationship guidance.
+         */
+        advice: string;
+    };
+};
+
+export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Response = GetChineseAstrologyZodiacCompatibilityBySign1BySign2Responses[keyof GetChineseAstrologyZodiacCompatibilityBySign1BySign2Responses];
+
+export type GetChineseAstrologyZodiacByIdDailyData = {
+    body?: never;
+    path: {
+        /**
+         * Animal id, case-insensitive. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+         */
+        id: 'rat' | 'ox' | 'tiger' | 'rabbit' | 'dragon' | 'snake' | 'horse' | 'goat' | 'monkey' | 'rooster' | 'dog' | 'pig';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Reading date in YYYY-MM-DD format. Past and future dates are both supported, for editorial scheduling and backfill. Defaults to the current day in the timezone parameter.
+         */
+        date?: string;
+        /**
+         * Selects which day counts as current when date is omitted. Defaults to UTC, so the reading rolls over at 00:00 UTC each day. Pass the timezone of the end user to roll over on their local clock instead. Ignored when date is set. Accepts an IANA name (e.g. "America/New_York"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
+         */
+        timezone?: string;
+    };
+    url: '/chinese-astrology/zodiac/{id}/daily';
+};
+
+export type GetChineseAstrologyZodiacByIdDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyZodiacByIdDailyError = GetChineseAstrologyZodiacByIdDailyErrors[keyof GetChineseAstrologyZodiacByIdDailyErrors];
+
+export type GetChineseAstrologyZodiacByIdDailyResponses = {
+    /**
+     * The daily reading for this sign.
+     */
+    200: {
+        /**
+         * The sign this reading was requested for.
+         */
+        animal: {
+            /**
+             * Machine identifier of the sign this reading is for. Always English and lowercase, so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * Display name of the sign in English. Always English; use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            nameLocalized?: string;
+            /**
+             * Simplified Chinese character for the animal.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the animal name.
+             */
+            pinyin: string;
+            /**
+             * Earthly Branch this animal names, as its pinyin identifier.
+             */
+            branch: string;
+            /**
+             * Fixed Five Element phase of the sign own branch. Always English so it stays safe to compare against.
+             */
+            element: string;
+            /**
+             * Five Element phase name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            elementLocalized?: string;
+            /**
+             * Yin or yang polarity of the branch.
+             */
+            polarity: string;
+        };
+        /**
+         * Date of this reading in YYYY-MM-DD format. Echoes the date requested, or the current day in the timezone parameter when it was omitted.
+         */
+        date: string;
+        /**
+         * The sexagenary pillar of this calendar day, evaluated at the reference meridian for the Chinese calendar.
+         */
+        dayPillar: {
+            /**
+             * Sexagenary day pillar id, Heavenly Stem then Earthly Branch. Always English pinyin.
+             */
+            id: string;
+            /**
+             * Position of this pillar in the sixty-day sexagenary cycle, 1 to 60, where jia-zi is 1. The day cycle runs unbroken and is independent of the lunar and solar calendars.
+             */
+            number: number;
+            /**
+             * Heavenly Stem of the day, as its pinyin identifier.
+             */
+            stem: string;
+            /**
+             * Earthly Branch of the day, as its pinyin identifier.
+             */
+            branch: string;
+            /**
+             * The animal the day branch carries, which the tradition calls the day animal. This is what the requested sign is being read against.
+             */
+            animal: string;
+            /**
+             * Five Element phase of the day Heavenly Stem. Together with the sign own phase this sets the energy rating, through the classical generating and controlling cycles.
+             */
+            element: string;
+        };
+        /**
+         * How the day branch stands to the sign branch. One of secret-friend, trine, same, neutral, harm or clash. Exactly one applies, because no two of the conditions can hold at once. Always English so it stays safe to switch on, and the same vocabulary /zodiac/compatibility returns.
+         */
+        relationship: string;
+        /**
+         * Overall energy for this sign on this day, 1 to 10. Derived from the branch relation plus how the day phase treats the sign phase on the generating and controlling cycles, so a favourable relation in a draining phase lands lower than a favourable relation in a supporting one. Built for content widgets and visual indicators.
+         */
+        energyRating: number;
+        /**
+         * What the day does to this sign, from the branch relation and the phase of the day stem.
+         */
+        overview: string;
+        /**
+         * Relationship guidance for the day, specific to the branch relation.
+         */
+        love: string;
+        /**
+         * Work guidance for the day. Clash and harm days carry the traditional cautions about signings and launches.
+         */
+        career: string;
+        /**
+         * The one thing worth doing differently today, drawn from the relation and from this sign own habitual weak point.
+         */
+        advice: string;
+        /**
+         * The sexagenary year this date falls in, resolved on the LUNAR NEW YEAR rule to match the folk zodiac this route family answers. The Four Pillars routes use the classical Li Chun rule and can name a different year for dates in early February.
+         */
+        year: {
+            /**
+             * Sexagenary year pillar in force on this date, resolved on the lunar new year rule.
+             */
+            pillar: string;
+            /**
+             * Animal of the year in force. Always English so it stays safe to compare against.
+             */
+            animal: string;
+            /**
+             * Animal name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            animalLocalized?: string;
+            /**
+             * How the year branch stands to the requested sign, from the same six-value vocabulary as the daily relationship. This is the slower background the day sits inside.
+             */
+            relationship: string;
+            /**
+             * One line on the year relationship, or on the Ben Ming Nian year when the year animal matches the sign.
+             */
+            note: string;
+        };
+        /**
+         * True when the year animal is the same as the requested sign, the return of your own branch that comes round every twelve years. The tradition treats a Ben Ming Nian as a year to be deliberate in rather than one to fear, because the sign own qualities run at full strength and that cuts both ways.
+         */
+        benMingNian: boolean;
+    };
+};
+
+export type GetChineseAstrologyZodiacByIdDailyResponse = GetChineseAstrologyZodiacByIdDailyResponses[keyof GetChineseAstrologyZodiacByIdDailyResponses];
+
+export type GetChineseAstrologyCalendarSolarTermsByYearData = {
+    body?: never;
+    path: {
+        /**
+         * Solar year, 1900 to 2100. The year opens at Li Chun rather than on 1 January, so its last two terms fall in the following January.
+         */
+        year: number;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/calendar/solar-terms/{year}';
+};
+
+export type GetChineseAstrologyCalendarSolarTermsByYearErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyCalendarSolarTermsByYearError = GetChineseAstrologyCalendarSolarTermsByYearErrors[keyof GetChineseAstrologyCalendarSolarTermsByYearErrors];
+
+export type GetChineseAstrologyCalendarSolarTermsByYearResponses = {
+    /**
+     * The 24 solar terms of the year, in chronological order from Li Chun.
+     */
+    200: {
+        /**
+         * Echo of the solar year requested.
+         */
+        year: number;
+        /**
+         * Decimal UTC offset of the reference meridian the local fields are given at. Fixed at 8 for the Chinese calendar.
+         */
+        referenceOffset: number;
+        /**
+         * Number of terms returned, which is always 24.
+         */
+        total: number;
+        terms: Array<{
+            /**
+             * Solar term identifier in kebab case pinyin. Always English pinyin, whatever the lang parameter says, because the English names are not standardised and would not be safe to compare against.
+             */
+            id: string;
+            /**
+             * Display name of the term. Several English renderings are in circulation, so treat this as a label and the id as the value.
+             */
+            name: string;
+            /**
+             * The term in Chinese. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone marked pinyin for the characters.
+             */
+            pinyin: string;
+            /**
+             * Apparent solar longitude in degrees that defines the term. A multiple of 15, and the only thing about a term that is not a convention.
+             */
+            longitude: number;
+            /**
+             * Either minor or major. The month pillar changes at the twelve MINOR terms, and a lunar month containing no MAJOR term is the leap month.
+             */
+            type: string;
+            /**
+             * The instant the sun reaches the longitude, in UTC.
+             */
+            instantUtc: string;
+            /**
+             * Calendar date of the instant at the reference meridian. This is the date printed in an almanac.
+             */
+            localDate: string;
+            /**
+             * Time of day of the instant at the reference meridian.
+             */
+            localTime: string;
+        }>;
+    };
+};
+
+export type GetChineseAstrologyCalendarSolarTermsByYearResponse = GetChineseAstrologyCalendarSolarTermsByYearResponses[keyof GetChineseAstrologyCalendarSolarTermsByYearResponses];
+
+export type PostChineseAstrologyCalendarLunarDateData = {
+    /**
+     * Send a Gregorian date to convert forward, or a lunar year, month and day to convert back.
+     */
+    body?: {
+        /**
+         * Gregorian date to convert to the lunisolar calendar. Send this OR the lunar fields, never both.
+         */
+        date?: string;
+        /**
+         * Lunisolar year to convert back to a Gregorian date. Requires lunarMonth and lunarDay.
+         */
+        lunarYear?: number;
+        /**
+         * Lunar month, 1 to 12. Requires lunarYear and lunarDay.
+         */
+        lunarMonth?: number;
+        /**
+         * Day of the lunar month, 1 to 30. Requires lunarYear and lunarMonth.
+         */
+        lunarDay?: number;
+        /**
+         * Set true to address the leap repetition of lunarMonth rather than the first pass. Requesting a leap month a year does not have returns 400.
+         */
+        isLeapMonth?: boolean;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/calendar/lunar-date';
+};
+
+export type PostChineseAstrologyCalendarLunarDateErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyCalendarLunarDateError = PostChineseAstrologyCalendarLunarDateErrors[keyof PostChineseAstrologyCalendarLunarDateErrors];
+
+export type PostChineseAstrologyCalendarLunarDateResponses = {
+    /**
+     * The converted date, in both calendars.
+     */
+    200: {
+        /**
+         * The Gregorian date, echoed when one was sent and computed when the lunar fields were. Echoes the request, or the current UTC date when neither side was supplied.
+         */
+        gregorianDate: string;
+        lunar: {
+            /**
+             * Lunisolar year. It advances on the first day of month 1, not at Li Chun, so it can lag the Gregorian year by up to seven weeks.
+             */
+            year: number;
+            /**
+             * Lunar month, 1 to 12. A leap month repeats the number of the month it follows.
+             */
+            month: number;
+            /**
+             * Day of the lunar month, 1 to 30. A lunar month never has 31 days.
+             */
+            day: number;
+            /**
+             * True when this is the leap repetition of the month number rather than the first pass through it.
+             */
+            isLeapMonth: boolean;
+            /**
+             * Days in this lunar month, 29 for a short month or 30 for a long one. It is the interval between two new moons, so it varies month to month.
+             */
+            monthLength: number;
+            /**
+             * The Gregorian date this lunar day covers, evaluated at the reference meridian.
+             */
+            date: string;
+        };
+        /**
+         * The month this lunisolar year repeats, when it has thirteen months. Absent in a twelve month year, so a caller can branch on presence rather than on a sentinel.
+         */
+        leapMonthOfYear?: number;
+        /**
+         * Decimal UTC offset the calendar was evaluated at. Fixed at 8, which is what makes a Chinese lunar date a world constant.
+         */
+        referenceOffset: number;
+    };
+};
+
+export type PostChineseAstrologyCalendarLunarDateResponse = PostChineseAstrologyCalendarLunarDateResponses[keyof PostChineseAstrologyCalendarLunarDateResponses];
+
+export type GetChineseAstrologyCalendarDayByDateData = {
+    body?: never;
+    path: {
+        /**
+         * Gregorian date in YYYY-MM-DD format, evaluated at the reference meridian. Years 1900 to 2100.
+         */
+        date: string;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/calendar/day/{date}';
+};
+
+export type GetChineseAstrologyCalendarDayByDateErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * The date is outside the supported range.
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyCalendarDayByDateError = GetChineseAstrologyCalendarDayByDateErrors[keyof GetChineseAstrologyCalendarDayByDateErrors];
+
+export type GetChineseAstrologyCalendarDayByDateResponses = {
+    /**
+     * The almanac reading for the day.
+     */
+    200: {
+        /**
+         * The Gregorian date of the day, at the reference meridian.
+         */
+        date: string;
+        lunar: {
+            /**
+             * Lunisolar year. It advances on the first day of month 1, not at Li Chun, so it can lag the Gregorian year by up to seven weeks.
+             */
+            year: number;
+            /**
+             * Lunar month, 1 to 12. A leap month repeats the number of the month it follows.
+             */
+            month: number;
+            /**
+             * Day of the lunar month, 1 to 30. A lunar month never has 31 days.
+             */
+            day: number;
+            /**
+             * True when this is the leap repetition of the month number rather than the first pass through it.
+             */
+            isLeapMonth: boolean;
+            /**
+             * Days in this lunar month, 29 for a short month or 30 for a long one. It is the interval between two new moons, so it varies month to month.
+             */
+            monthLength: number;
+            /**
+             * The Gregorian date this lunar day covers, evaluated at the reference meridian.
+             */
+            date: string;
+        };
+        /**
+         * Sexagenary year pillar of the day. Attributed by whole days, so the day Li Chun falls on belongs to the new year for its whole length. A BaZi chart built from a birth TIME uses the term instant instead, so a birth in the hours before the term on that same day carries the previous year pillar.
+         */
+        yearPillar: {
+            /**
+             * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+             */
+            number: number;
+            /**
+             * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+             */
+            stem: string;
+            /**
+             * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+             */
+            branch: string;
+            /**
+             * The pillar in Chinese characters. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+             */
+            naYin: string;
+            /**
+             * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+             */
+            naYinElement: string;
+        };
+        /**
+         * Sexagenary month pillar of the day, and the pillar the day officer is counted from. Attributed by whole days like the year pillar, so the day a minor solar term falls on belongs to the new month even when the term arrives late in the evening. This is what an almanac prints, and it is not the same as the month pillar of a birth moment inside that day.
+         */
+        monthPillar: {
+            /**
+             * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+             */
+            number: number;
+            /**
+             * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+             */
+            stem: string;
+            /**
+             * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+             */
+            branch: string;
+            /**
+             * The pillar in Chinese characters. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+             */
+            naYin: string;
+            /**
+             * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+             */
+            naYinElement: string;
+        };
+        dayPillar: {
+            /**
+             * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+             */
+            number: number;
+            /**
+             * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+             */
+            stem: string;
+            /**
+             * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+             */
+            branch: string;
+            /**
+             * The pillar in Chinese characters. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+             */
+            naYin: string;
+            /**
+             * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+             */
+            naYinElement: string;
+        };
+        dayOfficer: {
+            /**
+             * Day officer identifier, one of jian chu man ping ding zhi po wei cheng shou kai bi. Always English pinyin, so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * Display name of the officer in the requested language. Absent when lang is en, so an English response is unchanged.
+             */
+            nameLocalized?: string;
+            /**
+             * English display name of the officer.
+             */
+            name: string;
+            /**
+             * The officer in Chinese. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone marked pinyin for the character.
+             */
+            pinyin: string;
+            /**
+             * Whether the officer falls on the auspicious or the inauspicious side of the coarse yellow and black split. Read favours and avoids for what the day actually rules on.
+             */
+            quality: string;
+            /**
+             * What the officer means, in the terms a date choice uses it in.
+             */
+            meaning: string;
+        };
+        mansion: {
+            /**
+             * Mansion number, 1 to 28, counted from the Horn. This is the identifier: three mansions share the pinyin wei and two share bi, so there is no unique pinyin key.
+             */
+            number: number;
+            /**
+             * English display name of the mansion.
+             */
+            name: string;
+            /**
+             * The mansion in Chinese. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone marked pinyin for the character.
+             */
+            pinyin: string;
+            /**
+             * One of the four palaces, seven mansions each: azure-dragon, black-tortoise, white-tiger, vermilion-bird. Always English, so it stays safe to compare against in code.
+             */
+            palace: string;
+            /**
+             * The luminary the mansion belongs to, one of Wood Metal Earth Sun Moon Fire Water. Twenty eight mansions over seven luminaries is four weeks exactly, which is why a mansion always falls on the same weekday.
+             */
+            planet: string;
+            /**
+             * Animal emblem of the mansion, the third character of its full Chinese name.
+             */
+            animal: string;
+        };
+        /**
+         * The zodiac animal the day clashes with, which is the animal six branches away from the day branch. Anyone born in that animal year traditionally avoids the day for anything important.
+         */
+        clashAnimal: string;
+        /**
+         * Display name of the clashing animal in the requested language. Absent when lang is en, so an English response is unchanged.
+         */
+        clashAnimalLocalized?: string;
+        /**
+         * Activity identifiers, always English kebab case so they stay safe to compare against in code. Use the /calendar/auspicious-days endpoint to search a date range for one of them.
+         */
+        favours: Array<string>;
+        /**
+         * Activity identifiers, always English kebab case so they stay safe to compare against in code. Use the /calendar/auspicious-days endpoint to search a date range for one of them.
+         */
+        avoids: Array<string>;
+    };
+};
+
+export type GetChineseAstrologyCalendarDayByDateResponse = GetChineseAstrologyCalendarDayByDateResponses[keyof GetChineseAstrologyCalendarDayByDateResponses];
+
+export type GetChineseAstrologyCalendarMonthlyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Gregorian year, 1900 to 2100. Defaults to the current UTC year when omitted, together with month.
+         */
+        year?: number;
+        /**
+         * Gregorian month, 1 to 12. Defaults to the current UTC month when omitted, together with year.
+         */
+        month?: number;
+    };
+    url: '/chinese-astrology/calendar/monthly';
+};
+
+export type GetChineseAstrologyCalendarMonthlyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyCalendarMonthlyError = GetChineseAstrologyCalendarMonthlyErrors[keyof GetChineseAstrologyCalendarMonthlyErrors];
+
+export type GetChineseAstrologyCalendarMonthlyResponses = {
+    /**
+     * Every day of the month, with the solar terms it contains.
+     */
+    200: {
+        /**
+         * Year of the month returned. Echoes the year requested, or the current UTC year when it was omitted.
+         */
+        year: number;
+        /**
+         * Month returned, 1 to 12. Echoes the month requested, or the current UTC month when it was omitted.
+         */
+        month: number;
+        /**
+         * Number of days in the month.
+         */
+        total: number;
+        solarTerms: Array<{
+            /**
+             * Solar term identifier in kebab case pinyin.
+             */
+            id: string;
+            /**
+             * Display name of the term.
+             */
+            name: string;
+            /**
+             * Either minor or major. A minor term inside the month is where the month pillar changes and where the day officer repeats for a day.
+             */
+            type: string;
+            /**
+             * Date the term falls on at the reference meridian.
+             */
+            date: string;
+            /**
+             * The exact instant of the term, in UTC.
+             */
+            instantUtc: string;
+        }>;
+        /**
+         * Every day of the month, in order.
+         */
+        days: Array<{
+            /**
+             * The Gregorian date of the day, at the reference meridian.
+             */
+            date: string;
+            lunar: {
+                /**
+                 * Lunisolar year. It advances on the first day of month 1, not at Li Chun, so it can lag the Gregorian year by up to seven weeks.
+                 */
+                year: number;
+                /**
+                 * Lunar month, 1 to 12. A leap month repeats the number of the month it follows.
+                 */
+                month: number;
+                /**
+                 * Day of the lunar month, 1 to 30. A lunar month never has 31 days.
+                 */
+                day: number;
+                /**
+                 * True when this is the leap repetition of the month number rather than the first pass through it.
+                 */
+                isLeapMonth: boolean;
+                /**
+                 * Days in this lunar month, 29 for a short month or 30 for a long one. It is the interval between two new moons, so it varies month to month.
+                 */
+                monthLength: number;
+                /**
+                 * The Gregorian date this lunar day covers, evaluated at the reference meridian.
+                 */
+                date: string;
+            };
+            /**
+             * Sexagenary year pillar of the day. Attributed by whole days, so the day Li Chun falls on belongs to the new year for its whole length. A BaZi chart built from a birth TIME uses the term instant instead, so a birth in the hours before the term on that same day carries the previous year pillar.
+             */
+            yearPillar: {
+                /**
+                 * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+                 */
+                number: number;
+                /**
+                 * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+                 */
+                stem: string;
+                /**
+                 * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+                 */
+                branch: string;
+                /**
+                 * The pillar in Chinese characters. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+                 */
+                naYin: string;
+                /**
+                 * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+                 */
+                naYinElement: string;
+            };
+            /**
+             * Sexagenary month pillar of the day, and the pillar the day officer is counted from. Attributed by whole days like the year pillar, so the day a minor solar term falls on belongs to the new month even when the term arrives late in the evening. This is what an almanac prints, and it is not the same as the month pillar of a birth moment inside that day.
+             */
+            monthPillar: {
+                /**
+                 * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+                 */
+                number: number;
+                /**
+                 * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+                 */
+                stem: string;
+                /**
+                 * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+                 */
+                branch: string;
+                /**
+                 * The pillar in Chinese characters. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+                 */
+                naYin: string;
+                /**
+                 * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+                 */
+                naYinElement: string;
+            };
+            dayPillar: {
+                /**
+                 * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+                 */
+                number: number;
+                /**
+                 * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+                 */
+                stem: string;
+                /**
+                 * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+                 */
+                branch: string;
+                /**
+                 * The pillar in Chinese characters. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+                 */
+                naYin: string;
+                /**
+                 * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+                 */
+                naYinElement: string;
+            };
+            dayOfficer: {
+                /**
+                 * Day officer identifier, one of jian chu man ping ding zhi po wei cheng shou kai bi. Always English pinyin, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Display name of the officer in the requested language. Absent when lang is en, so an English response is unchanged.
+                 */
+                nameLocalized?: string;
+                /**
+                 * English display name of the officer.
+                 */
+                name: string;
+                /**
+                 * The officer in Chinese. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone marked pinyin for the character.
+                 */
+                pinyin: string;
+                /**
+                 * Whether the officer falls on the auspicious or the inauspicious side of the coarse yellow and black split. Read favours and avoids for what the day actually rules on.
+                 */
+                quality: string;
+                /**
+                 * What the officer means, in the terms a date choice uses it in.
+                 */
+                meaning: string;
+            };
+            mansion: {
+                /**
+                 * Mansion number, 1 to 28, counted from the Horn. This is the identifier: three mansions share the pinyin wei and two share bi, so there is no unique pinyin key.
+                 */
+                number: number;
+                /**
+                 * English display name of the mansion.
+                 */
+                name: string;
+                /**
+                 * The mansion in Chinese. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone marked pinyin for the character.
+                 */
+                pinyin: string;
+                /**
+                 * One of the four palaces, seven mansions each: azure-dragon, black-tortoise, white-tiger, vermilion-bird. Always English, so it stays safe to compare against in code.
+                 */
+                palace: string;
+                /**
+                 * The luminary the mansion belongs to, one of Wood Metal Earth Sun Moon Fire Water. Twenty eight mansions over seven luminaries is four weeks exactly, which is why a mansion always falls on the same weekday.
+                 */
+                planet: string;
+                /**
+                 * Animal emblem of the mansion, the third character of its full Chinese name.
+                 */
+                animal: string;
+            };
+            /**
+             * The zodiac animal the day clashes with, which is the animal six branches away from the day branch. Anyone born in that animal year traditionally avoids the day for anything important.
+             */
+            clashAnimal: string;
+            /**
+             * Display name of the clashing animal in the requested language. Absent when lang is en, so an English response is unchanged.
+             */
+            clashAnimalLocalized?: string;
+            /**
+             * Activity identifiers, always English kebab case so they stay safe to compare against in code. Use the /calendar/auspicious-days endpoint to search a date range for one of them.
+             */
+            favours: Array<string>;
+            /**
+             * Activity identifiers, always English kebab case so they stay safe to compare against in code. Use the /calendar/auspicious-days endpoint to search a date range for one of them.
+             */
+            avoids: Array<string>;
+        }>;
+    };
+};
+
+export type GetChineseAstrologyCalendarMonthlyResponse = GetChineseAstrologyCalendarMonthlyResponses[keyof GetChineseAstrologyCalendarMonthlyResponses];
+
+export type PostChineseAstrologyCalendarAuspiciousDaysData = {
+    body: {
+        /**
+         * Activity to choose a date for. One of wedding, travel, moving-house, opening-business, signing-contracts, construction, groundbreaking, burial, medical-treatment, praying. Matching folds case and punctuation, so moving-house and MOVING_HOUSE both resolve.
+         */
+        activity: 'wedding' | 'travel' | 'moving-house' | 'opening-business' | 'signing-contracts' | 'construction' | 'groundbreaking' | 'burial' | 'medical-treatment' | 'praying';
+        /**
+         * First date of the range to search, inclusive.
+         */
+        startDate: string;
+        /**
+         * Last date of the range to search, inclusive. The range may not exceed 93 days.
+         */
+        endDate: string;
+        /**
+         * Zodiac animal to protect. Days that clash with this animal are dropped from the results, which is how a date is chosen around the people attending rather than in the abstract. One of rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog, pig.
+         */
+        avoidAnimal?: 'rat' | 'ox' | 'tiger' | 'rabbit' | 'dragon' | 'snake' | 'horse' | 'goat' | 'monkey' | 'rooster' | 'dog' | 'pig';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/chinese-astrology/calendar/auspicious-days';
+};
+
+export type PostChineseAstrologyCalendarAuspiciousDaysErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostChineseAstrologyCalendarAuspiciousDaysError = PostChineseAstrologyCalendarAuspiciousDaysErrors[keyof PostChineseAstrologyCalendarAuspiciousDaysErrors];
+
+export type PostChineseAstrologyCalendarAuspiciousDaysResponses = {
+    /**
+     * The favoured days inside the range.
+     */
+    200: {
+        /**
+         * Echo of the activity searched for, folded to its canonical identifier.
+         */
+        activity: string;
+        /**
+         * Display label for the activity in the requested language.
+         */
+        activityLabel: string;
+        /**
+         * Echo of the first date of the range.
+         */
+        startDate: string;
+        /**
+         * Echo of the last date of the range.
+         */
+        endDate: string;
+        /**
+         * Number of days in the range, counting both ends.
+         */
+        daysSearched: number;
+        /**
+         * Echo of the animal protected. Absent when none was sent, rather than null.
+         */
+        avoidAnimal?: string;
+        /**
+         * Number of favoured days found. This is the count after the clash filter, not the number of days searched.
+         */
+        total: number;
+        /**
+         * The favoured days, in date order.
+         */
+        days: Array<{
+            /**
+             * The Gregorian date of the day, at the reference meridian.
+             */
+            date: string;
+            lunar: {
+                /**
+                 * Lunisolar year. It advances on the first day of month 1, not at Li Chun, so it can lag the Gregorian year by up to seven weeks.
+                 */
+                year: number;
+                /**
+                 * Lunar month, 1 to 12. A leap month repeats the number of the month it follows.
+                 */
+                month: number;
+                /**
+                 * Day of the lunar month, 1 to 30. A lunar month never has 31 days.
+                 */
+                day: number;
+                /**
+                 * True when this is the leap repetition of the month number rather than the first pass through it.
+                 */
+                isLeapMonth: boolean;
+                /**
+                 * Days in this lunar month, 29 for a short month or 30 for a long one. It is the interval between two new moons, so it varies month to month.
+                 */
+                monthLength: number;
+                /**
+                 * The Gregorian date this lunar day covers, evaluated at the reference meridian.
+                 */
+                date: string;
+            };
+            /**
+             * Sexagenary year pillar of the day. Attributed by whole days, so the day Li Chun falls on belongs to the new year for its whole length. A BaZi chart built from a birth TIME uses the term instant instead, so a birth in the hours before the term on that same day carries the previous year pillar.
+             */
+            yearPillar: {
+                /**
+                 * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+                 */
+                number: number;
+                /**
+                 * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+                 */
+                stem: string;
+                /**
+                 * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+                 */
+                branch: string;
+                /**
+                 * The pillar in Chinese characters. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+                 */
+                naYin: string;
+                /**
+                 * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+                 */
+                naYinElement: string;
+            };
+            /**
+             * Sexagenary month pillar of the day, and the pillar the day officer is counted from. Attributed by whole days like the year pillar, so the day a minor solar term falls on belongs to the new month even when the term arrives late in the evening. This is what an almanac prints, and it is not the same as the month pillar of a birth moment inside that day.
+             */
+            monthPillar: {
+                /**
+                 * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+                 */
+                number: number;
+                /**
+                 * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+                 */
+                stem: string;
+                /**
+                 * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+                 */
+                branch: string;
+                /**
+                 * The pillar in Chinese characters. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+                 */
+                naYin: string;
+                /**
+                 * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+                 */
+                naYinElement: string;
+            };
+            dayPillar: {
+                /**
+                 * Pillar identifier as stem-branch, e.g. jia-zi. Always English pinyin, whatever the lang parameter says, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Position in the sixty year cycle, 1 to 60. jia-zi is 1 and gui-hai is 60.
+                 */
+                number: number;
+                /**
+                 * Heavenly Stem of the pillar, one of jia yi bing ding wu ji geng xin ren gui.
+                 */
+                stem: string;
+                /**
+                 * Earthly Branch of the pillar, one of zi chou yin mao chen si wu wei shen you xu hai.
+                 */
+                branch: string;
+                /**
+                 * The pillar in Chinese characters. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Na Yin sound element of the pillar. It is a property of the pair, not of the stem, so it often names a different phase from the stem itself.
+                 */
+                naYin: string;
+                /**
+                 * Five phase the Na Yin resolves to. Always English, so it stays safe to compare against in code.
+                 */
+                naYinElement: string;
+            };
+            dayOfficer: {
+                /**
+                 * Day officer identifier, one of jian chu man ping ding zhi po wei cheng shou kai bi. Always English pinyin, so it stays safe to compare against in code.
+                 */
+                id: string;
+                /**
+                 * Display name of the officer in the requested language. Absent when lang is en, so an English response is unchanged.
+                 */
+                nameLocalized?: string;
+                /**
+                 * English display name of the officer.
+                 */
+                name: string;
+                /**
+                 * The officer in Chinese. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone marked pinyin for the character.
+                 */
+                pinyin: string;
+                /**
+                 * Whether the officer falls on the auspicious or the inauspicious side of the coarse yellow and black split. Read favours and avoids for what the day actually rules on.
+                 */
+                quality: string;
+                /**
+                 * What the officer means, in the terms a date choice uses it in.
+                 */
+                meaning: string;
+            };
+            mansion: {
+                /**
+                 * Mansion number, 1 to 28, counted from the Horn. This is the identifier: three mansions share the pinyin wei and two share bi, so there is no unique pinyin key.
+                 */
+                number: number;
+                /**
+                 * English display name of the mansion.
+                 */
+                name: string;
+                /**
+                 * The mansion in Chinese. A data field, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone marked pinyin for the character.
+                 */
+                pinyin: string;
+                /**
+                 * One of the four palaces, seven mansions each: azure-dragon, black-tortoise, white-tiger, vermilion-bird. Always English, so it stays safe to compare against in code.
+                 */
+                palace: string;
+                /**
+                 * The luminary the mansion belongs to, one of Wood Metal Earth Sun Moon Fire Water. Twenty eight mansions over seven luminaries is four weeks exactly, which is why a mansion always falls on the same weekday.
+                 */
+                planet: string;
+                /**
+                 * Animal emblem of the mansion, the third character of its full Chinese name.
+                 */
+                animal: string;
+            };
+            /**
+             * The zodiac animal the day clashes with, which is the animal six branches away from the day branch. Anyone born in that animal year traditionally avoids the day for anything important.
+             */
+            clashAnimal: string;
+            /**
+             * Display name of the clashing animal in the requested language. Absent when lang is en, so an English response is unchanged.
+             */
+            clashAnimalLocalized?: string;
+            /**
+             * Activity identifiers, always English kebab case so they stay safe to compare against in code. Use the /calendar/auspicious-days endpoint to search a date range for one of them.
+             */
+            favours: Array<string>;
+            /**
+             * Activity identifiers, always English kebab case so they stay safe to compare against in code. Use the /calendar/auspicious-days endpoint to search a date range for one of them.
+             */
+            avoids: Array<string>;
+        }>;
+    };
+};
+
+export type PostChineseAstrologyCalendarAuspiciousDaysResponse = PostChineseAstrologyCalendarAuspiciousDaysResponses[keyof PostChineseAstrologyCalendarAuspiciousDaysResponses];
+
+export type GetChineseAstrologyElementsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-5, default 5.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/chinese-astrology/elements';
+};
+
+export type GetChineseAstrologyElementsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetChineseAstrologyElementsError = GetChineseAstrologyElementsErrors[keyof GetChineseAstrologyElementsErrors];
+
+export type GetChineseAstrologyElementsResponses = {
+    /**
+     * The five phases with both cycles.
+     */
+    200: {
+        /**
+         * Total number of phases, which is always five.
+         */
+        total: number;
+        /**
+         * Maximum phases returned in this page.
+         */
+        limit: number;
+        /**
+         * Number of phases skipped before this page.
+         */
+        offset: number;
+        /**
+         * The producing ring in order. Each phase generates the next and the last generates the first, so the list wraps.
+         */
+        generatingCycle: Array<string>;
+        /**
+         * The restraining ring in order. Each phase controls the next and the last controls the first, so this list wraps too. It is the same five phases walked two steps at a time.
+         */
+        controllingCycle: Array<string>;
+        /**
+         * The phases for this page, in generating cycle order.
+         */
+        elements: Array<{
+            /**
+             * Five phase identifier. Always English, whatever the lang parameter says, so it stays safe to compare against in code. The same five values appear on stems, branches, pillars, Na Yin and every feng shui star.
+             */
+            id: string;
+            /**
+             * Display name of the phase in the requested language. Absent when lang is en, so an English response is unchanged.
+             */
+            nameLocalized?: string;
+            /**
+             * Chinese character for the phase. A data field, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone marked pinyin for the character. A data field, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Season the phase governs. Earth governs the transitions rather than a season of its own, and is reported as Late Summer.
+             */
+            season: string;
+            /**
+             * Compass direction of the phase. Earth returns Center, because it sits at the middle of the arrangement rather than on the ring.
+             */
+            direction: string;
+            /**
+             * The phase this one produces in the generating cycle. Wood feeds Fire, Fire makes Earth, Earth bears Metal, Metal condenses Water, Water grows Wood.
+             */
+            generates: string;
+            /**
+             * The phase that produces this one. The inverse of the generates field.
+             */
+            generatedBy: string;
+            /**
+             * The phase this one restrains in the controlling cycle. Wood breaks Earth, Earth dams Water, Water quenches Fire, Fire melts Metal, Metal cuts Wood.
+             */
+            controls: string;
+            /**
+             * The phase that restrains this one. The inverse of the controls field.
+             */
+            controlledBy: string;
+            /**
+             * The two Heavenly Stems that carry this phase, yang first. Every phase has exactly two, which is why ten stems cover five phases.
+             */
+            stems: Array<string>;
+            /**
+             * The Earthly Branches that carry this phase. Wood, Fire, Metal and Water take two each and Earth takes four, the branches that sit between the seasons.
+             */
+            branches: Array<string>;
+            /**
+             * What the phase is and how it behaves, in the terms a reading uses it in. Translated in place.
+             */
+            meaning: string;
+        }>;
+    };
+};
+
+export type GetChineseAstrologyElementsResponse = GetChineseAstrologyElementsResponses[keyof GetChineseAstrologyElementsResponses];
+
+export type PostFengShuiKuaData = {
+    body?: {
+        /**
+         * Birth date in YYYY-MM-DD format. Only the Chinese YEAR this date falls in enters the formula, so no birth time, latitude or longitude is needed. A January or early February birthday is the case that matters: it usually belongs to the PREVIOUS Chinese year and produces a different Kua. A date is read at the start of its day, and the boundary falls part-way through its own day, so a birth date landing exactly on the boundary day is placed in the outgoing year.
+         */
+        date: string;
+        /**
+         * Selects the Kua formula variant. The two formulas are different arithmetic on the same year, and they also differ in where a raw result of 5 is reassigned.
+         */
+        gender: 'male' | 'female';
+        /**
+         * Which boundary starts the Chinese year. Defaults to li-chun, the astronomical start of spring in early February, which is the classical position and the one feng shui uses for periods, annual stars and afflictions alike. Send lunar-new-year to match popular zodiac tables, which start the year two to four weeks later. The two disagree for anyone born between the two dates.
+         */
+        yearBoundary?: 'li-chun' | 'lunar-new-year';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/kua';
+};
+
+export type PostFengShuiKuaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostFengShuiKuaError = PostFengShuiKuaErrors[keyof PostFengShuiKuaErrors];
+
+export type PostFengShuiKuaResponses = {
+    /**
+     * Kua number, life group, personal trigram and all eight classified sectors
+     */
+    200: {
+        /**
+         * Kua number, 1 to 9 excluding 5. This is the value every other feng shui calculation about a person keys on.
+         */
+        kua: number;
+        /**
+         * The formula output before any reassignment. Equal to kua except when the formula produced 5, which has no trigram and no direction and must be moved.
+         */
+        rawKua: number;
+        /**
+         * Whether the raw result was 5 and had to be moved onto a trigram, to 2 for a man and to 8 for a woman.
+         */
+        reassigned: boolean;
+        /**
+         * Echo of the sex sent, which selected the formula variant.
+         */
+        gender: string;
+        /**
+         * Life group, east or west. East group Kuas are 1, 3, 4 and 9 and share North, East, Southeast and South as their favourable sectors; west group Kuas are 2, 6, 7 and 8 and share Northeast, Southwest, West and Northwest. Always English, safe to compare against.
+         */
+        group: string;
+        /**
+         * The Chinese year the birth date fell in under the boundary applied. This is the year the formula actually used, which is the previous calendar year for an early-in-the-year birthday.
+         */
+        solarYear: number;
+        /**
+         * Calendar date of the boundary that decided the year, computed astronomically rather than assumed. Li Chun is commonly quoted as 4 February and lands on the 3rd or the 5th in roughly one year in four.
+         */
+        boundaryDate: string;
+        trigram: {
+            /**
+             * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+             */
+            number: number;
+            /**
+             * Chinese character for the trigram. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             */
+            english: string;
+            /**
+             * Tone-marked pinyin for the trigram. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+             */
+            symbol: string;
+            /**
+             * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+             */
+            binary: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             */
+            familyMember: string;
+        };
+        /**
+         * All eight sectors classified for this Kua, in compass order from North. Exactly four are auspicious and four are inauspicious, and the two sets partition the compass. Call the eight mansions endpoint for the same map with full readings and ranked placement guidance.
+         */
+        sectors: Array<{
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Eight Mansions star for this sector, one of sheng-chi, tian-yi, yan-nian, fu-wei, huo-hai, wu-gui, liu-sha, jue-ming. Always English, safe to compare against and to key styling on.
+             */
+            star: string;
+            /**
+             * Display name of the star. Always English, whatever the lang parameter says. Use starNameLocalized for anything a reader sees.
+             */
+            starName: string;
+            /**
+             * Star name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat starName exactly. Never compare against this value.
+             */
+            starNameLocalized?: string;
+            /**
+             * Whether the sector helps or harms: auspicious or inauspicious.
+             */
+            nature: string;
+            /**
+             * Order within its nature, 1 to 4. Among auspicious sectors 1 is the strongest; among inauspicious sectors 1 is the mildest and 4 the most serious, which is what tells you which affliction to accept when no favourable sector is reachable.
+             */
+            rank: number;
+            /**
+             * The life domain this sector governs, in a few words.
+             */
+            domain: string;
+        }>;
+        conventions: {
+            /**
+             * Which boundary decided the Chinese year for this calculation. li-chun starts the year at the astronomical start of spring, in early February, and is the classical position that feng shui uses throughout. lunar-new-year starts it at the first day of the lunar year, which is usually two to four weeks later and is what most popular zodiac tables use. Echoes the resolved value, whether it was sent or defaulted.
+             */
+            yearBoundary: string;
+        };
+    };
+};
+
+export type PostFengShuiKuaResponse = PostFengShuiKuaResponses[keyof PostFengShuiKuaResponses];
+
+export type GetFengShuiKuaByNumberData = {
+    body?: never;
+    path: {
+        /**
+         * Kua number, 1 to 9.
+         */
+        number: number;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/kua/{number}';
+};
+
+export type GetFengShuiKuaByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No Kua chart for that number
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiKuaByNumberError = GetFengShuiKuaByNumberErrors[keyof GetFengShuiKuaByNumberErrors];
+
+export type GetFengShuiKuaByNumberResponses = {
+    /**
+     * Kua reference chart with trigram, life group and eight classified sectors
+     */
+    200: {
+        /**
+         * Kua number, 1 to 9.
+         */
+        number: number;
+        /**
+         * Life group, east or west. Always English, safe to compare against and to key styling on.
+         */
+        group: string;
+        trigram: {
+            /**
+             * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+             */
+            number: number;
+            /**
+             * Chinese character for the trigram. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             */
+            english: string;
+            /**
+             * Tone-marked pinyin for the trigram. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+             */
+            symbol: string;
+            /**
+             * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+             */
+            binary: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             */
+            familyMember: string;
+        };
+        /**
+         * All eight sectors classified for this Kua, in compass order from North.
+         */
+        sectors: Array<{
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Eight Mansions star for this sector, one of sheng-chi, tian-yi, yan-nian, fu-wei, huo-hai, wu-gui, liu-sha, jue-ming. Always English, safe to compare against and to key styling on.
+             */
+            star: string;
+            /**
+             * Display name of the star. Always English, whatever the lang parameter says. Use starNameLocalized for anything a reader sees.
+             */
+            starName: string;
+            /**
+             * Star name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat starName exactly. Never compare against this value.
+             */
+            starNameLocalized?: string;
+            /**
+             * Whether the sector helps or harms: auspicious or inauspicious.
+             */
+            nature: string;
+            /**
+             * Order within its nature, 1 to 4. Among auspicious sectors 1 is the strongest; among inauspicious sectors 1 is the mildest and 4 the most serious, which is what tells you which affliction to accept when no favourable sector is reachable.
+             */
+            rank: number;
+            /**
+             * The life domain this sector governs, in a few words.
+             */
+            domain: string;
+        }>;
+    };
+};
+
+export type GetFengShuiKuaByNumberResponse = GetFengShuiKuaByNumberResponses[keyof GetFengShuiKuaByNumberResponses];
+
+export type PostFengShuiEightMansionsData = {
+    /**
+     * Send either a kua number, or a date and gender to derive one. Sending neither is a 400.
+     */
+    body?: {
+        /**
+         * Kua number to build the map for, if you already have one. Send this OR date and gender, not neither. A Kua of 5 is read as the Kua 2 chart, since 5 has no direction of its own.
+         */
+        kua?: number;
+        /**
+         * Birth date in YYYY-MM-DD format, used to derive the Kua when no kua is sent. Requires gender alongside it. A date is read at the start of its day, so a birth date landing exactly on the year boundary is placed in the outgoing year.
+         */
+        date?: string;
+        /**
+         * Selects the Kua formula variant. Required when the Kua is being derived from a birth date.
+         */
+        gender?: 'male' | 'female';
+        /**
+         * Which boundary starts the Chinese year when the Kua is derived from a birth date. Defaults to li-chun, the classical position. Ignored when a kua is sent directly, and echoed back either way.
+         */
+        yearBoundary?: 'li-chun' | 'lunar-new-year';
+        /**
+         * Optional compass sector the main door faces, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. When sent, the response names the star sitting on that sector so a caller can judge an entrance without scanning the whole map.
+         */
+        facing?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/eight-mansions';
+};
+
+export type PostFengShuiEightMansionsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostFengShuiEightMansionsError = PostFengShuiEightMansionsErrors[keyof PostFengShuiEightMansionsErrors];
+
+export type PostFengShuiEightMansionsResponses = {
+    /**
+     * Eight classified sectors ordered best to worst, with readings
+     */
+    200: {
+        /**
+         * The Kua number this map was built for.
+         */
+        kua: number;
+        /**
+         * Life group, east or west. Always English, safe to compare against and to key styling on.
+         */
+        group: string;
+        trigram: {
+            /**
+             * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+             */
+            number: number;
+            /**
+             * Chinese character for the trigram. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             */
+            english: string;
+            /**
+             * Tone-marked pinyin for the trigram. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+             */
+            symbol: string;
+            /**
+             * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+             */
+            binary: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             */
+            familyMember: string;
+        };
+        /**
+         * All eight sectors, ordered best to worst rather than by compass, because the question this map answers is which sector to use next. Read down the list until you reach one the building actually has.
+         */
+        sectors: Array<{
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Eight Mansions star for this sector. Always English, safe to compare against and to key styling on.
+             */
+            star: string;
+            /**
+             * Display name of the star. Always English, whatever the lang parameter says. Use starNameLocalized for anything a reader sees.
+             */
+            starName: string;
+            /**
+             * Star name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat starName exactly. Never compare against this value.
+             */
+            starNameLocalized?: string;
+            /**
+             * Chinese characters for the star. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the star. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Whether the sector helps or harms: auspicious or inauspicious.
+             */
+            nature: string;
+            /**
+             * Order within its nature, 1 to 4. Among auspicious sectors 1 is the strongest; among inauspicious sectors 1 is the mildest and 4 the most serious.
+             */
+            rank: number;
+            /**
+             * The life domain this sector governs, in a few words.
+             */
+            domain: string;
+            trigram: {
+                /**
+                 * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+                 */
+                number: number;
+                /**
+                 * Chinese character for the trigram. Data, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+                 */
+                english: string;
+                /**
+                 * Tone-marked pinyin for the trigram. Data, identical in every language.
+                 */
+                pinyin: string;
+                /**
+                 * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+                 */
+                symbol: string;
+                /**
+                 * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+                 */
+                binary: string;
+                /**
+                 * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+                 */
+                element: string;
+                /**
+                 * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+                 */
+                direction: string;
+                /**
+                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+                 */
+                familyMember: string;
+            };
+            /**
+             * Composed reading for this sector: which star it holds, where that star ranks for this Kua, and what the star means in practice.
+             */
+            reading: string;
+        }>;
+        /**
+         * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+         */
+        bestSector: string;
+        /**
+         * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+         */
+        worstSector: string;
+        /**
+         * The classification of the sector sent as facing. Absent when no facing was sent.
+         */
+        facingSector?: {
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Eight Mansions star sitting on the facing sector.
+             */
+            star: string;
+            /**
+             * Whether the facing sector helps or harms for this Kua.
+             */
+            nature: string;
+        };
+        conventions: {
+            /**
+             * Which boundary decided the Chinese year for this calculation. li-chun starts the year at the astronomical start of spring, in early February, and is the classical position that feng shui uses throughout. lunar-new-year starts it at the first day of the lunar year, which is usually two to four weeks later and is what most popular zodiac tables use. Echoes the resolved value, whether it was sent or defaulted.
+             */
+            yearBoundary: string;
+        };
+    };
+};
+
+export type PostFengShuiEightMansionsResponse = PostFengShuiEightMansionsResponses[keyof PostFengShuiEightMansionsResponses];
+
+export type PostFengShuiFlyingStarsNatalData = {
+    body?: {
+        /**
+         * Construction period of the building, 1 to 9. This is the twenty year cycle the building was completed in, or last renovated heavily enough to reset, and it is fixed for the life of the building. Periods change at Li Chun in early February, so a building finished in January 2024 is a Period 8 building. Defaults to the period in force now.
+         */
+        period?: number;
+        /**
+         * The mountain the front of the building faces, by id or by compass label such as S2. Send this or facingDegrees, not neither. The facing side is the open, active, public side, which is not always the side with the front door.
+         */
+        facing?: 'ren' | 'zi' | 'gui' | 'chou' | 'gen' | 'yin' | 'jia' | 'mao' | 'yi' | 'chen' | 'xun' | 'si' | 'bing' | 'wu' | 'ding' | 'wei' | 'kun' | 'shen' | 'geng' | 'you' | 'xin' | 'xu' | 'qian' | 'hai' | 'N1' | 'N2' | 'N3' | 'NE1' | 'NE2' | 'NE3' | 'E1' | 'E2' | 'E3' | 'SE1' | 'SE2' | 'SE3' | 'S1' | 'S2' | 'S3' | 'SW1' | 'SW2' | 'SW3' | 'W1' | 'W2' | 'W3' | 'NW1' | 'NW2' | 'NW3';
+        /**
+         * The compass bearing the front of the building faces, 0 to 360 degrees, measured looking out from inside. Resolved to one of the 24 mountains. Send this or facing, not neither.
+         */
+        facingDegrees?: number | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/flying-stars/natal';
+};
+
+export type PostFengShuiFlyingStarsNatalErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostFengShuiFlyingStarsNatalError = PostFengShuiFlyingStarsNatalErrors[keyof PostFengShuiFlyingStarsNatalErrors];
+
+export type PostFengShuiFlyingStarsNatalResponses = {
+    /**
+     * Nine palaces with period, mountain and water stars, readings and structure
+     */
+    200: {
+        /**
+         * The period this chart was built for. Echoes the period requested, or the period in force now when it was omitted.
+         */
+        period: number;
+        facing: {
+            /**
+             * Mountain id, the pinyin of the stem, branch or trigram that names it. Always English pinyin, safe to compare against.
+             */
+            id: string;
+            /**
+             * Compass label of the mountain, sector plus position 1 to 3 clockwise. The form a facing is usually quoted in.
+             */
+            label: string;
+            /**
+             * Chinese character for the mountain. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the mountain. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Which of the three dragons the mountain holds inside its sector: earth for the first mountain clockwise, heaven for the middle, human for the last. The heaven and human dragons share a polarity, which is why they share a chart.
+             */
+            yuan: string;
+            /**
+             * San Yuan polarity of the mountain, yang or yin, which decides whether a plate entering the centre flies forward or in reverse. This is NOT the natural polarity of the stem or branch and the two differ on eight of the 24 mountains.
+             */
+            polarity: string;
+            /**
+             * Start of the 15 degree span, in compass degrees. Wraps past 360 for the two northernmost mountains.
+             */
+            startDegree: number;
+            /**
+             * End of the 15 degree span, in compass degrees.
+             */
+            endDegree: number;
+        };
+        sitting: {
+            /**
+             * Mountain id, the pinyin of the stem, branch or trigram that names it. Always English pinyin, safe to compare against.
+             */
+            id: string;
+            /**
+             * Compass label of the mountain, sector plus position 1 to 3 clockwise. The form a facing is usually quoted in.
+             */
+            label: string;
+            /**
+             * Chinese character for the mountain. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the mountain. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Which of the three dragons the mountain holds inside its sector: earth for the first mountain clockwise, heaven for the middle, human for the last. The heaven and human dragons share a polarity, which is why they share a chart.
+             */
+            yuan: string;
+            /**
+             * San Yuan polarity of the mountain, yang or yin, which decides whether a plate entering the centre flies forward or in reverse. This is NOT the natural polarity of the stem or branch and the two differ on eight of the 24 mountains.
+             */
+            polarity: string;
+            /**
+             * Start of the 15 degree span, in compass degrees. Wraps past 360 for the two northernmost mountains.
+             */
+            startDegree: number;
+            /**
+             * End of the 15 degree span, in compass degrees.
+             */
+            endDegree: number;
+        };
+        /**
+         * Echo of the bearing sent, when one was sent. Absent when the facing was named as a mountain instead.
+         */
+        facingDegrees?: number;
+        /**
+         * Whether the bearing fell in the outer 3 degrees of its mountain rather than the central 9. A bearing there calls for the substitute gua construction, which is a different chart; this chart is always the down gua one, so a true value means the result needs a specialist rather than this endpoint. Always false when the facing was named as a mountain, since naming a mountain expresses no bearing.
+         */
+        straddling: boolean;
+        /**
+         * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+         */
+        mountainCenterStar: number;
+        /**
+         * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+         */
+        waterCenterStar: number;
+        /**
+         * Whether the mountain plate flew forward or in reverse, decided by the polarity of the mountain the centre star answers to. Published because it is the step that separates two charts that otherwise look alike.
+         */
+        mountainFlight: string;
+        /**
+         * Whether the water plate flew forward or in reverse, decided the same way against the facing mountain.
+         */
+        waterFlight: string;
+        structure: {
+            /**
+             * The classical verdict on the chart: prosperous-mountain-prosperous-water, reversed, double-facing or double-sitting. Always English, safe to switch on.
+             */
+            id: string;
+            /**
+             * Display name of the structure. Always English, whatever the lang parameter says.
+             */
+            name: string;
+            /**
+             * Chinese name of the structure. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * What the structure means and what the classical correction for it is.
+             */
+            meaning: string;
+        };
+        /**
+         * All nine palaces, centre first and then along the Lo Shu flight path. Each of the nine stars appears exactly once on each plate, which is the property that makes a chart checkable.
+         */
+        palaces: Array<{
+            /**
+             * Palace of the Lo Shu grid: one of the eight compass sectors, or Center. Always English, safe to compare against and to key a grid cell on.
+             */
+            palace: string;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            base: number;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            period: number;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            mountain: number;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            water: number;
+            /**
+             * The named classical formation for this mountain and water pair. Absent for the pairs the tradition does not name, where the composed reading carries the meaning instead.
+             */
+            combination?: {
+                /**
+                 * Canonical key for the pair, lower number first, so a palace holding mountain 9 and water 8 resolves to the same entry as one holding mountain 8 and water 9.
+                 */
+                id: string;
+                /**
+                 * Name of the formation. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+                 */
+                name: string;
+                /**
+                 * Formation name in the requested language, for display only. Present only when lang is set to a language other than English.
+                 */
+                nameLocalized?: string;
+                /**
+                 * Chinese name of the formation. Data, identical in every language.
+                 */
+                chinese?: string;
+                /**
+                 * Whether the formation helps or harms.
+                 */
+                nature: string;
+            };
+            /**
+             * What this palace means, composed from the two stars and the phase relation between them. Named formations return their own passage; the rest are built from the star pair.
+             */
+            reading: string;
+        }>;
+    };
+};
+
+export type PostFengShuiFlyingStarsNatalResponse = PostFengShuiFlyingStarsNatalResponses[keyof PostFengShuiFlyingStarsNatalResponses];
+
+export type GetFengShuiFlyingStarsAnnualByYearData = {
+    body?: never;
+    path: {
+        /**
+         * Solar year, 1900 to 2100. The year runs from Li Chun to Li Chun, so a date in January belongs to the previous year here.
+         */
+        year: number;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/flying-stars/annual/{year}';
+};
+
+export type GetFengShuiFlyingStarsAnnualByYearErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiFlyingStarsAnnualByYearError = GetFengShuiFlyingStarsAnnualByYearErrors[keyof GetFengShuiFlyingStarsAnnualByYearErrors];
+
+export type GetFengShuiFlyingStarsAnnualByYearResponses = {
+    /**
+     * The nine palaces of the annual plate with meanings and remedies
+     */
+    200: {
+        /**
+         * The solar year this plate is for.
+         */
+        year: number;
+        /**
+         * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+         */
+        centerStar: number;
+        /**
+         * The date this plate takes effect, which is Li Chun and NOT Lunar New Year. Lunar New Year 2026 falls on 17 February, roughly two weeks later, and applying the new plate from that date is the most common error in annual feng shui.
+         */
+        changeoverDate: string;
+        /**
+         * All nine palaces with the star that flew there, centre first and then along the Lo Shu path. The plate is universal: it is the same for every building on earth.
+         */
+        palaces: Array<{
+            /**
+             * Palace of the Lo Shu grid: one of the eight compass sectors, or Center. Always English, safe to compare against and to key a grid cell on.
+             */
+            palace: string;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            star: number;
+            /**
+             * Display name of the star in this palace. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Star name in the requested language, for display only. Present only when lang is set to a language other than English.
+             */
+            nameLocalized?: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * The untimely reading of the star, auspicious or inauspicious.
+             */
+            nature: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            enhancer: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            remedy: string;
+            /**
+             * What the star does in the sector it has flown to this period.
+             */
+            meaning: string;
+        }>;
+    };
+};
+
+export type GetFengShuiFlyingStarsAnnualByYearResponse = GetFengShuiFlyingStarsAnnualByYearResponses[keyof GetFengShuiFlyingStarsAnnualByYearResponses];
+
+export type GetFengShuiFlyingStarsMonthlyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Solar year, 1900 to 2100. Defaults to the solar year in progress, which changes at Li Chun rather than on 1 January.
+         */
+        year?: number;
+        /**
+         * Solar month, 1 to 12, where 1 begins at Li Chun in early February. This is NOT the calendar month: solar month 1 covers roughly 4 February to 5 March. Defaults to the solar month in progress.
+         */
+        month?: number;
+    };
+    url: '/feng-shui/flying-stars/monthly';
+};
+
+export type GetFengShuiFlyingStarsMonthlyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiFlyingStarsMonthlyError = GetFengShuiFlyingStarsMonthlyErrors[keyof GetFengShuiFlyingStarsMonthlyErrors];
+
+export type GetFengShuiFlyingStarsMonthlyResponses = {
+    /**
+     * The nine palaces of the monthly plate with meanings and remedies
+     */
+    200: {
+        /**
+         * Solar year of the plate. Echoes the year requested, or the solar year in progress when it was omitted.
+         */
+        year: number;
+        /**
+         * Solar month of the plate, 1 to 12, where 1 is the month that begins at Li Chun in early February. Echoes the month requested, or the solar month in progress when it was omitted.
+         */
+        month: number;
+        /**
+         * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+         */
+        centerStar: number;
+        /**
+         * Earthly Branch of the solar year, which decides where the monthly sequence starts. Rat, Horse, Rabbit and Rooster years open on 8; Dragon, Dog, Ox and Goat years on 5; Tiger, Monkey, Snake and Pig years on 2.
+         */
+        yearBranch: string;
+        /**
+         * All nine palaces of the monthly plate, centre first and then along the Lo Shu path.
+         */
+        palaces: Array<{
+            /**
+             * Palace of the Lo Shu grid: one of the eight compass sectors, or Center. Always English, safe to compare against and to key a grid cell on.
+             */
+            palace: string;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            star: number;
+            /**
+             * Display name of the star in this palace. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Star name in the requested language, for display only. Present only when lang is set to a language other than English.
+             */
+            nameLocalized?: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * The untimely reading of the star, auspicious or inauspicious.
+             */
+            nature: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            enhancer: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            remedy: string;
+            /**
+             * What the star does in the sector it has flown to this period.
+             */
+            meaning: string;
+        }>;
+    };
+};
+
+export type GetFengShuiFlyingStarsMonthlyResponse = GetFengShuiFlyingStarsMonthlyResponses[keyof GetFengShuiFlyingStarsMonthlyResponses];
+
+export type GetFengShuiFlyingStarsStarsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum stars to return per page. Range 1 to 9, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of stars to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/feng-shui/flying-stars/stars';
+};
+
+export type GetFengShuiFlyingStarsStarsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiFlyingStarsStarsError = GetFengShuiFlyingStarsStarsErrors[keyof GetFengShuiFlyingStarsStarsErrors];
+
+export type GetFengShuiFlyingStarsStarsResponses = {
+    /**
+     * The nine flying stars with meanings, elements and remedies
+     */
+    200: {
+        /**
+         * Number of stars in the catalogue.
+         */
+        total: number;
+        /**
+         * Page size applied.
+         */
+        limit: number;
+        /**
+         * Number of entries skipped.
+         */
+        offset: number;
+        /**
+         * The nine flying stars in Lo Shu order, 1 through 9.
+         */
+        stars: Array<{
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            number: number;
+            /**
+             * Display name of the star. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Star name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat name exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
+            /**
+             * Chinese characters for the star. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin for the star. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * The untimely reading of the star, auspicious or inauspicious. It is not the whole verdict: the ruling star of the period in force is prosperous whatever this says, and a star long past its period is the one that does damage. Only the 5 is harmful in every period.
+             */
+            nature: string;
+            /**
+             * Themes the star governs, for tagging and for quick summaries.
+             */
+            keywords: Array<string>;
+            /**
+             * What the star does, how it reads when timely, and how it reads when it is not.
+             */
+            meaning: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            enhancer: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            remedy: string;
+            /**
+             * Palace of the Lo Shu grid: one of the eight compass sectors, or Center. Always English, safe to compare against and to key a grid cell on.
+             */
+            palace: string;
+            /**
+             * The twenty year period this star rules. A star is at its strongest during its own period and weakest long after it.
+             */
+            period: number;
+            /**
+             * The trigram of the star palace. Absent for the 5, which owns the centre and has no trigram, which is also why the 5 is the one star with no direction of its own.
+             */
+            trigram?: {
+                /**
+                 * Trigram number, the same identifier the I-Ching trigram endpoints use.
+                 */
+                number: number;
+                /**
+                 * English name of the trigram, byte identical to the I-Ching catalogue.
+                 */
+                english: string;
+                /**
+                 * Chinese character for the trigram. Data, identical in every language.
+                 */
+                chinese: string;
+            };
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            base: number;
+        }>;
+    };
+};
+
+export type GetFengShuiFlyingStarsStarsResponse = GetFengShuiFlyingStarsStarsResponses[keyof GetFengShuiFlyingStarsStarsResponses];
+
+export type GetFengShuiAfflictionsByYearData = {
+    body?: never;
+    path: {
+        /**
+         * Solar year, 1900 to 2100. The year runs from Li Chun to Li Chun, so a date in January belongs to the previous year here.
+         */
+        year: number;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/afflictions/{year}';
+};
+
+export type GetFengShuiAfflictionsByYearErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiAfflictionsByYearError = GetFengShuiAfflictionsByYearErrors[keyof GetFengShuiAfflictionsByYearErrors];
+
+export type GetFengShuiAfflictionsByYearResponses = {
+    /**
+     * The four annual afflictions with mountains, degree spans and meanings
+     */
+    200: {
+        /**
+         * The solar year these positions are for.
+         */
+        year: number;
+        /**
+         * Earthly Branch of the solar year, in pinyin. Three of the four afflictions are derived from it. Always English pinyin, safe to compare against.
+         */
+        yearBranch: string;
+        /**
+         * The date all four afflictions move, which is Li Chun and NOT Lunar New Year. In 2026 Lunar New Year falls on 17 February, roughly two weeks after the afflictions have already changed.
+         */
+        changeoverDate: string;
+        /**
+         * The Grand Duke, occupying a single 15 degree mountain rather than a whole sector. Precision matters here more than anywhere else in the system, because the neighbouring mountains of the same sector are unaffected.
+         */
+        taiSui: {
+            /**
+             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            name: string;
+            /**
+             * Chinese characters for the affliction. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * What the affliction does and the standing rule for handling it.
+             */
+            meaning: string;
+            mountain: {
+                /**
+                 * Mountain id, the pinyin of the stem, branch or trigram that names it. Always English pinyin, safe to compare against.
+                 */
+                id: string;
+                /**
+                 * Compass label of the mountain, sector plus position 1 to 3 clockwise. The form a facing is usually quoted in.
+                 */
+                label: string;
+                /**
+                 * Chinese character for the mountain. Data, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the mountain. Data, identical in every language.
+                 */
+                pinyin: string;
+                /**
+                 * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+                 */
+                direction: string;
+                /**
+                 * Which of the three dragons the mountain holds inside its sector: earth for the first mountain clockwise, heaven for the middle, human for the last. The heaven and human dragons share a polarity, which is why they share a chart.
+                 */
+                yuan: string;
+                /**
+                 * San Yuan polarity of the mountain, yang or yin, which decides whether a plate entering the centre flies forward or in reverse. This is NOT the natural polarity of the stem or branch and the two differ on eight of the 24 mountains.
+                 */
+                polarity: string;
+                /**
+                 * Start of the 15 degree span, in compass degrees. Wraps past 360 for the two northernmost mountains.
+                 */
+                startDegree: number;
+                /**
+                 * End of the 15 degree span, in compass degrees.
+                 */
+                endDegree: number;
+            };
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, safe to compare against and to key styling on.
+             */
+            direction: string;
+            /**
+             * Zodiac animal of the year, which shares the sign Tai Sui occupies. Always English, safe to compare against.
+             */
+            animal: string;
+            /**
+             * The animal directly opposite, which clashes with Tai Sui head on. People of this sign are the ones traditionally advised to take the most care during the year.
+             */
+            clashingAnimal: string;
+        };
+        /**
+         * The Year Breaker, always the mountain directly opposite Tai Sui.
+         */
+        suiPo: {
+            /**
+             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            name: string;
+            /**
+             * Chinese characters for the affliction. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * What the affliction does and the standing rule for handling it.
+             */
+            meaning: string;
+            mountain: {
+                /**
+                 * Mountain id, the pinyin of the stem, branch or trigram that names it. Always English pinyin, safe to compare against.
+                 */
+                id: string;
+                /**
+                 * Compass label of the mountain, sector plus position 1 to 3 clockwise. The form a facing is usually quoted in.
+                 */
+                label: string;
+                /**
+                 * Chinese character for the mountain. Data, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin for the mountain. Data, identical in every language.
+                 */
+                pinyin: string;
+                /**
+                 * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+                 */
+                direction: string;
+                /**
+                 * Which of the three dragons the mountain holds inside its sector: earth for the first mountain clockwise, heaven for the middle, human for the last. The heaven and human dragons share a polarity, which is why they share a chart.
+                 */
+                yuan: string;
+                /**
+                 * San Yuan polarity of the mountain, yang or yin, which decides whether a plate entering the centre flies forward or in reverse. This is NOT the natural polarity of the stem or branch and the two differ on eight of the 24 mountains.
+                 */
+                polarity: string;
+                /**
+                 * Start of the 15 degree span, in compass degrees. Wraps past 360 for the two northernmost mountains.
+                 */
+                startDegree: number;
+                /**
+                 * End of the 15 degree span, in compass degrees.
+                 */
+                endDegree: number;
+            };
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, safe to compare against and to key styling on.
+             */
+            direction: string;
+        };
+        /**
+         * The Three Killings. Two readings of its extent are in circulation and both are given: the exact 75 degree branch span in startDegree and endDegree, and the 45 degree cardinal palace named in direction.
+         */
+        sanSha: {
+            /**
+             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            name: string;
+            /**
+             * Chinese characters for the affliction. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * What the affliction does and the standing rule for handling it.
+             */
+            meaning: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, safe to compare against and to key styling on.
+             */
+            direction: string;
+            /**
+             * The five phase the year branch forms with its trine. The Three Killings always sits in the cardinal direction opposite this frame.
+             */
+            frameElement: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, safe to compare against and to key styling on.
+             */
+            frameDirection: string;
+            /**
+             * Start of the afflicted span in compass degrees. The span crosses 360 when the affliction is in the north.
+             */
+            startDegree: number;
+            /**
+             * End of the afflicted span in compass degrees.
+             */
+            endDegree: number;
+            /**
+             * The three mountains of the span, first to last in compass order. They are one affliction read in three parts, not three separate ones, and disturbing any part is taken to wake the whole.
+             */
+            parts: Array<{
+                /**
+                 * Which of the three parts this is: jie-sha, zai-sha or sui-sha, in compass order. Always English, safe to compare against.
+                 */
+                id: string;
+                /**
+                 * Display name of the part. Always English, whatever the lang parameter says.
+                 */
+                name: string;
+                /**
+                 * Chinese characters for the part. Data, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * Tone-marked pinyin. Data, identical in every language.
+                 */
+                pinyin: string;
+                /**
+                 * What this part of the span brings.
+                 */
+                meaning: string;
+                mountain: {
+                    /**
+                     * Mountain id, the pinyin of the stem, branch or trigram that names it. Always English pinyin, safe to compare against.
+                     */
+                    id: string;
+                    /**
+                     * Compass label of the mountain, sector plus position 1 to 3 clockwise. The form a facing is usually quoted in.
+                     */
+                    label: string;
+                    /**
+                     * Chinese character for the mountain. Data, identical in every language.
+                     */
+                    chinese: string;
+                    /**
+                     * Tone-marked pinyin for the mountain. Data, identical in every language.
+                     */
+                    pinyin: string;
+                    /**
+                     * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+                     */
+                    direction: string;
+                    /**
+                     * Which of the three dragons the mountain holds inside its sector: earth for the first mountain clockwise, heaven for the middle, human for the last. The heaven and human dragons share a polarity, which is why they share a chart.
+                     */
+                    yuan: string;
+                    /**
+                     * San Yuan polarity of the mountain, yang or yin, which decides whether a plate entering the centre flies forward or in reverse. This is NOT the natural polarity of the stem or branch and the two differ on eight of the 24 mountains.
+                     */
+                    polarity: string;
+                    /**
+                     * Start of the 15 degree span, in compass degrees. Wraps past 360 for the two northernmost mountains.
+                     */
+                    startDegree: number;
+                    /**
+                     * End of the 15 degree span, in compass degrees.
+                     */
+                    endDegree: number;
+                };
+            }>;
+        };
+        /**
+         * The Five Yellow, read off the annual star plate rather than from the year branch, which is why it is the only one of the four that has nothing to do with the animal of the year.
+         */
+        fiveYellow: {
+            /**
+             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             */
+            name: string;
+            /**
+             * Chinese characters for the affliction. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * Tone-marked pinyin. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * What the affliction does and the standing rule for handling it.
+             */
+            meaning: string;
+            /**
+             * Palace the 5 flew to this year, one of the eight sectors or Center. Always English, safe to compare against.
+             */
+            palace: string;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            star: number;
+            /**
+             * The phase that drains the 5, which is what the 5 itself produces. Never treat it with Fire, which produces Earth and feeds it.
+             */
+            remedy: string;
+        };
+    };
+};
+
+export type GetFengShuiAfflictionsByYearResponse = GetFengShuiAfflictionsByYearResponses[keyof GetFengShuiAfflictionsByYearResponses];
+
+export type GetFengShuiBaguaData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum sectors to return per page. Range 1 to 9, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of sectors to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/feng-shui/bagua';
+};
+
+export type GetFengShuiBaguaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiBaguaError = GetFengShuiBaguaErrors[keyof GetFengShuiBaguaErrors];
+
+export type GetFengShuiBaguaResponses = {
+    /**
+     * The nine Bagua palaces with life areas, elements, colours and trigrams
+     */
+    200: {
+        /**
+         * Number of palaces in the map.
+         */
+        total: number;
+        /**
+         * Page size applied.
+         */
+        limit: number;
+        /**
+         * Number of entries skipped.
+         */
+        offset: number;
+        /**
+         * The nine palaces of the compass Bagua map, in Lo Shu palace order starting at North and ending with the centre.
+         */
+        sectors: Array<{
+            /**
+             * Life area id: career, knowledge, family, wealth, fame, love, children, helpful-people or health. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+             */
+            id: string;
+            /**
+             * Display name of the life area. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+             */
+            name: string;
+            /**
+             * Life area name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat name exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
+            /**
+             * Lo Shu number of the palace, 1 to 9. This is the same number the flying stars use, so a chart palace and a Bagua sector line up by it.
+             */
+            number: number;
+            /**
+             * Palace of the Lo Shu grid: one of the eight compass sectors, or Center for the ninth. Always English, safe to compare against.
+             */
+            palace: string;
+            /**
+             * Compass sector of the palace, taken from the trigram that sits there. Absent on the centre palace, which has no direction.
+             */
+            direction?: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Colours of the phase this sector carries, for activating it. Derived from the element rather than assigned per sector, so they cannot disagree with the element beside them.
+             */
+            colors: Array<string>;
+            /**
+             * The Later Heaven trigram of the sector, which is the arrangement every compass reading and every flying star chart uses. Absent on the centre palace.
+             */
+            trigram?: {
+                /**
+                 * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+                 */
+                number: number;
+                /**
+                 * Chinese character for the trigram. Data, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+                 */
+                english: string;
+                /**
+                 * Tone-marked pinyin for the trigram. Data, identical in every language.
+                 */
+                pinyin: string;
+                /**
+                 * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+                 */
+                symbol: string;
+                /**
+                 * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+                 */
+                binary: string;
+                /**
+                 * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+                 */
+                element: string;
+                /**
+                 * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+                 */
+                direction: string;
+                /**
+                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+                 */
+                familyMember: string;
+            };
+            /**
+             * The trigram that sits in this direction under the Earlier Heaven arrangement, read for the symbolic relation between opposite sectors. A different question from the Later Heaven trigram, not a competing answer. Absent on the centre palace.
+             */
+            earlierHeavenTrigram?: {
+                /**
+                 * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+                 */
+                number: number;
+                /**
+                 * Chinese character for the trigram. Data, identical in every language.
+                 */
+                chinese: string;
+                /**
+                 * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+                 */
+                english: string;
+                /**
+                 * Tone-marked pinyin for the trigram. Data, identical in every language.
+                 */
+                pinyin: string;
+                /**
+                 * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+                 */
+                symbol: string;
+                /**
+                 * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+                 */
+                binary: string;
+                /**
+                 * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+                 */
+                element: string;
+                /**
+                 * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+                 */
+                direction: string;
+                /**
+                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+                 */
+                familyMember: string;
+            };
+            /**
+             * What this sector governs, in a few words.
+             */
+            focus: string;
+            /**
+             * What the sector governs and how to work with it.
+             */
+            meaning: string;
+        }>;
+    };
+};
+
+export type GetFengShuiBaguaResponse = GetFengShuiBaguaResponses[keyof GetFengShuiBaguaResponses];
+
+export type GetFengShuiBaguaByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Life area id. One of career, knowledge, family, wealth, fame, love, children, helpful-people, health.
+         */
+        id: 'career' | 'knowledge' | 'family' | 'wealth' | 'fame' | 'love' | 'children' | 'helpful-people' | 'health';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/feng-shui/bagua/{id}';
+};
+
+export type GetFengShuiBaguaByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No Bagua sector with that life area id
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiBaguaByIdError = GetFengShuiBaguaByIdErrors[keyof GetFengShuiBaguaByIdErrors];
+
+export type GetFengShuiBaguaByIdResponses = {
+    /**
+     * One Bagua palace with its life area, element, colours and trigrams
+     */
+    200: {
+        /**
+         * Life area id: career, knowledge, family, wealth, fame, love, children, helpful-people or health. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use nameLocalized for anything a reader sees.
+         */
+        id: string;
+        /**
+         * Display name of the life area. Always English, whatever the lang parameter says. Use nameLocalized for anything a reader sees.
+         */
+        name: string;
+        /**
+         * Life area name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat name exactly. Never compare against this value.
+         */
+        nameLocalized?: string;
+        /**
+         * Lo Shu number of the palace, 1 to 9. This is the same number the flying stars use, so a chart palace and a Bagua sector line up by it.
+         */
+        number: number;
+        /**
+         * Palace of the Lo Shu grid: one of the eight compass sectors, or Center for the ninth. Always English, safe to compare against.
+         */
+        palace: string;
+        /**
+         * Compass sector of the palace, taken from the trigram that sits there. Absent on the centre palace, which has no direction.
+         */
+        direction?: string;
+        /**
+         * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+         */
+        element: string;
+        /**
+         * Colours of the phase this sector carries, for activating it. Derived from the element rather than assigned per sector, so they cannot disagree with the element beside them.
+         */
+        colors: Array<string>;
+        /**
+         * The Later Heaven trigram of the sector, which is the arrangement every compass reading and every flying star chart uses. Absent on the centre palace.
+         */
+        trigram?: {
+            /**
+             * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+             */
+            number: number;
+            /**
+             * Chinese character for the trigram. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             */
+            english: string;
+            /**
+             * Tone-marked pinyin for the trigram. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+             */
+            symbol: string;
+            /**
+             * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+             */
+            binary: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             */
+            familyMember: string;
+        };
+        /**
+         * The trigram that sits in this direction under the Earlier Heaven arrangement, read for the symbolic relation between opposite sectors. A different question from the Later Heaven trigram, not a competing answer. Absent on the centre palace.
+         */
+        earlierHeavenTrigram?: {
+            /**
+             * Trigram number, 1 to 8, the same identifier the I-Ching trigram endpoints use. It is a lookup key, not a ranking.
+             */
+            number: number;
+            /**
+             * Chinese character for the trigram. Data, identical in every language.
+             */
+            chinese: string;
+            /**
+             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             */
+            english: string;
+            /**
+             * Tone-marked pinyin for the trigram. Data, identical in every language.
+             */
+            pinyin: string;
+            /**
+             * Unicode trigram symbol, for rendering a Bagua diagram without an icon set.
+             */
+            symbol: string;
+            /**
+             * Three lines bottom to top, 1 for yang and 0 for yin. The Eight Mansions classification of any sector is decided by which of these three lines differ from your own trigram.
+             */
+            binary: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
+             */
+            direction: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             */
+            familyMember: string;
+        };
+        /**
+         * What this sector governs, in a few words.
+         */
+        focus: string;
+        /**
+         * What the sector governs and how to work with it.
+         */
+        meaning: string;
+    };
+};
+
+export type GetFengShuiBaguaByIdResponse = GetFengShuiBaguaByIdResponses[keyof GetFengShuiBaguaByIdResponses];
+
+export type GetFengShuiPeriodsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Date to resolve the current period for, in YYYY-MM-DD format. Defaults to today in UTC. Useful for asking which period a building was completed in.
+         */
+        date?: string;
+    };
+    url: '/feng-shui/periods';
+};
+
+export type GetFengShuiPeriodsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetFengShuiPeriodsError = GetFengShuiPeriodsErrors[keyof GetFengShuiPeriodsErrors];
+
+export type GetFengShuiPeriodsResponses = {
+    /**
+     * The nine periods with ruling stars and the period in force
+     */
+    200: {
+        /**
+         * Number of periods in the cycle. Always nine.
+         */
+        total: number;
+        /**
+         * First solar year of the recorded 180 year cycle.
+         */
+        cycleStartYear: number;
+        /**
+         * Last solar year of the recorded cycle. The cycle then repeats, so 2044 opens Period 1 again.
+         */
+        cycleEndYear: number;
+        /**
+         * The date the current period was resolved for. Echoes the date requested, or the current UTC date when it was omitted.
+         */
+        date: string;
+        /**
+         * The period in force on that date. Resolved at Li Chun, so a date in January belongs to the previous solar year and can fall in the previous period.
+         */
+        currentPeriod: number;
+        /**
+         * All nine periods of the 180 year cycle in order, each with its ruling star, element, palace and exact opening date.
+         */
+        periods: Array<{
+            /**
+             * Period number, 1 to 9. A building takes the period it was completed in and keeps that period plate for its whole life, so this is the first input to every natal chart.
+             */
+            number: number;
+            /**
+             * First solar year of the period. The period opens at Li Chun of this year, in early February, not on 1 January.
+             */
+            startYear: number;
+            /**
+             * Last solar year of the period. The next period opens at Li Chun of the year after.
+             */
+            endYear: number;
+            /**
+             * Exact date the period opened, computed astronomically. Li Chun is commonly quoted as 4 February and falls on the 3rd or the 5th in roughly one year in four, which is what decides whether a building finished in early February belongs to this period or the last.
+             */
+            startDate: string;
+            /**
+             * Which sixty year era the period belongs to: upper, middle or lower, three periods each. Always English, safe to compare against.
+             */
+            era: string;
+            /**
+             * Display name of the era.
+             */
+            eraName: string;
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            rulingStar: number;
+            /**
+             * Display name of the ruling star. Always English, whatever the lang parameter says. Use rulingStarNameLocalized for anything a reader sees.
+             */
+            rulingStarName: string;
+            /**
+             * Ruling star name in the requested language, for display only. Present only when lang is set to a language other than English.
+             */
+            rulingStarNameLocalized?: string;
+            /**
+             * Five phase of this entry: Wood, Fire, Earth, Metal or Water. Always English so it stays safe to compare against and to key styling on. The full cycles live on the Chinese astrology elements endpoint.
+             */
+            element: string;
+            /**
+             * Palace the ruling star owns on the Lo Shu base plate. Always English, safe to compare against.
+             */
+            palace: string;
+            /**
+             * Trigram of the ruling star palace. Absent for Period 5, whose star owns the centre and has no trigram.
+             */
+            trigram?: {
+                /**
+                 * Trigram number, the same identifier the I-Ching trigram endpoints use.
+                 */
+                number: number;
+                /**
+                 * English name of the trigram, byte identical to the I-Ching catalogue.
+                 */
+                english: string;
+                /**
+                 * Chinese character for the trigram. Data, identical in every language.
+                 */
+                chinese: string;
+            };
+            /**
+             * Flying star number, 1 to 9. The number IS the identifier of the star: 8 is always the Eight White Earth star whichever plate it appears on.
+             */
+            base: number;
+        }>;
+    };
+};
+
+export type GetFengShuiPeriodsResponse = GetFengShuiPeriodsResponses[keyof GetFengShuiPeriodsResponses];
+
 export type PostNumerologyLifePathData = {
     body?: {
         /**
@@ -31715,9 +40053,9 @@ export type PostNumerologyLifePathData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/life-path';
 };
@@ -31917,9 +40255,9 @@ export type PostNumerologyExpressionData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/expression';
 };
@@ -32131,9 +40469,9 @@ export type PostNumerologyBridgeData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/bridge';
 };
@@ -32361,9 +40699,9 @@ export type PostNumerologySoulUrgeData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/soul-urge';
 };
@@ -32563,9 +40901,9 @@ export type PostNumerologyPersonalityData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/personality';
 };
@@ -32765,9 +41103,9 @@ export type PostNumerologyBirthDayData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/birth-day';
 };
@@ -32987,9 +41325,9 @@ export type PostNumerologyMaturityData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/maturity';
 };
@@ -33189,9 +41527,9 @@ export type PostNumerologyKarmicLessonsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/karmic-lessons';
 };
@@ -33360,9 +41698,9 @@ export type PostNumerologyKarmicDebtData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/karmic-debt';
 };
@@ -33529,9 +41867,9 @@ export type PostNumerologyPersonalDayData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/personal-day';
 };
@@ -33704,9 +42042,9 @@ export type PostNumerologyPersonalMonthData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/personal-month';
 };
@@ -33867,9 +42205,9 @@ export type PostNumerologyPersonalYearData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/personal-year';
 };
@@ -34082,9 +42420,9 @@ export type PostNumerologyCompatibilityData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/compatibility';
 };
@@ -34303,9 +42641,9 @@ export type PostNumerologyChartData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/chart';
 };
@@ -35226,9 +43564,9 @@ export type GetNumerologyMeaningsByNumberData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/meanings/{number}';
 };
@@ -35297,7 +43635,7 @@ export type GetNumerologyMeaningsByNumberErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -35416,9 +43754,9 @@ export type PostNumerologyDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/daily';
 };
@@ -35601,9 +43939,9 @@ export type PostNumerologyChaldeanData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/chaldean';
 };
@@ -35908,9 +44246,9 @@ export type GetNumerologyCompoundNumberByNumberData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/compound-number/{number}';
 };
@@ -36063,9 +44401,9 @@ export type PostNumerologyDualData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/dual';
 };
@@ -36283,9 +44621,9 @@ export type PostNumerologyBusinessNameData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/numerology/business-name';
 };
@@ -36478,9 +44816,9 @@ export type GetTarotCardsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Maximum items to return per page. Range: 1-100, default 20.
          */
@@ -36611,7 +44949,7 @@ export type GetTarotCardsError = GetTarotCardsErrors[keyof GetTarotCardsErrors];
 
 export type GetTarotCardsResponses = {
     /**
-     * List of tarot cards with basic information. Use GET /cards/:id for full details.
+     * List of tarot cards with basic information. Use GET /cards/{id} for full details.
      */
     200: {
         /**
@@ -36627,7 +44965,7 @@ export type GetTarotCardsResponses = {
          */
         offset: number;
         /**
-         * Array of tarot cards with basic metadata. Use GET /cards/:id for full upright and reversed interpretations.
+         * Array of tarot cards with basic metadata. Use GET /cards/{id} for full upright and reversed interpretations.
          */
         cards: Array<BasicCard>;
     };
@@ -36645,9 +44983,9 @@ export type GetTarotCardsByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/cards/{id}';
 };
@@ -36716,7 +45054,7 @@ export type GetTarotCardsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -36800,9 +45138,9 @@ export type PostTarotDrawData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/draw';
 };
@@ -36943,9 +45281,9 @@ export type PostTarotDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/daily';
 };
@@ -37042,7 +45380,7 @@ export type PostTarotDailyErrors = {
      */
     500: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -37091,9 +45429,9 @@ export type PostTarotYesNoData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/yes-no';
 };
@@ -37190,7 +45528,7 @@ export type PostTarotYesNoErrors = {
      */
     500: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -37272,9 +45610,9 @@ export type PostTarotSpreadsThreeCardData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/spreads/three-card';
 };
@@ -37441,9 +45779,9 @@ export type PostTarotSpreadsCelticCrossData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/spreads/celtic-cross';
 };
@@ -37610,9 +45948,9 @@ export type PostTarotSpreadsLoveData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/spreads/love';
 };
@@ -37779,9 +46117,9 @@ export type PostTarotSpreadsCareerData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/spreads/career';
 };
@@ -37965,9 +46303,9 @@ export type PostTarotSpreadsCustomData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/tarot/spreads/custom';
 };
@@ -38130,9 +46468,9 @@ export type PostBiorhythmReadingData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/biorhythm/reading';
 };
@@ -38365,9 +46703,9 @@ export type PostBiorhythmForecastData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/biorhythm/forecast';
 };
@@ -38583,9 +46921,9 @@ export type PostBiorhythmCriticalDaysData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/biorhythm/critical-days';
 };
@@ -38779,9 +47117,9 @@ export type PostBiorhythmCompatibilityData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/biorhythm/compatibility';
 };
@@ -38995,9 +47333,9 @@ export type PostBiorhythmPhasesData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/biorhythm/phases';
 };
@@ -39181,9 +47519,9 @@ export type PostBiorhythmDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/biorhythm/daily';
 };
@@ -39372,9 +47710,9 @@ export type PostIchingDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/iching/daily';
 };
@@ -39471,7 +47809,7 @@ export type PostIchingDailyErrors = {
      */
     500: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -39582,9 +47920,9 @@ export type PostIchingDailyCastData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/iching/daily/cast';
 };
@@ -39857,9 +48195,9 @@ export type GetIchingHexagramsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Maximum items to return per page. Range: 1-64, default 20.
          */
@@ -40007,9 +48345,9 @@ export type GetIchingHexagramsRandomData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/iching/hexagrams/random';
 };
@@ -40078,7 +48416,7 @@ export type GetIchingHexagramsRandomErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -40145,9 +48483,9 @@ export type GetIchingHexagramsLookupData = {
     path?: never;
     query: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Six-digit binary pattern (0=yin/broken, 1=yang/solid) from bottom to top.
          */
@@ -40220,7 +48558,7 @@ export type GetIchingHexagramsLookupErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -40292,9 +48630,9 @@ export type GetIchingHexagramsByNumberData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/iching/hexagrams/{number}';
 };
@@ -40363,7 +48701,7 @@ export type GetIchingHexagramsByNumberErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -40430,9 +48768,9 @@ export type GetIchingCastData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Optional seed for reproducible castings. Same seed = same casting every time. Pass any unique identifier (userId, session token, question hash). Omit for random casting.
          */
@@ -40574,9 +48912,9 @@ export type GetIchingTrigramsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/iching/trigrams';
 };
@@ -40713,9 +49051,9 @@ export type GetIchingTrigramsByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/iching/trigrams/{id}';
 };
@@ -40784,7 +49122,7 @@ export type GetIchingTrigramsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -40856,9 +49194,9 @@ export type GetCrystalsZodiacBySignData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Maximum items to return per page. Range: 1-30, default 20.
          */
@@ -40997,7 +49335,7 @@ export type GetCrystalsZodiacBySignResponses = {
          */
         offset: number;
         /**
-         * Crystal summaries for this zodiac sign. Call /crystals/:id for full healing properties.
+         * Crystal summaries for this zodiac sign. Call /crystals/{id} for full healing properties.
          */
         crystals: Array<{
             /**
@@ -41032,9 +49370,9 @@ export type GetCrystalsChakraByChakraData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Maximum items to return per page. Range: 1-30, default 20.
          */
@@ -41173,7 +49511,7 @@ export type GetCrystalsChakraByChakraResponses = {
          */
         offset: number;
         /**
-         * Crystal summaries for this chakra. Call /crystals/:id for full healing properties.
+         * Crystal summaries for this chakra. Call /crystals/{id} for full healing properties.
          */
         crystals: Array<{
             /**
@@ -41208,9 +49546,9 @@ export type GetCrystalsElementByElementData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Maximum items to return per page. Range: 1-30, default 20.
          */
@@ -41349,7 +49687,7 @@ export type GetCrystalsElementByElementResponses = {
          */
         offset: number;
         /**
-         * Crystal summaries for this element. Call /crystals/:id for full healing properties.
+         * Crystal summaries for this element. Call /crystals/{id} for full healing properties.
          */
         crystals: Array<{
             /**
@@ -41384,9 +49722,9 @@ export type GetCrystalsBirthstoneByMonthData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/crystals/birthstone/{month}';
 };
@@ -41513,7 +49851,7 @@ export type GetCrystalsBirthstoneByMonthResponses = {
          */
         total: number;
         /**
-         * Birthstone crystals for this month. Call /crystals/:id for full healing properties.
+         * Birthstone crystals for this month. Call /crystals/{id} for full healing properties.
          */
         crystals: Array<{
             /**
@@ -41543,9 +49881,9 @@ export type GetCrystalsSearchData = {
     path?: never;
     query: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Search query (2-50 characters). Matches against crystal names, keywords, descriptions, and meaning fields. Case-insensitive partial matching.
          */
@@ -41688,7 +50026,7 @@ export type GetCrystalsSearchResponses = {
          */
         offset: number;
         /**
-         * Matching crystal summaries. Call /crystals/:id for full healing properties.
+         * Matching crystal summaries. Call /crystals/{id} for full healing properties.
          */
         crystals: Array<{
             /**
@@ -41723,9 +50061,9 @@ export type GetCrystalsPairingsByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/crystals/pairings/{id}';
 };
@@ -41794,7 +50132,7 @@ export type GetCrystalsPairingsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -41912,9 +50250,9 @@ export type PostCrystalsDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/crystals/daily';
 };
@@ -42041,7 +50379,7 @@ export type PostCrystalsDailyResponses = {
          */
         name: string;
         /**
-         * URL-safe identifier. Call /crystals/:id for full healing properties.
+         * URL-safe identifier. Call /crystals/{id} for full healing properties.
          */
         id: string;
         /**
@@ -42074,9 +50412,9 @@ export type GetCrystalsRandomData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/crystals/random';
 };
@@ -42195,7 +50533,7 @@ export type GetCrystalsRandomResponses = {
          */
         name: string;
         /**
-         * URL-safe identifier. Call /crystals/:id for full healing properties.
+         * URL-safe identifier. Call /crystals/{id} for full healing properties.
          */
         id: string;
         /**
@@ -42486,9 +50824,9 @@ export type GetCrystalsData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Filter by chakra association, case-insensitive. Valid values: Root, Sacral, Solar Plexus, Heart, Throat, Third Eye, Crown.
          */
@@ -42682,9 +51020,9 @@ export type GetCrystalsByIdData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/crystals/{id}';
 };
@@ -42753,7 +51091,7 @@ export type GetCrystalsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -43381,7 +51719,7 @@ export type GetDreamsSymbolsByIdErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -43608,9 +51946,9 @@ export type GetAngelNumbersNumbersData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Maximum items to return per page. Range: 1-50, default 20.
          */
@@ -43796,9 +52134,9 @@ export type GetAngelNumbersNumbersByNumberData = {
     };
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/angel-numbers/numbers/{number}';
 };
@@ -43867,7 +52205,7 @@ export type GetAngelNumbersNumbersByNumberErrors = {
      */
     404: {
         /**
-         * Human-readable error message. May change wording — do not parse programmatically.
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
          */
         error: string;
         /**
@@ -44001,9 +52339,9 @@ export type GetAngelNumbersLookupData = {
     path?: never;
     query: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
          * Number sequence to analyze (1-8 digits). Can be any number the user has encountered: clock times (1111), addresses (717), receipts (888), license plates (4444), or any repeating pattern.
          */
@@ -44288,9 +52626,9 @@ export type PostAngelNumbersDailyData = {
     path?: never;
     query?: {
         /**
-         * Response language (ISO 639-1). Supported: en, tr, de, es, hi, pt, fr, ru. Defaults to en. Languages without translations yet return English.
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
-        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
     };
     url: '/angel-numbers/daily';
 };
@@ -45302,7 +53640,7 @@ export type GetLanguagesResponses = {
             /**
              * ISO 639-1 language code. Pass this value as the `lang` query parameter.
              */
-            code: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru';
+            code: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
             /**
              * Language name in English.
              */
