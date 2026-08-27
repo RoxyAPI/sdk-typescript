@@ -36136,7 +36136,7 @@ export type GetChineseAstrologyCalendarDayByDateResponses = {
              */
             nameLocalized?: string;
             /**
-             * English display name of the officer.
+             * English display name of the officer. Canonical, identical in every language, so it stays safe to compare against in code. The translation is in nameLocalized.
              */
             name: string;
             /**
@@ -36162,9 +36162,13 @@ export type GetChineseAstrologyCalendarDayByDateResponses = {
              */
             number: number;
             /**
-             * English display name of the mansion.
+             * English display name of the mansion. Canonical, identical in every language. The translation is in nameLocalized. Note the mansion has no string id: number is the stable 1 to 28 key, because five of the 28 share a pinyin spelling.
              */
             name: string;
+            /**
+             * Display name of the mansion in the requested language. Absent when lang is en, and absent when a language has no entry for this mansion, so a caller falls back to name rather than rendering a blank.
+             */
+            nameLocalized?: string;
             /**
              * The mansion in Chinese. A data field, identical in every language.
              */
@@ -36182,9 +36186,13 @@ export type GetChineseAstrologyCalendarDayByDateResponses = {
              */
             planet: string;
             /**
-             * Animal emblem of the mansion, the third character of its full Chinese name.
+             * Animal emblem of the mansion, the third character of its full Chinese name. English and canonical, identical in every language, matching how clashAnimal behaves on the same response. The translation is in animalLocalized.
              */
             animal: string;
+            /**
+             * Animal emblem in the requested language. Absent when lang is en, and absent when a language has no entry, so a caller falls back to animal.
+             */
+            animalLocalized?: string;
         };
         /**
          * The zodiac animal the day clashes with, which is the animal six branches away from the day branch. Anyone born in that animal year traditionally avoids the day for anything important.
@@ -36510,7 +36518,7 @@ export type GetChineseAstrologyCalendarMonthlyResponses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * English display name of the officer.
+                 * English display name of the officer. Canonical, identical in every language, so it stays safe to compare against in code. The translation is in nameLocalized.
                  */
                 name: string;
                 /**
@@ -36536,9 +36544,13 @@ export type GetChineseAstrologyCalendarMonthlyResponses = {
                  */
                 number: number;
                 /**
-                 * English display name of the mansion.
+                 * English display name of the mansion. Canonical, identical in every language. The translation is in nameLocalized. Note the mansion has no string id: number is the stable 1 to 28 key, because five of the 28 share a pinyin spelling.
                  */
                 name: string;
+                /**
+                 * Display name of the mansion in the requested language. Absent when lang is en, and absent when a language has no entry for this mansion, so a caller falls back to name rather than rendering a blank.
+                 */
+                nameLocalized?: string;
                 /**
                  * The mansion in Chinese. A data field, identical in every language.
                  */
@@ -36556,9 +36568,13 @@ export type GetChineseAstrologyCalendarMonthlyResponses = {
                  */
                 planet: string;
                 /**
-                 * Animal emblem of the mansion, the third character of its full Chinese name.
+                 * Animal emblem of the mansion, the third character of its full Chinese name. English and canonical, identical in every language, matching how clashAnimal behaves on the same response. The translation is in animalLocalized.
                  */
                 animal: string;
+                /**
+                 * Animal emblem in the requested language. Absent when lang is en, and absent when a language has no entry, so a caller falls back to animal.
+                 */
+                animalLocalized?: string;
             };
             /**
              * The zodiac animal the day clashes with, which is the animal six branches away from the day branch. Anyone born in that animal year traditionally avoids the day for anything important.
@@ -36888,7 +36904,7 @@ export type PostChineseAstrologyCalendarAuspiciousDaysResponses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * English display name of the officer.
+                 * English display name of the officer. Canonical, identical in every language, so it stays safe to compare against in code. The translation is in nameLocalized.
                  */
                 name: string;
                 /**
@@ -36914,9 +36930,13 @@ export type PostChineseAstrologyCalendarAuspiciousDaysResponses = {
                  */
                 number: number;
                 /**
-                 * English display name of the mansion.
+                 * English display name of the mansion. Canonical, identical in every language. The translation is in nameLocalized. Note the mansion has no string id: number is the stable 1 to 28 key, because five of the 28 share a pinyin spelling.
                  */
                 name: string;
+                /**
+                 * Display name of the mansion in the requested language. Absent when lang is en, and absent when a language has no entry for this mansion, so a caller falls back to name rather than rendering a blank.
+                 */
+                nameLocalized?: string;
                 /**
                  * The mansion in Chinese. A data field, identical in every language.
                  */
@@ -36934,9 +36954,13 @@ export type PostChineseAstrologyCalendarAuspiciousDaysResponses = {
                  */
                 planet: string;
                 /**
-                 * Animal emblem of the mansion, the third character of its full Chinese name.
+                 * Animal emblem of the mansion, the third character of its full Chinese name. English and canonical, identical in every language, matching how clashAnimal behaves on the same response. The translation is in animalLocalized.
                  */
                 animal: string;
+                /**
+                 * Animal emblem in the requested language. Absent when lang is en, and absent when a language has no entry, so a caller falls back to animal.
+                 */
+                animalLocalized?: string;
             };
             /**
              * The zodiac animal the day clashes with, which is the animal six branches away from the day branch. Anyone born in that animal year traditionally avoids the day for anything important.
@@ -38192,7 +38216,7 @@ export type PostFengShuiFlyingStarsNatalResponses = {
              */
             id: string;
             /**
-             * Display name of the structure. Always English, whatever the lang parameter says.
+             * Display name of the structure, TRANSLATED IN PLACE under the lang parameter. Switch on structure.id, which is the stable machine value in every language. Unlike the star and formation names beside it, this field has no nameLocalized sibling.
              */
             name: string;
             /**
@@ -39005,7 +39029,11 @@ export type GetFengShuiAfflictionsByYearResponses = {
          */
         taiSui: {
             /**
-             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             * Stable machine key for the affliction: taiSui, suiPo, sanSha or fiveYellow. Always English, identical in every language, and the field to branch on. Use this rather than name, which is display copy and does translate.
+             */
+            id: string;
+            /**
+             * Display name of the affliction, translated in place when lang is set (Tai Sui in English, 太岁 under zh-Hans). Display copy, never a comparison key: branch on id instead.
              */
             name: string;
             /**
@@ -39076,7 +39104,11 @@ export type GetFengShuiAfflictionsByYearResponses = {
          */
         suiPo: {
             /**
-             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             * Stable machine key for the affliction: taiSui, suiPo, sanSha or fiveYellow. Always English, identical in every language, and the field to branch on. Use this rather than name, which is display copy and does translate.
+             */
+            id: string;
+            /**
+             * Display name of the affliction, translated in place when lang is set (Tai Sui in English, 太岁 under zh-Hans). Display copy, never a comparison key: branch on id instead.
              */
             name: string;
             /**
@@ -39139,7 +39171,11 @@ export type GetFengShuiAfflictionsByYearResponses = {
          */
         sanSha: {
             /**
-             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             * Stable machine key for the affliction: taiSui, suiPo, sanSha or fiveYellow. Always English, identical in every language, and the field to branch on. Use this rather than name, which is display copy and does translate.
+             */
+            id: string;
+            /**
+             * Display name of the affliction, translated in place when lang is set (Tai Sui in English, 太岁 under zh-Hans). Display copy, never a comparison key: branch on id instead.
              */
             name: string;
             /**
@@ -39183,7 +39219,7 @@ export type GetFengShuiAfflictionsByYearResponses = {
                  */
                 id: string;
                 /**
-                 * Display name of the part. Always English, whatever the lang parameter says.
+                 * Display name of the part, translated in place when lang is set. Display copy, never a comparison key: branch on id instead.
                  */
                 name: string;
                 /**
@@ -39243,7 +39279,11 @@ export type GetFengShuiAfflictionsByYearResponses = {
          */
         fiveYellow: {
             /**
-             * Display name of the affliction. Always English, whatever the lang parameter says, so it stays safe to compare against in code.
+             * Stable machine key for the affliction: taiSui, suiPo, sanSha or fiveYellow. Always English, identical in every language, and the field to branch on. Use this rather than name, which is display copy and does translate.
+             */
+            id: string;
+            /**
+             * Display name of the affliction, translated in place when lang is set (Tai Sui in English, 太岁 under zh-Hans). Display copy, never a comparison key: branch on id instead.
              */
             name: string;
             /**
