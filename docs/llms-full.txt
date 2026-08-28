@@ -27,7 +27,7 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 
 ## Western Astrology — `roxy.astrology`
 
-Western astrology API for natal birth charts, daily, weekly, and monthly horoscopes with unique content per sign, syn...
+Western astrology API for natal birth charts, daily, weekly, monthly, and yearly horoscopes with unique content per s...
 
 ```typescript
 // Get all zodiac signs - Complete zodiac signs list with dates and elements
@@ -270,22 +270,28 @@ const { data } = await roxy.astrology.calculateCompatibility({
   },
 });
 
-// Daily horoscope by zodiac sign - Transit-based forecast with house activations
+// Daily horoscope by zodiac sign - Transit-based editorial columns
 const { data } = await roxy.astrology.getDailyHoroscope({
   path: { sign: 'aries' },
   query: { date: '2026-04-03', timezone: 'America/New_York' },
 });
 
-// Weekly horoscope by zodiac sign - 7-day transit forecast
+// Weekly horoscope by zodiac sign - Seven-day editorial column
 const { data } = await roxy.astrology.getWeeklyHoroscope({
   path: { sign: 'aries' },
   query: { date: '2026-04-03', timezone: 'America/New_York' },
 });
 
-// Monthly horoscope by zodiac sign - 30-day transit forecast with key dates
+// Monthly horoscope by zodiac sign - Editorial column with key dates
 const { data } = await roxy.astrology.getMonthlyHoroscope({
   path: { sign: 'aries' },
   query: { date: '2026-04-03', timezone: 'America/New_York' },
+});
+
+// Yearly horoscope by zodiac sign - Year ahead forecast with themes, key periods, eclipses and retrogrades
+const { data } = await roxy.astrology.getYearlyHoroscope({
+  path: { sign: 'aries' },
+  query: { year: 2026, timezone: 'America/New_York' },
 });
 
 // Planetary Return Chart - Saturn return, Jupiter return, and inner planet cycles

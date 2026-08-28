@@ -13677,11 +13677,48 @@ export type GetAstrologyHoroscopeBySignDailyResponses = {
          */
         advice: string;
         /**
-         * Lucky number for the day.
+         * The full column for this period, ready to run as one piece, with paragraphs separated by a blank line. Names the events driving it and the dates they fall on, read into the whole-sign houses of this sign. Typically 120 to 180 words. The six section fields are the same reading split by topic, so render either shape and never both. Deterministic: the same sign and period always returns the same column.
+         */
+        column: string;
+        /**
+         * The dated astronomical events this reading is built on, earliest first. Every field in every row can be checked against an independent authority, so a column can be fact-checked before it is published. Empty on a period in which nothing exact happens, where the reading falls back to the standing positions instead.
+         */
+        events: Array<{
+            /**
+             * Kind of event. aspect is an exact angle between two moving bodies, sign-ingress a body entering a new sign, retrograde-station a body turning retrograde or direct, lunar-phase one of the four quarters, eclipse a solar or lunar eclipse, and solar-season the Sun entering a sign.
+             */
+            type: 'aspect' | 'sign-ingress' | 'retrograde-station' | 'lunar-phase' | 'eclipse' | 'solar-season';
+            /**
+             * Exact instant the event perfects, UTC, to the second. Verifiable against NASA JPL Horizons for a position event and against the US Naval Observatory for a lunar phase or eclipse.
+             */
+            at: string;
+            /**
+             * Bodies involved, canonical English regardless of the requested language so the value stays safe to switch on. Two entries for an aspect, faster body first. One entry for an ingress, a station, a lunar phase, or an eclipse.
+             */
+            bodies: Array<string>;
+            /**
+             * Angle formed, on aspect events only: conjunction, sextile, square, trine, opposition, semi-sextile, quincunx, semi-square, or sesquiquadrate.
+             */
+            aspect?: string;
+            /**
+             * Sign the event falls in, lowercase, where it has exactly one. Absent for an aspect whose two bodies stand in different signs.
+             */
+            sign?: string;
+            /**
+             * Whole-sign house the event falls in, counted from the queried sign, 1 to 12. This is what turns one global sky event into a statement about this reader.
+             */
+            house: number;
+            /**
+             * End of the window this event holds open, UTC, given only where a bounded window is a real fact about it: the orb span of an aspect, the sign span of an ingress or a season, the retrograde span of a station. Absent for a lunar phase or an eclipse, which are instants and not spans.
+             */
+            through?: string;
+        }>;
+        /**
+         * Lucky number for the day, 1 to 9, from the traditional planetary number correspondence applied to the planet that governs this sign today. Not a random draw and not a function of the date.
          */
         luckyNumber: number;
         /**
-         * Lucky color for the day, derived from the sign element.
+         * Lucky color for the day, drawn from the three colors of the sign element and selected by the planet governing the reading.
          */
         luckyColor: string;
         /**
@@ -13701,7 +13738,7 @@ export type GetAstrologyHoroscopeBySignDailyResponses = {
          */
         moonPhase: string;
         /**
-         * Overall energy intensity for this sign today (1-10). Higher when more transits activate this sign directly. Useful for content widgets and visual indicators.
+         * Overall energy for this sign today (1-10). Derived from how many aspects are in force between the planets, how tight they are, whether they are harmonious or challenging, and which houses they fall in for this sign, so a busy day rates higher than a quiet one and a harmonious day higher than a hostile one of the same weight. Useful for content widgets and visual indicators.
          */
         energyRating: number;
     };
@@ -13876,11 +13913,48 @@ export type GetAstrologyHoroscopeBySignWeeklyResponses = {
          */
         advice: string;
         /**
-         * Favorable days this week, based on planetary rulership.
+         * The full column for this period, ready to run as one piece, with paragraphs separated by a blank line. Names the events driving it and the dates they fall on, read into the whole-sign houses of this sign. Typically 250 to 450 words. The six section fields are the same reading split by topic, so render either shape and never both. Deterministic: the same sign and period always returns the same column.
+         */
+        column: string;
+        /**
+         * The dated astronomical events this reading is built on, earliest first. Every field in every row can be checked against an independent authority, so a column can be fact-checked before it is published. Empty on a period in which nothing exact happens, where the reading falls back to the standing positions instead.
+         */
+        events: Array<{
+            /**
+             * Kind of event. aspect is an exact angle between two moving bodies, sign-ingress a body entering a new sign, retrograde-station a body turning retrograde or direct, lunar-phase one of the four quarters, eclipse a solar or lunar eclipse, and solar-season the Sun entering a sign.
+             */
+            type: 'aspect' | 'sign-ingress' | 'retrograde-station' | 'lunar-phase' | 'eclipse' | 'solar-season';
+            /**
+             * Exact instant the event perfects, UTC, to the second. Verifiable against NASA JPL Horizons for a position event and against the US Naval Observatory for a lunar phase or eclipse.
+             */
+            at: string;
+            /**
+             * Bodies involved, canonical English regardless of the requested language so the value stays safe to switch on. Two entries for an aspect, faster body first. One entry for an ingress, a station, a lunar phase, or an eclipse.
+             */
+            bodies: Array<string>;
+            /**
+             * Angle formed, on aspect events only: conjunction, sextile, square, trine, opposition, semi-sextile, quincunx, semi-square, or sesquiquadrate.
+             */
+            aspect?: string;
+            /**
+             * Sign the event falls in, lowercase, where it has exactly one. Absent for an aspect whose two bodies stand in different signs.
+             */
+            sign?: string;
+            /**
+             * Whole-sign house the event falls in, counted from the queried sign, 1 to 12. This is what turns one global sky event into a statement about this reader.
+             */
+            house: number;
+            /**
+             * End of the window this event holds open, UTC, given only where a bounded window is a real fact about it: the orb span of an aspect, the sign span of an ingress or a season, the retrograde span of a station. Absent for a lunar phase or an eclipse, which are instants and not spans.
+             */
+            through?: string;
+        }>;
+        /**
+         * The three most favorable days this week, from the planetary rulers of the seven weekdays, ranked by how strongly each of those planets stands for this sign.
          */
         luckyDays: Array<string>;
         /**
-         * Lucky numbers for the week.
+         * Three lucky numbers for the week, each 1 to 9 and all distinct, from the traditional planetary number correspondence applied to the three planets that govern this sign this week.
          */
         luckyNumbers: Array<number>;
         /**
@@ -14059,6 +14133,43 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
          */
         advice: string;
         /**
+         * The full column for this period, ready to run as one piece, with paragraphs separated by a blank line. Names the events driving it and the dates they fall on, read into the whole-sign houses of this sign. Typically 400 to 700 words. The six section fields are the same reading split by topic, so render either shape and never both. Deterministic: the same sign and period always returns the same column.
+         */
+        column: string;
+        /**
+         * The dated astronomical events this reading is built on, earliest first. Every field in every row can be checked against an independent authority, so a column can be fact-checked before it is published. Empty on a period in which nothing exact happens, where the reading falls back to the standing positions instead.
+         */
+        events: Array<{
+            /**
+             * Kind of event. aspect is an exact angle between two moving bodies, sign-ingress a body entering a new sign, retrograde-station a body turning retrograde or direct, lunar-phase one of the four quarters, eclipse a solar or lunar eclipse, and solar-season the Sun entering a sign.
+             */
+            type: 'aspect' | 'sign-ingress' | 'retrograde-station' | 'lunar-phase' | 'eclipse' | 'solar-season';
+            /**
+             * Exact instant the event perfects, UTC, to the second. Verifiable against NASA JPL Horizons for a position event and against the US Naval Observatory for a lunar phase or eclipse.
+             */
+            at: string;
+            /**
+             * Bodies involved, canonical English regardless of the requested language so the value stays safe to switch on. Two entries for an aspect, faster body first. One entry for an ingress, a station, a lunar phase, or an eclipse.
+             */
+            bodies: Array<string>;
+            /**
+             * Angle formed, on aspect events only: conjunction, sextile, square, trine, opposition, semi-sextile, quincunx, semi-square, or sesquiquadrate.
+             */
+            aspect?: string;
+            /**
+             * Sign the event falls in, lowercase, where it has exactly one. Absent for an aspect whose two bodies stand in different signs.
+             */
+            sign?: string;
+            /**
+             * Whole-sign house the event falls in, counted from the queried sign, 1 to 12. This is what turns one global sky event into a statement about this reader.
+             */
+            house: number;
+            /**
+             * End of the window this event holds open, UTC, given only where a bounded window is a real fact about it: the orb span of an aspect, the sign span of an ingress or a season, the retrograde span of a station. Absent for a lunar phase or an eclipse, which are instants and not spans.
+             */
+            through?: string;
+        }>;
+        /**
          * Week-by-week breakdown with sign-specific focus areas based on transit house positions.
          */
         weekByWeek: Array<{
@@ -14089,11 +14200,11 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
             event: string;
         }>;
         /**
-         * Lucky numbers for the month.
+         * Four lucky numbers for the month, each 1 to 9 and all distinct, from the traditional planetary number correspondence applied to the four planets that govern this sign this month.
          */
         luckyNumbers: Array<number>;
         /**
-         * Lucky color for the month.
+         * Lucky color for the month, drawn from the three colors of the sign element and selected by the planet governing the reading.
          */
         luckyColor: string;
         /**
@@ -14104,6 +14215,399 @@ export type GetAstrologyHoroscopeBySignMonthlyResponses = {
 };
 
 export type GetAstrologyHoroscopeBySignMonthlyResponse = GetAstrologyHoroscopeBySignMonthlyResponses[keyof GetAstrologyHoroscopeBySignMonthlyResponses];
+
+export type GetAstrologyHoroscopeBySignYearlyData = {
+    body?: never;
+    path: {
+        /**
+         * Zodiac sign, case-insensitive (e.g., aries, Aries, ARIES all work).
+         */
+        sign: 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo' | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Calendar year to forecast, 1900 to 2100. Defaults to the current year in the timezone parameter.
+         */
+        year?: number;
+        /**
+         * Selects which year counts as current when year is omitted. Defaults to UTC, so the forecast rolls over at 00:00 UTC on January 1. Pass the timezone of the end user to roll over on their local clock instead. Ignored when year is set. Accepts an IANA name (e.g. "America/New_York"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
+         */
+        timezone?: string;
+    };
+    url: '/astrology/horoscope/{sign}/yearly';
+};
+
+export type GetAstrologyHoroscopeBySignYearlyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAstrologyHoroscopeBySignYearlyError = GetAstrologyHoroscopeBySignYearlyErrors[keyof GetAstrologyHoroscopeBySignYearlyErrors];
+
+export type GetAstrologyHoroscopeBySignYearlyResponses = {
+    /**
+     * Yearly horoscope retrieved successfully
+     */
+    200: {
+        /**
+         * Zodiac sign for this horoscope.
+         */
+        sign: string;
+        /**
+         * Calendar year this forecast covers. Echoes the year requested, or the current year when it was omitted.
+         */
+        year: number;
+        /**
+         * Yearly overview, led by the single event with the most weight for this sign across the whole year.
+         */
+        overview: string;
+        /**
+         * Yearly love and relationship outlook.
+         */
+        love: string;
+        /**
+         * Yearly career and professional outlook.
+         */
+        career: string;
+        /**
+         * Yearly health, energy, and wellness outlook.
+         */
+        health: string;
+        /**
+         * Yearly financial outlook.
+         */
+        finance: string;
+        /**
+         * The single takeaway for the year, drawn from the event that leads it rather than stated in general terms.
+         */
+        advice: string;
+        /**
+         * The full column for this period, ready to run as one piece, with paragraphs separated by a blank line. Names the events driving it and the dates they fall on, read into the whole-sign houses of this sign. Typically 600 to 900 words. The six section fields are the same reading split by topic, so render either shape and never both. Deterministic: the same sign and period always returns the same column.
+         */
+        column: string;
+        /**
+         * The dated astronomical events this reading is built on, earliest first. Every field in every row can be checked against an independent authority, so a column can be fact-checked before it is published. Empty on a period in which nothing exact happens, where the reading falls back to the standing positions instead.
+         */
+        events: Array<{
+            /**
+             * Kind of event. aspect is an exact angle between two moving bodies, sign-ingress a body entering a new sign, retrograde-station a body turning retrograde or direct, lunar-phase one of the four quarters, eclipse a solar or lunar eclipse, and solar-season the Sun entering a sign.
+             */
+            type: 'aspect' | 'sign-ingress' | 'retrograde-station' | 'lunar-phase' | 'eclipse' | 'solar-season';
+            /**
+             * Exact instant the event perfects, UTC, to the second. Verifiable against NASA JPL Horizons for a position event and against the US Naval Observatory for a lunar phase or eclipse.
+             */
+            at: string;
+            /**
+             * Bodies involved, canonical English regardless of the requested language so the value stays safe to switch on. Two entries for an aspect, faster body first. One entry for an ingress, a station, a lunar phase, or an eclipse.
+             */
+            bodies: Array<string>;
+            /**
+             * Angle formed, on aspect events only: conjunction, sextile, square, trine, opposition, semi-sextile, quincunx, semi-square, or sesquiquadrate.
+             */
+            aspect?: string;
+            /**
+             * Sign the event falls in, lowercase, where it has exactly one. Absent for an aspect whose two bodies stand in different signs.
+             */
+            sign?: string;
+            /**
+             * Whole-sign house the event falls in, counted from the queried sign, 1 to 12. This is what turns one global sky event into a statement about this reader.
+             */
+            house: number;
+            /**
+             * End of the window this event holds open, UTC, given only where a bounded window is a real fact about it: the orb span of an aspect, the sign span of an ingress or a season, the retrograde span of a station. Absent for a lunar phase or an eclipse, which are instants and not spans.
+             */
+            through?: string;
+        }>;
+        /**
+         * The backdrop of the year: which whole-sign house each slow-moving body occupies for this sign, Jupiter first and Pluto last. One row per unbroken stretch, so a body that stays put is a single row spanning the year and a body that changes sign is two rows with the exact date between them. Dates are the part of the stretch that falls inside this year; the full span of a change that happens inside the year is in the events array. Use it for the year-at-a-glance panel a year-ahead page opens with.
+         */
+        themes: Array<{
+            /**
+             * The slow-moving body holding this theme, canonical English regardless of the requested language: Jupiter, Saturn, Uranus, Neptune, or Pluto.
+             */
+            body: string;
+            /**
+             * Sign the body occupies through this stretch, lowercase. Checkable against NASA JPL Horizons for any date inside from and to.
+             */
+            sign: string;
+            /**
+             * Whole-sign house that sign is for this sign, 1 to 12.
+             */
+            house: number;
+            /**
+             * What that house governs, so the placement reads as a life area rather than a coordinate.
+             */
+            theme: string;
+            /**
+             * First date of the stretch inside this year, in UTC (YYYY-MM-DD). January 1 when the body was already there when the year opened, otherwise the date it arrived.
+             */
+            from: string;
+            /**
+             * Last date of the stretch inside this year, in UTC (YYYY-MM-DD). December 31 when the body is still there when the year closes, otherwise the date it leaves.
+             */
+            to: string;
+        }>;
+        /**
+         * Every solar and lunar eclipse of the year, with the house each one falls in for this sign. Usually four to six, and the dates match the published eclipse canon.
+         */
+        eclipses: Array<{
+            /**
+             * Date of the eclipse peak in UTC (YYYY-MM-DD). The exact instant is in the events array.
+             */
+            date: string;
+            /**
+             * Eclipse kind: total, annular, partial, or penumbral.
+             */
+            kind: string;
+            /**
+             * Whole-sign house the eclipse falls in for this sign, 1 to 12.
+             */
+            house: number;
+            /**
+             * What that house governs, so the eclipse reads as a life area rather than a coordinate.
+             */
+            theme: string;
+        }>;
+        /**
+         * Every retrograde and direct station of the year, in order, with the house each falls in for this sign. Drives review windows and the not-yet warnings a yearly column is bought for.
+         */
+        retrogrades: Array<{
+            /**
+             * Date the body turns, in UTC (YYYY-MM-DD). The exact instant is in the events array.
+             */
+            date: string;
+            /**
+             * Body making the station, canonical English.
+             */
+            body: string;
+            /**
+             * Which way it turns: retrograde when apparent motion reverses, direct when it resumes.
+             */
+            direction: string;
+            /**
+             * Whole-sign house the station falls in for this sign, 1 to 12.
+             */
+            house: number;
+            /**
+             * What that house governs, so the station reads as a life area rather than a coordinate.
+             */
+            theme: string;
+        }>;
+        /**
+         * The year as a calendar of life areas: for each whole-sign house, the single dated stretch that most strongly activates it, ordered by start date. Twelve rows in a full year, one per house, so every life area gets a date range and none is named twice. Periods overlap freely, because more than one body is always moving. Use it for the dates-to-circle panel of a year-ahead page.
+         */
+        keyPeriods: Array<{
+            /**
+             * Date the period opens, in UTC (YYYY-MM-DD). Always inside the year requested: this is the day the body enters the sign.
+             */
+            from: string;
+            /**
+             * Date the period closes, in UTC (YYYY-MM-DD), which is the day the body leaves that sign. A period that opens late in the year closes in the next one, by at most about three months, so a reader knows what they are still in on January 1.
+             */
+            to: string;
+            /**
+             * Body driving the period, canonical English regardless of the requested language: Mercury, Venus, or Mars. The slower bodies are in the themes array instead, because a stretch measured in years is a backdrop rather than a date to circle.
+             */
+            body: string;
+            /**
+             * Whole-sign house the period activates for this sign, 1 to 12. Unique within the array: each house appears at most once.
+             */
+            house: number;
+            /**
+             * The life area that period is about, from the house it activates.
+             */
+            focus: string;
+        }>;
+        /**
+         * The easiest month of the year for each of the four topic sections, by how many exact harmonious aspects (sextiles and trines) fall in that month and land in the houses that govern the area for this sign. An area is omitted only in the rare year that carries no harmonious aspect for it at all, so treat each key as optional. Use it for the best-months-for panel, and read the count as the evidence behind the word best.
+         */
+        bestPeriods: {
+            /**
+             * Best month for romance and partnership. Absent only if the whole year carries no harmonious aspect reaching this area.
+             */
+            love?: {
+                /**
+                 * First day of the month, in UTC (YYYY-MM-DD).
+                 */
+                from: string;
+                /**
+                 * Last day of the month, in UTC (YYYY-MM-DD).
+                 */
+                to: string;
+                /**
+                 * How many exact harmonious aspects fell in that month and reached this area. This is the measurement the month was chosen on, and every aspect behind it can be checked against NASA JPL Horizons.
+                 */
+                count: number;
+            };
+            /**
+             * Best month for career, work and reputation. Absent only if the whole year carries no harmonious aspect reaching this area.
+             */
+            career?: {
+                /**
+                 * First day of the month, in UTC (YYYY-MM-DD).
+                 */
+                from: string;
+                /**
+                 * Last day of the month, in UTC (YYYY-MM-DD).
+                 */
+                to: string;
+                /**
+                 * How many exact harmonious aspects fell in that month and reached this area. This is the measurement the month was chosen on, and every aspect behind it can be checked against NASA JPL Horizons.
+                 */
+                count: number;
+            };
+            /**
+             * Best month for health. Absent only if the whole year carries no harmonious aspect reaching this area.
+             */
+            health?: {
+                /**
+                 * First day of the month, in UTC (YYYY-MM-DD).
+                 */
+                from: string;
+                /**
+                 * Last day of the month, in UTC (YYYY-MM-DD).
+                 */
+                to: string;
+                /**
+                 * How many exact harmonious aspects fell in that month and reached this area. This is the measurement the month was chosen on, and every aspect behind it can be checked against NASA JPL Horizons.
+                 */
+                count: number;
+            };
+            /**
+             * Best month for finance. Absent only if the whole year carries no harmonious aspect reaching this area.
+             */
+            finance?: {
+                /**
+                 * First day of the month, in UTC (YYYY-MM-DD).
+                 */
+                from: string;
+                /**
+                 * Last day of the month, in UTC (YYYY-MM-DD).
+                 */
+                to: string;
+                /**
+                 * How many exact harmonious aspects fell in that month and reached this area. This is the measurement the month was chosen on, and every aspect behind it can be checked against NASA JPL Horizons.
+                 */
+                count: number;
+            };
+        };
+        /**
+         * Four lucky numbers for the year, each 1 to 9 and all distinct, from the traditional planetary number correspondence applied to the four planets that govern this sign this year.
+         */
+        luckyNumbers: Array<number>;
+        /**
+         * Lucky color for the year, drawn from the three colors of the sign element and selected by the planet governing the reading.
+         */
+        luckyColor: string;
+        /**
+         * Most compatible zodiac signs for this sign. Trine partners (same element) followed by a sextile partner (complementary element).
+         */
+        compatibleSigns: Array<string>;
+    };
+};
+
+export type GetAstrologyHoroscopeBySignYearlyResponse = GetAstrologyHoroscopeBySignYearlyResponses[keyof GetAstrologyHoroscopeBySignYearlyResponses];
 
 export type PostAstrologyPlanetaryReturnsData = {
     body?: {
@@ -31992,7 +32496,7 @@ export type PostChineseAstrologyBaziChartResponses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                 * The relation in traditional hanzi. Identical under every lang.
                  */
                 chinese: string;
                 /**
@@ -32062,7 +32566,7 @@ export type PostChineseAstrologyBaziChartResponses = {
                      */
                     nameLocalized?: string;
                     /**
-                     * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                     * The relation in traditional hanzi. Identical under every lang.
                      */
                     chinese: string;
                     /**
@@ -32551,7 +33055,7 @@ export type PostChineseAstrologyBaziLuckPillarsResponses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                 * The relation in traditional hanzi. Identical under every lang.
                  */
                 chinese: string;
                 /**
@@ -32617,7 +33121,7 @@ export type PostChineseAstrologyBaziLuckPillarsResponses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                 * The relation in traditional hanzi. Identical under every lang.
                  */
                 chinese: string;
                 /**
@@ -33270,7 +33774,7 @@ export type PostChineseAstrologyBaziCompatibilityResponses = {
                      */
                     nameLocalized?: string;
                     /**
-                     * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                     * The relation in traditional hanzi. Identical under every lang.
                      */
                     chinese: string;
                     /**
@@ -33340,7 +33844,7 @@ export type PostChineseAstrologyBaziCompatibilityResponses = {
                          */
                         nameLocalized?: string;
                         /**
-                         * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                         * The relation in traditional hanzi. Identical under every lang.
                          */
                         chinese: string;
                         /**
@@ -33528,7 +34032,7 @@ export type PostChineseAstrologyBaziCompatibilityResponses = {
                      */
                     nameLocalized?: string;
                     /**
-                     * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                     * The relation in traditional hanzi. Identical under every lang.
                      */
                     chinese: string;
                     /**
@@ -33598,7 +34102,7 @@ export type PostChineseAstrologyBaziCompatibilityResponses = {
                          */
                         nameLocalized?: string;
                         /**
-                         * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+                         * The relation in traditional hanzi. Identical under every lang.
                          */
                         chinese: string;
                         /**
@@ -34073,7 +34577,7 @@ export type PostChineseAstrologyBaziAnnualForecastResponses = {
              */
             nameLocalized?: string;
             /**
-             * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+             * The relation in traditional hanzi. Identical under every lang.
              */
             chinese: string;
             /**
@@ -34106,7 +34610,7 @@ export type PostChineseAstrologyBaziAnnualForecastResponses = {
              */
             nameLocalized?: string;
             /**
-             * The relation in simplified hanzi. Identical under every lang; the traditional forms arrive through the zh-Hant response.
+             * The relation in traditional hanzi. Identical under every lang.
              */
             chinese: string;
             /**
@@ -34350,7 +34854,7 @@ export type GetChineseAstrologyZodiacAnimalsResponses = {
              */
             nameLocalized?: string;
             /**
-             * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+             * Traditional hanzi character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
              */
             chinese: string;
             /**
@@ -34522,7 +35026,7 @@ export type GetChineseAstrologyZodiacAnimalsByIdResponses = {
          */
         nameLocalized?: string;
         /**
-         * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+         * Traditional hanzi character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
          */
         chinese: string;
         /**
@@ -34632,7 +35136,7 @@ export type GetChineseAstrologyZodiacAnimalsByIdResponses = {
              */
             nameLocalized?: string;
             /**
-             * Simplified Chinese character for the related animal.
+             * Traditional hanzi character for the related animal.
              */
             chinese: string;
             /**
@@ -34665,7 +35169,7 @@ export type GetChineseAstrologyZodiacAnimalsByIdResponses = {
              */
             nameLocalized?: string;
             /**
-             * Simplified Chinese character for the related animal.
+             * Traditional hanzi character for the related animal.
              */
             chinese: string;
             /**
@@ -34690,7 +35194,7 @@ export type GetChineseAstrologyZodiacAnimalsByIdResponses = {
              */
             nameLocalized?: string;
             /**
-             * Simplified Chinese character for the related animal.
+             * Traditional hanzi character for the related animal.
              */
             chinese: string;
             /**
@@ -34883,7 +35387,7 @@ export type PostChineseAstrologyZodiacSignResponses = {
              */
             nameLocalized?: string;
             /**
-             * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+             * Traditional hanzi character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
              */
             chinese: string;
             /**
@@ -35106,7 +35610,7 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Responses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+                 * Traditional hanzi character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
                  */
                 chinese: string;
                 /**
@@ -35144,7 +35648,7 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Responses = {
                  */
                 nameLocalized?: string;
                 /**
-                 * Simplified Chinese character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
+                 * Traditional hanzi character for the animal itself, not for its Earthly Branch. Data rather than a translation, so it is identical under every lang.
                  */
                 chinese: string;
                 /**
@@ -35182,7 +35686,7 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Responses = {
          */
         relationshipNameLocalized?: string;
         /**
-         * Classical name of the relation in simplified Chinese.
+         * Classical name of the relation in traditional hanzi. Identical under every lang.
          */
         relationshipChinese: string;
         /**
@@ -35377,7 +35881,7 @@ export type GetChineseAstrologyZodiacByIdDailyResponses = {
              */
             nameLocalized?: string;
             /**
-             * Simplified Chinese character for the animal.
+             * Traditional hanzi character for the animal. Identical under every lang.
              */
             chinese: string;
             /**
