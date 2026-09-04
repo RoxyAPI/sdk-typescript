@@ -514,7 +514,7 @@ export type HousesResponse = {
         degree: number;
     }>;
     /**
-     * Side-by-side house cusp comparison across all four systems (Placidus, Whole Sign, Equal, Koch). Only included when houseSystem is set to "all". Useful for educational tools and system comparison.
+     * Side-by-side house cusp comparison keyed by house system id: placidus, whole-sign, equal, koch. Only included when houseSystem is set to "all". Useful for educational tools and system comparison.
      */
     comparison?: {
         [key: string]: {
@@ -3856,6 +3856,9 @@ export type CompatibilityRequest = {
     ayanamsaValue?: number;
 };
 
+/**
+ * Every graha keyed by its English name: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu, plus Lagna for the Ascendant. Read a placement straight off the key you want, such as `response.Sun`, and iterate the keys to render a full navagraha table.
+ */
 export type PlanetaryPositionsResponse = {
     [key: string]: {
         /**
@@ -7224,6 +7227,83 @@ export type DrawnCard = {
     imageUrl: string;
 };
 
+export type AyurvedaConstitutionRequest = {
+    /**
+     * Birth date in YYYY-MM-DD format. It sets the sidereal positions the whole reading is built from, so an approximate date gives an approximate constitution.
+     */
+    date: string;
+    /**
+     * Birth time in 24-hour HH:MM:SS format. The rising sign turns roughly every two hours and carries the heaviest weight of the three factors, so time is the input a reading is most sensitive to.
+     */
+    time: string;
+    /**
+     * Birth latitude in decimal degrees. It sets the local sidereal time behind the rising sign, and it feeds the strength of each graha through the sunrise at that place.
+     */
+    latitude: number;
+    /**
+     * Birth longitude in decimal degrees. It sets the local sidereal time behind the rising sign, together with the latitude.
+     */
+    longitude: number;
+    /**
+     * Timezone as an IANA name such as "Asia/Kolkata", or as decimal hours from UTC such as 5.5. An IANA name is resolved to the offset in force on the birth date, so a summer-time birth is placed correctly. Defaults to 5.5.
+     */
+    timezone?: number | string;
+    /**
+     * Sidereal frame the chart is cast in. "lahiri" is the traditional Vedic standard used by most software and is the default. "raman" sits about 1.45 degrees below it. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue. The frame rotates the whole zodiac, so a graha within 1.45 degrees of a boundary can change rashi when you switch, which moves both sign factors of the reading.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom sidereal frame value in degrees. Required when ayanamsa is "custom" and ignored otherwise. Use it to reconcile exactly against a specific reference program.
+     */
+    ayanamsaValue?: number;
+    /**
+     * Which classical sign table the rising sign and the Moon sign are read through. "satyacharya" is the twelve-sign extract appended to Brihat Jataka 18.20, carried in two independent public-domain translations that agree on all twelve rows, and is the default. "bphs" is the Brihat Parasara Hora Sastra rule by elemental triplicity. The two agree exactly on three signs of twelve, overlap in part on seven, and share no humour at all on Scorpio or Sagittarius, so the choice can change the reading outright and is echoed in the response.
+     */
+    signDoshaScheme?: 'satyacharya' | 'bphs';
+};
+
+export type AyurvedaDinacharyaRequest = {
+    /**
+     * The local calendar date, in YYYY-MM-DD format. Sunrise and sunset are computed for this date at the given place, and the whole routine follows from them, so the answer changes through the year at any latitude away from the equator.
+     */
+    date: string;
+    /**
+     * Latitude in decimal degrees. It sets how long the day and the night actually are, which is the whole difference between this and a printed timetable: at 51 north in June the day runs about sixteen and a half hours and its thirds are five and a half hours each.
+     */
+    latitude: number;
+    /**
+     * Longitude in decimal degrees. It sets the clock time of sunrise at this place.
+     */
+    longitude: number;
+    /**
+     * Timezone as an IANA name such as "Europe/London", or as decimal hours from UTC such as 5.5. An IANA name is resolved to the offset in force on the requested date. It decides which local day is meant and, on the clock-hour grid, where the blocks fall. Defaults to 0.
+     */
+    timezone?: number | string;
+    /**
+     * How the six dosha periods are cut. "sunrise-anchored" divides the actual day and the actual night at this place into thirds, which is the division the frame chapter states, and is the default. "clock-hours" is the modern grid of six four-hour blocks from six in the morning; no classical text assigns clock hours, and the grid is only exact at an equinox near the equator. Both sets are returned whichever is chosen, so a caller can show one and reconcile against the other.
+     */
+    doshaClock?: 'sunrise-anchored' | 'clock-hours';
+};
+
+export type AyurvedaRitucharyaRequest = {
+    /**
+     * The date to resolve, in YYYY-MM-DD format. The season is read at midday UTC on this date, because a season boundary is an instant and a calendar day has to be reduced to one; on a day that carries a boundary, the half the midday falls in is the answer.
+     */
+    date: string;
+    /**
+     * Which six-season division the year is cut into. "sutrasthana-6" is the standard set of sisira, vasanta, grisma, varsa, sarad and hemanta, and is the default. "vimana-8" is the alternate division in which three seasons of extreme character alternate with three of moderate character and pravrt, the season of the first rains, replaces sisira. The alternate is not a relabelling: five of the six boundaries move, and because its verse gives no solar-month boundaries the month allocation is a RoxyAPI convention, stated in the response.
+     */
+    ritucharyaScheme?: 'sutrasthana-6' | 'vimana-8';
+    /**
+     * Which zodiac the solar-month boundaries are measured in. "sayana" is the tropical reading, which is what published almanacs use for seasons and is the default. "nirayana" is the sidereal reading in the Lahiri frame, which runs about 24 days later. The gap is the size of the ayanamsa, so near a boundary the two answer with different seasons for the same date, which is why the value is echoed in every response.
+     */
+    rituZodiac?: 'sayana' | 'nirayana';
+    /**
+     * Which half of the world the season names are stated for. Defaults to "northern", which is the half the primary text describes. It is NEVER inferred from a latitude: a silent flip would change the answer without the caller asking, and no classical text handles the southern case at all. Passing "southern" rotates the six season names by three places, following a modern almanac rather than a verse, and the response says so and states what was not rotated with them.
+     */
+    hemisphere?: 'northern' | 'southern';
+};
+
 export type ChangingLine = {
     /**
      * Line position (1-6, bottom to top). In I-Ching, each hexagram has six lines (yao) read from bottom upward.
@@ -9920,7 +10000,7 @@ export type PostAstrologyHousesData = {
          */
         date: string;
         /**
-         * Birth time in 24-hour HH:MM:SS format. Time is ESSENTIAL for accurate house cusps - even minutes matter. The Ascendant (1st house cusp) changes roughly every 4 minutes. Without accurate time, house placements will be incorrect.
+         * Birth time in 24-hour HH:MM:SS format. Time is ESSENTIAL for accurate house cusps, and even minutes matter. The Ascendant (1st house cusp) changes roughly every 4 minutes. Without accurate time, house placements will be incorrect.
          */
         time: string;
         /**
@@ -16979,7 +17059,7 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyData = {
          */
         month?: number;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -24109,7 +24189,7 @@ export type PostVedicAstrologyAspectsData = {
          */
         timezone?: number | string;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -24336,7 +24416,7 @@ export type PostVedicAstrologyAspectsMonthlyData = {
          */
         timezone?: number | string;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -24544,7 +24624,7 @@ export type PostVedicAstrologyAspectsLunarData = {
          */
         timezone?: number | string;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -24760,7 +24840,7 @@ export type PostVedicAstrologyTransitData = {
          */
         timezone?: number | string;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -25061,7 +25141,7 @@ export type PostVedicAstrologyTransitMonthlyData = {
          */
         timezone?: number | string;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -25674,7 +25754,7 @@ export type PostVedicAstrologyEclipticCrossingsData = {
          */
         timezone?: number | string;
         /**
-         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa - standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
+         * Coordinate system for longitude output. "sidereal" (Nirayana) uses Lahiri ayanamsa, the standard for Vedic astrology. "tropical" (Sayana) uses raw ecliptic longitude matching Western astrology. Defaults to "sidereal".
          */
         coordinateSystem?: 'sidereal' | 'tropical';
     };
@@ -40579,6 +40659,6889 @@ export type GetFengShuiPeriodsResponses = {
 
 export type GetFengShuiPeriodsResponse = GetFengShuiPeriodsResponses[keyof GetFengShuiPeriodsResponses];
 
+export type PostMesoamericanAstrologyMayanTzolkinData = {
+    body: {
+        /**
+         * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded.
+         */
+        date: string;
+        /**
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         */
+        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/mayan/tzolkin';
+};
+
+export type PostMesoamericanAstrologyMayanTzolkinErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostMesoamericanAstrologyMayanTzolkinError = PostMesoamericanAstrologyMayanTzolkinErrors[keyof PostMesoamericanAstrologyMayanTzolkinErrors];
+
+export type PostMesoamericanAstrologyMayanTzolkinResponses = {
+    /**
+     * The Tzolkin day for this date.
+     */
+    200: {
+        /**
+         * Machine identifier of the Tzolkin day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+         */
+        daySign: string;
+        /**
+         * Display name of the day sign in the standard Maya orthography, where the ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, so it is identical under every lang.
+         */
+        daySignName: string;
+        /**
+         * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older sources use. Useful for matching a name a reader copied out of a book.
+         */
+        daySignClassic: string;
+        /**
+         * The Kʼicheʼ name of the same day from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+         */
+        daySignKiche: string;
+        /**
+         * The Tzolkin coefficient, 1 to 13. This is the classical day number that runs alongside the twenty signs; it is not a rank and a 13 is not better than a 1. Nine of the thirteen carry a recorded character, which is returned separately.
+         */
+        number: number;
+        /**
+         * The thirteen day period this day belongs to. The trecena is the unit a daykeeper reads a run of days in, and the sign it opens on is what gives the whole period its character.
+         */
+        trecena: {
+            /**
+             * Which of the twenty thirteen day periods this day falls in, 1 to 20. Trecena 1 opens on 1 Imix.
+             */
+            number: number;
+            /**
+             * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient, because a trecena is exactly one run of the coefficient.
+             */
+            dayOfTrecena: number;
+            /**
+             * Machine identifier of the day sign the trecena opens on, which the tradition reads as colouring all thirteen of its days.
+             */
+            rulingSign: string;
+            /**
+             * Display name of the sign the trecena opens on. A proper noun carried as data.
+             */
+            rulingSignName: string;
+        };
+        /**
+         * Echo of the date the day was resolved from, in proleptic Gregorian.
+         */
+        date: string;
+        /**
+         * The composed nawal reading for this day: the sign, what the coefficient contributes, and what the sign does well and badly.
+         */
+        reading: {
+            /**
+             * The sign in one composed sentence: its name in both naming traditions, what it is about, and the glyph reading behind it. Composed per request from the sign components rather than stored whole, which is why it stays consistent with every other reading in the response.
+             */
+            keynote: string;
+            /**
+             * What the coefficient contributes. Nine of the thirteen carry a recorded character, banded as gentle, indifferent or violent; the other four carry none and this field says so rather than inventing one. The band ids are the source vocabulary, so violent names the days reserved for strong ceremony and defence and is not a warning.
+             */
+            numberReading: string;
+            /**
+             * Machine identifier of the recorded character of the coefficient: gentle, indifferent or violent. ABSENT for coefficients 4, 5, 6 and 10, which have no recorded character in any consulted source. Always English so it stays safe to switch on.
+             */
+            numberBand?: string;
+            /**
+             * What the sign does well, as full sentences rather than keywords.
+             */
+            strengths: Array<string>;
+            /**
+             * Where the same temperament costs the sign something. Each one is the shadow of a strength above rather than an unrelated flaw.
+             */
+            challenges: Array<string>;
+            /**
+             * The one thing worth doing differently under this sign.
+             */
+            guidance: string;
+        };
+        /**
+         * The conventions this answer was computed under, echoed so the result is self describing. Only the correlation is echoed here, because it is the only switch this route takes.
+         */
+        conventions: {
+            /**
+             * The correlation constant actually applied, whether it was requested or defaulted. Store this beside any Maya date you persist: the same civil date resolves to a different Long Count under each constant, and a date with no correlation recorded cannot be reproduced.
+             */
+            correlation: string;
+        };
+    };
+};
+
+export type PostMesoamericanAstrologyMayanTzolkinResponse = PostMesoamericanAstrologyMayanTzolkinResponses[keyof PostMesoamericanAstrologyMayanTzolkinResponses];
+
+export type PostMesoamericanAstrologyMayanChartData = {
+    body: {
+        /**
+         * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded.
+         */
+        date: string;
+        /**
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         */
+        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        /**
+         * Which Haab day is read as the start of the year when naming its Year Bearer. Only four of the twenty day signs can ever carry a year, and which four depends entirely on this choice, so the three schools never agree. "classic" reads the seating of Pop and is the default, because it is the set highland daykeepers still use; its four bearers are Ikʼ, Manikʼ, Ebʼ and Kabʼan. "campeche" reads 1 Pop and gives Akʼbʼal, Lamat, Bʼen and Etzʼnabʼ. "colonial-yucatec" reads 2 Pop and gives Kʼan, Muluk, Ix and Kawak. The three sets share no member, so a bearer alone tells you which school produced it.
+         */
+        yearBearerSystem?: 'classic' | 'campeche' | 'colonial-yucatec';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/mayan/chart';
+};
+
+export type PostMesoamericanAstrologyMayanChartErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostMesoamericanAstrologyMayanChartError = PostMesoamericanAstrologyMayanChartErrors[keyof PostMesoamericanAstrologyMayanChartErrors];
+
+export type PostMesoamericanAstrologyMayanChartResponses = {
+    /**
+     * The full Maya chart for this date.
+     */
+    200: {
+        /**
+         * Echo of the date the chart was computed from, in proleptic Gregorian.
+         */
+        date: string;
+        /**
+         * The 260 day sacred round: the day sign, its coefficient and the trecena it falls in. This is the cycle a nawal reading is built on.
+         */
+        tzolkin: {
+            /**
+             * Machine identifier of the Tzolkin day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+             */
+            daySign: string;
+            /**
+             * Display name of the day sign in the standard Maya orthography, where the ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, so it is identical under every lang.
+             */
+            daySignName: string;
+            /**
+             * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older sources use. Useful for matching a name a reader copied out of a book.
+             */
+            daySignClassic: string;
+            /**
+             * The Kʼicheʼ name of the same day from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+             */
+            daySignKiche: string;
+            /**
+             * The Tzolkin coefficient, 1 to 13. This is the classical day number that runs alongside the twenty signs; it is not a rank and a 13 is not better than a 1. Nine of the thirteen carry a recorded character, which is returned separately.
+             */
+            number: number;
+            /**
+             * The thirteen day period this day belongs to. The trecena is the unit a daykeeper reads a run of days in, and the sign it opens on is what gives the whole period its character.
+             */
+            trecena: {
+                /**
+                 * Which of the twenty thirteen day periods this day falls in, 1 to 20. Trecena 1 opens on 1 Imix.
+                 */
+                number: number;
+                /**
+                 * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient, because a trecena is exactly one run of the coefficient.
+                 */
+                dayOfTrecena: number;
+                /**
+                 * Machine identifier of the day sign the trecena opens on, which the tradition reads as colouring all thirteen of its days.
+                 */
+                rulingSign: string;
+                /**
+                 * Display name of the sign the trecena opens on. A proper noun carried as data.
+                 */
+                rulingSignName: string;
+            };
+            /**
+             * The composed nawal reading for the Tzolkin day.
+             */
+            reading: {
+                /**
+                 * The sign in one composed sentence: its name in both naming traditions, what it is about, and the glyph reading behind it. Composed per request from the sign components rather than stored whole, which is why it stays consistent with every other reading in the response.
+                 */
+                keynote: string;
+                /**
+                 * What the coefficient contributes. Nine of the thirteen carry a recorded character, banded as gentle, indifferent or violent; the other four carry none and this field says so rather than inventing one. The band ids are the source vocabulary, so violent names the days reserved for strong ceremony and defence and is not a warning.
+                 */
+                numberReading: string;
+                /**
+                 * Machine identifier of the recorded character of the coefficient: gentle, indifferent or violent. ABSENT for coefficients 4, 5, 6 and 10, which have no recorded character in any consulted source. Always English so it stays safe to switch on.
+                 */
+                numberBand?: string;
+                /**
+                 * What the sign does well, as full sentences rather than keywords.
+                 */
+                strengths: Array<string>;
+                /**
+                 * Where the same temperament costs the sign something. Each one is the shadow of a strength above rather than an unrelated flaw.
+                 */
+                challenges: Array<string>;
+                /**
+                 * The one thing worth doing differently under this sign.
+                 */
+                guidance: string;
+            };
+        };
+        /**
+         * The 365 day vague year: eighteen periods of twenty days plus the five days of Wayebʼ. This is the agricultural year the Tzolkin runs against.
+         */
+        haab: {
+            /**
+             * Machine identifier of the Haab period, always lowercase ASCII. The nineteen ids run pop, wo, sip, sotz, sek, xul, yaxkin, mol, chen, yax, sak, keh, mak, kankin, muwan, pax, kayab, kumku, wayeb.
+             */
+            month: string;
+            /**
+             * Display name of the Haab period in the standard orthography. A proper noun carried as data, so it is identical under every lang.
+             */
+            monthName: string;
+            /**
+             * The sixteenth century Yucatec spelling of the same period, which is the form most printed tables use.
+             */
+            monthClassic: string;
+            /**
+             * Day inside the period, 0 to 19, or 0 to 4 in Wayebʼ. Day 0 is a real date and is called the seating of the period, so a Haab month has no day 20. Numbering from 1 instead is the usual way to be one day wrong on every Haab date.
+             */
+            day: number;
+            /**
+             * Day of the 365 day Haab year, 0 to 364. The Haab has no leap day at all, so it drifts against the solar year by about a day every four years and there is nothing to correct.
+             */
+            dayOfYear: number;
+            /**
+             * Composed reading of the Haab date, which reads differently on the seating day of a period.
+             */
+            reading: string;
+        };
+        /**
+         * The linear day count from the mythological start of the era, written in five positions. Unlike the two round calendars this one never repeats, which is what lets an inscription name an absolute date.
+         */
+        longCount: {
+            /**
+             * The dotted Long Count, most significant position first. This is the spelling every reference converter and every inscription uses.
+             */
+            formatted: string;
+            /**
+             * Baktun, the highest of the five positions. One baktun is 144,000 days.
+             */
+            baktun: number;
+            /**
+             * Katun, 0 to 19. One katun is 7,200 days, roughly twenty years.
+             */
+            katun: number;
+            /**
+             * Tun, 0 to 19. One tun is 360 days, which is why this position sits roughly a year apart.
+             */
+            tun: number;
+            /**
+             * Winal, 0 to 17 and never 19. This is the one position that is not base twenty: eighteen winal make a tun, which is what keeps the tun near a solar year.
+             */
+            winal: number;
+            /**
+             * Kin, 0 to 19. One kin is one day.
+             */
+            kin: number;
+            /**
+             * The whole Long Count as a single integer count of days from the epoch. Subtracting two of these is the correct way to measure an interval, and it is the number the Tzolkin, the Haab and the night lord are all derived from.
+             */
+            daysSinceEpoch: number;
+            /**
+             * Julian Day Number of the same day, which is the bridge between this count and any other calendar. Adding the correlation constant to daysSinceEpoch gives exactly this.
+             */
+            julianDayNumber: number;
+        };
+        /**
+         * The Tzolkin and Haab dates written together, which is how a Classic inscription names a day. The pair repeats every 18,980 days, a little under 52 years, so a Calendar Round alone is ambiguous beyond one lifetime and the Long Count is what disambiguates it.
+         */
+        calendarRound: string;
+        /**
+         * The nine day cycle that runs beside the other three. The nine are identified and the cycle is unambiguous, but no source records what the Maya called them, so this API publishes the labels rather than borrowing names from a neighbouring culture.
+         */
+        lordOfNight: {
+            /**
+             * Which of the nine Lords of the Night governs this day, G1 to G9. The cycle steps forward one per day and closes every nine.
+             */
+            label: string;
+            /**
+             * One line on the night lord, including why the nine carry labels rather than names.
+             */
+            reading: string;
+        };
+        /**
+         * The Tzolkin day that names the Haab year this date falls in, under the requested school.
+         */
+        yearBearer: {
+            /**
+             * Machine identifier of the day sign carrying the Haab year this date falls in. Only four of the twenty can ever carry a year, and which four depends on the school.
+             */
+            daySign: string;
+            /**
+             * Display name of the bearing sign. A proper noun carried as data.
+             */
+            daySignName: string;
+            /**
+             * Coefficient of the bearing day, 1 to 13. The coefficient advances by one each Haab year, which is what makes the bearer and the number together repeat only every 52 years.
+             */
+            number: number;
+            /**
+             * One line on the year bearer that names the school it was read under, because the three schools name three different bearers for the same year.
+             */
+            reading: string;
+        };
+        /**
+         * The Cruz Maya, the five point nawal cross, with source convention. This is a LIVING DAYKEEPER PRACTICE rather than an archaeological reconstruction: no academic source describes a five point cross, and the day offsets here were measured against two independent practitioner calculators that agree. It is published because practitioners use it, and it is labelled because that is what honesty about a source looks like.
+         */
+        cross: Array<{
+            /**
+             * Which point of the cross this is: center, conception, destiny, left or right. Always English so it stays safe to switch on. The arms are published as left and right and carry no gender, because the sources that agree on the SIGNS disagree on which arm is masculine and which feminine.
+             */
+            position: string;
+            /**
+             * Days from the birth day to this arm. Negative is before the birth day. Conception is minus eight, destiny plus eight, the left arm plus six and the right arm minus six.
+             */
+            offsetDays: number;
+            /**
+             * Machine identifier of the day sign standing at this point.
+             */
+            daySign: string;
+            /**
+             * Display name of the sign at this point. A proper noun carried as data.
+             */
+            daySignName: string;
+            /**
+             * Kʼicheʼ name of the same sign, which is the vocabulary a cross is normally read in.
+             */
+            daySignKiche: string;
+            /**
+             * Coefficient of the day at this point, 1 to 13.
+             */
+            number: number;
+            /**
+             * One line on what this point of the cross is read as.
+             */
+            reading: string;
+        }>;
+        /**
+         * One composed sentence placing the day in all three calendars, for a card headline or a chat reply.
+         */
+        summary: string;
+        /**
+         * The conventions this chart was computed under, echoed so the result is self describing. Store both beside any chart you persist.
+         */
+        conventions: {
+            /**
+             * The correlation constant actually applied, whether it was requested or defaulted. Store this beside any Maya date you persist: the same civil date resolves to a different Long Count under each constant, and a date with no correlation recorded cannot be reproduced.
+             */
+            correlation: string;
+            /**
+             * The Year Bearer school actually applied. The three schools name three different bearers for the same Haab year, so a bearer stored without this value cannot be checked against anything.
+             */
+            yearBearerSystem: string;
+        };
+    };
+};
+
+export type PostMesoamericanAstrologyMayanChartResponse = PostMesoamericanAstrologyMayanChartResponses[keyof PostMesoamericanAstrologyMayanChartResponses];
+
+export type PostMesoamericanAstrologyMayanLongCountConvertData = {
+    body: {
+        /**
+         * Proleptic Gregorian date to convert INTO a Long Count. Supply this or longCount, never both and never neither.
+         */
+        date?: string;
+        /**
+         * Dotted Long Count to convert INTO a date, written baktun.katun.tun.winal.kin. Each position is bounded by its own base, and the winal counts to 17 rather than to 19 because eighteen winal make a tun, so 9.12.11.18.0 is rejected as a date that does not exist. Supply this or date, never both and never neither.
+         */
+        longCount?: string;
+        /**
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         */
+        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/mayan/long-count/convert';
+};
+
+export type PostMesoamericanAstrologyMayanLongCountConvertErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostMesoamericanAstrologyMayanLongCountConvertError = PostMesoamericanAstrologyMayanLongCountConvertErrors[keyof PostMesoamericanAstrologyMayanLongCountConvertErrors];
+
+export type PostMesoamericanAstrologyMayanLongCountConvertResponses = {
+    /**
+     * The converted date.
+     */
+    200: {
+        /**
+         * The proleptic Gregorian date, echoed when it was the input and computed when the Long Count was.
+         */
+        date: string;
+        /**
+         * The dotted Long Count, echoed when it was the input and computed when the date was.
+         */
+        longCount: string;
+        /**
+         * The Long Count as one integer count of days from the epoch. Subtracting two of these is the correct way to measure an interval between two Maya dates.
+         */
+        daysSinceEpoch: number;
+        /**
+         * Julian Day Number of the same day, which is the bridge to any other calendar. It is exactly daysSinceEpoch plus the correlation constant.
+         */
+        julianDayNumber: number;
+        /**
+         * The Tzolkin and Haab dates written together, which is how an inscription names a day. The pair repeats every 18,980 days, so it is ambiguous beyond about 52 years and the Long Count is what fixes it.
+         */
+        calendarRound: string;
+        /**
+         * Which of the nine Lords of the Night governs the day, G1 to G9. The nine carry glyph labels rather than names because no source records what the Maya called them.
+         */
+        lordOfNight: string;
+        /**
+         * Present ONLY for a date before the Gregorian reform, where the input convention is the usual reason two converters disagree. Absent otherwise, so its presence is itself the signal.
+         */
+        note?: string;
+        /**
+         * The conventions this conversion was computed under, echoed so the result is self describing.
+         */
+        conventions: {
+            /**
+             * The correlation constant actually applied, whether it was requested or defaulted. Store this beside any Maya date you persist: the same civil date resolves to a different Long Count under each constant, and a date with no correlation recorded cannot be reproduced.
+             */
+            correlation: string;
+        };
+    };
+};
+
+export type PostMesoamericanAstrologyMayanLongCountConvertResponse = PostMesoamericanAstrologyMayanLongCountConvertResponses[keyof PostMesoamericanAstrologyMayanLongCountConvertResponses];
+
+export type GetMesoamericanAstrologyMayanDailyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded. Defaults to the current day in UTC.
+         */
+        date?: string;
+        /**
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         */
+        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+    };
+    url: '/mesoamerican-astrology/mayan/daily';
+};
+
+export type GetMesoamericanAstrologyMayanDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanDailyError = GetMesoamericanAstrologyMayanDailyErrors[keyof GetMesoamericanAstrologyMayanDailyErrors];
+
+export type GetMesoamericanAstrologyMayanDailyResponses = {
+    /**
+     * The Tzolkin reading for this day.
+     */
+    200: {
+        /**
+         * Machine identifier of the Tzolkin day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+         */
+        daySign: string;
+        /**
+         * Display name of the day sign in the standard Maya orthography, where the ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, so it is identical under every lang.
+         */
+        daySignName: string;
+        /**
+         * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older sources use. Useful for matching a name a reader copied out of a book.
+         */
+        daySignClassic: string;
+        /**
+         * The Kʼicheʼ name of the same day from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+         */
+        daySignKiche: string;
+        /**
+         * The Tzolkin coefficient, 1 to 13. This is the classical day number that runs alongside the twenty signs; it is not a rank and a 13 is not better than a 1. Nine of the thirteen carry a recorded character, which is returned separately.
+         */
+        number: number;
+        /**
+         * The thirteen day period this day belongs to. The trecena is the unit a daykeeper reads a run of days in, and the sign it opens on is what gives the whole period its character.
+         */
+        trecena: {
+            /**
+             * Which of the twenty thirteen day periods this day falls in, 1 to 20. Trecena 1 opens on 1 Imix.
+             */
+            number: number;
+            /**
+             * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient, because a trecena is exactly one run of the coefficient.
+             */
+            dayOfTrecena: number;
+            /**
+             * Machine identifier of the day sign the trecena opens on, which the tradition reads as colouring all thirteen of its days.
+             */
+            rulingSign: string;
+            /**
+             * Display name of the sign the trecena opens on. A proper noun carried as data.
+             */
+            rulingSignName: string;
+        };
+        /**
+         * Date of this reading. Echoes the date requested, or the current day in UTC when it was omitted.
+         */
+        date: string;
+        /**
+         * What the day carries, placing it inside its trecena as well as naming it. Composed per request, so it stays consistent with the reading below rather than being a second opinion.
+         */
+        overview: string;
+        /**
+         * The composed nawal reading for the day sign in force.
+         */
+        reading: {
+            /**
+             * The sign in one composed sentence: its name in both naming traditions, what it is about, and the glyph reading behind it. Composed per request from the sign components rather than stored whole, which is why it stays consistent with every other reading in the response.
+             */
+            keynote: string;
+            /**
+             * What the coefficient contributes. Nine of the thirteen carry a recorded character, banded as gentle, indifferent or violent; the other four carry none and this field says so rather than inventing one. The band ids are the source vocabulary, so violent names the days reserved for strong ceremony and defence and is not a warning.
+             */
+            numberReading: string;
+            /**
+             * Machine identifier of the recorded character of the coefficient: gentle, indifferent or violent. ABSENT for coefficients 4, 5, 6 and 10, which have no recorded character in any consulted source. Always English so it stays safe to switch on.
+             */
+            numberBand?: string;
+            /**
+             * What the sign does well, as full sentences rather than keywords.
+             */
+            strengths: Array<string>;
+            /**
+             * Where the same temperament costs the sign something. Each one is the shadow of a strength above rather than an unrelated flaw.
+             */
+            challenges: Array<string>;
+            /**
+             * The one thing worth doing differently under this sign.
+             */
+            guidance: string;
+        };
+        /**
+         * The conventions this reading was computed under, echoed so the result is self describing.
+         */
+        conventions: {
+            /**
+             * The correlation constant actually applied, whether it was requested or defaulted. Store this beside any Maya date you persist: the same civil date resolves to a different Long Count under each constant, and a date with no correlation recorded cannot be reproduced.
+             */
+            correlation: string;
+        };
+    };
+};
+
+export type GetMesoamericanAstrologyMayanDailyResponse = GetMesoamericanAstrologyMayanDailyResponses[keyof GetMesoamericanAstrologyMayanDailyResponses];
+
+export type GetMesoamericanAstrologyMayanCalendarMonthlyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Gregorian year of the grid, 1900 to 2100. Defaults to the current year in UTC. Wider historical ranges are available on the single date routes, which are not bounded to this window.
+         */
+        year?: number;
+        /**
+         * Calendar month of the grid, 1 to 12. Defaults to the current month in UTC.
+         */
+        month?: number;
+        /**
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         */
+        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+    };
+    url: '/mesoamerican-astrology/mayan/calendar/monthly';
+};
+
+export type GetMesoamericanAstrologyMayanCalendarMonthlyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanCalendarMonthlyError = GetMesoamericanAstrologyMayanCalendarMonthlyErrors[keyof GetMesoamericanAstrologyMayanCalendarMonthlyErrors];
+
+export type GetMesoamericanAstrologyMayanCalendarMonthlyResponses = {
+    /**
+     * Every day of the month with its Maya date.
+     */
+    200: {
+        /**
+         * Year of the grid, echoed or defaulted to the current year in UTC.
+         */
+        year: number;
+        /**
+         * Month of the grid, echoed or defaulted to the current month in UTC.
+         */
+        month: number;
+        /**
+         * Number of days in the grid, which is the length of the civil month. Every day of the month appears exactly once and none is repeated.
+         */
+        total: number;
+        /**
+         * The days of the month in calendar order, one row per day. Every date in the month is present exactly once, which is what makes this safe to render straight into a grid.
+         */
+        days: Array<{
+            /**
+             * Calendar date of this row, in proleptic Gregorian.
+             */
+            date: string;
+            /**
+             * Machine identifier of the Tzolkin day sign, always lowercase ASCII Yucatec, so it stays safe to compare against in code.
+             */
+            daySign: string;
+            /**
+             * Display name of the day sign. A proper noun carried as data, identical under every lang.
+             */
+            daySignName: string;
+            /**
+             * The Tzolkin coefficient for this day, 1 to 13.
+             */
+            number: number;
+            /**
+             * Which of the twenty thirteen day periods this day falls in, 1 to 20. Consecutive rows share a trecena until the period turns.
+             */
+            trecena: number;
+            /**
+             * The Haab date, written as the day inside its period followed by the period name. Day 0 is the seating of a period and is a real date.
+             */
+            haab: string;
+            /**
+             * The dotted Long Count for this day. Consecutive rows differ by exactly one kin.
+             */
+            longCount: string;
+        }>;
+        /**
+         * The conventions this grid was computed under, echoed so the result is self describing.
+         */
+        conventions: {
+            /**
+             * The correlation constant actually applied, whether it was requested or defaulted. Store this beside any Maya date you persist: the same civil date resolves to a different Long Count under each constant, and a date with no correlation recorded cannot be reproduced.
+             */
+            correlation: string;
+        };
+    };
+};
+
+export type GetMesoamericanAstrologyMayanCalendarMonthlyResponse = GetMesoamericanAstrologyMayanCalendarMonthlyResponses[keyof GetMesoamericanAstrologyMayanCalendarMonthlyResponses];
+
+export type PostMesoamericanAstrologyMayanCompatibilityData = {
+    body: {
+        /**
+         * The first person, by birth date. Only a date is needed: the Tzolkin is a day count, so no time, timezone or place changes the answer.
+         */
+        personA: {
+            /**
+             * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded.
+             */
+            date: string;
+        };
+        /**
+         * The second person, by birth date. The comparison is symmetric except for the cross tie, which is checked in both directions.
+         */
+        personB: {
+            /**
+             * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded.
+             */
+            date: string;
+        };
+        /**
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         */
+        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        /**
+         * Which reading of the world direction and colour to serve for a day sign. The two published assignments differ by exactly one quarter turn on all twenty signs, so neither is a rounding of the other and a silent pick would be a school choice. "madrid-codex" is the codex reading and the default; "landa" is the sixteenth century assignment recorded beside it.
+         */
+        directionScheme?: 'madrid-codex' | 'landa';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/mayan/compatibility';
+};
+
+export type PostMesoamericanAstrologyMayanCompatibilityErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostMesoamericanAstrologyMayanCompatibilityError = PostMesoamericanAstrologyMayanCompatibilityErrors[keyof PostMesoamericanAstrologyMayanCompatibilityErrors];
+
+export type PostMesoamericanAstrologyMayanCompatibilityResponses = {
+    /**
+     * The comparison of the two days.
+     */
+    200: {
+        /**
+         * The Tzolkin day the first person was born on.
+         */
+        personA: {
+            /**
+             * Machine identifier of the Tzolkin day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+             */
+            daySign: string;
+            /**
+             * Display name of the day sign in the standard Maya orthography, where the ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, so it is identical under every lang.
+             */
+            daySignName: string;
+            /**
+             * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older sources use. Useful for matching a name a reader copied out of a book.
+             */
+            daySignClassic: string;
+            /**
+             * The Kʼicheʼ name of the same day from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+             */
+            daySignKiche: string;
+            /**
+             * The Tzolkin coefficient, 1 to 13. This is the classical day number that runs alongside the twenty signs; it is not a rank and a 13 is not better than a 1. Nine of the thirteen carry a recorded character, which is returned separately.
+             */
+            number: number;
+            /**
+             * The thirteen day period this day belongs to. The trecena is the unit a daykeeper reads a run of days in, and the sign it opens on is what gives the whole period its character.
+             */
+            trecena: {
+                /**
+                 * Which of the twenty thirteen day periods this day falls in, 1 to 20. Trecena 1 opens on 1 Imix.
+                 */
+                number: number;
+                /**
+                 * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient, because a trecena is exactly one run of the coefficient.
+                 */
+                dayOfTrecena: number;
+                /**
+                 * Machine identifier of the day sign the trecena opens on, which the tradition reads as colouring all thirteen of its days.
+                 */
+                rulingSign: string;
+                /**
+                 * Display name of the sign the trecena opens on. A proper noun carried as data.
+                 */
+                rulingSignName: string;
+            };
+            /**
+             * Echo of the first birth date.
+             */
+            date: string;
+        };
+        /**
+         * The Tzolkin day the second person was born on.
+         */
+        personB: {
+            /**
+             * Machine identifier of the Tzolkin day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+             */
+            daySign: string;
+            /**
+             * Display name of the day sign in the standard Maya orthography, where the ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, so it is identical under every lang.
+             */
+            daySignName: string;
+            /**
+             * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older sources use. Useful for matching a name a reader copied out of a book.
+             */
+            daySignClassic: string;
+            /**
+             * The Kʼicheʼ name of the same day from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+             */
+            daySignKiche: string;
+            /**
+             * The Tzolkin coefficient, 1 to 13. This is the classical day number that runs alongside the twenty signs; it is not a rank and a 13 is not better than a 1. Nine of the thirteen carry a recorded character, which is returned separately.
+             */
+            number: number;
+            /**
+             * The thirteen day period this day belongs to. The trecena is the unit a daykeeper reads a run of days in, and the sign it opens on is what gives the whole period its character.
+             */
+            trecena: {
+                /**
+                 * Which of the twenty thirteen day periods this day falls in, 1 to 20. Trecena 1 opens on 1 Imix.
+                 */
+                number: number;
+                /**
+                 * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient, because a trecena is exactly one run of the coefficient.
+                 */
+                dayOfTrecena: number;
+                /**
+                 * Machine identifier of the day sign the trecena opens on, which the tradition reads as colouring all thirteen of its days.
+                 */
+                rulingSign: string;
+                /**
+                 * Display name of the sign the trecena opens on. A proper noun carried as data.
+                 */
+                rulingSignName: string;
+            };
+            /**
+             * Echo of the second birth date.
+             */
+            date: string;
+        };
+        /**
+         * How far apart the two days sit in the 260 day round, taken the short way round, so the value never exceeds 130. Two people on the same nawal are 0 apart.
+         */
+        daysApart: number;
+        /**
+         * The five structural ties, in a fixed order, each either holding or not. Every one of them is a property of the count itself or of the measured daykeeper cross convention; what is ours is only the decision to weigh them together.
+         */
+        components: Array<{
+            /**
+             * Which tie this row reports: same-sign, same-trecena, same-number, cross-partner or shared-direction. Always English so it stays safe to switch on.
+             */
+            id: string;
+            /**
+             * Whether this tie holds for the pair. Every component is returned whether it holds or not, so a caller can render the misses as well as the hits.
+             */
+            holds: boolean;
+            /**
+             * Points this tie contributes to the score when it holds, and nothing when it does not. The weights are published rather than hidden precisely because the weighting is ours rather than traditional.
+             */
+            weight: number;
+            /**
+             * One line on what this tie means. Present ONLY when the tie holds, so a caller can render the hits without filtering and a miss carries no sentence to explain away.
+             */
+            reading?: string;
+        }>;
+        /**
+         * A RoxyAPI COMPOSITE, not a traditional rating. No classical source rates a pair of Tzolkin days, so this number is a floor of 45 plus the weight of every tie that holds, capped at 100. The components above are what is sourced; this is what we built out of them, and it is labelled so that nobody cites it as tradition.
+         */
+        score: number;
+        /**
+         * Coarse band the composite score falls in: excellent, strong, workable or reserved. Built for badges and filters that should not hard code a threshold against a number whose weighting may be tuned.
+         */
+        verdict: string;
+        /**
+         * One composed sentence naming both nawals and the distance between them, for a headline above the component list. When no tie holds at all it says so, because that is the common case and a blank component list is not self explanatory.
+         */
+        summary: string;
+        /**
+         * The conventions this comparison was computed under. The direction scheme is echoed because one of the five ties is read off the world directions, which the two schemes assign differently.
+         */
+        conventions: {
+            /**
+             * The correlation constant actually applied, whether it was requested or defaulted. Store this beside any Maya date you persist: the same civil date resolves to a different Long Count under each constant, and a date with no correlation recorded cannot be reproduced.
+             */
+            correlation: string;
+            /**
+             * The direction reading actually applied. The two readings sit one quarter turn apart, so a direction stored without this value is ambiguous.
+             */
+            directionScheme: string;
+        };
+    };
+};
+
+export type PostMesoamericanAstrologyMayanCompatibilityResponse = PostMesoamericanAstrologyMayanCompatibilityResponses[keyof PostMesoamericanAstrologyMayanCompatibilityResponses];
+
+export type GetMesoamericanAstrologyMayanDaySignsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Which reading of the world direction and colour to serve for a day sign. The two published assignments differ by exactly one quarter turn on all twenty signs, so neither is a rounding of the other and a silent pick would be a school choice. "madrid-codex" is the codex reading and the default; "landa" is the sixteenth century assignment recorded beside it.
+         */
+        directionScheme?: 'madrid-codex' | 'landa';
+        /**
+         * Maximum items to return per page. Range: 1-20, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/mesoamerican-astrology/mayan/day-signs';
+};
+
+export type GetMesoamericanAstrologyMayanDaySignsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanDaySignsError = GetMesoamericanAstrologyMayanDaySignsErrors[keyof GetMesoamericanAstrologyMayanDaySignsErrors];
+
+export type GetMesoamericanAstrologyMayanDaySignsResponses = {
+    /**
+     * The day sign catalogue.
+     */
+    200: {
+        /**
+         * Total signs in the cycle. Always 20; the Tzolkin sign set is closed.
+         */
+        total: number;
+        /**
+         * Maximum items returned for this page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped before this page.
+         */
+        offset: number;
+        /**
+         * Day signs for the current page, in sequence order. Use /mayan/day-signs/{id} for the full record with the composed reading, strengths, challenges and guidance.
+         */
+        daySigns: Array<{
+            /**
+             * Place in the twenty sign sequence, 1 to 20, counting Imix as 1. The sequence never varies and is what every other cycle in the domain is indexed against.
+             */
+            position: number;
+            /**
+             * Machine identifier of the day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code and to use as a path parameter. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+             */
+            id: string;
+            /**
+             * Display name in the standard Maya orthography, where an ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, identical under every lang.
+             */
+            nameYucatec: string;
+            /**
+             * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older books use.
+             */
+            nameClassic: string;
+            /**
+             * The Kʼicheʼ name from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+             */
+            nameKiche: string;
+            /**
+             * The short day-name association, translated in place because it is a common noun rather than a name. Two published readings of the twenty signs disagree on six of them, so the alternate reading ships beside this one rather than one being resolved away.
+             */
+            gloss: string;
+            /**
+             * The glyph-table reading of the same sign, translated in place. On the six signs where the two readings disagree this is the one the composed prose follows, so a reading that seems to ignore the gloss above is doing so deliberately.
+             */
+            glossAlternate: string;
+            /**
+             * World direction this sign belongs to under the requested scheme: east, north, west or south. The twenty signs divide evenly into four groups of five, so exactly five signs share each quarter.
+             */
+            direction: string;
+            /**
+             * Colour paired with the direction: red for east, white for north, black for west, yellow for south. Always English so it stays safe to key a palette off.
+             */
+            color: string;
+        }>;
+        /**
+         * The conventions this listing was served under. Only the direction scheme applies here, because it is the only field on a catalogue row that a school split moves.
+         */
+        conventions: {
+            /**
+             * The direction reading actually applied. The two readings sit one quarter turn apart, so a direction stored without this value is ambiguous.
+             */
+            directionScheme: string;
+        };
+    };
+};
+
+export type GetMesoamericanAstrologyMayanDaySignsResponse = GetMesoamericanAstrologyMayanDaySignsResponses[keyof GetMesoamericanAstrologyMayanDaySignsResponses];
+
+export type GetMesoamericanAstrologyMayanDaySignsByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Day sign id, case-insensitive and punctuation-insensitive. One of imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+         */
+        id: 'imix' | 'ik' | 'akbal' | 'kan' | 'chikchan' | 'kimi' | 'manik' | 'lamat' | 'muluk' | 'ok' | 'chuwen' | 'eb' | 'ben' | 'ix' | 'men' | 'kib' | 'kaban' | 'etznab' | 'kawak' | 'ajaw';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Which reading of the world direction and colour to serve for a day sign. The two published assignments differ by exactly one quarter turn on all twenty signs, so neither is a rounding of the other and a silent pick would be a school choice. "madrid-codex" is the codex reading and the default; "landa" is the sixteenth century assignment recorded beside it.
+         */
+        directionScheme?: 'madrid-codex' | 'landa';
+    };
+    url: '/mesoamerican-astrology/mayan/day-signs/{id}';
+};
+
+export type GetMesoamericanAstrologyMayanDaySignsByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanDaySignsByIdError = GetMesoamericanAstrologyMayanDaySignsByIdErrors[keyof GetMesoamericanAstrologyMayanDaySignsByIdErrors];
+
+export type GetMesoamericanAstrologyMayanDaySignsByIdResponses = {
+    /**
+     * Full day sign profile.
+     */
+    200: {
+        /**
+         * Place in the twenty sign sequence, 1 to 20, counting Imix as 1. The sequence never varies and is what every other cycle in the domain is indexed against.
+         */
+        position: number;
+        /**
+         * Machine identifier of the day sign, always lowercase ASCII Yucatec whatever the lang parameter says, so it stays safe to compare against in code and to use as a path parameter. The twenty ids run imix, ik, akbal, kan, chikchan, kimi, manik, lamat, muluk, ok, chuwen, eb, ben, ix, men, kib, kaban, etznab, kawak, ajaw.
+         */
+        id: string;
+        /**
+         * Display name in the standard Maya orthography, where an ejective is written with a modifier letter rather than a typewriter quote. A proper noun carried as data, identical under every lang.
+         */
+        nameYucatec: string;
+        /**
+         * The sixteenth century Yucatec spelling of the same sign, which is the form most printed reference tables and older books use.
+         */
+        nameClassic: string;
+        /**
+         * The Kʼicheʼ name from the living highland daykeeping tradition, which is the vocabulary a nawal reading in Guatemala uses. A parallel naming tradition rather than a translation, so it is identical under every lang.
+         */
+        nameKiche: string;
+        /**
+         * The short day-name association, translated in place because it is a common noun rather than a name. Two published readings of the twenty signs disagree on six of them, so the alternate reading ships beside this one rather than one being resolved away.
+         */
+        gloss: string;
+        /**
+         * The glyph-table reading of the same sign, translated in place. On the six signs where the two readings disagree this is the one the composed prose follows, so a reading that seems to ignore the gloss above is doing so deliberately.
+         */
+        glossAlternate: string;
+        /**
+         * World direction this sign belongs to under the requested scheme: east, north, west or south. The twenty signs divide evenly into four groups of five, so exactly five signs share each quarter.
+         */
+        direction: string;
+        /**
+         * Colour paired with the direction: red for east, white for north, black for west, yellow for south. Always English so it stays safe to key a palette off.
+         */
+        color: string;
+        /**
+         * The sign in one composed sentence: both names, what it is about and the glyph reading behind it.
+         */
+        keynote: string;
+        /**
+         * The world direction in prose, followed by a line naming which of the two published readings produced it. The two sit one quarter turn apart on all twenty signs.
+         */
+        directionReading: string;
+        /**
+         * What the sign is about, as a clause rather than a sentence, because it is spliced into composed prose elsewhere in the API. Translated in place.
+         */
+        essence: string;
+        /**
+         * What the sign does well, as full sentences rather than keywords.
+         */
+        strengths: Array<string>;
+        /**
+         * Where the same temperament costs the sign something. Each one is the shadow of a strength above rather than an unrelated flaw.
+         */
+        challenges: Array<string>;
+        /**
+         * The one thing worth doing differently under this sign.
+         */
+        guidance: string;
+        /**
+         * The thirteen day period this sign opens. Composed from the sign rather than stored, so the two can never disagree.
+         */
+        trecena: {
+            /**
+             * The trecena this sign opens, 1 to 20. Every sign opens exactly one trecena, because 13 and 20 share no factor.
+             */
+            number: number;
+            /**
+             * The composed reading of the thirteen day period this sign opens.
+             */
+            reading: string;
+        };
+        /**
+         * The conventions this profile was served under.
+         */
+        conventions: {
+            /**
+             * The direction reading actually applied. The two readings sit one quarter turn apart, so a direction stored without this value is ambiguous.
+             */
+            directionScheme: string;
+        };
+    };
+};
+
+export type GetMesoamericanAstrologyMayanDaySignsByIdResponse = GetMesoamericanAstrologyMayanDaySignsByIdResponses[keyof GetMesoamericanAstrologyMayanDaySignsByIdResponses];
+
+export type GetMesoamericanAstrologyMayanTrecenasData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-20, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/mesoamerican-astrology/mayan/trecenas';
+};
+
+export type GetMesoamericanAstrologyMayanTrecenasErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanTrecenasError = GetMesoamericanAstrologyMayanTrecenasErrors[keyof GetMesoamericanAstrologyMayanTrecenasErrors];
+
+export type GetMesoamericanAstrologyMayanTrecenasResponses = {
+    /**
+     * The trecena catalogue.
+     */
+    200: {
+        /**
+         * Total trecenas in the round. Always 20, because 260 divided by 13 is exactly 20.
+         */
+        total: number;
+        /**
+         * Maximum items returned for this page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped before this page.
+         */
+        offset: number;
+        /**
+         * Trecenas for the current page, in order from the one that opens on 1 Imix.
+         */
+        trecenas: Array<{
+            /**
+             * Which of the twenty thirteen day periods this is, 1 to 20. Trecena 1 opens on 1 Imix and the openers step thirteen signs at a time from there.
+             */
+            number: number;
+            /**
+             * Machine identifier of the day sign the period opens on, which the tradition reads as colouring all thirteen of its days.
+             */
+            rulingSign: string;
+            /**
+             * Display name of the sign the period opens on. A proper noun carried as data.
+             */
+            rulingSignName: string;
+            /**
+             * Kʼicheʼ name of the same sign, the vocabulary a highland reading uses.
+             */
+            rulingSignKiche: string;
+            /**
+             * Days in the period. Always 13, which is what the word trecena means.
+             */
+            length: number;
+            /**
+             * The composed reading of the period, built from the sign it opens on. Composed rather than stored, so it can never drift away from the day sign it is drawn from.
+             */
+            reading: string;
+        }>;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanTrecenasResponse = GetMesoamericanAstrologyMayanTrecenasResponses[keyof GetMesoamericanAstrologyMayanTrecenasResponses];
+
+export type GetMesoamericanAstrologyMayanTrecenasByNumberData = {
+    body?: never;
+    path: {
+        /**
+         * Trecena number, 1 to 20. Trecena 1 opens on 1 Imix, trecena 2 on 1 Ix, and each subsequent period opens thirteen signs further round the twenty.
+         */
+        number: number;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/mayan/trecenas/{number}';
+};
+
+export type GetMesoamericanAstrologyMayanTrecenasByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanTrecenasByNumberError = GetMesoamericanAstrologyMayanTrecenasByNumberErrors[keyof GetMesoamericanAstrologyMayanTrecenasByNumberErrors];
+
+export type GetMesoamericanAstrologyMayanTrecenasByNumberResponses = {
+    /**
+     * The trecena.
+     */
+    200: {
+        /**
+         * Which of the twenty thirteen day periods this is, 1 to 20. Trecena 1 opens on 1 Imix and the openers step thirteen signs at a time from there.
+         */
+        number: number;
+        /**
+         * Machine identifier of the day sign the period opens on, which the tradition reads as colouring all thirteen of its days.
+         */
+        rulingSign: string;
+        /**
+         * Display name of the sign the period opens on. A proper noun carried as data.
+         */
+        rulingSignName: string;
+        /**
+         * Kʼicheʼ name of the same sign, the vocabulary a highland reading uses.
+         */
+        rulingSignKiche: string;
+        /**
+         * Days in the period. Always 13, which is what the word trecena means.
+         */
+        length: number;
+        /**
+         * The composed reading of the period, built from the sign it opens on. Composed rather than stored, so it can never drift away from the day sign it is drawn from.
+         */
+        reading: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanTrecenasByNumberResponse = GetMesoamericanAstrologyMayanTrecenasByNumberResponses[keyof GetMesoamericanAstrologyMayanTrecenasByNumberResponses];
+
+export type GetMesoamericanAstrologyMayanHaabMonthsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-19, default 19.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/mesoamerican-astrology/mayan/haab-months';
+};
+
+export type GetMesoamericanAstrologyMayanHaabMonthsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanHaabMonthsError = GetMesoamericanAstrologyMayanHaabMonthsErrors[keyof GetMesoamericanAstrologyMayanHaabMonthsErrors];
+
+export type GetMesoamericanAstrologyMayanHaabMonthsResponses = {
+    /**
+     * The Haab period catalogue.
+     */
+    200: {
+        /**
+         * Total periods in the Haab year. Always 19: eighteen months plus Wayebʼ, which is a period of the year even though it is only five days.
+         */
+        total: number;
+        /**
+         * Maximum items returned for this page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped before this page.
+         */
+        offset: number;
+        /**
+         * Periods for the current page, in order from Pop.
+         */
+        months: Array<{
+            /**
+             * Place in the Haab year, 1 to 19. Pop is 1 and Wayebʼ is 19, so a position of 19 always means the five short days.
+             */
+            position: number;
+            /**
+             * Machine identifier of the Haab period, always lowercase ASCII, so it stays safe to compare against and to use as a path parameter. The nineteen ids run pop, wo, sip, sotz, sek, xul, yaxkin, mol, chen, yax, sak, keh, mak, kankin, muwan, pax, kayab, kumku, wayeb.
+             */
+            id: string;
+            /**
+             * Display name in the standard orthography. A proper noun carried as data, identical under every lang.
+             */
+            nameYucatec: string;
+            /**
+             * The sixteenth century Yucatec spelling, which is the form most printed tables use.
+             */
+            nameClassic: string;
+            /**
+             * Days in the period. Twenty for the eighteen months and five for Wayebʼ, which is never twenty. Days inside a period are numbered from 0, so a twenty day period runs 0 to 19.
+             */
+            length: number;
+            /**
+             * What the period name means, translated in place because it is a common noun rather than a name.
+             */
+            gloss: string;
+            /**
+             * The composed reading of the period, built from its position, its length and its gloss.
+             */
+            reading: string;
+        }>;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanHaabMonthsResponse = GetMesoamericanAstrologyMayanHaabMonthsResponses[keyof GetMesoamericanAstrologyMayanHaabMonthsResponses];
+
+export type GetMesoamericanAstrologyMayanHaabMonthsByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Haab period id, case-insensitive and punctuation-insensitive. One of pop, wo, sip, sotz, sek, xul, yaxkin, mol, chen, yax, sak, keh, mak, kankin, muwan, pax, kayab, kumku, wayeb.
+         */
+        id: 'pop' | 'wo' | 'sip' | 'sotz' | 'sek' | 'xul' | 'yaxkin' | 'mol' | 'chen' | 'yax' | 'sak' | 'keh' | 'mak' | 'kankin' | 'muwan' | 'pax' | 'kayab' | 'kumku' | 'wayeb';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/mayan/haab-months/{id}';
+};
+
+export type GetMesoamericanAstrologyMayanHaabMonthsByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanHaabMonthsByIdError = GetMesoamericanAstrologyMayanHaabMonthsByIdErrors[keyof GetMesoamericanAstrologyMayanHaabMonthsByIdErrors];
+
+export type GetMesoamericanAstrologyMayanHaabMonthsByIdResponses = {
+    /**
+     * The Haab period.
+     */
+    200: {
+        /**
+         * Place in the Haab year, 1 to 19. Pop is 1 and Wayebʼ is 19, so a position of 19 always means the five short days.
+         */
+        position: number;
+        /**
+         * Machine identifier of the Haab period, always lowercase ASCII, so it stays safe to compare against and to use as a path parameter. The nineteen ids run pop, wo, sip, sotz, sek, xul, yaxkin, mol, chen, yax, sak, keh, mak, kankin, muwan, pax, kayab, kumku, wayeb.
+         */
+        id: string;
+        /**
+         * Display name in the standard orthography. A proper noun carried as data, identical under every lang.
+         */
+        nameYucatec: string;
+        /**
+         * The sixteenth century Yucatec spelling, which is the form most printed tables use.
+         */
+        nameClassic: string;
+        /**
+         * Days in the period. Twenty for the eighteen months and five for Wayebʼ, which is never twenty. Days inside a period are numbered from 0, so a twenty day period runs 0 to 19.
+         */
+        length: number;
+        /**
+         * What the period name means, translated in place because it is a common noun rather than a name.
+         */
+        gloss: string;
+        /**
+         * The composed reading of the period, built from its position, its length and its gloss.
+         */
+        reading: string;
+    };
+};
+
+export type GetMesoamericanAstrologyMayanHaabMonthsByIdResponse = GetMesoamericanAstrologyMayanHaabMonthsByIdResponses[keyof GetMesoamericanAstrologyMayanHaabMonthsByIdResponses];
+
+export type PostMesoamericanAstrologyAztecTonalpohualliData = {
+    body: {
+        /**
+         * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded.
+         */
+        date: string;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/aztec/tonalpohualli';
+};
+
+export type PostMesoamericanAstrologyAztecTonalpohualliErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostMesoamericanAstrologyAztecTonalpohualliError = PostMesoamericanAstrologyAztecTonalpohualliErrors[keyof PostMesoamericanAstrologyAztecTonalpohualliErrors];
+
+export type PostMesoamericanAstrologyAztecTonalpohualliResponses = {
+    /**
+     * The tonalpohualli day for this date.
+     */
+    200: {
+        /**
+         * Machine identifier of the tonalpohualli day sign, always lowercase ASCII Nahuatl whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run cipactli, ehecatl, calli, cuetzpalin, coatl, miquiztli, mazatl, tochtli, atl, itzcuintli, ozomahtli, malinalli, acatl, ocelotl, cuauhtli, cozcacuauhtli, ollin, tecpatl, quiahuitl, xochitl.
+         */
+        daySign: string;
+        /**
+         * Display name in Nahuatl with the vowel length marks the reference tables print. A proper noun carried as data, so it is identical under every lang.
+         */
+        daySignName: string;
+        /**
+         * What the sign name means, translated in place because it is a common noun. Several English renderings are in circulation for some signs and all of them are given rather than one being picked.
+         */
+        gloss: string;
+        /**
+         * World direction the sign belongs to: east, north, west or south. The twenty run through the four quarters in order, so the direction is a property of the position as much as of the sign.
+         */
+        direction: string;
+        /**
+         * The tonalpohualli coefficient, 1 to 13. Structurally the same count as the Maya coefficient and read the same way: a rank it is not.
+         */
+        number: number;
+        /**
+         * The thirteen day period this day belongs to, named by the sign it opens on. No patron deity is returned: the published patron column carries an unresolved disagreement on two of the twenty rows, and a column that is right for eighteen and guessed for two is worse than none.
+         */
+        trecena: {
+            /**
+             * Which of the twenty thirteen day periods this day falls in, 1 to 20.
+             */
+            number: number;
+            /**
+             * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient.
+             */
+            dayOfTrecena: number;
+            /**
+             * Machine identifier of the day sign the trecena opens on.
+             */
+            startSign: string;
+            /**
+             * Display name of the sign the trecena opens on. A proper noun carried as data.
+             */
+            startSignName: string;
+        };
+        /**
+         * The sign in one composed sentence. Composed per request from the sign components rather than stored whole.
+         */
+        keynote: string;
+        /**
+         * The one thing worth doing differently under this sign.
+         */
+        guidance: string;
+        /**
+         * A plain statement of what this family covers and what it deliberately leaves out. Present on every response so nobody has to guess whether a missing field is an outage or a decision.
+         */
+        scope: string;
+        /**
+         * Echo of the date the day was resolved from, in proleptic Gregorian.
+         */
+        date: string;
+        /**
+         * The conventions this answer was computed under, echoed so the result is self describing.
+         */
+        conventions: {
+            /**
+             * The correlation this count runs on, anchored on the recorded day 1 Coatl at the fall of Tenochtitlan, 13 August 1521 in the Julian calendar and 23 August 1521 in the proleptic Gregorian calendar this API takes. It is echoed rather than requested because it is not a switch: the anchor is a civil date, so no correlation constant enters the arithmetic, and the published alternatives for this calendar move the solar year alignment rather than the day count. The count was verified to run in step with the Maya count under the default constant, on the anchor and on two modern dates.
+             */
+            correlation: string;
+        };
+    };
+};
+
+export type PostMesoamericanAstrologyAztecTonalpohualliResponse = PostMesoamericanAstrologyAztecTonalpohualliResponses[keyof PostMesoamericanAstrologyAztecTonalpohualliResponses];
+
+export type GetMesoamericanAstrologyAztecDailyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Date in YYYY-MM-DD format, in the PROLEPTIC GREGORIAN calendar, extended backwards unchanged through the 1582 reform. Years 1 to 4000 are accepted. A reference converter that switches to the Julian calendar below the reform will disagree with a date before 15 October 1582 by ten or eleven days; that is a difference of input convention rather than of arithmetic, and passing the Julian equivalent to such a tool reproduces these values exactly. A single-digit month or day is accepted and zero padded. Defaults to the current day in UTC.
+         */
+        date?: string;
+    };
+    url: '/mesoamerican-astrology/aztec/daily';
+};
+
+export type GetMesoamericanAstrologyAztecDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecDailyError = GetMesoamericanAstrologyAztecDailyErrors[keyof GetMesoamericanAstrologyAztecDailyErrors];
+
+export type GetMesoamericanAstrologyAztecDailyResponses = {
+    /**
+     * The tonalpohualli reading for this day.
+     */
+    200: {
+        /**
+         * Machine identifier of the tonalpohualli day sign, always lowercase ASCII Nahuatl whatever the lang parameter says, so it stays safe to compare against in code. The twenty ids run cipactli, ehecatl, calli, cuetzpalin, coatl, miquiztli, mazatl, tochtli, atl, itzcuintli, ozomahtli, malinalli, acatl, ocelotl, cuauhtli, cozcacuauhtli, ollin, tecpatl, quiahuitl, xochitl.
+         */
+        daySign: string;
+        /**
+         * Display name in Nahuatl with the vowel length marks the reference tables print. A proper noun carried as data, so it is identical under every lang.
+         */
+        daySignName: string;
+        /**
+         * What the sign name means, translated in place because it is a common noun. Several English renderings are in circulation for some signs and all of them are given rather than one being picked.
+         */
+        gloss: string;
+        /**
+         * World direction the sign belongs to: east, north, west or south. The twenty run through the four quarters in order, so the direction is a property of the position as much as of the sign.
+         */
+        direction: string;
+        /**
+         * The tonalpohualli coefficient, 1 to 13. Structurally the same count as the Maya coefficient and read the same way: a rank it is not.
+         */
+        number: number;
+        /**
+         * The thirteen day period this day belongs to, named by the sign it opens on. No patron deity is returned: the published patron column carries an unresolved disagreement on two of the twenty rows, and a column that is right for eighteen and guessed for two is worse than none.
+         */
+        trecena: {
+            /**
+             * Which of the twenty thirteen day periods this day falls in, 1 to 20.
+             */
+            number: number;
+            /**
+             * Position of this day inside its trecena, 1 to 13. Always equal to the coefficient.
+             */
+            dayOfTrecena: number;
+            /**
+             * Machine identifier of the day sign the trecena opens on.
+             */
+            startSign: string;
+            /**
+             * Display name of the sign the trecena opens on. A proper noun carried as data.
+             */
+            startSignName: string;
+        };
+        /**
+         * The sign in one composed sentence. Composed per request from the sign components rather than stored whole.
+         */
+        keynote: string;
+        /**
+         * The one thing worth doing differently under this sign.
+         */
+        guidance: string;
+        /**
+         * A plain statement of what this family covers and what it deliberately leaves out. Present on every response so nobody has to guess whether a missing field is an outage or a decision.
+         */
+        scope: string;
+        /**
+         * Date of this reading. Echoes the date requested, or the current day in UTC when it was omitted.
+         */
+        date: string;
+        /**
+         * What the day carries, placing it inside its trecena as well as naming it. Composed per request, so it stays consistent with the keynote rather than being a second opinion.
+         */
+        overview: string;
+        /**
+         * The conventions this reading was computed under, echoed so the result is self describing.
+         */
+        conventions: {
+            /**
+             * The correlation this count runs on, anchored on the recorded day 1 Coatl at the fall of Tenochtitlan, 13 August 1521 in the Julian calendar and 23 August 1521 in the proleptic Gregorian calendar this API takes. It is echoed rather than requested because it is not a switch: the anchor is a civil date, so no correlation constant enters the arithmetic, and the published alternatives for this calendar move the solar year alignment rather than the day count. The count was verified to run in step with the Maya count under the default constant, on the anchor and on two modern dates.
+             */
+            correlation: string;
+        };
+    };
+};
+
+export type GetMesoamericanAstrologyAztecDailyResponse = GetMesoamericanAstrologyAztecDailyResponses[keyof GetMesoamericanAstrologyAztecDailyResponses];
+
+export type GetMesoamericanAstrologyAztecDaySignsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-20, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/mesoamerican-astrology/aztec/day-signs';
+};
+
+export type GetMesoamericanAstrologyAztecDaySignsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecDaySignsError = GetMesoamericanAstrologyAztecDaySignsErrors[keyof GetMesoamericanAstrologyAztecDaySignsErrors];
+
+export type GetMesoamericanAstrologyAztecDaySignsResponses = {
+    /**
+     * The tonalpohualli day sign catalogue.
+     */
+    200: {
+        /**
+         * Total signs in the cycle. Always 20; the sign set is closed.
+         */
+        total: number;
+        /**
+         * Maximum items returned for this page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped before this page.
+         */
+        offset: number;
+        /**
+         * Day signs for the current page, in sequence order.
+         */
+        daySigns: Array<{
+            /**
+             * Place in the twenty sign sequence, 1 to 20, counting Cipactli as 1. The sequence never varies and is what the trecenas are indexed against.
+             */
+            position: number;
+            /**
+             * Machine identifier of the day sign, always lowercase ASCII Nahuatl whatever the lang parameter says, so it stays safe to compare against and to use as a path parameter. The twenty ids run cipactli, ehecatl, calli, cuetzpalin, coatl, miquiztli, mazatl, tochtli, atl, itzcuintli, ozomahtli, malinalli, acatl, ocelotl, cuauhtli, cozcacuauhtli, ollin, tecpatl, quiahuitl, xochitl.
+             */
+            id: string;
+            /**
+             * Display name in Nahuatl with the vowel length marks the reference tables print. A proper noun carried as data, identical under every lang.
+             */
+            nameNahuatl: string;
+            /**
+             * What the sign name means, translated in place because it is a common noun. Where several English renderings are in circulation all of them are given rather than one being picked.
+             */
+            gloss: string;
+            /**
+             * World direction the sign belongs to: east, north, west or south. The twenty run through the four quarters in strict rotation, so every fourth sign shares a quarter.
+             */
+            direction: string;
+            /**
+             * What the sign is about, as a clause rather than a sentence, because it is spliced into composed prose elsewhere in the API. Translated in place.
+             */
+            essence: string;
+            /**
+             * The one thing worth doing differently under this sign.
+             */
+            guidance: string;
+            /**
+             * The sign in one composed sentence, built from the components above.
+             */
+            keynote: string;
+        }>;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecDaySignsResponse = GetMesoamericanAstrologyAztecDaySignsResponses[keyof GetMesoamericanAstrologyAztecDaySignsResponses];
+
+export type GetMesoamericanAstrologyAztecDaySignsByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Day sign id, case-insensitive and punctuation-insensitive. One of cipactli, ehecatl, calli, cuetzpalin, coatl, miquiztli, mazatl, tochtli, atl, itzcuintli, ozomahtli, malinalli, acatl, ocelotl, cuauhtli, cozcacuauhtli, ollin, tecpatl, quiahuitl, xochitl.
+         */
+        id: 'cipactli' | 'ehecatl' | 'calli' | 'cuetzpalin' | 'coatl' | 'miquiztli' | 'mazatl' | 'tochtli' | 'atl' | 'itzcuintli' | 'ozomahtli' | 'malinalli' | 'acatl' | 'ocelotl' | 'cuauhtli' | 'cozcacuauhtli' | 'ollin' | 'tecpatl' | 'quiahuitl' | 'xochitl';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/aztec/day-signs/{id}';
+};
+
+export type GetMesoamericanAstrologyAztecDaySignsByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecDaySignsByIdError = GetMesoamericanAstrologyAztecDaySignsByIdErrors[keyof GetMesoamericanAstrologyAztecDaySignsByIdErrors];
+
+export type GetMesoamericanAstrologyAztecDaySignsByIdResponses = {
+    /**
+     * The tonalpohualli day sign.
+     */
+    200: {
+        /**
+         * Place in the twenty sign sequence, 1 to 20, counting Cipactli as 1. The sequence never varies and is what the trecenas are indexed against.
+         */
+        position: number;
+        /**
+         * Machine identifier of the day sign, always lowercase ASCII Nahuatl whatever the lang parameter says, so it stays safe to compare against and to use as a path parameter. The twenty ids run cipactli, ehecatl, calli, cuetzpalin, coatl, miquiztli, mazatl, tochtli, atl, itzcuintli, ozomahtli, malinalli, acatl, ocelotl, cuauhtli, cozcacuauhtli, ollin, tecpatl, quiahuitl, xochitl.
+         */
+        id: string;
+        /**
+         * Display name in Nahuatl with the vowel length marks the reference tables print. A proper noun carried as data, identical under every lang.
+         */
+        nameNahuatl: string;
+        /**
+         * What the sign name means, translated in place because it is a common noun. Where several English renderings are in circulation all of them are given rather than one being picked.
+         */
+        gloss: string;
+        /**
+         * World direction the sign belongs to: east, north, west or south. The twenty run through the four quarters in strict rotation, so every fourth sign shares a quarter.
+         */
+        direction: string;
+        /**
+         * What the sign is about, as a clause rather than a sentence, because it is spliced into composed prose elsewhere in the API. Translated in place.
+         */
+        essence: string;
+        /**
+         * The one thing worth doing differently under this sign.
+         */
+        guidance: string;
+        /**
+         * The sign in one composed sentence, built from the components above.
+         */
+        keynote: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecDaySignsByIdResponse = GetMesoamericanAstrologyAztecDaySignsByIdResponses[keyof GetMesoamericanAstrologyAztecDaySignsByIdResponses];
+
+export type GetMesoamericanAstrologyAztecTrecenasData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-20, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/mesoamerican-astrology/aztec/trecenas';
+};
+
+export type GetMesoamericanAstrologyAztecTrecenasErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecTrecenasError = GetMesoamericanAstrologyAztecTrecenasErrors[keyof GetMesoamericanAstrologyAztecTrecenasErrors];
+
+export type GetMesoamericanAstrologyAztecTrecenasResponses = {
+    /**
+     * The tonalpohualli trecena catalogue.
+     */
+    200: {
+        /**
+         * Total trecenas in the count. Always 20, because 260 divided by 13 is exactly 20.
+         */
+        total: number;
+        /**
+         * Maximum items returned for this page.
+         */
+        limit: number;
+        /**
+         * Number of items skipped before this page.
+         */
+        offset: number;
+        /**
+         * Trecenas for the current page, in order from the one that opens on 1 Cipactli.
+         */
+        trecenas: Array<{
+            /**
+             * Which of the twenty thirteen day periods this is, 1 to 20. Trecena 1 opens on 1 Cipactli and the openers step thirteen signs at a time from there.
+             */
+            number: number;
+            /**
+             * Machine identifier of the day sign the period opens on.
+             */
+            startSign: string;
+            /**
+             * Display name of the sign the period opens on. A proper noun carried as data.
+             */
+            startSignName: string;
+            /**
+             * Days in the period. Always 13, which is what the word trecena means.
+             */
+            length: number;
+            /**
+             * The composed reading of the period, built from the sign it opens on rather than stored, so the two can never drift apart. No patron deity is named, because two of the twenty published patrons are disputed and none ships rather than eighteen shipping beside two guesses.
+             */
+            reading: string;
+        }>;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecTrecenasResponse = GetMesoamericanAstrologyAztecTrecenasResponses[keyof GetMesoamericanAstrologyAztecTrecenasResponses];
+
+export type GetMesoamericanAstrologyAztecTrecenasByNumberData = {
+    body?: never;
+    path: {
+        /**
+         * Trecena number, 1 to 20. Trecena 1 opens on 1 Cipactli, trecena 2 on 1 Ocelotl, and each subsequent period opens thirteen signs further round the twenty.
+         */
+        number: number;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/mesoamerican-astrology/aztec/trecenas/{number}';
+};
+
+export type GetMesoamericanAstrologyAztecTrecenasByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecTrecenasByNumberError = GetMesoamericanAstrologyAztecTrecenasByNumberErrors[keyof GetMesoamericanAstrologyAztecTrecenasByNumberErrors];
+
+export type GetMesoamericanAstrologyAztecTrecenasByNumberResponses = {
+    /**
+     * The tonalpohualli trecena.
+     */
+    200: {
+        /**
+         * Which of the twenty thirteen day periods this is, 1 to 20. Trecena 1 opens on 1 Cipactli and the openers step thirteen signs at a time from there.
+         */
+        number: number;
+        /**
+         * Machine identifier of the day sign the period opens on.
+         */
+        startSign: string;
+        /**
+         * Display name of the sign the period opens on. A proper noun carried as data.
+         */
+        startSignName: string;
+        /**
+         * Days in the period. Always 13, which is what the word trecena means.
+         */
+        length: number;
+        /**
+         * The composed reading of the period, built from the sign it opens on rather than stored, so the two can never drift apart. No patron deity is named, because two of the twenty published patrons are disputed and none ships rather than eighteen shipping beside two guesses.
+         */
+        reading: string;
+    };
+};
+
+export type GetMesoamericanAstrologyAztecTrecenasByNumberResponse = GetMesoamericanAstrologyAztecTrecenasByNumberResponses[keyof GetMesoamericanAstrologyAztecTrecenasByNumberResponses];
+
+export type PostVastuEntranceData = {
+    body?: {
+        /**
+         * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
+         */
+        plot: {
+            /**
+             * East-west extent of a rectangular plot, in the unit given. Send this with depth for a rectangle, or send polygon instead.
+             */
+            width?: number;
+            /**
+             * North-south extent of a rectangular plot, in the unit given. Send this with width for a rectangle, or send polygon instead.
+             */
+            depth?: number;
+            /**
+             * The plot outline as 3 to 16 vertices in plot coordinates, x east and y north, in either winding order. Use this instead of width and depth for a plot with a cut corner, an extension or an irregular boundary.
+             */
+            polygon?: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+            /**
+             * Unit the plot dimensions are given in. Every distance the response returns is in this same unit. The mandala projection is scale free, so this affects the areas and the marma size and nothing else.
+             */
+            unit?: 'feet' | 'metres';
+        };
+        /**
+         * Direction the front of the house looks out toward, one of the eight compass sectors. Case and punctuation are folded, so north-east, northeast and NorthEast all resolve. Send this or facingDegrees, never both.
+         */
+        facing?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+        /**
+         * Direction the front of the house looks out toward, as a compass bearing in degrees clockwise from true north, measured looking OUT from the building. The same convention the feng shui facing endpoints use, so a bearing works unchanged across the two domains. Send this or facing, never both.
+         */
+        facingDegrees?: number;
+        /**
+         * Where the main door sits, in plot coordinates. The point is snapped to the nearest boundary of the plot, so a coordinate read off a drawing that lands slightly inside or outside still resolves. Send this or doorPosition, never both.
+         */
+        door?: {
+            /**
+             * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+             */
+            x: number;
+            /**
+             * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+             */
+            y: number;
+        };
+        /**
+         * Where the main door sits along the facing side, as a fraction from 0 to 1 measured from the corner the chapter starts that side at: the north-east for an east facing, the south-east for a south facing, the south-west for a west facing and the north-west for a north facing. Requires a cardinal facing, since an intercardinal facing names no single side. Send this or door, never both.
+         */
+        doorPosition?: number;
+        /**
+         * Which division of the ground to read: 81-pada is the Paramasayika of Brihat Samhita 53.42, the grid the chapter numbers and names every devata on, and 64-pada is the Manduka of 53.55, for which the chapter gives structure only and no devata names. Defaults to 81-pada.
+         */
+        grid?: '81-pada' | '64-pada';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/entrance';
+};
+
+export type PostVastuEntranceErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVastuEntranceError = PostVastuEntranceErrors[keyof PostVastuEntranceErrors];
+
+export type PostVastuEntranceResponses = {
+    /**
+     * Entrance pada, its devata, the classical effect and the favourable padas
+     */
+    200: {
+        /**
+         * Which of the 32 perimeter padas the main door falls on, numbered 1 to 32. Padas 1 to 8 run down the east side from the north-east corner, 9 to 16 along the south from the south-east, 17 to 24 up the west from the south-west and 25 to 32 along the north from the north-west. This index is the identifier every entrance verdict keys on.
+         */
+        pada: number;
+        /**
+         * Which of the four sides the pada belongs to. A corner square belongs to exactly one side, decided by the verses rather than by geometry, so the south-east corner reads South even though it sits at the end of the east edge.
+         */
+        side: string;
+        /**
+         * The corner the chapter counts this side from. The four start corners are stated in the verses themselves, which is what makes the effect to pada alignment a reading rather than an inference.
+         */
+        startCorner: string;
+        /**
+         * Position of the pada along its own side, 1 to 8, counting from the start corner. Useful for drawing a door strip without recomputing the global index.
+         */
+        ordinalOnSide: number;
+        /**
+         * The square of the 81 pada grid the door falls in, 1 to 81. It is always the 81 pada square, whichever grid you ask for, because that is the division the chapter numbers and the one the 32 padas are enumerated on. Squares run row-major over the printed plate, so the corners are 1 north-east, 9 south-east, 73 north-west and 81 south-west.
+         */
+        square: number;
+        /**
+         * The square as a row and column, which is what you draw with. Row 1 is the northern edge and column 1 the western one.
+         */
+        cell: {
+            /**
+             * Row of the grid the square sits in, 1 at the northern edge.
+             */
+            rowFromNorth: number;
+            /**
+             * Column of the grid the square sits in, 1 at the western edge.
+             */
+            columnFromWest: number;
+        };
+        /**
+         * The devata holding the entrance square. Present only on the 81 pada grid, because 53.55 to 56 gives the 64 pada division its structure and names no devata on it. The effects themselves apply to either division, which is why the pada and the effect are returned in both cases.
+         */
+        devata?: {
+            /**
+             * Identifier of the devata holding that square. Always English transliteration, safe to compare against and to look up on the devatas endpoint.
+             */
+            id: string;
+            /**
+             * Display name of the devata, with the diacritics the transliteration carries.
+             */
+            name: string;
+            /**
+             * How many of the 81 squares this devata holds: one for a padika, two for a dvipada, three for a tripada and nine for Brahma.
+             */
+            padaCount: number;
+        };
+        /**
+         * What the chapter says follows from a main entrance on this pada. Original prose composed from the verse, translated in place when lang is set.
+         */
+        effect: string;
+        /**
+         * How the stated effect reads: auspicious for a gain, inauspicious for a harm, mixed where the text names a gain and a loss together. A RoxyAPI classification of the verse effect rather than a word in the text, and always English so it is safe to key styling on.
+         */
+        auspiciousness: string;
+        /**
+         * The verdict as a sentence, for a report or a chat answer. Composed from the pada, its side and its effect, and translated in place when lang is set.
+         */
+        reading: string;
+        /**
+         * The padas on this same side whose stated effect is a gain, so a door can be moved to the nearest favourable position without re-reading the whole table. Empty on a side where the chapter names no gain at all, which is true of the south.
+         */
+        recommendedPadas: Array<number>;
+        /**
+         * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+         */
+        source: {
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        };
+        /**
+         * The switches this reading resolved, echoed so a stored response can be reproduced years later without knowing what the defaults were on the day it was made.
+         */
+        conventions: {
+            /**
+             * Which division of the ground was read. Echoes the resolved value whether it was sent or defaulted.
+             */
+            grid: string;
+        };
+    };
+};
+
+export type PostVastuEntranceResponse = PostVastuEntranceResponses[keyof PostVastuEntranceResponses];
+
+export type PostVastuMandalaData = {
+    body?: {
+        /**
+         * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
+         */
+        plot: {
+            /**
+             * East-west extent of a rectangular plot, in the unit given. Send this with depth for a rectangle, or send polygon instead.
+             */
+            width?: number;
+            /**
+             * North-south extent of a rectangular plot, in the unit given. Send this with width for a rectangle, or send polygon instead.
+             */
+            depth?: number;
+            /**
+             * The plot outline as 3 to 16 vertices in plot coordinates, x east and y north, in either winding order. Use this instead of width and depth for a plot with a cut corner, an extension or an irregular boundary.
+             */
+            polygon?: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+            /**
+             * Unit the plot dimensions are given in. Every distance the response returns is in this same unit. The mandala projection is scale free, so this affects the areas and the marma size and nothing else.
+             */
+            unit?: 'feet' | 'metres';
+        };
+        /**
+         * Which division of the ground to read: 81-pada is the Paramasayika of Brihat Samhita 53.42, the grid the chapter numbers and names every devata on, and 64-pada is the Manduka of 53.55, for which the chapter gives structure only and no devata names. Defaults to 81-pada.
+         */
+        grid?: '81-pada' | '64-pada';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/mandala';
+};
+
+export type PostVastuMandalaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVastuMandalaError = PostVastuMandalaErrors[keyof PostVastuMandalaErrors];
+
+export type PostVastuMandalaResponses = {
+    /**
+     * Every cell of the projected mandala with its devata, brahmasthan and geometry
+     */
+    200: {
+        /**
+         * Which division was projected, echoing the resolved value.
+         */
+        grid: string;
+        /**
+         * Every square of the projected mandala, row-major from the north-west. 81 entries on the Paramasayika and 64 on the Manduka.
+         */
+        cells: Array<{
+            /**
+             * Square number, 1 to 81 on the Paramasayika and 1 to 64 on the Manduka. Squares run row-major over the printed plate, which puts 1 in the north-east, 9 in the south-east, 73 in the north-west and 81 in the south-west on the 81 pada grid.
+             */
+            square: number;
+            /**
+             * Row of the grid, 1 at the northern edge and 9 or 8 at the southern one.
+             */
+            rowFromNorth: number;
+            /**
+             * Column of the grid, 1 at the western edge and 9 or 8 at the eastern one.
+             */
+            columnFromWest: number;
+            /**
+             * Identifier of the devata holding this square. Always English transliteration, safe to compare against. Present only on the 81 pada grid, since the chapter names no devata on the 64 pada division.
+             */
+            devata?: string;
+            /**
+             * Display name of that devata, with the diacritics the transliteration carries. Present only on the 81 pada grid.
+             */
+            devataName?: string;
+            /**
+             * Which ring of the mandala the devata belongs to: perimeter for the outer 32, innerRing for the eight around Brahma, innerCorner for the four on the inner diagonals, center for Brahma. Present only on the 81 pada grid.
+             */
+            class?: string;
+            /**
+             * How many squares the devata holds under the classification of 53.49 to 50: padika for one, dvipada for two, tripada for three. Absent for Brahma, which those verses leave outside the scheme, and on the 64 pada grid.
+             */
+            group?: string;
+            /**
+             * The structural role 53.55 to 56 gives this square of the 64 pada division: brahma, halved-inner-corner, halved-outer-corner, around-brahma, dvipada or outer. Present only on the 64 pada grid, which is the only thing that chapter states about it.
+             */
+            role?: string;
+            /**
+             * Centre of the square in plot coordinates. This point is the marmasthala of the square, the vital spot 53.57 forbids raising a pillar on.
+             */
+            center: {
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            };
+            /**
+             * Whether the centre of this square falls inside the plot outline. False where an irregular plot has a corner cut away, which is how a missing quarter of the mandala shows up as data rather than as a missing row.
+             */
+            withinPlot: boolean;
+        }>;
+        /**
+         * The central block of the mandala. Nine squares on the Paramasayika and four on the Manduka.
+         */
+        brahmasthan: {
+            /**
+             * The squares Brahma holds: the nine central squares on the 81 pada grid, the four on the 64 pada grid.
+             */
+            squares: Array<number>;
+            /**
+             * The brahmasthan as four corners in plot coordinates, so it can be drawn straight onto a plan. It is the block a house is kept clear of, and the chapter destroys the family of a house whose gate faces it.
+             */
+            polygon: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+            /**
+             * Area of the brahmasthan in the square of the plot unit, so a report can quote how much ground it covers.
+             */
+            area: number;
+        };
+        /**
+         * The vital spots of the mandala. Present on the 81 pada grid, where 53.57 and 53.64 state the rule and its size. Absent on the 64 pada grid, for which the chapter states neither.
+         */
+        marma?: {
+            /**
+             * The centre of every square, which 53.57 calls a marmasthala and forbids raising a pillar over.
+             */
+            points: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+            /**
+             * Area of one marma spot in the square of the plot unit. 53.64 sets it at one eighth of the area of a square, so it scales with the plot.
+             */
+            areaEach: number;
+        };
+        /**
+         * The six vamsa lines of 53.63, each named in the verse by the devatas at its two ends. Present only on the 81 pada grid: the 64 pada division is told to draw its main diagonals and nothing further is stated, so a six line geometry there would be borrowed from a different text.
+         */
+        vamsa?: Array<{
+            /**
+             * Square the line starts at, named in 53.63 by the devata holding it.
+             */
+            fromSquare: number;
+            /**
+             * Identifier of the devata at that end. Always English transliteration, safe to compare against.
+             */
+            fromDevata: string;
+            /**
+             * Square the line ends at, named in 53.63 by the devata holding it.
+             */
+            toSquare: number;
+            /**
+             * Identifier of the devata at that end.
+             */
+            toDevata: string;
+            /**
+             * Which way the line runs across the grid, northwest-southeast or northeast-southwest. Derived from the endpoint cells rather than stored, so it cannot disagree with the geometry.
+             */
+            axis: string;
+            /**
+             * Whether this is one of the two corner to corner diagonals. The other four run parallel to them, two cells either side.
+             */
+            isMainDiagonal: boolean;
+            /**
+             * Start of the line in plot coordinates, at the centre of its square.
+             */
+            from: {
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            };
+            /**
+             * End of the line in plot coordinates, at the centre of its square.
+             */
+            to: {
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            };
+        }>;
+        /**
+         * The nine squares where the six vamsa lines cross. 53.63 asserts nine points and lists none, so these are computed by intersecting the lines rather than transcribed. They are the centre, the four corners of the Brahma block and the four cardinal squares of the second ring. Present only on the 81 pada grid.
+         */
+        atimarma?: Array<number>;
+        /**
+         * Every verse this projection rests on: the grid and its devatas, the 64 pada structure where that grid was asked for, and the marma and vamsa geometry where it applies.
+         */
+        sources: Array<{
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        }>;
+        /**
+         * The switches this projection resolved, echoed so a stored response can be reproduced later.
+         */
+        conventions: {
+            /**
+             * Which division of the ground was projected. Echoes the resolved value whether it was sent or defaulted.
+             */
+            grid: string;
+        };
+    };
+};
+
+export type PostVastuMandalaResponse = PostVastuMandalaResponses[keyof PostVastuMandalaResponses];
+
+export type PostVastuPlotData = {
+    body?: {
+        /**
+         * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
+         */
+        plot: {
+            /**
+             * East-west extent of a rectangular plot, in the unit given. Send this with depth for a rectangle, or send polygon instead.
+             */
+            width?: number;
+            /**
+             * North-south extent of a rectangular plot, in the unit given. Send this with width for a rectangle, or send polygon instead.
+             */
+            depth?: number;
+            /**
+             * The plot outline as 3 to 16 vertices in plot coordinates, x east and y north, in either winding order. Use this instead of width and depth for a plot with a cut corner, an extension or an irregular boundary.
+             */
+            polygon?: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+            /**
+             * Unit the plot dimensions are given in. Every distance the response returns is in this same unit. The mandala projection is scale free, so this affects the areas and the marma size and nothing else.
+             */
+            unit?: 'feet' | 'metres';
+        };
+        /**
+         * Direction the front of the house looks out toward, one of the eight compass sectors. Case and punctuation are folded, so north-east, northeast and NorthEast all resolve. Send this or facingDegrees, never both.
+         */
+        facing?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+        /**
+         * Direction the front of the house looks out toward, as a compass bearing in degrees clockwise from true north, measured looking OUT from the building. The same convention the feng shui facing endpoints use, so a bearing works unchanged across the two domains. Send this or facing, never both.
+         */
+        facingDegrees?: number;
+        /**
+         * Which quarter of the plot the ground falls toward, that is where the LOW point is. The chapter states its rules in terms of the side that stands HIGHER, so the opposite of this value is what the verses are read against, and both are returned. Omit it if the ground is level.
+         */
+        slopeLowDirection?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+        /**
+         * Which side a road runs along. The verdict is convention: the chapter states no rule for the side a road is on, only that an obstruction facing the gate brings misery unless it lies beyond twice the height of the house.
+         */
+        road?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+        /**
+         * Quarters where the plot bulges out beyond a rectangle. Every extension verdict is convention: the chapter states no rule for a named corner and the nearest verses speak of a figure with a limb wanting.
+         */
+        extensions?: Array<'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest'>;
+        /**
+         * Quarters where a corner is missing from the rectangle. Every cut verdict is convention, for the same reason as the extensions.
+         */
+        cuts?: Array<'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest'>;
+        /**
+         * Which quarter holds standing water, a well, a tank or a sump. This one IS sourced: 53.119 gives a distinct effect for each of the eight directions and calls only the north and the north-east favourable.
+         */
+        water?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+        /**
+         * Which reading of the ground level to lead with. brihat-samhita applies verses 115 to 117 as written, where a higher north-east is a loss, a higher east or north is permitted when level ground is unavoidable and still carries its stated cost, and a higher south or west carries its cost with no allowance. modern applies the widely taught rule that the north-east must be the lowest point, which agrees with verse 115 and contradicts the verse 116 allowance. Both readings are returned whichever you choose, so the disagreement is visible rather than hidden. Defaults to brihat-samhita.
+         */
+        slopeSchool?: 'brihat-samhita' | 'modern';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/plot';
+};
+
+export type PostVastuPlotErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVastuPlotError = PostVastuPlotErrors[keyof PostVastuPlotErrors];
+
+export type PostVastuPlotResponses = {
+    /**
+     * Shape, proportion, ground level under both schools, corners, road and water verdicts
+     */
+    200: {
+        /**
+         * Which way the building looks and which way it sits. Resolved through the same 24 mountain table the feng shui facing endpoints use, so a bearing lands in the same sector on both domains.
+         */
+        orientation: {
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+             */
+            facing: string;
+            /**
+             * The sector directly opposite the facing, which is the back of the building. Always English.
+             */
+            sitting: string;
+            /**
+             * The bearing you sent, echoed. Absent when you named a sector instead of a bearing.
+             */
+            facingDegrees?: number;
+            /**
+             * The 15 degree mountain the bearing fell in, in the compass label form the feng shui endpoints use. Absent when you named a sector instead of a bearing, since a sector spans three mountains.
+             */
+            mountain?: string;
+        };
+        /**
+         * What the outline measures, in the unit you sent.
+         */
+        dimensions: {
+            /**
+             * North-south extent of the plot, in the unit you sent.
+             */
+            length: number;
+            /**
+             * East-west extent of the plot, in the unit you sent.
+             */
+            breadth: number;
+            /**
+             * Area enclosed by the outline, in the square of your unit. Computed from the polygon, so a cut corner reduces it.
+             */
+            area: number;
+            /**
+             * Length divided by breadth. The chapter has exactly one rank-independent ratio rule, twice the breadth for a house with an inner hall, and no band at all for anything else.
+             */
+            ratio: number;
+        };
+        /**
+         * Whether the ground is a regular four sided figure, per 53.115, which gives the death of kinsmen for an irregular shape and barrenness for irregular sides.
+         */
+        shape: {
+            /**
+             * How the reading lands. Always English, safe to compare against and to key styling on.
+             */
+            verdict: string;
+            /**
+             * What the verdict means, as original prose. Translated in place when lang is set to a language other than English.
+             */
+            effect: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        };
+        /**
+         * How the proportion reads. The one sourced verdict is the doubled length of 53.11; everything else is a modern band and is labelled convention, because no rank-independent ratio rule exists in the chapter at all.
+         */
+        ratio: {
+            /**
+             * How the reading lands. Always English, safe to compare against and to key styling on.
+             */
+            verdict: string;
+            /**
+             * What the verdict means, as original prose. Translated in place when lang is set to a language other than English.
+             */
+            effect: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        };
+        /**
+         * The ground level under both schools. Absent when you sent no low direction, which is how you say the ground is level.
+         */
+        slope?: {
+            /**
+             * The quarter you said the ground falls toward, echoed.
+             */
+            lowDirection: string;
+            /**
+             * The quarter that therefore stands higher, which is what the verses are stated in terms of.
+             */
+            highDirection: string;
+            /**
+             * The ground level as a sentence, for a report. Translated in place when lang is set.
+             */
+            reading: string;
+            /**
+             * Both readings, always, whichever school you asked for. The two genuinely disagree where a slight rise on the east or the north is unavoidable: the chapter allows it and the modern rule does not, and publishing both is what lets a practitioner reconcile our verdict with their teacher.
+             */
+            schools: Array<{
+                /**
+                 * Which reading this verdict follows. Always English, safe to compare against.
+                 */
+                school: string;
+                /**
+                 * How that reading lands: auspicious, permitted where a slight rise is expressly allowed, inauspicious, or not-stated where the chapter gives no effect for a rise in that quarter. Always English.
+                 */
+                verdict: string;
+                /**
+                 * The verse the reading rests on. Empty on the modern school, which rests on teaching practice rather than on a verse.
+                 */
+                verse: string;
+                /**
+                 * What that reading says follows, as original prose. Translated in place when lang is set.
+                 */
+                effect: string;
+            }>;
+            /**
+             * Which of the two readings you asked to lead with, echoed.
+             */
+            chosen: string;
+        };
+        /**
+         * What the chapter says about standing water in the quarter you named. Only the north and the north-east are favourable, and each of the other six carries its own harm. Absent when you named no water.
+         */
+        water?: {
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+             */
+            direction: string;
+            /**
+             * What 53.119 gives for standing water in that quarter, as original prose. Translated in place when lang is set.
+             */
+            effect: string;
+            /**
+             * How the stated effect reads: auspicious for a gain, inauspicious for a harm, mixed where the text names a gain and a loss together. A RoxyAPI classification of the verse effect rather than a word in the text, and always English so it is safe to key styling on.
+             */
+            auspiciousness: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        };
+        /**
+         * A verdict per extended quarter, every one of them convention. Empty when you named none.
+         */
+        extensions: Array<{
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+             */
+            direction: string;
+            /**
+             * How the stated effect reads: auspicious for a gain, inauspicious for a harm, mixed where the text names a gain and a loss together. A RoxyAPI classification of the verse effect rather than a word in the text, and always English so it is safe to key styling on.
+             */
+            auspiciousness: string;
+            /**
+             * What the reading says, as original prose that names its own basis.
+             */
+            effect: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        }>;
+        /**
+         * A verdict per cut quarter, every one of them convention.
+         */
+        cuts: Array<{
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+             */
+            direction: string;
+            /**
+             * How the stated effect reads: auspicious for a gain, inauspicious for a harm, mixed where the text names a gain and a loss together. A RoxyAPI classification of the verse effect rather than a word in the text, and always English so it is safe to key styling on.
+             */
+            auspiciousness: string;
+            /**
+             * What the reading says, as original prose that names its own basis.
+             */
+            effect: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        }>;
+        /**
+         * The convention verdict on the side a road runs, with the sourced obstruction rule quoted in the sources list beside it. Absent when you named no road.
+         */
+        road?: {
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+             */
+            direction: string;
+            /**
+             * How the stated effect reads: auspicious for a gain, inauspicious for a harm, mixed where the text names a gain and a loss together. A RoxyAPI classification of the verse effect rather than a word in the text, and always English so it is safe to key styling on.
+             */
+            auspiciousness: string;
+            /**
+             * What the reading says, as original prose that names its own basis.
+             */
+            effect: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        };
+        /**
+         * Every verse and every convention this analysis rests on, so a report can print the citation beside each verdict.
+         */
+        sources: Array<{
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        }>;
+        /**
+         * The switches this analysis resolved, echoed so it can be reproduced later.
+         */
+        conventions: {
+            /**
+             * Which ground level reading was asked to lead. Echoes the resolved value whether it was sent or defaulted.
+             */
+            slopeSchool: string;
+        };
+    };
+};
+
+export type PostVastuPlotResponse = PostVastuPlotResponses[keyof PostVastuPlotResponses];
+
+export type PostVastuAyadiData = {
+    body?: {
+        /**
+         * Length of the building or room, in the unit given. Under the Manasara family this is the measure the aya and rksha formulas multiply; under the perimeter family it only feeds the perimeter.
+         */
+        length: number;
+        /**
+         * Breadth of the building or room, in the unit given. Under the Manasara family this is the measure the vyaya and yoni formulas multiply.
+         */
+        breadth: number;
+        /**
+         * Perimeter of the plan, if it is not simply twice the length plus twice the breadth. The perimeter family runs every formula on this one measure, so it is the number that decides all six remainders there.
+         */
+        perimeter?: number;
+        /**
+         * Circumference or height, if the Manasara vara and tithi formulas should read something other than the perimeter. Defaults to the perimeter, which is what a rectangular plan supplies.
+         */
+        circumference?: number;
+        /**
+         * Unit the Ayadi dimensions are given in. Every remainder is unit sensitive, so this is an input and never assumed: the same building measured in cubits and in feet gives different remainders. hasta is the classical cubit and needs no conversion; feet and metres are converted using hastaInches and rounded to whole cubits, and the rounded figures are returned. Defaults to hasta.
+         */
+        unit?: 'hasta' | 'feet' | 'metres';
+        /**
+         * Length of one hasta, the classical cubit, in inches. Defaults to 18, which is 24 angula at three quarters of an inch each and is the value three independent sources agree on. Raise it if your lineage measures the cubit differently; the value used is echoed on the response so a stored reading can be reproduced years later. Only used when unit is feet or metres.
+         */
+        hastaInches?: number;
+        /**
+         * Which family of Ayadi formulas to apply. manasara takes length, breadth and circumference separately and is double sourced. perimeter-texts runs every formula on the perimeter alone and is the family the usual worked example is printed for. utpala supplies a yoni formula from the length times the breadth and nothing else, so the other five vargas fall back to the perimeter family and the response says so. Defaults to manasara.
+         */
+        ayadiText?: 'manasara' | 'perimeter-texts' | 'utpala';
+        /**
+         * Which vyaya formula the perimeter family uses. The printed table gives two joined by the word or and states no rule for choosing. p9-10 multiplies by nine and divides by ten, which is the only divisor consistent with the ten member vyaya group, so its remainder can be placed in that group and it is the default. p3-14 multiplies by three and divides by fourteen, and its remainder maps to no group any source enumerates. Ignored when ayadiText is manasara, which has one vyaya formula.
+         */
+        vyayaFormula?: 'p9-10' | 'p3-14';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/ayadi';
+};
+
+export type PostVastuAyadiErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVastuAyadiError = PostVastuAyadiErrors[keyof PostVastuAyadiErrors];
+
+export type PostVastuAyadiResponses = {
+    /**
+     * The six vargas with their arithmetic, the vayas quotient and the verdict
+     */
+    200: {
+        /**
+         * What was actually divided, in whole cubits. Every remainder is unit sensitive and the formulas are integer arithmetic, so a measure sent in feet or metres is converted and rounded and the rounded figure is published here rather than left for you to infer.
+         */
+        measures: {
+            /**
+             * Length in whole hasta, after conversion and rounding.
+             */
+            length: number;
+            /**
+             * Breadth in whole hasta, after conversion and rounding.
+             */
+            breadth: number;
+            /**
+             * Perimeter in whole hasta, either as you sent it or as twice length plus twice breadth.
+             */
+            perimeter: number;
+            /**
+             * Circumference in whole hasta, defaulting to the perimeter.
+             */
+            circumference: number;
+            /**
+             * Length times breadth in whole hasta squared, which is the measure the Utpala yoni formula reads.
+             */
+            area: number;
+        };
+        /**
+         * The six proportional formulas, each with its measure, multiplier, divisor, remainder and the member that remainder names.
+         */
+        vargas: Array<{
+            /**
+             * Which of the six proportional formulas this row is: aya, vyaya, yoni, rksha, tithi or vara. Always English, safe to compare against.
+             */
+            varga: string;
+            /**
+             * Which measure the formula multiplied: length, breadth, circumference, perimeter or area. This is where the three text families differ most, since the Manasara reads three measures separately and the perimeter family reads one.
+             */
+            operand: string;
+            /**
+             * The measure in whole hasta, after any conversion and rounding. This is the number actually multiplied, so a surprising remainder can be traced to it.
+             */
+            operandValue: number;
+            /**
+             * What the measure was multiplied by, per the formula of the chosen text family.
+             */
+            multiplier: number;
+            /**
+             * What the product was divided by, which is also the size of the group named.
+             */
+            divisor: number;
+            /**
+             * The measure times the multiplier, shown so the arithmetic can be checked by hand.
+             */
+            product: number;
+            /**
+             * What the division left. This is the Ayadi result: the remainder, not the quotient, names the member of the group.
+             */
+            remainder: number;
+            /**
+             * How many members the group has. Aya is a group of twelve and vyaya a group of ten, which is stated in the text even though the names are not.
+             */
+            groupSize: number;
+            /**
+             * The member the remainder names. Present for the four groups whose names are sourced: the eight yonis, the 27 nakshatras, the 30 tithis and the seven varas. Absent for aya and vyaya, whose names beyond the first are printed in no public-domain source and are never invented here.
+             */
+            name?: string;
+            /**
+             * The first member of the group, for the two groups where that is all any source gives. Present on aya and on vyaya, and on nothing else.
+             */
+            firstName?: string;
+            /**
+             * What the yoni name means in plain words. Present on the yoni row only, and translated in place when lang is set.
+             */
+            gloss?: string;
+            /**
+             * Whether this remainder is favourable under the rule the text states for that group: the odd yonis, the odd nakshatras, and four of the seven varas. Absent where no source states a rule for the group.
+             */
+            auspicious?: boolean;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        }>;
+        /**
+         * The seventh formula of the perimeter family, which takes the QUOTIENT of the perimeter times eight over twenty seven where rksha takes the remainder. An age or span rather than a member of a named group, and not part of the Manasara six.
+         */
+        vayas: number;
+        /**
+         * The two verdict rules the texts actually state: the yoni must be one of the four favourable members, and the aya remainder should exceed the vyaya remainder.
+         */
+        verdict: {
+            /**
+             * Whether the yoni is one of the four favourable members. A remainder of zero is a reject rather than the eighth name, because a zero remainder would face the building north-east and the reference rule says the proportions must be altered instead.
+             */
+            yoniAuspicious: boolean;
+            /**
+             * How the aya compares with the vyaya: aya-greater is conducive to prosperity, equal carries no defect, aya-lesser is defective, and zero-remainder means one of the two divided exactly, which the text calls auspicious in its own right. Always English, safe to compare against.
+             */
+            ayaVyaya: string;
+            /**
+             * The verdict as a sentence, for a report. Composed from the yoni and the aya against vyaya rule, and translated in place when lang is set.
+             */
+            reading: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        };
+        /**
+         * The switches this calculation resolved, echoed so it can be reproduced years later without knowing what the defaults were on the day it was made.
+         */
+        conventions: {
+            /**
+             * Which family of formulas was applied. Echoes the resolved value.
+             */
+            ayadiText: string;
+            /**
+             * Which of the two perimeter vyaya formulas was applied. Echoed even under the Manasara family, which has one vyaya formula and ignores it, so a stored response always says what was resolved.
+             */
+            vyayaFormula: string;
+            /**
+             * Which unit the dimensions arrived in. Echoes the resolved value.
+             */
+            unit: string;
+            /**
+             * How long one hasta was taken to be, in inches. Echoed because the remainders are unit sensitive and a stored reading cannot be reproduced without it.
+             */
+            hastaInches: number;
+        };
+    };
+};
+
+export type PostVastuAyadiResponse = PostVastuAyadiResponses[keyof PostVastuAyadiResponses];
+
+export type PostVastuRoomsData = {
+    body?: {
+        /**
+         * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
+         */
+        plot: {
+            /**
+             * East-west extent of a rectangular plot, in the unit given. Send this with depth for a rectangle, or send polygon instead.
+             */
+            width?: number;
+            /**
+             * North-south extent of a rectangular plot, in the unit given. Send this with width for a rectangle, or send polygon instead.
+             */
+            depth?: number;
+            /**
+             * The plot outline as 3 to 16 vertices in plot coordinates, x east and y north, in either winding order. Use this instead of width and depth for a plot with a cut corner, an extension or an irregular boundary.
+             */
+            polygon?: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+            /**
+             * Unit the plot dimensions are given in. Every distance the response returns is in this same unit. The mandala projection is scale free, so this affects the areas and the marma size and nothing else.
+             */
+            unit?: 'feet' | 'metres';
+        };
+        /**
+         * Direction the front of the house looks out toward, one of the eight compass sectors. Case and punctuation are folded, so north-east, northeast and NorthEast all resolve. Send this or facingDegrees, never both.
+         */
+        facing?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+        /**
+         * Direction the front of the house looks out toward, as a compass bearing in degrees clockwise from true north, measured looking OUT from the building. The same convention the feng shui facing endpoints use, so a bearing works unchanged across the two domains. Send this or facing, never both.
+         */
+        facingDegrees?: number;
+        /**
+         * The rooms to check, 1 to 24 of them. Each carries a type and either the quarter it sits in or its outline.
+         */
+        rooms: Array<{
+            /**
+             * What the room is, one of puja, kitchen, master-bedroom, bedroom, living, dining, study, toilet, store, staircase, water-storage, entrance. Case and punctuation are folded, so Master Bedroom and master_bedroom both resolve. Four of the twelve carry a verse and the rest carry convention, and the response says which.
+             */
+            type: 'puja' | 'kitchen' | 'master-bedroom' | 'bedroom' | 'living' | 'dining' | 'study' | 'toilet' | 'store' | 'staircase' | 'water-storage' | 'entrance';
+            /**
+             * Which quarter of the plot the room sits in, if you already know it. Send this or polygon, never both.
+             */
+            direction?: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+            /**
+             * The room outline in plot coordinates, 3 to 16 vertices. The quarter is read from the area centroid against thirds of the plot, so an L-shaped room lands where its mass is rather than where its corners are. Send this or direction, never both.
+             */
+            polygon?: Array<{
+                /**
+                 * Distance east of the plot origin, in the same unit as the plot. The x axis runs east.
+                 */
+                x: number;
+                /**
+                 * Distance north of the plot origin, in the same unit as the plot. The y axis runs north.
+                 */
+                y: number;
+            }>;
+        }>;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/rooms';
+};
+
+export type PostVastuRoomsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVastuRoomsError = PostVastuRoomsErrors[keyof PostVastuRoomsErrors];
+
+export type PostVastuRoomsResponses = {
+    /**
+     * A verdict per room, the composite score and the weights behind it
+     */
+    200: {
+        /**
+         * One reading per room sent, in the order you sent them.
+         */
+        rooms: Array<{
+            /**
+             * The room type, echoed in its canonical spelling. Always English, safe to compare against.
+             */
+            type: string;
+            /**
+             * Which of the nine zones the room occupies: one of the eight compass sectors, or Center for the middle ninth, which is the brahmasthan. Always English.
+             */
+            zone: string;
+            /**
+             * How the placement reads: ideal where the room sits where its rule puts it, avoid where it sits where the rule warns against, acceptable for everything between. Always English, safe to key styling on.
+             */
+            verdict: string;
+            /**
+             * The quarters this room type belongs in under its rule.
+             */
+            idealDirections: Array<string>;
+            /**
+             * The quarters this room type should be kept out of under its rule.
+             */
+            avoidDirections: Array<string>;
+            /**
+             * The placement as a sentence, for a report. Translated in place when lang is set to a language other than English.
+             */
+            reading: string;
+            /**
+             * What to do when the room is not where it belongs. Original prose, translated in place when lang is set.
+             */
+            remedy: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        }>;
+        /**
+         * A RoxyAPI composite from 0 to 100 over the rooms you sent, not a classical quantity and not a number any verse gives. A rule carrying a verse weighs twice one carrying convention; an ideal placement scores full, an acceptable one half and a placement to avoid nothing. The weights are published in the scoring field so you can recompute it or ignore it.
+         */
+        score: number;
+        /**
+         * The weights behind the composite, published rather than hidden so the number is auditable.
+         */
+        scoring: {
+            /**
+             * The weight a rule carrying a chapter and verse contributes.
+             */
+            sourcedWeight: number;
+            /**
+             * The weight a rule carrying convention contributes.
+             */
+            conventionWeight: number;
+            /**
+             * The points an ideal placement earns, out of one.
+             */
+            idealPoints: number;
+            /**
+             * The points an acceptable placement earns, out of one.
+             */
+            neutralPoints: number;
+            /**
+             * The points a placement to avoid earns, out of one.
+             */
+            avoidPoints: number;
+        };
+        /**
+         * Which way the building faces, echoed. It does not move the zones: the mandala is aligned to the compass rather than to the building, so a room in the south-east is in the south-east whichever way the front door looks.
+         */
+        facing: string;
+        /**
+         * Every rule this report rests on, so a printed report can carry the citation beside each room.
+         */
+        sources: Array<{
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        }>;
+    };
+};
+
+export type PostVastuRoomsResponse = PostVastuRoomsResponses[keyof PostVastuRoomsResponses];
+
+export type PostVastuTimingGrihaPraveshData = {
+    body?: {
+        /**
+         * First day of the search window, in YYYY-MM-DD. Every limb is read at sunrise of the local day, because the Hindu day begins at sunrise rather than at midnight.
+         */
+        startDate: string;
+        /**
+         * Last day of the search window, in YYYY-MM-DD, inclusive. The window is capped at 93 days, which is a full season and the same cap the Vedic auspicious day search carries.
+         */
+        endDate: string;
+        /**
+         * Latitude of the house, in decimal degrees, positive north. Sunrise decides where one day ends and the next begins, so a nakshatra running out during the morning changes which day it counts for.
+         */
+        latitude: number;
+        /**
+         * Longitude of the house, in decimal degrees, positive east.
+         */
+        longitude: number;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * Which Muhurta text supplies the admissible nakshatras for entering a new house. muhurta-chintamani admits eight and kalaprakasika admits twelve; seven overlap and are the high confidence core, one is unique to the first and five to the second. The two texts are independent witnesses, which is what makes the overlap strong and the difference worth exposing. Defaults to muhurta-chintamani.
+         */
+        muhurtaText?: 'muhurta-chintamani' | 'kalaprakasika';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/timing/griha-pravesh';
+};
+
+export type PostVastuTimingGrihaPraveshErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVastuTimingGrihaPraveshError = PostVastuTimingGrihaPraveshErrors[keyof PostVastuTimingGrihaPraveshErrors];
+
+export type PostVastuTimingGrihaPraveshResponses = {
+    /**
+     * Every admitted day with its panchang limbs, plus the rules and the rejections
+     */
+    200: {
+        /**
+         * The days in the window that clear every day-level rule, in date order. Only admitted days are listed; the rules that rejected the rest are tallied in rejectionsByRule.
+         */
+        days: Array<{
+            /**
+             * The admitted day, in YYYY-MM-DD.
+             */
+            date: string;
+            /**
+             * Sunrise at the coordinates you sent, as a UTC instant. This is the moment every limb below was read at. Absent inside a polar night, where the Sun does not rise and the day was read from local midnight instead.
+             */
+            sunrise?: string;
+            /**
+             * The nakshatra the Moon stood in at sunrise, which is the strongest of the rules.
+             */
+            nakshatra: {
+                /**
+                 * Nakshatra number 1 to 27, counting from Ashwini. Abhijit is not among them.
+                 */
+                number: number;
+                /**
+                 * Identifier of the nakshatra, lower case with hyphens. Always English transliteration, safe to compare against and against the same value on the panchang endpoints.
+                 */
+                id: string;
+                /**
+                 * Display name of the nakshatra, as the panchang endpoints spell it.
+                 */
+                name: string;
+            };
+            /**
+             * The tithi running at sunrise.
+             */
+            tithi: {
+                /**
+                 * Tithi number 1 to 30 across the lunar month, 1 to 15 bright then 16 to 30 dark.
+                 */
+                number: number;
+                /**
+                 * Display name of the tithi, as the panchang endpoints spell it.
+                 */
+                name: string;
+                /**
+                 * Which half of the lunar month: Shukla for the bright half and Krishna for the dark. Always English, safe to compare against.
+                 */
+                paksha: string;
+            };
+            /**
+             * The weekday, which begins at sunrise in this reckoning.
+             */
+            vara: {
+                /**
+                 * Weekday number, 0 for Sunday through 6 for Saturday.
+                 */
+                number: number;
+                /**
+                 * Weekday name, counted from sunrise rather than from midnight.
+                 */
+                name: string;
+            };
+            /**
+             * Which half of the solar year: uttarayana is the northern course and is required, dakshinayana the southern. Always English, safe to compare against.
+             */
+            ayana: string;
+            /**
+             * Sidereal longitude of the Sun at sunrise, in degrees. Published because two of the rules are solar and a caller can check them from it.
+             */
+            solarLongitude: number;
+            /**
+             * The karana at sunrise. Vishti, also called Bhadra, is the one that bars a day. Always English transliteration.
+             */
+            karana: string;
+            /**
+             * preferred where the tithi is one both texts single out and the weekday is not the neutral one, admissible otherwise. Always English, safe to compare against.
+             */
+            quality: string;
+            /**
+             * The rule ids this day satisfied, in the order they were tested. Look each one up in the rules field for what it requires and where it comes from.
+             */
+            admittedBy: Array<string>;
+            /**
+             * The day as a sentence, for a report or a chat answer. Translated in place when lang is set to a language other than English.
+             */
+            reading: string;
+        }>;
+        /**
+         * How many days were admitted.
+         */
+        total: number;
+        /**
+         * What was searched, echoed so a stored result is self describing.
+         */
+        window: {
+            /**
+             * First day searched, echoed.
+             */
+            startDate: string;
+            /**
+             * Last day searched, echoed.
+             */
+            endDate: string;
+            /**
+             * How many days the window covered, inclusive of both ends.
+             */
+            daysEvaluated: number;
+        };
+        /**
+         * A tally of which rule rejected how many days, keyed on the rule id. This is what makes an empty result actionable: a window inside the southern course fails every day on one rule and you can see that at a glance.
+         */
+        rejectionsByRule: {
+            [key: string]: number;
+        };
+        /**
+         * Every rule applied, with what it requires, how well attested it is, and where it comes from.
+         */
+        rules: Array<{
+            /**
+             * Identifier of the rule, which is what the day rows reference.
+             */
+            id: string;
+            /**
+             * What the rule requires, as original prose. Translated in place when lang is set.
+             */
+            requirement: string;
+            /**
+             * How well attested the rule is: high where two independent texts agree, medium where two dependent witnesses do or one text states it twice. Always English.
+             */
+            confidence: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        }>;
+        /**
+         * The rules a date search cannot settle, published rather than dropped. They are judgements about a MOMENT and about the owner, not about a day, and a caller who believes an admitted day is finished without them would be wrong.
+         */
+        leftToTheAstrologer: Array<string>;
+        /**
+         * The primary citations behind the whole search, including the one house entry rule the Brihat Samhita itself states, which is in its muhurta chapter and not in the architecture chapter.
+         */
+        sources: Array<{
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        }>;
+        /**
+         * The switches this search resolved, echoed so it can be reproduced later.
+         */
+        conventions: {
+            /**
+             * Which Muhurta text supplied the nakshatra list. Echoes the resolved value whether it was sent or defaulted.
+             */
+            muhurtaText: string;
+            /**
+             * The UTC offset in hours the local day was resolved with, after any IANA name was resolved to a number.
+             */
+            timezone: number;
+        };
+    };
+};
+
+export type PostVastuTimingGrihaPraveshResponse = PostVastuTimingGrihaPraveshResponses[keyof PostVastuTimingGrihaPraveshResponses];
+
+export type GetVastuDirectionsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-8, default 8.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/vastu/directions';
+};
+
+export type GetVastuDirectionsErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVastuDirectionsError = GetVastuDirectionsErrors[keyof GetVastuDirectionsErrors];
+
+export type GetVastuDirectionsResponses = {
+    /**
+     * The eight directions with their dikpalas, devatas and water effects
+     */
+    200: {
+        /**
+         * How many directions there are in all, which is always eight.
+         */
+        total: number;
+        /**
+         * How many were requested per page.
+         */
+        limit: number;
+        /**
+         * How many were skipped.
+         */
+        offset: number;
+        /**
+         * The directions on this page, in compass order from North.
+         */
+        directions: Array<{
+            /**
+             * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+             */
+            id: string;
+            /**
+             * The lord of this quarter of the horizon, per Brihat Samhita 54.3. Always English transliteration, safe to compare against. These are NOT the 45 mandala devatas and the two sets must not be merged: Agni is the north-east mandala square and the south-east dikpala.
+             */
+            dikpala: string;
+            /**
+             * Whether this is one of the four cardinal directions or one of the four intercardinal quarters. Always English.
+             */
+            kind: string;
+            /**
+             * The element conventionally assigned to this quarter: fire, earth, air or water. Present only on the four intercardinal quarters, because the cardinal ones carry none in this scheme, and it is labelled convention because the Brihat Samhita assigns no element to any direction at all.
+             */
+            element?: string;
+            /**
+             * The squares of the 81 pada grid this direction covers. For a cardinal direction those are its eight perimeter squares in the order the verses enumerate them; for an intercardinal quarter they are the corner square and the four single pada squares gathered around it.
+             */
+            squares: Array<number>;
+            /**
+             * The devatas of the squares this direction covers, in the same order as the squares list.
+             */
+            devatas: Array<{
+                /**
+                 * Square number in the 81 pada grid.
+                 */
+                square: number;
+                /**
+                 * Identifier of the devata holding it. Always English transliteration, safe to compare against and to look up on the devatas endpoint.
+                 */
+                id: string;
+                /**
+                 * Display name of the devata, with the diacritics the transliteration carries.
+                 */
+                name: string;
+            }>;
+            /**
+             * What Brihat Samhita 53.118 puts on this side, in the chapter own terms. Present on the four intercardinal quarters, which are the only ones that verse places anything on.
+             */
+            places?: string;
+            /**
+             * What the chapter says about standing water here, which it gives for all eight directions.
+             */
+            water: {
+                /**
+                 * What 53.119 says follows from standing water in this quarter, as original prose.
+                 */
+                effect: string;
+                /**
+                 * Whether that effect is a gain or a harm. Only the north and the north-east are gains. Always English.
+                 */
+                auspiciousness: string;
+            };
+            /**
+             * The verses behind each part of this entry, and the convention label on the element where no verse gives one.
+             */
+            sources: Array<{
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            }>;
+        }>;
+    };
+};
+
+export type GetVastuDirectionsResponse = GetVastuDirectionsResponses[keyof GetVastuDirectionsResponses];
+
+export type GetVastuDirectionsByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Direction id, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Case and punctuation are folded.
+         */
+        id: 'North' | 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/directions/{id}';
+};
+
+export type GetVastuDirectionsByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No direction with that id
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVastuDirectionsByIdError = GetVastuDirectionsByIdErrors[keyof GetVastuDirectionsByIdErrors];
+
+export type GetVastuDirectionsByIdResponses = {
+    /**
+     * One direction with its dikpala, devatas and water effect
+     */
+    200: {
+        /**
+         * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against and against the same value on the feng shui and I Ching endpoints.
+         */
+        id: string;
+        /**
+         * The lord of this quarter of the horizon, per Brihat Samhita 54.3. Always English transliteration, safe to compare against. These are NOT the 45 mandala devatas and the two sets must not be merged: Agni is the north-east mandala square and the south-east dikpala.
+         */
+        dikpala: string;
+        /**
+         * Whether this is one of the four cardinal directions or one of the four intercardinal quarters. Always English.
+         */
+        kind: string;
+        /**
+         * The element conventionally assigned to this quarter: fire, earth, air or water. Present only on the four intercardinal quarters, because the cardinal ones carry none in this scheme, and it is labelled convention because the Brihat Samhita assigns no element to any direction at all.
+         */
+        element?: string;
+        /**
+         * The squares of the 81 pada grid this direction covers. For a cardinal direction those are its eight perimeter squares in the order the verses enumerate them; for an intercardinal quarter they are the corner square and the four single pada squares gathered around it.
+         */
+        squares: Array<number>;
+        /**
+         * The devatas of the squares this direction covers, in the same order as the squares list.
+         */
+        devatas: Array<{
+            /**
+             * Square number in the 81 pada grid.
+             */
+            square: number;
+            /**
+             * Identifier of the devata holding it. Always English transliteration, safe to compare against and to look up on the devatas endpoint.
+             */
+            id: string;
+            /**
+             * Display name of the devata, with the diacritics the transliteration carries.
+             */
+            name: string;
+        }>;
+        /**
+         * What Brihat Samhita 53.118 puts on this side, in the chapter own terms. Present on the four intercardinal quarters, which are the only ones that verse places anything on.
+         */
+        places?: string;
+        /**
+         * What the chapter says about standing water here, which it gives for all eight directions.
+         */
+        water: {
+            /**
+             * What 53.119 says follows from standing water in this quarter, as original prose.
+             */
+            effect: string;
+            /**
+             * Whether that effect is a gain or a harm. Only the north and the north-east are gains. Always English.
+             */
+            auspiciousness: string;
+        };
+        /**
+         * The verses behind each part of this entry, and the convention label on the element where no verse gives one.
+         */
+        sources: Array<{
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        }>;
+    };
+};
+
+export type GetVastuDirectionsByIdResponse = GetVastuDirectionsByIdResponses[keyof GetVastuDirectionsByIdResponses];
+
+export type GetVastuDevatasData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-45, default 45.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/vastu/devatas';
+};
+
+export type GetVastuDevatasErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVastuDevatasError = GetVastuDevatasErrors[keyof GetVastuDevatasErrors];
+
+export type GetVastuDevatasResponses = {
+    /**
+     * The devatas of the mandala with their squares, class and verses
+     */
+    200: {
+        /**
+         * How many devatas there are in all. Always 45 squares held, though the chapter prints only 44 distinct names because Indra appears twice.
+         */
+        total: number;
+        /**
+         * How many were requested per page.
+         */
+        limit: number;
+        /**
+         * How many were skipped.
+         */
+        offset: number;
+        /**
+         * The devatas on this page, in the order the verses enumerate them: the east perimeter, then south, west and north, then inward to Brahma.
+         */
+        devatas: Array<{
+            /**
+             * Identifier of the devata, lower case transliteration. Always English, safe to compare against. Indra appears twice in the chapter, on the east perimeter and on the inner ring, so those two carry the ids indra-outer and indra-inner, which are ours: no source read for this package prints a distinguishing name for either.
+             */
+            id: string;
+            /**
+             * Display name of the devata, with the diacritics the transliteration carries. A Sanskrit proper noun, so it stays as it is in every language.
+             */
+            name: string;
+            /**
+             * Which ring of the mandala the devata belongs to: perimeter for the outer 32, innerRing for the eight around Brahma, innerCorner for the four on the inner diagonals, center for Brahma alone. 32 plus 8 plus 4 plus 1 is 45. Always English.
+             */
+            class: string;
+            /**
+             * How many squares the devata holds under 53.49 to 50: padika for one, dvipada for two, tripada for three. Absent for Brahma, whom those verses leave outside the scheme while enumerating 44 devatas.
+             */
+            group?: string;
+            /**
+             * Which side of the perimeter the devata sits on. Present only on the outer 32, which are the ones the verses enumerate side by side.
+             */
+            side?: string;
+            /**
+             * Which quarter of the mandala the devata occupies, where it sits in one. Absent for a devata spread along a side rather than gathered in a corner.
+             */
+            quadrant?: string;
+            /**
+             * Which of the 81 squares the devata holds. The verses name one square per devata and fix the pada count of each, and the remaining squares follow from that count: a dvipada takes its named square plus the one a step inward, a tripada the three cell cardinal run of the second ring.
+             */
+            squares: Array<number>;
+            /**
+             * The same squares as row and column pairs, which is what you draw with. The corners of the grid are 1 north-east, 9 south-east, 73 north-west and 81 south-west.
+             */
+            cells: Array<{
+                /**
+                 * Row of the grid, 1 at the northern edge and 9 at the southern one.
+                 */
+                rowFromNorth: number;
+                /**
+                 * Column of the grid, 1 at the western edge and 9 at the eastern one.
+                 */
+                columnFromWest: number;
+            }>;
+            /**
+             * How many squares the devata holds: one, two or three for the 44 enumerated devatas, and nine for Brahma.
+             */
+            padaCount: number;
+            /**
+             * The entrance pada this devata governs, 1 to 32. Present only on the outer 32, since only a perimeter square can hold a main door.
+             */
+            entrancePada?: number;
+            /**
+             * What the devata holds, as a sentence composed from the sourced structure. There is deliberately no meaning field: no source read for this package gives a devata a meaning, and inventing one would be unsourced content on a route that sells a citation per verdict. Translated in place when lang is set.
+             */
+            role: string;
+            /**
+             * Which verses of chapter 53 place this devata and fix its pada count, so a report can print the citation.
+             */
+            verses: Array<string>;
+            /**
+             * Where the sources disagree or contradict themselves about this row, and where Brahma sits outside the pada-count scheme. Present on the six rows that carry a recorded divergence: the two Indras, the north-east and south-east corner devatas where the Manasara differs from the Brihat Samhita, Prthvidhara, whom the chapter places on two different squares in two different verses, and Brahma. Original prose, translated in place when lang is set.
+             */
+            note?: string;
+            /**
+             * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+             */
+            source: {
+                /**
+                 * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+                 */
+                text: string;
+                /**
+                 * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+                 */
+                chapter?: number;
+                /**
+                 * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+                 */
+                verse?: string;
+                /**
+                 * Translator of the edition the verse was read in. Absent on a convention.
+                 */
+                translation?: string;
+                /**
+                 * Publication year of that edition. Absent on a convention.
+                 */
+                year?: number;
+                /**
+                 * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+                 */
+                publicDomain?: boolean;
+                /**
+                 * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+                 */
+                basis?: string;
+            };
+        }>;
+    };
+};
+
+export type GetVastuDevatasResponse = GetVastuDevatasResponses[keyof GetVastuDevatasResponses];
+
+export type GetVastuDevatasByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Devata id, lower case transliteration. The two Indras are indra-outer for the east perimeter square and indra-inner for the inner ring one. Case and punctuation are folded.
+         */
+        id: 'agni' | 'parjanya' | 'jayanta' | 'indra-outer' | 'surya' | 'satya' | 'bhrisa' | 'antariksha' | 'vayu' | 'pusha' | 'vitatha' | 'brihatkshata' | 'yama' | 'gandharva' | 'bhringaraja' | 'mriga' | 'pitri' | 'dauvarika' | 'sugriva' | 'kusumadanta' | 'varuna' | 'asura' | 'sosha' | 'papayakshma' | 'roga' | 'ahi' | 'mukhya' | 'bhallata' | 'soma' | 'bhujaga' | 'aditi' | 'diti' | 'aryaman' | 'savita' | 'vivasvan' | 'indra-inner' | 'mitra' | 'rajayakshma' | 'prthvidhara' | 'apavatsa' | 'apa' | 'savitra' | 'jaya' | 'rudra' | 'brahma';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vastu/devatas/{id}';
+};
+
+export type GetVastuDevatasByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No devata with that id
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetVastuDevatasByIdError = GetVastuDevatasByIdErrors[keyof GetVastuDevatasByIdErrors];
+
+export type GetVastuDevatasByIdResponses = {
+    /**
+     * One devata with its squares, class, entrance pada and verses
+     */
+    200: {
+        /**
+         * Identifier of the devata, lower case transliteration. Always English, safe to compare against. Indra appears twice in the chapter, on the east perimeter and on the inner ring, so those two carry the ids indra-outer and indra-inner, which are ours: no source read for this package prints a distinguishing name for either.
+         */
+        id: string;
+        /**
+         * Display name of the devata, with the diacritics the transliteration carries. A Sanskrit proper noun, so it stays as it is in every language.
+         */
+        name: string;
+        /**
+         * Which ring of the mandala the devata belongs to: perimeter for the outer 32, innerRing for the eight around Brahma, innerCorner for the four on the inner diagonals, center for Brahma alone. 32 plus 8 plus 4 plus 1 is 45. Always English.
+         */
+        class: string;
+        /**
+         * How many squares the devata holds under 53.49 to 50: padika for one, dvipada for two, tripada for three. Absent for Brahma, whom those verses leave outside the scheme while enumerating 44 devatas.
+         */
+        group?: string;
+        /**
+         * Which side of the perimeter the devata sits on. Present only on the outer 32, which are the ones the verses enumerate side by side.
+         */
+        side?: string;
+        /**
+         * Which quarter of the mandala the devata occupies, where it sits in one. Absent for a devata spread along a side rather than gathered in a corner.
+         */
+        quadrant?: string;
+        /**
+         * Which of the 81 squares the devata holds. The verses name one square per devata and fix the pada count of each, and the remaining squares follow from that count: a dvipada takes its named square plus the one a step inward, a tripada the three cell cardinal run of the second ring.
+         */
+        squares: Array<number>;
+        /**
+         * The same squares as row and column pairs, which is what you draw with. The corners of the grid are 1 north-east, 9 south-east, 73 north-west and 81 south-west.
+         */
+        cells: Array<{
+            /**
+             * Row of the grid, 1 at the northern edge and 9 at the southern one.
+             */
+            rowFromNorth: number;
+            /**
+             * Column of the grid, 1 at the western edge and 9 at the eastern one.
+             */
+            columnFromWest: number;
+        }>;
+        /**
+         * How many squares the devata holds: one, two or three for the 44 enumerated devatas, and nine for Brahma.
+         */
+        padaCount: number;
+        /**
+         * The entrance pada this devata governs, 1 to 32. Present only on the outer 32, since only a perimeter square can hold a main door.
+         */
+        entrancePada?: number;
+        /**
+         * What the devata holds, as a sentence composed from the sourced structure. There is deliberately no meaning field: no source read for this package gives a devata a meaning, and inventing one would be unsourced content on a route that sells a citation per verdict. Translated in place when lang is set.
+         */
+        role: string;
+        /**
+         * Which verses of chapter 53 place this devata and fix its pada count, so a report can print the citation.
+         */
+        verses: Array<string>;
+        /**
+         * Where the sources disagree or contradict themselves about this row, and where Brahma sits outside the pada-count scheme. Present on the six rows that carry a recorded divergence: the two Indras, the north-east and south-east corner devatas where the Manasara differs from the Brihat Samhita, Prthvidhara, whom the chapter places on two different squares in two different verses, and Brahma. Original prose, translated in place when lang is set.
+         */
+        note?: string;
+        /**
+         * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
+         */
+        source: {
+            /**
+             * The primary text this verdict rests on, or the literal value convention where no verse states the rule. Always English, safe to compare against.
+             */
+            text: string;
+            /**
+             * Chapter of the primary text. Absent on a convention, which has no chapter to cite.
+             */
+            chapter?: number;
+            /**
+             * Verse or verse range inside the chapter. Absent on a convention. A range is written with a hyphen, as in 115-117.
+             */
+            verse?: string;
+            /**
+             * Translator of the edition the verse was read in. Absent on a convention.
+             */
+            translation?: string;
+            /**
+             * Publication year of that edition. Absent on a convention.
+             */
+            year?: number;
+            /**
+             * Whether the cited edition is in the public domain. True on the 1884 Brihat Samhita edition, whose verses are quoted. False on the 1933 Manasara edition behind the Ayadi formulas, from which only the multipliers, divisors and names are taken, never a sentence.
+             */
+            publicDomain?: boolean;
+            /**
+             * Why a convention rule says what it says. Present only when text is convention, and it names the tradition the rule comes from rather than a verse.
+             */
+            basis?: string;
+        };
+    };
+};
+
+export type GetVastuDevatasByIdResponse = GetVastuDevatasByIdResponses[keyof GetVastuDevatasByIdResponses];
+
 export type PostNumerologyLifePathData = {
     body?: {
         /**
@@ -45355,6 +52318,3185 @@ export type PostNumerologyBusinessNameResponses = {
 
 export type PostNumerologyBusinessNameResponse = PostNumerologyBusinessNameResponses[keyof PostNumerologyBusinessNameResponses];
 
+export type PostKabbalahGematriaData = {
+    body: {
+        /**
+         * Latin text to write in Hebrew and then score, up to 200 characters. Non Latin scripts are folded to Latin first, so a Cyrillic or Devanagari name works. Send textHebrew instead to control the Hebrew spelling yourself.
+         */
+        text?: string;
+        /**
+         * Hebrew text to score, up to 200 characters. Anything outside the Hebrew script is rejected. Vowel points, cantillation marks, maqaf and paseq are removed before scoring, so a pointed and an unpointed spelling of one word give the same number.
+         */
+        textHebrew?: string;
+        /**
+         * How a Latin name is written in Hebrew before it is scored. One member, a deterministic published letter map. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction, and every published Hebrew standard romanizes the other way. Send textHebrew to control the spelling yourself.
+         */
+        transliteration?: 'letter-map-mathers';
+        /**
+         * Which ciphers to return, by identifier. Omit for every computed cipher. Valid values are mispar-hechrachi, mispar-gadol, otiyot-be-milui, mispar-katan, mispar-kidmi, mispar-prati, mispar-ha-merubah-ha-klali, mispar-meshulash, mispar-musafi, kolel.
+         */
+        ciphers?: Array<string>;
+        /**
+         * Which method the name mispar gadol means, because the sources use it for two. Use finals-500-900 to score the five word final letters as 500 to 900, or milui to score each letter as the value of its own spelled out name.
+         */
+        misparGadol?: 'finals-500-900' | 'milui';
+        /**
+         * What AtBash and Albam return: the substituted Hebrew string, its standard value, or both. The biblical witness for AtBash is a substituted WORD rather than a number, which is why the string is available on its own.
+         */
+        atbashOutput?: 'both' | 'string' | 'value';
+        /**
+         * Whether to return the curated equal value entries for the chosen spelling. Set false to skip the lookup when only the numbers are wanted.
+         */
+        includeMatches?: boolean;
+        /**
+         * Whether to also score the Latin text with the three Latin alphabet ciphers. They are Renaissance Christian and modern in lineage rather than rabbinic, and the response labels each one. Ignored when textHebrew was sent.
+         */
+        latinCiphers?: boolean;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/kabbalah/gematria';
+};
+
+export type PostKabbalahGematriaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostKabbalahGematriaError = PostKabbalahGematriaErrors[keyof PostKabbalahGematriaErrors];
+
+export type PostKabbalahGematriaResponses = {
+    /**
+     * Every candidate spelling with its values, the chosen one, and the matches.
+     */
+    200: {
+        input: {
+            /**
+             * Echo of the Latin text sent. Absent when Hebrew was sent instead.
+             */
+            text?: string;
+            /**
+             * Echo of the Hebrew text sent. Absent when Latin was sent instead.
+             */
+            textHebrew?: string;
+        };
+        /**
+         * Every Hebrew spelling the input can be written as, greedy parse first. One entry when Hebrew was sent, since there is nothing to choose.
+         */
+        hebrewForms: Array<{
+            /**
+             * One Hebrew spelling the Latin input can be written as. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew beside it, produced by one mechanical letter map. It is a label for reading the string back, never a pronunciation claim.
+             */
+            romanization: string;
+            /**
+             * Why this spelling came out of the map, so a caller can tell the parses apart.
+             */
+            rule: string;
+            /**
+             * Every cipher applied to this spelling.
+             */
+            values: Array<{
+                /**
+                 * Machine identifier of the cipher. Call the ciphers endpoint for the definition, the tradition and the sources behind each one.
+                 */
+                id: string;
+                /**
+                 * The number this cipher gives for the string. Null on the one catalogued cipher this API does not compute, which is stated on its catalogue entry rather than left to guess.
+                 */
+                value: number | null;
+                /**
+                 * Other published totals for the same string, ascending. Present only where the cipher is not single valued: letter names have several accepted spellings, so several totals are equally published. Absent otherwise, so a caller can branch on presence.
+                 */
+                alternateValues?: Array<number>;
+                /**
+                 * Provenance class of the cipher, one of rabbinic, renaissance-latin, golden-dawn-transliterated or modern. Always English, so it stays safe to compare against in code.
+                 */
+                tradition: string;
+                /**
+                 * The first published source this cipher was taken from.
+                 */
+                source: string;
+            }>;
+            /**
+             * The per letter breakdown of this spelling under the standard reading.
+             */
+            letters: Array<{
+                /**
+                 * The Hebrew letter as it stands in the string. Data, identical in every language.
+                 */
+                glyph: string;
+                /**
+                 * Machine identifier of the letter, always English romanization so it stays safe to compare against in code.
+                 */
+                letterId: string;
+                /**
+                 * Display name of the letter.
+                 */
+                name: string;
+                /**
+                 * True when the glyph is the word final form. Under the finals-500-900 reading the same letter scores differently in final position, which is why this is on the row.
+                 */
+                isFinal: boolean;
+                /**
+                 * What this letter contributed under the standard reading, or under the finals reading when one applies.
+                 */
+                value: number;
+            }>;
+        }>;
+        chosen: {
+            /**
+             * The spelling the values and matches on this response were taken from.
+             */
+            hebrew: string;
+            /**
+             * Why this spelling was chosen over the others.
+             */
+            rule: string;
+        };
+        /**
+         * Every requested cipher applied to the chosen spelling.
+         */
+        values: Array<{
+            /**
+             * Machine identifier of the cipher. Call the ciphers endpoint for the definition, the tradition and the sources behind each one.
+             */
+            id: string;
+            /**
+             * The number this cipher gives for the string. Null on the one catalogued cipher this API does not compute, which is stated on its catalogue entry rather than left to guess.
+             */
+            value: number | null;
+            /**
+             * Other published totals for the same string, ascending. Present only where the cipher is not single valued: letter names have several accepted spellings, so several totals are equally published. Absent otherwise, so a caller can branch on presence.
+             */
+            alternateValues?: Array<number>;
+            /**
+             * Provenance class of the cipher, one of rabbinic, renaissance-latin, golden-dawn-transliterated or modern. Always English, so it stays safe to compare against in code.
+             */
+            tradition: string;
+            /**
+             * The first published source this cipher was taken from.
+             */
+            source: string;
+        }>;
+        /**
+         * The two substitution transformations applied to the chosen spelling. Each exchanges letters and returns a new word, so the interesting output is often the string rather than the number.
+         */
+        transformations: Array<{
+            /**
+             * Machine identifier of the transformation.
+             */
+            id: string;
+            /**
+             * The substituted Hebrew string. Absent when atbashOutput asked for the value alone.
+             */
+            output?: string;
+            /**
+             * Latin transcription of the substituted string, from the same mechanical letter map.
+             */
+            outputRomanization?: string;
+            /**
+             * Standard value of the substituted string. Absent when atbashOutput asked for the string alone.
+             */
+            value?: number;
+            /**
+             * Provenance class of the transformation.
+             */
+            tradition: string;
+            /**
+             * The first published source the substitution table was taken from.
+             */
+            source: string;
+        }>;
+        /**
+         * The Latin alphabet ciphers applied to the Latin text. Present only when latinCiphers was set and a Latin text was sent.
+         */
+        latinValues?: Array<{
+            /**
+             * Machine identifier of the Latin cipher.
+             */
+            id: string;
+            /**
+             * The number this cipher gives for the Latin text as sent.
+             */
+            value: number;
+            /**
+             * Provenance class. None of these is rabbinic, whatever a consumer calculator calls them.
+             */
+            tradition: string;
+            /**
+             * Where the cipher comes from, stated so it cannot be misattributed.
+             */
+            lineage: string;
+        }>;
+        /**
+         * Curated words whose standard value equals the chosen spelling. Matching is on the standard reading only, because that is the relation the classical method works with. Empty when nothing matches, which is the ordinary case.
+         */
+        matches: Array<{
+            /**
+             * Machine identifier of the entry, an ASCII romanization.
+             */
+            id: string;
+            /**
+             * The word in Hebrew. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew beside it, from the same mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * What the word means, in the requested language.
+             */
+            meaning: string;
+            /**
+             * Its value under the standard reading, which is why it matched.
+             */
+            value: number;
+            /**
+             * What the tradition says about the equality, in the requested language.
+             */
+            note: string;
+            /**
+             * Where the value is attested. Every entry in the lexicon carries at least two independent sources, which is why the list is short rather than long.
+             */
+            sources: Array<string>;
+        }>;
+        conventions: {
+            /**
+             * The Latin to Hebrew scheme applied. Absent when the caller sent Hebrew directly.
+             */
+            transliteration?: string;
+            /**
+             * Which of the two published methods the name mispar gadol was read as.
+             */
+            misparGadol: string;
+            /**
+             * What the substitution transformations returned.
+             */
+            atbashOutput: string;
+        };
+    };
+};
+
+export type PostKabbalahGematriaResponse = PostKabbalahGematriaResponses[keyof PostKabbalahGematriaResponses];
+
+export type GetKabbalahCiphersData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/kabbalah/ciphers';
+};
+
+export type GetKabbalahCiphersErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahCiphersError = GetKabbalahCiphersErrors[keyof GetKabbalahCiphersErrors];
+
+export type GetKabbalahCiphersResponses = {
+    /**
+     * The cipher catalogue, split by kind.
+     */
+    200: {
+        /**
+         * Number of entries across all three lists.
+         */
+        total: number;
+        /**
+         * The rabbinic ciphers. Each returns a number from the letters of a Hebrew string.
+         */
+        ciphers: Array<{
+            /**
+             * Machine identifier of the cipher, always English romanization so it stays safe to compare against in code. Pass it in the ciphers array on the gematria endpoint.
+             */
+            id: string;
+            /**
+             * Display name of the cipher, in the requested language.
+             */
+            name: string;
+            /**
+             * Provenance class, one of rabbinic, renaissance-latin, golden-dawn-transliterated or modern. Always English. Read it before presenting a cipher as Jewish practice, because three of the ones here are not.
+             */
+            tradition: string;
+            /**
+             * The century the tradition this method belongs to is attested in, not a first publication date for the named variety.
+             */
+            century: string;
+            /**
+             * How the cipher turns letters into a number, in the requested language.
+             */
+            definition: string;
+            /**
+             * Whether the gematria endpoint returns a number for this cipher. False on the one method whose table is not published in two independent sources, which is stated rather than silently omitted.
+             */
+            computed: boolean;
+            /**
+             * Present and true where one spelling has several equally published totals. Absent otherwise, so a caller can branch on presence.
+             */
+            multiValued?: boolean;
+            /**
+             * Where the definition is published. Every cipher here carries at least two independent sources, which is why the catalogue is shorter than the ones that advertise a cipher count.
+             */
+            sources: Array<string>;
+        }>;
+        /**
+         * The rabbinic substitution transformations. Each exchanges letters for other letters and returns a WORD, whose value is then read the ordinary way.
+         */
+        transformations: Array<{
+            /**
+             * Machine identifier of the cipher, always English romanization so it stays safe to compare against in code. Pass it in the ciphers array on the gematria endpoint.
+             */
+            id: string;
+            /**
+             * Display name of the cipher, in the requested language.
+             */
+            name: string;
+            /**
+             * Provenance class, one of rabbinic, renaissance-latin, golden-dawn-transliterated or modern. Always English. Read it before presenting a cipher as Jewish practice, because three of the ones here are not.
+             */
+            tradition: string;
+            /**
+             * The century the tradition this method belongs to is attested in, not a first publication date for the named variety.
+             */
+            century: string;
+            /**
+             * How the cipher turns letters into a number, in the requested language.
+             */
+            definition: string;
+            /**
+             * Whether the gematria endpoint returns a number for this cipher. False on the one method whose table is not published in two independent sources, which is stated rather than silently omitted.
+             */
+            computed: boolean;
+            /**
+             * Present and true where one spelling has several equally published totals. Absent otherwise, so a caller can branch on presence.
+             */
+            multiValued?: boolean;
+            /**
+             * Where the definition is published. Every cipher here carries at least two independent sources, which is why the catalogue is shorter than the ones that advertise a cipher count.
+             */
+            sources: Array<string>;
+        }>;
+        /**
+         * The Latin alphabet ciphers, scored on Latin letters directly. None is rabbinic and each carries the lineage that says so.
+         */
+        latinCiphers: Array<{
+            /**
+             * Machine identifier of the cipher, always English romanization so it stays safe to compare against in code. Pass it in the ciphers array on the gematria endpoint.
+             */
+            id: string;
+            /**
+             * Display name of the cipher, in the requested language.
+             */
+            name: string;
+            /**
+             * Provenance class, one of rabbinic, renaissance-latin, golden-dawn-transliterated or modern. Always English. Read it before presenting a cipher as Jewish practice, because three of the ones here are not.
+             */
+            tradition: string;
+            /**
+             * The century the tradition this method belongs to is attested in, not a first publication date for the named variety.
+             */
+            century: string;
+            /**
+             * How the cipher turns letters into a number, in the requested language.
+             */
+            definition: string;
+            /**
+             * Whether the gematria endpoint returns a number for this cipher. False on the one method whose table is not published in two independent sources, which is stated rather than silently omitted.
+             */
+            computed: boolean;
+            /**
+             * Present and true where one spelling has several equally published totals. Absent otherwise, so a caller can branch on presence.
+             */
+            multiValued?: boolean;
+            /**
+             * Where the definition is published. Every cipher here carries at least two independent sources, which is why the catalogue is shorter than the ones that advertise a cipher count.
+             */
+            sources: Array<string>;
+        }>;
+    };
+};
+
+export type GetKabbalahCiphersResponse = GetKabbalahCiphersResponses[keyof GetKabbalahCiphersResponses];
+
+export type PostKabbalahNameProfileData = {
+    body: {
+        /**
+         * The name in Latin script, to be written in Hebrew and then scored. Non Latin scripts are folded to Latin first. Send nameHebrew instead to control the spelling yourself.
+         */
+        name?: string;
+        /**
+         * The name already in Hebrew, which skips the transliteration step entirely and scores exactly the spelling you sent.
+         */
+        nameHebrew?: string;
+        /**
+         * How a Latin name is written in Hebrew before it is scored. One member, a deterministic published letter map. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction, and every published Hebrew standard romanizes the other way. Send textHebrew to control the spelling yourself.
+         */
+        transliteration?: 'letter-map-mathers';
+        /**
+         * Which method the name mispar gadol means, because the sources use it for two. Use finals-500-900 to score the five word final letters as 500 to 900, or milui to score each letter as the value of its own spelled out name.
+         */
+        misparGadol?: 'finals-500-900' | 'milui';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/kabbalah/name-profile';
+};
+
+export type PostKabbalahNameProfileErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostKabbalahNameProfileError = PostKabbalahNameProfileErrors[keyof PostKabbalahNameProfileErrors];
+
+export type PostKabbalahNameProfileResponses = {
+    /**
+     * The name profile.
+     */
+    200: {
+        input: {
+            /**
+             * Echo of the Latin name sent. Absent when Hebrew was sent instead.
+             */
+            name?: string;
+            /**
+             * Echo of the Hebrew name sent. Absent when Latin was sent instead.
+             */
+            nameHebrew?: string;
+        };
+        /**
+         * Every Hebrew spelling the name can be written as, greedy parse first. One entry when Hebrew was sent, since there is nothing to choose.
+         */
+        hebrewForms: Array<{
+            /**
+             * One Hebrew spelling the Latin input can be written as. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew beside it, produced by one mechanical letter map. It is a label for reading the string back, never a pronunciation claim.
+             */
+            romanization: string;
+            /**
+             * Why this spelling came out of the map, so a caller can tell the parses apart.
+             */
+            rule: string;
+            /**
+             * Every cipher applied to this spelling.
+             */
+            values: Array<{
+                /**
+                 * Machine identifier of the cipher. Call the ciphers endpoint for the definition, the tradition and the sources behind each one.
+                 */
+                id: string;
+                /**
+                 * The number this cipher gives for the string. Null on the one catalogued cipher this API does not compute, which is stated on its catalogue entry rather than left to guess.
+                 */
+                value: number | null;
+                /**
+                 * Other published totals for the same string, ascending. Present only where the cipher is not single valued: letter names have several accepted spellings, so several totals are equally published. Absent otherwise, so a caller can branch on presence.
+                 */
+                alternateValues?: Array<number>;
+                /**
+                 * Provenance class of the cipher, one of rabbinic, renaissance-latin, golden-dawn-transliterated or modern. Always English, so it stays safe to compare against in code.
+                 */
+                tradition: string;
+                /**
+                 * The first published source this cipher was taken from.
+                 */
+                source: string;
+            }>;
+            /**
+             * The per letter breakdown of this spelling under the standard reading.
+             */
+            letters: Array<{
+                /**
+                 * The Hebrew letter as it stands in the string. Data, identical in every language.
+                 */
+                glyph: string;
+                /**
+                 * Machine identifier of the letter, always English romanization so it stays safe to compare against in code.
+                 */
+                letterId: string;
+                /**
+                 * Display name of the letter.
+                 */
+                name: string;
+                /**
+                 * True when the glyph is the word final form. Under the finals-500-900 reading the same letter scores differently in final position, which is why this is on the row.
+                 */
+                isFinal: boolean;
+                /**
+                 * What this letter contributed under the standard reading, or under the finals reading when one applies.
+                 */
+                value: number;
+            }>;
+        }>;
+        chosen: {
+            /**
+             * The spelling the rest of this response was computed from.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the chosen spelling, from the mechanical map.
+             */
+            romanization: string;
+            /**
+             * Why this spelling was chosen over the others.
+             */
+            rule: string;
+        };
+        /**
+         * The four readings a name profile leads with. Call the gematria endpoint for the full set and for the substitution transformations.
+         */
+        values: {
+            /**
+             * Mispar hechrachi, the standard reading, where every letter takes its ordinary value and a final form scores as its base letter.
+             */
+            standard: number;
+            /**
+             * Mispar gadol under the reading the misparGadol convention selected, which is why the convention comes back on the response.
+             */
+            large: number;
+            /**
+             * Mispar katan, where each letter value has its trailing zeros truncated, so yod is 1 and qof is 1.
+             */
+            small: number;
+            /**
+             * Mispar kidmi, where each letter scores the sum of every standard value up to and including itself, so tav is 1495.
+             */
+            preceding: number;
+        };
+        /**
+         * The per letter breakdown of the chosen spelling.
+         */
+        letters: Array<{
+            /**
+             * The letter as it stands in the chosen spelling.
+             */
+            glyph: string;
+            /**
+             * Machine identifier of the letter.
+             */
+            letterId: string;
+            /**
+             * Display name of the letter.
+             */
+            name: string;
+            /**
+             * True when the glyph is the word final form.
+             */
+            isFinal: boolean;
+            /**
+             * What this letter contributed.
+             */
+            value: number;
+        }>;
+        /**
+         * Where the name lands on the tree. The reduction is a numerical convention, not a rule from any text, and the reading says so.
+         */
+        sephirah: {
+            /**
+             * Machine identifier of the sephirah the reduced value points at.
+             */
+            id: string;
+            /**
+             * Its position in the emanation, 1 to 10.
+             */
+            number: number | null;
+            /**
+             * The English gloss of the name, in the requested language.
+             */
+            english: string;
+            /**
+             * The name in Hebrew. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * The standard value reduced by repeated digit sum, stopping at ten so all ten emanations stay reachable.
+             */
+            reduced: number;
+            /**
+             * What the emanation is said to hold, in the requested language.
+             */
+            meaning: string;
+            /**
+             * The composed sentence that places the name on the tree, in the requested language. It states plainly that the reduction is a numerical convention rather than a classical rule.
+             */
+            reading: string;
+        };
+        /**
+         * Curated words whose standard value equals the name. Empty when nothing matches, which is the ordinary case.
+         */
+        matches: Array<{
+            /**
+             * Machine identifier of the entry, an ASCII romanization.
+             */
+            id: string;
+            /**
+             * The word in Hebrew. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew beside it, from the same mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * What the word means, in the requested language.
+             */
+            meaning: string;
+            /**
+             * Its value under the standard reading, which is why it matched.
+             */
+            value: number;
+            /**
+             * What the tradition says about the equality, in the requested language.
+             */
+            note: string;
+            /**
+             * Where the value is attested. Every entry in the lexicon carries at least two independent sources, which is why the list is short rather than long.
+             */
+            sources: Array<string>;
+        }>;
+        conventions: {
+            /**
+             * The Latin to Hebrew scheme applied. Absent when the caller sent Hebrew directly.
+             */
+            transliteration?: string;
+            /**
+             * Which of the two published methods the name mispar gadol was read as.
+             */
+            misparGadol: string;
+        };
+    };
+};
+
+export type PostKabbalahNameProfileResponse = PostKabbalahNameProfileResponses[keyof PostKabbalahNameProfileResponses];
+
+export type PostKabbalahBirthProfileData = {
+    body: {
+        /**
+         * Birth date in YYYY-MM-DD, proleptic Gregorian. Dates before the 1582 reform are read on the same proleptic reckoning rather than switched to the Julian calendar.
+         */
+        date: string;
+        /**
+         * Birth time in HH:MM:SS local to the timezone field. Defaults to noon when omitted, which is stated because the name read from the hour changes every twenty minutes and a defaulted time cannot be precise.
+         */
+        time?: string;
+        /**
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the DST-correct offset for the birth date, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state on that date. Invalid timezones return 400 with a validation error.
+         */
+        timezone: number | string;
+        /**
+         * How the name of the day is found. Use solar-longitude for the exact five degree arc the Sun stood in at the birth moment, or lenain-blocks for the fixed civil calendar of five day periods. The Sun does not move at a constant rate, so the two drift apart by up to about three days by early August and were never reconciled.
+         */
+        angelDating?: 'solar-longitude' | 'lenain-blocks';
+        /**
+         * Which date the civil wheel of five day periods opens on. Both are conventions rather than facts: the equinox itself moves inside a window that covers both days, and it fell on 20 March in 2026. march-21 is the pinned published wheel and march-20 is that wheel shifted one day. Ignored when angelDating is solar-longitude.
+         */
+        yearStart?: 'march-21' | 'march-20';
+        /**
+         * Where 29 February falls. The civil wheel was built for a 365 day year and has no slot for it, so published tables differ: extend-previous reads the day as part of the period ending 28 February, next-angel reads it as the opening of the period starting 1 March. Ignored when angelDating is solar-longitude.
+         */
+        leapDayPolicy?: 'extend-previous' | 'next-angel';
+        /**
+         * Set true when the moment falls after nightfall, which advances the Hebrew date by one day because the Hebrew day begins in the evening. It is a caller assertion rather than a computation, since sunset depends on a place and this conversion takes none.
+         */
+        afterSunset?: boolean;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/kabbalah/birth-profile';
+};
+
+export type PostKabbalahBirthProfileErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostKabbalahBirthProfileError = PostKabbalahBirthProfileErrors[keyof PostKabbalahBirthProfileErrors];
+
+export type PostKabbalahBirthProfileResponses = {
+    /**
+     * The Hebrew date, the birthday, the three names and the sephirah.
+     */
+    200: {
+        /**
+         * The birth moment this answer was computed from.
+         */
+        birthData: {
+            /**
+             * Echo of the birth date.
+             */
+            date: string;
+            /**
+             * The birth time used, which is noon when none was sent.
+             */
+            time: string;
+            /**
+             * The timezone resolved to a decimal offset in hours. An IANA name sent on the request is resolved against the birth date, so a summer birth carries its summer offset.
+             */
+            timezone: number;
+        };
+        /**
+         * The Hebrew date of the birth.
+         */
+        hebrewDate: {
+            /**
+             * Hebrew year.
+             */
+            year: number;
+            /**
+             * Hebrew month name. A leap year carries Adar I and Adar II in place of Adar, which is why the name is returned rather than only a number.
+             */
+            month: string;
+            /**
+             * Month number in the published algorithm order, Nisan first. Adar II is 13.
+             */
+            monthNumber: number;
+            /**
+             * Day of the Hebrew month, 1 to 30.
+             */
+            day: number;
+            /**
+             * True in the seven years of each nineteen that carry a second Adar.
+             */
+            leapYear: boolean;
+            /**
+             * The date written the way it is printed, with the day and the year in Hebrew letters. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Echo of the sunset flag. The Hebrew day begins in the evening, so a moment after nightfall already belongs to the next date and this says whether that was applied.
+             */
+            afterSunset: boolean;
+        };
+        /**
+         * The next Hebrew birthday. Three Hebrew dates are missing from some years, and where the anniversary moves to is a matter of community practice rather than arithmetic, so the field is null with a note rather than a guess.
+         */
+        hebrewBirthday: {
+            /**
+             * The next Gregorian date the Hebrew birthday falls on, or null when that Hebrew date does not exist in the year it would fall in.
+             */
+            date: string | null;
+            /**
+             * The Hebrew year the anniversary was looked for in.
+             */
+            hebrewYear: number;
+            /**
+             * Present only when the date is null, saying why. Absent otherwise, so a caller can branch on presence.
+             */
+            note?: string;
+        };
+        /**
+         * The three names: two read from the day of birth by two different cycles, and one from the hour. All three are described, never invoked.
+         */
+        angels: Array<{
+            /**
+             * What this name is read from: body and character both come from the day of birth by two different cycles, and spirit comes from the hour. Always English, so it stays safe to compare against in code.
+             */
+            role: string;
+            /**
+             * Index of the name, 1 to 72.
+             */
+            number: number;
+            /**
+             * The name in Hebrew. Data, identical in every language.
+             */
+            name: string;
+            /**
+             * Latin transcription of the Hebrew, from the one mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * The Latin spelling the published tables print, which is the searchable name.
+             */
+            traditionalName: string;
+            /**
+             * The angelic choir the name belongs to under the published Renaissance table.
+             */
+            choir: string;
+            /**
+             * The window that selected this name, in the terms of its own cycle: an arc of longitude, a span of civil days, or a twenty minute interval of the clock.
+             */
+            window: string;
+            /**
+             * What the tradition says this name is read for, in the requested language.
+             */
+            reading: string;
+        }>;
+        /**
+         * The sephirah reached from the value of the Hebrew date written in letters. A numerical convention rather than a classical rule, offered as a way into the tree.
+         */
+        sephirah: {
+            /**
+             * Machine identifier of the sephirah of the birth day.
+             */
+            id: string;
+            /**
+             * Its position in the emanation, 1 to 10.
+             */
+            number: number | null;
+            /**
+             * The English gloss of the name, in the requested language.
+             */
+            english: string;
+            /**
+             * The name in Hebrew. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew, from the mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * What the emanation is said to hold, in the requested language.
+             */
+            meaning: string;
+        };
+        /**
+         * The conventions this answer was computed under, echoed so it can be reproduced.
+         */
+        conventions: {
+            /**
+             * Which construction dated the name of the day.
+             */
+            angelDating: string;
+            /**
+             * Where the civil wheel opened. Reported even under solar-longitude, where it selects nothing, so a stored response records every input.
+             */
+            yearStart: string;
+            /**
+             * Where 29 February was read as falling.
+             */
+            leapDayPolicy: string;
+            /**
+             * Whether the Hebrew date was advanced for nightfall.
+             */
+            afterSunset: boolean;
+        };
+    };
+};
+
+export type PostKabbalahBirthProfileResponse = PostKabbalahBirthProfileResponses[keyof PostKabbalahBirthProfileResponses];
+
+export type GetKabbalahNamesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-72, default 20.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+        /**
+         * Ecliptic longitude in degrees, 0 inclusive to 360 exclusive, measured from 0 Aries. Returns the single name governing that degree instead of the list. 360 is rejected because it is the same point as 0 and the arcs are half open at the top.
+         */
+        longitude?: number | null;
+    };
+    url: '/kabbalah/names';
+};
+
+export type GetKabbalahNamesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahNamesError = GetKabbalahNamesErrors[keyof GetKabbalahNamesErrors];
+
+export type GetKabbalahNamesResponses = {
+    /**
+     * The names, or the one name governing the requested longitude.
+     */
+    200: {
+        /**
+         * Number of names matching the request before paging, which is 72 for the list and 1 for a longitude lookup.
+         */
+        total: number;
+        /**
+         * How many rows this page carries at most.
+         */
+        limit: number;
+        /**
+         * How many rows were skipped before this page.
+         */
+        offset: number;
+        /**
+         * Echo of the longitude looked up. Absent when the whole list was requested.
+         */
+        longitude?: number;
+        names: Array<{
+            /**
+             * Index of the name, 1 to 72. The index is the identifier here, because the Latin spellings differ between published tables while the index never does.
+             */
+            number: number;
+            /**
+             * The three letters read out of the verses, with any word final form written as its base letter, which is how every published list prints them.
+             */
+            letters: string;
+            /**
+             * The three letters exactly as they stand in the verses. Eighteen of the seventy two pick up a word final form because the source letter falls at a word end, and keeping this beside the normalized form is what makes the rule auditable.
+             */
+            lettersAsWritten: string;
+            /**
+             * The divine name suffix added to make the triplet pronounceable. Forty of the seventy two take one and thirty two take the other.
+             */
+            suffix: string;
+            /**
+             * The suffixed name in Hebrew. Data, identical in every language.
+             */
+            name: string;
+            /**
+             * Latin transcription of the Hebrew, from the one mechanical letter map. A label for reading the string back, and NOT the spelling the published tables print, which is in traditionalName.
+             */
+            romanization: string;
+            /**
+             * The Latin spelling the published tables print. This is the search term a reader knows the name by. Several rows have two attested spellings across tables and the one used here is stated on the methodology page.
+             */
+            traditionalName: string;
+            /**
+             * First degree of the ecliptic arc this name governs, measured from 0 Aries. Inclusive.
+             */
+            arcStart: number;
+            /**
+             * Last degree of the arc, EXCLUSIVE. Seventy two arcs of five degrees tile the circle exactly, which only works if the upper bound is exclusive.
+             */
+            arcEnd: number;
+            /**
+             * Which sign the arc falls in. Always English lowercase, so it stays safe to compare against in code. Six names fall in each sign.
+             */
+            sign: string;
+            /**
+             * Where the arc opens inside its sign, 0 to 25 in steps of five.
+             */
+            degreeInSign: number;
+            /**
+             * The angelic choir this name belongs to under the published Renaissance table. Nine choirs of exactly eight names each.
+             */
+            choir: string;
+            /**
+             * Present only on the rows where a named published list differs from the derivation. Recorded rather than silently corrected, because a reader comparing two sources deserves to know which one moved. Absent on every other row, so a caller can branch on presence.
+             */
+            publishedDisagreement?: {
+                /**
+                 * Which published list prints something different on this row.
+                 */
+                list: string;
+                /**
+                 * What that list prints, so a caller matching against it can see why.
+                 */
+                prints: string;
+            };
+        }>;
+    };
+};
+
+export type GetKabbalahNamesResponse = GetKabbalahNamesResponses[keyof GetKabbalahNamesResponses];
+
+export type GetKabbalahNamesByNumberData = {
+    body?: never;
+    path?: {
+        /**
+         * Index of the name, 1 to 72.
+         */
+        number?: number | null;
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/kabbalah/names/{number}';
+};
+
+export type GetKabbalahNamesByNumberErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No name carries that index.
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahNamesByNumberError = GetKabbalahNamesByNumberErrors[keyof GetKabbalahNamesByNumberErrors];
+
+export type GetKabbalahNamesByNumberResponses = {
+    /**
+     * The name.
+     */
+    200: {
+        /**
+         * Index of the name, 1 to 72. The index is the identifier here, because the Latin spellings differ between published tables while the index never does.
+         */
+        number: number;
+        /**
+         * The three letters read out of the verses, with any word final form written as its base letter, which is how every published list prints them.
+         */
+        letters: string;
+        /**
+         * The three letters exactly as they stand in the verses. Eighteen of the seventy two pick up a word final form because the source letter falls at a word end, and keeping this beside the normalized form is what makes the rule auditable.
+         */
+        lettersAsWritten: string;
+        /**
+         * The divine name suffix added to make the triplet pronounceable. Forty of the seventy two take one and thirty two take the other.
+         */
+        suffix: string;
+        /**
+         * The suffixed name in Hebrew. Data, identical in every language.
+         */
+        name: string;
+        /**
+         * Latin transcription of the Hebrew, from the one mechanical letter map. A label for reading the string back, and NOT the spelling the published tables print, which is in traditionalName.
+         */
+        romanization: string;
+        /**
+         * The Latin spelling the published tables print. This is the search term a reader knows the name by. Several rows have two attested spellings across tables and the one used here is stated on the methodology page.
+         */
+        traditionalName: string;
+        /**
+         * First degree of the ecliptic arc this name governs, measured from 0 Aries. Inclusive.
+         */
+        arcStart: number;
+        /**
+         * Last degree of the arc, EXCLUSIVE. Seventy two arcs of five degrees tile the circle exactly, which only works if the upper bound is exclusive.
+         */
+        arcEnd: number;
+        /**
+         * Which sign the arc falls in. Always English lowercase, so it stays safe to compare against in code. Six names fall in each sign.
+         */
+        sign: string;
+        /**
+         * Where the arc opens inside its sign, 0 to 25 in steps of five.
+         */
+        degreeInSign: number;
+        /**
+         * The angelic choir this name belongs to under the published Renaissance table. Nine choirs of exactly eight names each.
+         */
+        choir: string;
+        /**
+         * Present only on the rows where a named published list differs from the derivation. Recorded rather than silently corrected, because a reader comparing two sources deserves to know which one moved. Absent on every other row, so a caller can branch on presence.
+         */
+        publishedDisagreement?: {
+            /**
+             * Which published list prints something different on this row.
+             */
+            list: string;
+            /**
+             * What that list prints, so a caller matching against it can see why.
+             */
+            prints: string;
+        };
+    };
+};
+
+export type GetKabbalahNamesByNumberResponse = GetKabbalahNamesByNumberResponses[keyof GetKabbalahNamesByNumberResponses];
+
+export type GetKabbalahTreeData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Which arrangement of the twenty two paths. The 1652 arrangement, in which Malkuth carries three paths, is the only one with a published table that letters every path, so it is the only member.
+         */
+        treeVariant?: 'kircher';
+        /**
+         * Which reading assigns a sphere to each sephirah. The two were compared row by row and agree on all ten, so the answer is the same either way; the parameter exists so a caller knows which one produced it rather than assuming.
+         */
+        sephirotSystem?: 'classical' | 'golden-dawn';
+        /**
+         * Which reading assigns the element, planet or sign to each letter. The seven double letters are the contested column and the four readings genuinely disagree on them; the twelve simple letters run in natural zodiacal order in all four. The golden-dawn member does NOT exchange He and Tzade, which is a later change from a different author.
+         */
+        letterAttribution?: 'sefer-yetzirah-gra' | 'sefer-yetzirah-short' | 'sefer-yetzirah-saadia' | 'golden-dawn';
+    };
+    url: '/kabbalah/tree';
+};
+
+export type GetKabbalahTreeErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahTreeError = GetKabbalahTreeErrors[keyof GetKabbalahTreeErrors];
+
+export type GetKabbalahTreeResponses = {
+    /**
+     * The sephirot, the paths, the worlds and the lightning flash.
+     */
+    200: {
+        /**
+         * The ten emanations in order, with Daat last.
+         */
+        sephirot: Array<{
+            /**
+             * Machine identifier of the sephirah, an ASCII romanization, always English so it stays safe to compare against in code. Several romanizations of each name are in circulation and none is canonical, which is exactly why the id is fixed here.
+             */
+            id: string;
+            /**
+             * Position in the emanation, 1 to 10. Null for Daat, which is counted in some diagrams and left out of others and is never an eleventh emanation.
+             */
+            number: number | null;
+            /**
+             * The name in Hebrew, with vowel points. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew beside it, from the one mechanical letter map. A label for reading the string back, never a pronunciation claim and not the same thing as the id.
+             */
+            romanization: string;
+            /**
+             * The English gloss of the name, in the requested language.
+             */
+            english: string;
+            /**
+             * Which of the three pillars the sephirah stands on: left, middle or right. Always English.
+             */
+            pillar: string;
+            /**
+             * Display name of the pillar, in the requested language.
+             */
+            pillarName: string;
+            /**
+             * Which of the four worlds the sephirah belongs to under the Hermetic mapping. Null for Daat. A second mapping is in circulation and both are returned in the worlds block.
+             */
+            world: string | null;
+            /**
+             * The sphere assigned to the sephirah under the requested system, in the requested language. This is the sephirot allotment and it is NOT the planet series the seven double letters carry.
+             */
+            attribution: string;
+            /**
+             * What the emanation is said to hold, in the requested language.
+             */
+            meaning: string;
+        }>;
+        /**
+         * The 22 paths, in path order.
+         */
+        paths: Array<{
+            /**
+             * Path number, 11 to 32. The numbering continues the ten sephirot into the thirty two Paths of Wisdom, so path 11 is the eleventh Path and not the eleventh path.
+             */
+            path: number;
+            /**
+             * Machine identifier of the letter on the path. Each of the 22 appears exactly once.
+             */
+            letter: string;
+            /**
+             * The letter itself. Data, identical in every language.
+             */
+            letterGlyph: string;
+            /**
+             * Machine identifier of the sephirah the path runs from.
+             */
+            from: string;
+            /**
+             * Machine identifier of the sephirah the path runs to.
+             */
+            to: string;
+            trump: {
+                /**
+                 * Identifier of the tarot trump on this path. It resolves in the Tarot API on the same key.
+                 */
+                id: string;
+                /**
+                 * The trump number as the deck prints it.
+                 */
+                number: string;
+                /**
+                 * Display name of the trump.
+                 */
+                name: string;
+            };
+            attribution: {
+                /**
+                 * What the letter attribution names: element, planet or sign.
+                 */
+                kind: string;
+                /**
+                 * The element, planet or sign under the requested reading. Always English.
+                 */
+                value: string;
+            };
+        }>;
+        /**
+         * The four worlds, with both published mappings of the sephirot onto them.
+         */
+        worlds: Array<{
+            /**
+             * Machine identifier of the world, an ASCII romanization.
+             */
+            id: string;
+            /**
+             * The name in Hebrew. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew, from the mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * The English gloss, in the requested language.
+             */
+            english: string;
+            /**
+             * Which sephirot fall in this world under the Hermetic mapping, the one the world field on each sephirah uses.
+             */
+            sephirot: Array<string>;
+            /**
+             * Which sephirot fall in this world under the second mapping in circulation. The two agree on Formation and Action and differ at the top, and neither is suppressed.
+             */
+            sephirotAlternate: Array<string>;
+        }>;
+        /**
+         * The order the emanation descends, top to bottom. Ten identifiers, no repeats.
+         */
+        lightningFlash: Array<string>;
+        /**
+         * The conventions this answer was computed under, echoed so it can be reproduced.
+         */
+        conventions: {
+            /**
+             * Which arrangement of the paths produced this answer.
+             */
+            treeVariant: string;
+            /**
+             * Which reading assigned the spheres.
+             */
+            sephirotSystem: string;
+            /**
+             * Which reading assigned the element, planet or sign on each path.
+             */
+            letterAttribution: string;
+        };
+    };
+};
+
+export type GetKabbalahTreeResponse = GetKabbalahTreeResponses[keyof GetKabbalahTreeResponses];
+
+export type GetKabbalahSephirotByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Sephirah identifier, one of keter, chokhmah, binah, chesed, gevurah, tiferet, netzach, hod, yesod, malkuth, daat. Matching folds case and punctuation.
+         */
+        id: 'keter' | 'chokhmah' | 'binah' | 'chesed' | 'gevurah' | 'tiferet' | 'netzach' | 'hod' | 'yesod' | 'malkuth' | 'daat';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Which reading assigns a sphere to each sephirah. The two were compared row by row and agree on all ten, so the answer is the same either way; the parameter exists so a caller knows which one produced it rather than assuming.
+         */
+        sephirotSystem?: 'classical' | 'golden-dawn';
+        /**
+         * Which reading assigns the element, planet or sign to each letter. The seven double letters are the contested column and the four readings genuinely disagree on them; the twelve simple letters run in natural zodiacal order in all four. The golden-dawn member does NOT exchange He and Tzade, which is a later change from a different author.
+         */
+        letterAttribution?: 'sefer-yetzirah-gra' | 'sefer-yetzirah-short' | 'sefer-yetzirah-saadia' | 'golden-dawn';
+    };
+    url: '/kabbalah/sephirot/{id}';
+};
+
+export type GetKabbalahSephirotByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No sephirah carries that identifier.
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahSephirotByIdError = GetKabbalahSephirotByIdErrors[keyof GetKabbalahSephirotByIdErrors];
+
+export type GetKabbalahSephirotByIdResponses = {
+    /**
+     * The sephirah, with the paths that touch it.
+     */
+    200: {
+        /**
+         * Machine identifier of the sephirah, an ASCII romanization, always English so it stays safe to compare against in code. Several romanizations of each name are in circulation and none is canonical, which is exactly why the id is fixed here.
+         */
+        id: string;
+        /**
+         * Position in the emanation, 1 to 10. Null for Daat, which is counted in some diagrams and left out of others and is never an eleventh emanation.
+         */
+        number: number | null;
+        /**
+         * The name in Hebrew, with vowel points. Data, identical in every language.
+         */
+        hebrew: string;
+        /**
+         * Latin transcription of the Hebrew beside it, from the one mechanical letter map. A label for reading the string back, never a pronunciation claim and not the same thing as the id.
+         */
+        romanization: string;
+        /**
+         * The English gloss of the name, in the requested language.
+         */
+        english: string;
+        /**
+         * Which of the three pillars the sephirah stands on: left, middle or right. Always English.
+         */
+        pillar: string;
+        /**
+         * Display name of the pillar, in the requested language.
+         */
+        pillarName: string;
+        /**
+         * Which of the four worlds the sephirah belongs to under the Hermetic mapping. Null for Daat. A second mapping is in circulation and both are returned in the worlds block.
+         */
+        world: string | null;
+        /**
+         * The sphere assigned to the sephirah under the requested system, in the requested language. This is the sephirot allotment and it is NOT the planet series the seven double letters carry.
+         */
+        attribution: string;
+        /**
+         * What the emanation is said to hold, in the requested language.
+         */
+        meaning: string;
+        /**
+         * Every path that runs to or from this sephirah, in path order. Malkuth carries three under the arrangement this API ships, which is the whole difference between the two arrangements in circulation.
+         */
+        paths: Array<{
+            /**
+             * Path number, 11 to 32. The numbering continues the ten sephirot into the thirty two Paths of Wisdom, so path 11 is the eleventh Path and not the eleventh path.
+             */
+            path: number;
+            /**
+             * Machine identifier of the letter on the path. Each of the 22 appears exactly once.
+             */
+            letter: string;
+            /**
+             * The letter itself. Data, identical in every language.
+             */
+            letterGlyph: string;
+            /**
+             * Machine identifier of the sephirah the path runs from.
+             */
+            from: string;
+            /**
+             * Machine identifier of the sephirah the path runs to.
+             */
+            to: string;
+            trump: {
+                /**
+                 * Identifier of the tarot trump on this path. It resolves in the Tarot API on the same key.
+                 */
+                id: string;
+                /**
+                 * The trump number as the deck prints it.
+                 */
+                number: string;
+                /**
+                 * Display name of the trump.
+                 */
+                name: string;
+            };
+            attribution: {
+                /**
+                 * What the letter attribution names: element, planet or sign.
+                 */
+                kind: string;
+                /**
+                 * The element, planet or sign under the requested reading. Always English.
+                 */
+                value: string;
+            };
+        }>;
+        /**
+         * The conventions this answer was computed under.
+         */
+        conventions: {
+            /**
+             * Which reading assigned the sphere.
+             */
+            sephirotSystem: string;
+            /**
+             * Which reading assigned the element, planet or sign on each path.
+             */
+            letterAttribution: string;
+        };
+    };
+};
+
+export type GetKabbalahSephirotByIdResponse = GetKabbalahSephirotByIdResponses[keyof GetKabbalahSephirotByIdResponses];
+
+export type GetKabbalahLettersData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Which reading assigns the element, planet or sign to each letter. The seven double letters are the contested column and the four readings genuinely disagree on them; the twelve simple letters run in natural zodiacal order in all four. The golden-dawn member does NOT exchange He and Tzade, which is a later change from a different author.
+         */
+        letterAttribution?: 'sefer-yetzirah-gra' | 'sefer-yetzirah-short' | 'sefer-yetzirah-saadia' | 'golden-dawn';
+    };
+    url: '/kabbalah/letters';
+};
+
+export type GetKabbalahLettersErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahLettersError = GetKabbalahLettersErrors[keyof GetKabbalahLettersErrors];
+
+export type GetKabbalahLettersResponses = {
+    /**
+     * All 22 letters in alphabet order.
+     */
+    200: {
+        /**
+         * Number of letters returned, which is always 22.
+         */
+        total: number;
+        /**
+         * Echo of the reading the attributions were taken from.
+         */
+        letterAttribution: string;
+        /**
+         * Three, seven and twelve. Every recension agrees on the split even where it disagrees on what goes where.
+         */
+        classCounts: {
+            /**
+             * Mother letters, which take an element.
+             */
+            mother: number;
+            /**
+             * Double letters, which take a planet.
+             */
+            double: number;
+            /**
+             * Simple letters, which take a sign of the zodiac.
+             */
+            simple: number;
+        };
+        letters: Array<{
+            /**
+             * Machine identifier of the letter, always English romanization so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * The base glyph. Data, identical in every language.
+             */
+            letter: string;
+            /**
+             * The word final glyph, or null for the seventeen letters that have none. Five letters change shape at the end of a word and score differently there under one reading of mispar gadol.
+             */
+            final: string | null;
+            /**
+             * Latin transcription of the glyph, from the one mechanical letter map this API uses in both directions. A label, never a pronunciation claim.
+             */
+            romanization: string;
+            /**
+             * Display name of the letter, in the requested language.
+             */
+            name: string;
+            /**
+             * What the letter name means as an ordinary word, in the requested language. The names are object names, which is what the shapes were drawn from.
+             */
+            meaning: string;
+            /**
+             * Position in the alphabet, 1 to 22. A property of the letter, not a cipher reading.
+             */
+            ordinal: number;
+            /**
+             * Value under the standard reading. The 22 letters cover 1 to 9, 10 to 90 and 100 to 400.
+             */
+            value: number;
+            /**
+             * Value in final position under the finals-500-900 reading of mispar gadol, or null where the letter has no final form.
+             */
+            finalValue: number | null;
+            /**
+             * Sefer Yetzirah class: mother, double or simple. Three mothers take an element, seven doubles take a planet, twelve simples take a sign, and the three counts are the structure of the whole letter tradition.
+             */
+            letterClass: string;
+            /**
+             * What the class means, in the requested language.
+             */
+            classReading: string;
+            attribution: {
+                /**
+                 * What the attribution names: element, planet or sign. Always English.
+                 */
+                kind: string;
+                /**
+                 * The element, planet or sign under the requested reading. Always English, so it stays safe to compare against in code.
+                 */
+                value: string;
+            };
+            trump: {
+                /**
+                 * Identifier of the tarot trump on this letter path. It resolves in the Tarot API on the same key, so a caller can follow it straight to the card.
+                 */
+                id: string;
+                /**
+                 * The trump number as the deck prints it, in Roman numerals.
+                 */
+                number: string;
+                /**
+                 * Display name of the trump.
+                 */
+                name: string;
+            };
+            /**
+             * The path this letter sits on, numbered 11 to 32 to continue the ten sephirot into the thirty two Paths of Wisdom. Never null in practice: all 22 letters carry a path.
+             */
+            path: number | null;
+        }>;
+    };
+};
+
+export type GetKabbalahLettersResponse = GetKabbalahLettersResponses[keyof GetKabbalahLettersResponses];
+
+export type GetKabbalahLettersByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Letter identifier, one of alef, bet, gimel, dalet, he, vav, zayin, chet, tet, yod, kaf, lamed, mem, nun, samekh, ayin, pe, tzadi, qof, resh, shin, tav. Matching folds case and punctuation.
+         */
+        id: 'alef' | 'bet' | 'gimel' | 'dalet' | 'he' | 'vav' | 'zayin' | 'chet' | 'tet' | 'yod' | 'kaf' | 'lamed' | 'mem' | 'nun' | 'samekh' | 'ayin' | 'pe' | 'tzadi' | 'qof' | 'resh' | 'shin' | 'tav';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Which reading assigns the element, planet or sign to each letter. The seven double letters are the contested column and the four readings genuinely disagree on them; the twelve simple letters run in natural zodiacal order in all four. The golden-dawn member does NOT exchange He and Tzade, which is a later change from a different author.
+         */
+        letterAttribution?: 'sefer-yetzirah-gra' | 'sefer-yetzirah-short' | 'sefer-yetzirah-saadia' | 'golden-dawn';
+    };
+    url: '/kabbalah/letters/{id}';
+};
+
+export type GetKabbalahLettersByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * No letter carries that identifier.
+     */
+    404: {
+        /**
+         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier for programmatic error handling.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahLettersByIdError = GetKabbalahLettersByIdErrors[keyof GetKabbalahLettersByIdErrors];
+
+export type GetKabbalahLettersByIdResponses = {
+    /**
+     * The letter.
+     */
+    200: {
+        /**
+         * Machine identifier of the letter, always English romanization so it stays safe to compare against in code.
+         */
+        id: string;
+        /**
+         * The base glyph. Data, identical in every language.
+         */
+        letter: string;
+        /**
+         * The word final glyph, or null for the seventeen letters that have none. Five letters change shape at the end of a word and score differently there under one reading of mispar gadol.
+         */
+        final: string | null;
+        /**
+         * Latin transcription of the glyph, from the one mechanical letter map this API uses in both directions. A label, never a pronunciation claim.
+         */
+        romanization: string;
+        /**
+         * Display name of the letter, in the requested language.
+         */
+        name: string;
+        /**
+         * What the letter name means as an ordinary word, in the requested language. The names are object names, which is what the shapes were drawn from.
+         */
+        meaning: string;
+        /**
+         * Position in the alphabet, 1 to 22. A property of the letter, not a cipher reading.
+         */
+        ordinal: number;
+        /**
+         * Value under the standard reading. The 22 letters cover 1 to 9, 10 to 90 and 100 to 400.
+         */
+        value: number;
+        /**
+         * Value in final position under the finals-500-900 reading of mispar gadol, or null where the letter has no final form.
+         */
+        finalValue: number | null;
+        /**
+         * Sefer Yetzirah class: mother, double or simple. Three mothers take an element, seven doubles take a planet, twelve simples take a sign, and the three counts are the structure of the whole letter tradition.
+         */
+        letterClass: string;
+        /**
+         * What the class means, in the requested language.
+         */
+        classReading: string;
+        attribution: {
+            /**
+             * What the attribution names: element, planet or sign. Always English.
+             */
+            kind: string;
+            /**
+             * The element, planet or sign under the requested reading. Always English, so it stays safe to compare against in code.
+             */
+            value: string;
+        };
+        trump: {
+            /**
+             * Identifier of the tarot trump on this letter path. It resolves in the Tarot API on the same key, so a caller can follow it straight to the card.
+             */
+            id: string;
+            /**
+             * The trump number as the deck prints it, in Roman numerals.
+             */
+            number: string;
+            /**
+             * Display name of the trump.
+             */
+            name: string;
+        };
+        /**
+         * The path this letter sits on, numbered 11 to 32 to continue the ten sephirot into the thirty two Paths of Wisdom. Never null in practice: all 22 letters carry a path.
+         */
+        path: number | null;
+    };
+};
+
+export type GetKabbalahLettersByIdResponse = GetKabbalahLettersByIdResponses[keyof GetKabbalahLettersByIdResponses];
+
+export type PostKabbalahCompatibilityData = {
+    body: {
+        /**
+         * First name in Latin script. Send firstNameHebrew instead to control the spelling.
+         */
+        firstName?: string;
+        /**
+         * First name already in Hebrew, which skips the transliteration step.
+         */
+        firstNameHebrew?: string;
+        /**
+         * Second name in Latin script. Send secondNameHebrew instead to control the spelling.
+         */
+        secondName?: string;
+        /**
+         * Second name already in Hebrew, which skips the transliteration step.
+         */
+        secondNameHebrew?: string;
+        /**
+         * How a Latin name is written in Hebrew before it is scored. One member, a deterministic published letter map. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction, and every published Hebrew standard romanizes the other way. Send textHebrew to control the spelling yourself.
+         */
+        transliteration?: 'letter-map-mathers';
+        /**
+         * Which method the name mispar gadol means, because the sources use it for two. Use finals-500-900 to score the five word final letters as 500 to 900, or milui to score each letter as the value of its own spelled out name.
+         */
+        misparGadol?: 'finals-500-900' | 'milui';
+    };
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/kabbalah/compatibility';
+};
+
+export type PostKabbalahCompatibilityErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostKabbalahCompatibilityError = PostKabbalahCompatibilityErrors[keyof PostKabbalahCompatibilityErrors];
+
+export type PostKabbalahCompatibilityResponses = {
+    /**
+     * Both profiles, what they share, and the composite with its components.
+     */
+    200: {
+        first: {
+            /**
+             * The name as sent, in whichever script it was sent in.
+             */
+            input: string;
+            /**
+             * The Hebrew spelling this side was scored from.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of that spelling, from the one mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * Why this spelling was chosen over the other parses.
+             */
+            rule: string;
+            /**
+             * Value under the standard reading, which is the relation the tradition works with.
+             */
+            standard: number;
+            /**
+             * The standard value reduced by repeated digit sum, stopping at ten.
+             */
+            reduced: number;
+            /**
+             * Machine identifier of the sephirah the reduced value points at.
+             */
+            sephirah: string;
+            /**
+             * The English gloss of that sephirah, in the requested language.
+             */
+            sephirahEnglish: string;
+        };
+        second: {
+            /**
+             * The name as sent, in whichever script it was sent in.
+             */
+            input: string;
+            /**
+             * The Hebrew spelling this side was scored from.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of that spelling, from the one mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * Why this spelling was chosen over the other parses.
+             */
+            rule: string;
+            /**
+             * Value under the standard reading, which is the relation the tradition works with.
+             */
+            standard: number;
+            /**
+             * The standard value reduced by repeated digit sum, stopping at ten.
+             */
+            reduced: number;
+            /**
+             * Machine identifier of the sephirah the reduced value points at.
+             */
+            sephirah: string;
+            /**
+             * The English gloss of that sephirah, in the requested language.
+             */
+            sephirahEnglish: string;
+        };
+        /**
+         * Every cipher on which the two names give the same number. Empty when they share none, which happens often and carries no traditional reading of its own.
+         */
+        sharedValues: Array<{
+            /**
+             * Machine identifier of the cipher the two names agree on.
+             */
+            cipher: string;
+            /**
+             * Display name of that cipher.
+             */
+            name: string;
+            /**
+             * The value both names give under it.
+             */
+            value: number;
+        }>;
+        /**
+         * The composite, 0 to 100. A RoxyAPI composite, not a classical measure: no source scores two names against each other, so the components below are published and the number is derivable from them.
+         */
+        score: number;
+        /**
+         * Which band the composite falls in: high, moderate or low. Derived from the score, always English.
+         */
+        band: string;
+        /**
+         * Every component of the composite with its own maximum, so a caller who disagrees with the weighting can recompute rather than argue.
+         */
+        components: Array<{
+            /**
+             * Machine identifier of the component.
+             */
+            id: string;
+            /**
+             * What this component contributed.
+             */
+            points: number;
+            /**
+             * The most it can contribute. The four maxima sum to 100, so the weighting is visible rather than implied.
+             */
+            maximum: number;
+            /**
+             * Whether the component found anything at all.
+             */
+            matched: boolean;
+        }>;
+        /**
+         * The composed reading, in the requested language. It states that the score is ours.
+         */
+        reading: string;
+        /**
+         * The conventions this answer was computed under.
+         */
+        conventions: {
+            /**
+             * The Latin to Hebrew scheme applied. Absent when both names arrived in Hebrew.
+             */
+            transliteration?: string;
+            /**
+             * Which of the two published methods the name mispar gadol was read as.
+             */
+            misparGadol: string;
+        };
+    };
+};
+
+export type PostKabbalahCompatibilityResponse = PostKabbalahCompatibilityResponses[keyof PostKabbalahCompatibilityResponses];
+
+export type GetKabbalahDailyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Date in YYYY-MM-DD. Defaults to the current UTC date when omitted, so a caller that wants a fixed answer should send one.
+         */
+        date?: string;
+        /**
+         * IANA name or decimal offset, used only to decide which calendar date it is where the caller is when date is omitted. It does not move the count, which is a calendar count rather than a clock one.
+         */
+        timezone?: string;
+        /**
+         * Set true when the moment falls after nightfall, which advances the Hebrew date by one day because the Hebrew day begins in the evening. It is a caller assertion rather than a computation, since sunset depends on a place and this route takes none.
+         */
+        afterSunset?: string;
+    };
+    url: '/kabbalah/daily';
+};
+
+export type GetKabbalahDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetKabbalahDailyError = GetKabbalahDailyErrors[keyof GetKabbalahDailyErrors];
+
+export type GetKabbalahDailyResponses = {
+    /**
+     * The Omer day, or a statement that the count is not running.
+     */
+    200: {
+        /**
+         * The date this answer is for. Echoes the request or the resolved date.
+         */
+        date: string;
+        /**
+         * Whether the count is running on this date. False outside the forty nine days, and the fields below the count are then absent.
+         */
+        inOmer: boolean;
+        /**
+         * Day of the count, 1 to 49. Absent when the count is not running.
+         */
+        day?: number;
+        /**
+         * Which of the seven weeks the day falls in. Absent outside the count.
+         */
+        week?: number;
+        /**
+         * Which day inside that week, 1 to 7. Absent outside the count.
+         */
+        dayInWeek?: number;
+        /**
+         * The sephirah of the WEEK, which is the outer half of the label. Absent outside the count.
+         */
+        weekSephirah?: {
+            /**
+             * Machine identifier of the sephirah, always English so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * The name in Hebrew, unpointed. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew, from the one mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * The English gloss of the name, in the requested language.
+             */
+            english: string;
+        };
+        /**
+         * The sephirah of the DAY inside the week, which is the inner half of the label and is named first. Absent outside the count.
+         */
+        daySephirah?: {
+            /**
+             * Machine identifier of the sephirah, always English so it stays safe to compare against in code.
+             */
+            id: string;
+            /**
+             * The name in Hebrew, unpointed. Data, identical in every language.
+             */
+            hebrew: string;
+            /**
+             * Latin transcription of the Hebrew, from the one mechanical letter map.
+             */
+            romanization: string;
+            /**
+             * The English gloss of the name, in the requested language.
+             */
+            english: string;
+        };
+        /**
+         * The label as the printed text carries it, inner then outer. Absent outside the count.
+         */
+        hebrewLabel?: string;
+        /**
+         * The Hebrew month and day of this Omer day. Day 1 is 16 Nisan, the second day of Passover, on the reckoning this API uses. Absent outside the count.
+         */
+        hebrewDate?: string;
+        /**
+         * The composed reading for the day, in the requested language.
+         */
+        reading: string;
+        /**
+         * The date the count next opens. Present only when the count is not running, so a caller can branch on presence.
+         */
+        nextStart?: string;
+    };
+};
+
+export type GetKabbalahDailyResponse = GetKabbalahDailyResponses[keyof GetKabbalahDailyResponses];
+
 export type GetTarotCardsData = {
     body?: never;
     path?: never;
@@ -45920,15 +56062,15 @@ export type PostTarotDailyErrors = {
         code: string;
     };
     /**
-     * Failed to draw card
+     * Internal server error
      */
     500: {
         /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         * Human-readable error message. May change wording.
          */
         error: string;
         /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
+         * Machine-readable error code. Stable identifier.
          */
         code: string;
     };
@@ -46068,15 +56210,15 @@ export type PostTarotYesNoErrors = {
         code: string;
     };
     /**
-     * Failed to draw card
+     * Internal server error
      */
     500: {
         /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         * Human-readable error message. May change wording.
          */
         error: string;
         /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
+         * Machine-readable error code. Stable identifier.
          */
         code: string;
     };
@@ -47823,7 +57965,7 @@ export type PostBiorhythmCompatibilityResponses = {
                  */
                 alignment: number;
                 /**
-                 * How the two people's cycles sit against each other. One of: in_sync, complementary, neutral, opposing. This is a PAIR alignment and shares no values with the single-person cycle phase.
+                 * How the cycles of the two people sit against each other. One of: in_sync, complementary, neutral, opposing. This is a PAIR alignment and shares no values with the single-person cycle phase.
                  */
                 phase: 'in_sync' | 'complementary' | 'neutral' | 'opposing';
                 /**
@@ -48240,6 +58382,2846 @@ export type PostBiorhythmDailyResponses = {
 
 export type PostBiorhythmDailyResponse = PostBiorhythmDailyResponses[keyof PostBiorhythmDailyResponses];
 
+export type PostAyurvedaConstitutionData = {
+    body?: AyurvedaConstitutionRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/ayurveda/constitution';
+};
+
+export type PostAyurvedaConstitutionErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAyurvedaConstitutionError = PostAyurvedaConstitutionErrors[keyof PostAyurvedaConstitutionErrors];
+
+export type PostAyurvedaConstitutionResponses = {
+    /**
+     * The constitution, its cited factors, and the graha table behind them.
+     */
+    200: {
+        /**
+         * The sidereal frame this reading was cast in.
+         */
+        frame: {
+            /**
+             * The sidereal frame the chart was cast in, echoing the request. Always English, so it is safe to compare against.
+             */
+            ayanamsa: string;
+            /**
+             * The frame offset in degrees at the birth instant, read once and used for both sign factors and for the strength ranking, so the three cannot come from frames a fraction of a degree apart.
+             */
+            ayanamsaDegrees: number;
+        };
+        /**
+         * The rising sign, lowercase and always English. It is the best attested of the three factors and carries the heaviest weight.
+         */
+        lagnaSign: string;
+        /**
+         * The sign the Moon occupies, lowercase and always English. It is read through the same sign table as the rising sign, on the warrant of the verse that equates the two.
+         */
+        moonSign: string;
+        /**
+         * The three scored factors, in the order they are weighted.
+         */
+        factors: Array<{
+            /**
+             * Which factor this is. One of lagna-sign, moon-sign or strongest-planet. Always English and stable, so it is safe to switch on. There are three and only three, because the two indicators often listed beside them, the lagna lord and the Sun, carry no classical rule that they show the native humour.
+             */
+            id: string;
+            /**
+             * What this factor read: a sign id for the two sign factors, or the space-separated grahas that reached the strength cutoff for the third.
+             */
+            input: string;
+            /**
+             * The humours this factor carries, as the Sanskrit identifiers vata, pitta and kapha. Never translated, so they stay safe to compare against. Where a factor carries more than one they are stored in the standing order and that order means nothing, because the two translations of the source order them differently and their sets are identical.
+             */
+            doshas: Array<string>;
+            /**
+             * How much of the composite this factor is given. The weights are a RoxyAPI convention and no primary text states them, which is why every one of them is published here rather than kept private.
+             */
+            weight: number;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        }>;
+        /**
+         * The blended reading. The factors are cited and this is not, which is why it carries a convention label.
+         */
+        composite: {
+            /**
+             * Share of vata in whole percent. The three shares always sum to exactly 100, by largest remainder, so a caller can render them as a bar without normalising first.
+             */
+            vata: number;
+            /**
+             * Share of pitta in whole percent.
+             */
+            pitta: number;
+            /**
+             * Share of kapha in whole percent.
+             */
+            kapha: number;
+            /**
+             * The humour holding the largest share. A Sanskrit identifier, never translated.
+             */
+            dominant: string;
+            /**
+             * The humour holding the second largest share. Reported whether or not it reached the margin that would put it in the type label.
+             */
+            secondary: string;
+            /**
+             * The derived label: one humour when it leads clearly, two joined by a hyphen when the second is within the published margin, and sama when all three sit inside that band. Built from Sanskrit identifiers, so it stays the same string in every language.
+             */
+            type: string;
+            /**
+             * The version of the blending convention this composite was built under. It is ours and not classical, and it is versioned so a caller comparing two readings taken months apart can tell whether the rule moved.
+             */
+            convention: string;
+            /**
+             * Every number behind the blend, published so a caller who disagrees can re-weigh the factors themselves.
+             */
+            weighting: {
+                /**
+                 * Weight given to the rising sign factor.
+                 */
+                lagnaSign: number;
+                /**
+                 * Weight given to the Moon sign factor, lower than the rising sign because its classical warrant is the narrower of the two.
+                 */
+                moonSign: number;
+                /**
+                 * Weight given to the strongest graha factor.
+                 */
+                strongestPlanet: number;
+                /**
+                 * Fraction of the leading shadbala total at which a second graha also counts as strong. The verse licenses a blended result where several planets attain strength and gives no number for several, so this one is ours.
+                 */
+                strongPlanetThreshold: number;
+                /**
+                 * Percentage-point gap below which the second humour joins the type label. When all three sit inside it the label is sama.
+                 */
+                dualTypeMargin: number;
+            };
+        };
+        /**
+         * The seven grahas ranked by shadbala, strongest first. Rahu and Ketu are not ranked, because shadbala is defined over the seven.
+         */
+        strengthRanking: Array<{
+            /**
+             * Graha name, as a Vedic birth chart returns it.
+             */
+            graha: string;
+            /**
+             * Total shadbala in virupas, the six-fold strength measure. Higher is stronger, and the ranking below is taken from it.
+             */
+            totalVirupas: number;
+            /**
+             * Position in the ranking, 1 for the strongest of the seven.
+             */
+            rank: number;
+            /**
+             * Whether this graha reached the strength cutoff and therefore contributed to the reading. More than one true value is what makes the reading a blend.
+             */
+            strong: boolean;
+        }>;
+        /**
+         * The graha to humour and graha to constituent table, as reference. It is informational and does not vary with the request.
+         */
+        planetDoshas: Array<{
+            /**
+             * Graha name, matching the name a Vedic birth chart uses, so this table joins to a chart with nothing in between.
+             */
+            graha: string;
+            /**
+             * The graha name in Sanskrit, in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * The humours the verses give this graha. The Moon and Venus rows carry vata before kapha in both published translations, which is the row material in general circulation most often reverses.
+             */
+            doshas: Array<string>;
+            /**
+             * The bodily constituent this graha rules, in English. Saturn returns a deliberately neutral rendering, because the one Sanskrit word behind it is attested as sinew, tendon, muscle and nerve alike and the two published translations split on it.
+             */
+            dhatu: string;
+            /**
+             * The same constituent in Sanskrit. Read this rather than the English wherever the two translations disagree. These seven are not the standard seven dhatus and three of them will not line up against such a list.
+             */
+            dhatuSanskrit: string;
+            /**
+             * Where one claim in this response comes from.
+             */
+            doshaSource: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+            /**
+             * Where one claim in this response comes from.
+             */
+            dhatuSource: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        }>;
+        /**
+         * The reading in prose, composed from the factors rather than selected from stock text, and translated in place.
+         */
+        summary: string;
+        /**
+         * The conventions this reading was produced under.
+         */
+        conventions: {
+            /**
+             * Which sign table the two sign factors were read through. Echoes the request.
+             */
+            signDoshaScheme: string;
+            /**
+             * Which sidereal frame the chart was cast in. Echoes the request, and is repeated here beside the other conventions so one object answers what was chosen.
+             */
+            ayanamsa: string;
+        };
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type PostAyurvedaConstitutionResponse = PostAyurvedaConstitutionResponses[keyof PostAyurvedaConstitutionResponses];
+
+export type PostAyurvedaDinacharyaData = {
+    body?: AyurvedaDinacharyaRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/ayurveda/dinacharya';
+};
+
+export type PostAyurvedaDinacharyaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAyurvedaDinacharyaError = PostAyurvedaDinacharyaErrors[keyof PostAyurvedaDinacharyaErrors];
+
+export type PostAyurvedaDinacharyaResponses = {
+    /**
+     * The day divided, with the routine the chapter gives.
+     */
+    200: {
+        /**
+         * The local date this schedule is for, echoing the request.
+         */
+        date: string;
+        /**
+         * Sunrise at this place on this date, as an ISO 8601 instant in UTC. The day begins here, which is why every block below is measured from it rather than from midnight.
+         */
+        sunrise: string;
+        /**
+         * Sunset at this place on this date, as an ISO 8601 instant in UTC.
+         */
+        sunset: string;
+        /**
+         * The following sunrise, as an ISO 8601 instant in UTC. It closes the night, so the three night blocks are cut between this and the sunset above.
+         */
+        nextSunrise: string;
+        /**
+         * The pre-dawn window, as a fixed offset from sunrise. It is not scaled to the length of the night, and calculators that scale it are following a reading the commentary rejects.
+         */
+        brahmaMuhurta: {
+            /**
+             * When the window opens, 96 minutes before sunrise.
+             */
+            start: string;
+            /**
+             * When the window closes, 48 minutes before sunrise.
+             */
+            end: string;
+            /**
+             * Length of one muhurta in minutes. Thirty of them make one day AND night together, not thirty in the daylight alone, and reading it the other way doubles every number here.
+             */
+            muhurtaMinutes: number;
+            /**
+             * Muhurtas in one full day and night. Two texts state this and agree exactly on it while differing on the smaller units.
+             */
+            muhurtasPerAhoratra: number;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        };
+        /**
+         * The six blocks under the convention that was requested, in chronological order.
+         */
+        doshaPeriods: Array<{
+            /**
+             * The humour this block belongs to, as the Sanskrit identifier. Never translated, so it stays safe to compare against and to use as a style key.
+             */
+            dosha: string;
+            /**
+             * When the block opens, as an ISO 8601 instant in UTC.
+             */
+            start: string;
+            /**
+             * When the block closes, as an ISO 8601 instant in UTC.
+             */
+            end: string;
+            /**
+             * Whether the block sits in the day or the night. Always English, so it stays safe to switch on.
+             */
+            span: string;
+            /**
+             * Which third of its half the block is, 1 for the first, 2 for the middle and 3 for the last. Present only on the sunrise-anchored division, because the clock grid divides no actual day and has no thirds to report.
+             */
+            third?: number;
+        }>;
+        /**
+         * The same six blocks under the other convention, so a caller can show one and reconcile against the other without a second call.
+         */
+        alternatePeriods: Array<{
+            /**
+             * The humour this block belongs to, as the Sanskrit identifier. Never translated, so it stays safe to compare against and to use as a style key.
+             */
+            dosha: string;
+            /**
+             * When the block opens, as an ISO 8601 instant in UTC.
+             */
+            start: string;
+            /**
+             * When the block closes, as an ISO 8601 instant in UTC.
+             */
+            end: string;
+            /**
+             * Whether the block sits in the day or the night. Always English, so it stays safe to switch on.
+             */
+            span: string;
+            /**
+             * Which third of its half the block is, 1 for the first, 2 for the middle and 3 for the last. Present only on the sunrise-anchored division, because the clock grid divides no actual day and has no thirds to report.
+             */
+            third?: number;
+        }>;
+        /**
+         * The daily sequence the chapter gives, in its own order.
+         */
+        routine: Array<{
+            /**
+             * Position in the sequence the chapter gives, starting at 1.
+             */
+            order: number;
+            /**
+             * Stable identifier for the step. Always English and lowercase, so it is safe to compare against and to key a translation off.
+             */
+            id: string;
+            /**
+             * The step under its Sanskrit name, in the standard diacritic transliteration. Data rather than a translation, so it is identical under every language.
+             */
+            sanskritName: string;
+            /**
+             * What the step is, written from the source and translated in place. The chapter also names specific substances and gives lists of who should abstain; neither is carried here.
+             */
+            guidance: string;
+            /**
+             * Where the step sits in the sequence. Only the first step carries a real offset, because the chapter orders the day rather than scheduling it; the clock for this place is in the fields above.
+             */
+            timing: string;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        }>;
+        /**
+         * The day in prose, composed and translated in place.
+         */
+        summary: string;
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * The conventions this schedule was produced under.
+         */
+        conventions: {
+            /**
+             * Which division the doshaPeriods array holds. Echoes the request; the other one is in alternatePeriods.
+             */
+            doshaClock: string;
+        };
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type PostAyurvedaDinacharyaResponse = PostAyurvedaDinacharyaResponses[keyof PostAyurvedaDinacharyaResponses];
+
+export type PostAyurvedaRitucharyaData = {
+    body?: AyurvedaRitucharyaRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/ayurveda/ritucharya';
+};
+
+export type PostAyurvedaRitucharyaErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostAyurvedaRitucharyaError = PostAyurvedaRitucharyaErrors[keyof PostAyurvedaRitucharyaErrors];
+
+export type PostAyurvedaRitucharyaResponses = {
+    /**
+     * The season, its boundaries, and what the chapter states for it.
+     */
+    200: {
+        /**
+         * The date this reading is for, echoing the request.
+         */
+        date: string;
+        /**
+         * The season in force on this date.
+         */
+        ritu: {
+            /**
+             * The season as a Sanskrit identifier, always English-safe and never translated. One of sisira, vasanta, grisma, varsa, sarad and hemanta, plus pravrt which only the alternate scheme carries.
+             */
+            id: string;
+            /**
+             * The season in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * The season in Devanagari. Data rather than a translation, so it is identical under every language.
+             */
+            devanagari: string;
+            /**
+             * What the season is called in the requested language. This is the gloss and it does translate; the identifier above does not.
+             */
+            gloss: string;
+            /**
+             * The default-scheme season the classical layer was read from. Equal to the id in the ordinary case, and different under the alternate scheme, whose own verse states no strength cycle, taste cycle or dosha cycle for its seasons.
+             */
+            classicalRitu: string;
+            /**
+             * When the season opened, as an ISO 8601 instant in UTC. This is the ingress into the first of its two solar months, computed rather than tabulated, so it is exact to the second.
+             */
+            start: string;
+            /**
+             * When the season closes, as an ISO 8601 instant in UTC. It is the ingress that opens the next season, so two consecutive calls join without a gap.
+             */
+            end: string;
+            /**
+             * The two solar months the season spans, in order. A solar month is the interval the sun spends inside one rasi, which is why every boundary above is an ingress instant.
+             */
+            solarMonths: Array<{
+                /**
+                 * Zero-based rasi index, 0 for Aries, so a caller can order the twelve without a name table.
+                 */
+                index: number;
+                /**
+                 * The rasi as the lowercase English sign id every other RoxyAPI domain uses.
+                 */
+                id: string;
+                /**
+                 * The solar month under the name a panchang prints for it. Data, identical in every language.
+                 */
+                sanskritName: string;
+            }>;
+        };
+        /**
+         * Which course the sun is in.
+         */
+        ayana: {
+            /**
+             * The half-year course of the sun, as a Sanskrit identifier. Never translated. It names what the sun is doing rather than what the weather is, so it is the same for every observer on the same day and is never rotated for the hemisphere.
+             */
+            id: string;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        };
+        /**
+         * The taking or giving half of the year.
+         */
+        phase: {
+            /**
+             * Whether the sun is taking or giving across this half of the year, as a Sanskrit identifier. Never translated, and deliberately so: the published translations render the two terms with four different English words between them, so an English value would not be stable enough to compare against.
+             */
+            id: string;
+            /**
+             * The three tastes that grow across this half of the year, in the order the verse gives them, one per season. This is the sequence the season taste below is one member of.
+             */
+            tastes: Array<{
+                /**
+                 * The taste as a Sanskrit identifier. Never translated, so it stays safe to compare against and joins straight to the tastes catalogue.
+                 */
+                id: string;
+                /**
+                 * The same taste in the standard diacritic transliteration.
+                 */
+                sanskritName: string;
+                /**
+                 * The taste in the requested language. This is the gloss and it does translate.
+                 */
+                english: string;
+            }>;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        };
+        /**
+         * Where the season sits in the strength cycle.
+         */
+        strength: {
+            /**
+             * Bodily strength in this season: highest, moderate or lowest. Always English so it stays safe to switch on. The strongest pair is the cold season and the dewy season, which are adjacent in the cycle but sit at opposite ends of the two courses, and that wrap-around is the part a positional reading of the verse gets wrong.
+             */
+            level: string;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        };
+        /**
+         * The taste that grows IN NATURE across this season. It is not the taste to favour: the regimen for the same season is broadly the opposite, which is why this field is never named for a recommendation.
+         */
+        tasteIncreasing: {
+            /**
+             * The taste as a Sanskrit identifier. Never translated, so it stays safe to compare against and joins straight to the tastes catalogue.
+             */
+            id: string;
+            /**
+             * The same taste in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * The taste in the requested language. This is the gloss and it does translate.
+             */
+            english: string;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        };
+        /**
+         * Which humours the season moves, and how. A season moves at most three of the nine slots and often fewer, so an empty entry for a humour means the cycle simply says nothing about it in this season.
+         */
+        doshaCycle: Array<{
+            /**
+             * The humour, as a Sanskrit identifier. Never translated.
+             */
+            dosha: string;
+            /**
+             * Where the humour stands: accumulating, aggravated or settling. Always English so it stays safe to switch on. The three are positions and qualities rather than complaints, which is what the definitions below say.
+             */
+            state: string;
+            /**
+             * What the state is, in the requested language, defined by where the humour sits and how it behaves.
+             */
+            meaning: string;
+            /**
+             * A recorded disagreement about this row, present only where one exists.
+             */
+            note?: string;
+        }>;
+        /**
+         * What the chapter states for this season. Roughly half its verses leave no item here once substances and clinical procedures are set aside, and those verses are absent rather than padded.
+         */
+        regimen: Array<{
+            /**
+             * Stable identifier for the item. Always English and lowercase, so it is safe to compare against.
+             */
+            id: string;
+            /**
+             * The behaviour item, written from the source and translated in place. Behaviours, qualities and tastes only: the chapter also names specific substances and prescribes clinical procedures, and neither is carried here.
+             */
+            guidance: string;
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        }>;
+        /**
+         * The season in prose, composed and translated in place.
+         */
+        summary: string;
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * The conventions this reading was produced under.
+         */
+        conventions: {
+            /**
+             * Which six-season division was applied. Echoes the request.
+             */
+            ritucharyaScheme: string;
+            /**
+             * Which zodiac the boundaries were measured in. Echoes the request, and the two answers can differ by about 24 days.
+             */
+            rituZodiac: string;
+            /**
+             * Which half of the world the season names are stated for. Echoes the request and is never inferred from a latitude.
+             */
+            hemisphere: string;
+        };
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type PostAyurvedaRitucharyaResponse = PostAyurvedaRitucharyaResponses[keyof PostAyurvedaRitucharyaResponses];
+
+export type GetAyurvedaDailyData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Reading date in YYYY-MM-DD format. Past and future dates are both supported, for editorial scheduling and backfill. Defaults to the current day in the timezone parameter.
+         */
+        date?: string;
+        /**
+         * Latitude in decimal degrees. It sets how long the day and the night actually are, which is what the dosha periods are cut from.
+         */
+        latitude?: number | null;
+        /**
+         * Longitude in decimal degrees. It sets the clock time of sunrise at this place.
+         */
+        longitude?: number | null;
+        /**
+         * Selects which day counts as current when date is omitted, and which local day sunrise is computed for. Defaults to UTC, so the reading rolls over at 00:00 UTC. Accepts an IANA name (e.g. "Europe/London"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
+         */
+        timezone?: string;
+    };
+    url: '/ayurveda/daily';
+};
+
+export type GetAyurvedaDailyErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAyurvedaDailyError = GetAyurvedaDailyErrors[keyof GetAyurvedaDailyErrors];
+
+export type GetAyurvedaDailyResponses = {
+    /**
+     * The day, composed from the routine and the season.
+     */
+    200: {
+        /**
+         * The date of this reading. Echoes the date requested, or the current day in the timezone parameter when it was omitted.
+         */
+        date: string;
+        /**
+         * Sunrise at this place, as an ISO 8601 instant in UTC.
+         */
+        sunrise: string;
+        /**
+         * Sunset at this place, as an ISO 8601 instant in UTC.
+         */
+        sunset: string;
+        /**
+         * The pre-dawn window as a fixed offset from sunrise, not a share of the night.
+         */
+        brahmaMuhurta: {
+            /**
+             * When the window opens, 96 minutes before sunrise.
+             */
+            start: string;
+            /**
+             * When the window closes, 48 minutes before sunrise.
+             */
+            end: string;
+        };
+        /**
+         * The six blocks, cut from the actual day and night at this place into thirds.
+         */
+        doshaPeriods: Array<{
+            /**
+             * The humour this block belongs to, as a Sanskrit identifier.
+             */
+            dosha: string;
+            /**
+             * When the block opens, as an ISO 8601 instant in UTC.
+             */
+            start: string;
+            /**
+             * When the block closes, as an ISO 8601 instant in UTC.
+             */
+            end: string;
+            /**
+             * Whether the block sits in the day or the night.
+             */
+            span: string;
+        }>;
+        /**
+         * The season this date falls in.
+         */
+        ritu: {
+            /**
+             * The season as a Sanskrit identifier. Never translated.
+             */
+            id: string;
+            /**
+             * The season in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * What the season is called in the requested language.
+             */
+            gloss: string;
+            /**
+             * When the season opened, as an ISO 8601 instant in UTC.
+             */
+            start: string;
+            /**
+             * When it closes, as an ISO 8601 instant in UTC.
+             */
+            end: string;
+            /**
+             * The half-year course of the sun, as a Sanskrit identifier. It names what the sun is doing, so it is the same for every observer on the same day.
+             */
+            ayana: string;
+            /**
+             * Whether the sun is taking or giving across this half of the year, as a Sanskrit identifier.
+             */
+            phase: string;
+            /**
+             * Bodily strength in this season: highest, moderate or lowest. Always English so it stays safe to switch on.
+             */
+            strength: string;
+            /**
+             * The taste that grows in nature across this season, as a Sanskrit identifier. It is what the season brings rather than what to favour in it.
+             */
+            tasteIncreasing: string;
+        };
+        /**
+         * Which humours this season moves, and how. A season moves at most three of the nine slots and often fewer.
+         */
+        doshaCycle: Array<{
+            /**
+             * The humour, as a Sanskrit identifier.
+             */
+            dosha: string;
+            /**
+             * Where the season puts it: accumulating, aggravated or settling. Always English so it stays safe to switch on.
+             */
+            state: string;
+        }>;
+        /**
+         * The day in prose, composed and translated in place.
+         */
+        summary: string;
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * The conventions this reading was produced under. All four are the defaults, stated rather than assumed.
+         */
+        conventions: {
+            /**
+             * How the six periods were cut. This route always uses the default; the routine route takes the choice.
+             */
+            doshaClock: string;
+            /**
+             * Which six-season division was applied. This route always uses the default; the season route takes the choice.
+             */
+            ritucharyaScheme: string;
+            /**
+             * Which zodiac the season boundaries were measured in. This route always uses the default.
+             */
+            rituZodiac: string;
+            /**
+             * Which half of the world the season name is stated for. This route always uses the default and never infers it from the latitude.
+             */
+            hemisphere: string;
+        };
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type GetAyurvedaDailyResponse = GetAyurvedaDailyResponses[keyof GetAyurvedaDailyResponses];
+
+export type GetAyurvedaDoshasData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-3, default 3.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/ayurveda/doshas';
+};
+
+export type GetAyurvedaDoshasErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAyurvedaDoshasError = GetAyurvedaDoshasErrors[keyof GetAyurvedaDoshasErrors];
+
+export type GetAyurvedaDoshasResponses = {
+    /**
+     * The three doshas.
+     */
+    200: {
+        /**
+         * Total number of doshas, which is always three.
+         */
+        total: number;
+        /**
+         * Maximum doshas returned in this page.
+         */
+        limit: number;
+        /**
+         * Number of doshas skipped before this page.
+         */
+        offset: number;
+        /**
+         * The doshas for this page, in the standing order the texts name them.
+         */
+        doshas: Array<{
+            /**
+             * The dosha as a Sanskrit identifier: vata, pitta or kapha. Never translated in any language, because a caller switches on it, and a translated dosha name is a different concept rather than the same one in another language.
+             */
+            id: string;
+            /**
+             * The same name in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * The same name in Devanagari. Data, identical in every language.
+             */
+            devanagari: string;
+            /**
+             * Other names the primary texts use for the same dosha. Data rather than translations, and useful when reading a verse that names one of them instead.
+             */
+            alsoCalled: Array<string>;
+            /**
+             * The single mahabhuta the classical verses give this dosha. Classically each dosha gets one element, not a pair.
+             */
+            element: string;
+            /**
+             * The two-element pairing in general modern circulation. It carries no classical citation in this API, which is why it travels in its own field instead of inside the cited one.
+             */
+            modernElementPair: string;
+            /**
+             * The qualities the frame chapter gives this dosha, each as its Sanskrit word and its gloss. The three sets overlap, so the twenty gunas are not partitioned three ways between them.
+             */
+            qualities: Array<string>;
+            /**
+             * Identifiers from the twenty gunas for the qualities the guna verse names with the SAME Sanskrit word, so this joins straight to the qualities endpoint. Where the dosha chapter uses a synonym, or a word the guna verse does not carry, the entry is absent rather than mapped by resemblance.
+             */
+            qualityGunas: Array<string>;
+            /**
+             * Where the dosha sits, in the requested language.
+             */
+            seats: Array<string>;
+            /**
+             * The seat the chapter singles out above the others.
+             */
+            specialSeat: string;
+            /**
+             * How the second primary text reads the same list. The two are recorded side by side and never merged, because the special seat of pitta genuinely differs between them.
+             */
+            seatsVariant: string;
+            /**
+             * What the dosha does when it is even. For vata the text states this for the dosha as a whole; for the other two it states it only through the five sub-doshas, and those are what appear here.
+             */
+            functions: Array<string>;
+            /**
+             * The five sub-doshas, each with its seat and its work. The five vata NAMES are carried by two texts; every seat and function of the fifteen rests on one chapter alone.
+             */
+            subDoshas: Array<{
+                /**
+                 * Stable identifier for the sub-dosha. Always English-safe and lowercase, and never translated, so it is safe to compare against.
+                 */
+                id: string;
+                /**
+                 * The same name in the standard diacritic transliteration.
+                 */
+                sanskritName: string;
+                /**
+                 * The same name in Devanagari. Data rather than a translation, so it is identical under every language.
+                 */
+                devanagari: string;
+                /**
+                 * Where the sub-dosha sits, in the requested language.
+                 */
+                seat: string;
+                /**
+                 * Where the sub-dosha moves, where the chapter states one. Present on the five vatas and absent elsewhere, because the chapter gives a range of movement only for those.
+                 */
+                moves?: string;
+                /**
+                 * What the sub-dosha does, in the requested language.
+                 */
+                function: string;
+                /**
+                 * Where one claim in this response comes from.
+                 */
+                source: {
+                    /**
+                     * Title of the work the claim is taken from, as it should be cited.
+                     */
+                    text: string;
+                    /**
+                     * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                     */
+                    chapter: string;
+                    /**
+                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     */
+                    verse: string;
+                    /**
+                     * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                     */
+                    translation: string | null;
+                    /**
+                     * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                     */
+                    year: number | null;
+                    /**
+                     * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                     */
+                    publicDomain: boolean;
+                    /**
+                     * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                     */
+                    note?: string;
+                };
+            }>;
+            /**
+             * The three states, as positions and qualities.
+             */
+            states: {
+                /**
+                 * The even state, described as a position and a quality rather than as an absence of complaints.
+                 */
+                balanced: string;
+                /**
+                 * The first state of the seasonal cycle, described the same way.
+                 */
+                accumulating: string;
+                /**
+                 * The second state of the seasonal cycle, described the same way.
+                 */
+                aggravated: string;
+                /**
+                 * The qualities that bring the dosha back to even, which is the like-increases-like rule applied in reverse.
+                 */
+                settlesWith: string;
+                /**
+                 * Where one claim in this response comes from.
+                 */
+                source: {
+                    /**
+                     * Title of the work the claim is taken from, as it should be cited.
+                     */
+                    text: string;
+                    /**
+                     * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                     */
+                    chapter: string;
+                    /**
+                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     */
+                    verse: string;
+                    /**
+                     * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                     */
+                    translation: string | null;
+                    /**
+                     * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                     */
+                    year: number | null;
+                    /**
+                     * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                     */
+                    publicDomain: boolean;
+                    /**
+                     * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                     */
+                    note?: string;
+                };
+            };
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        }>;
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type GetAyurvedaDoshasResponse = GetAyurvedaDoshasResponses[keyof GetAyurvedaDoshasResponses];
+
+export type GetAyurvedaDoshasByIdData = {
+    body?: never;
+    path: {
+        /**
+         * Dosha identifier, case-insensitive. One of vata, pitta or kapha.
+         */
+        id: 'vata' | 'pitta' | 'kapha';
+    };
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/ayurveda/doshas/{id}';
+};
+
+export type GetAyurvedaDoshasByIdErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAyurvedaDoshasByIdError = GetAyurvedaDoshasByIdErrors[keyof GetAyurvedaDoshasByIdErrors];
+
+export type GetAyurvedaDoshasByIdResponses = {
+    /**
+     * The dosha.
+     */
+    200: {
+        /**
+         * One dosha with its qualities, seats, pentad and states.
+         */
+        dosha: {
+            /**
+             * The dosha as a Sanskrit identifier: vata, pitta or kapha. Never translated in any language, because a caller switches on it, and a translated dosha name is a different concept rather than the same one in another language.
+             */
+            id: string;
+            /**
+             * The same name in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * The same name in Devanagari. Data, identical in every language.
+             */
+            devanagari: string;
+            /**
+             * Other names the primary texts use for the same dosha. Data rather than translations, and useful when reading a verse that names one of them instead.
+             */
+            alsoCalled: Array<string>;
+            /**
+             * The single mahabhuta the classical verses give this dosha. Classically each dosha gets one element, not a pair.
+             */
+            element: string;
+            /**
+             * The two-element pairing in general modern circulation. It carries no classical citation in this API, which is why it travels in its own field instead of inside the cited one.
+             */
+            modernElementPair: string;
+            /**
+             * The qualities the frame chapter gives this dosha, each as its Sanskrit word and its gloss. The three sets overlap, so the twenty gunas are not partitioned three ways between them.
+             */
+            qualities: Array<string>;
+            /**
+             * Identifiers from the twenty gunas for the qualities the guna verse names with the SAME Sanskrit word, so this joins straight to the qualities endpoint. Where the dosha chapter uses a synonym, or a word the guna verse does not carry, the entry is absent rather than mapped by resemblance.
+             */
+            qualityGunas: Array<string>;
+            /**
+             * Where the dosha sits, in the requested language.
+             */
+            seats: Array<string>;
+            /**
+             * The seat the chapter singles out above the others.
+             */
+            specialSeat: string;
+            /**
+             * How the second primary text reads the same list. The two are recorded side by side and never merged, because the special seat of pitta genuinely differs between them.
+             */
+            seatsVariant: string;
+            /**
+             * What the dosha does when it is even. For vata the text states this for the dosha as a whole; for the other two it states it only through the five sub-doshas, and those are what appear here.
+             */
+            functions: Array<string>;
+            /**
+             * The five sub-doshas, each with its seat and its work. The five vata NAMES are carried by two texts; every seat and function of the fifteen rests on one chapter alone.
+             */
+            subDoshas: Array<{
+                /**
+                 * Stable identifier for the sub-dosha. Always English-safe and lowercase, and never translated, so it is safe to compare against.
+                 */
+                id: string;
+                /**
+                 * The same name in the standard diacritic transliteration.
+                 */
+                sanskritName: string;
+                /**
+                 * The same name in Devanagari. Data rather than a translation, so it is identical under every language.
+                 */
+                devanagari: string;
+                /**
+                 * Where the sub-dosha sits, in the requested language.
+                 */
+                seat: string;
+                /**
+                 * Where the sub-dosha moves, where the chapter states one. Present on the five vatas and absent elsewhere, because the chapter gives a range of movement only for those.
+                 */
+                moves?: string;
+                /**
+                 * What the sub-dosha does, in the requested language.
+                 */
+                function: string;
+                /**
+                 * Where one claim in this response comes from.
+                 */
+                source: {
+                    /**
+                     * Title of the work the claim is taken from, as it should be cited.
+                     */
+                    text: string;
+                    /**
+                     * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                     */
+                    chapter: string;
+                    /**
+                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     */
+                    verse: string;
+                    /**
+                     * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                     */
+                    translation: string | null;
+                    /**
+                     * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                     */
+                    year: number | null;
+                    /**
+                     * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                     */
+                    publicDomain: boolean;
+                    /**
+                     * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                     */
+                    note?: string;
+                };
+            }>;
+            /**
+             * The three states, as positions and qualities.
+             */
+            states: {
+                /**
+                 * The even state, described as a position and a quality rather than as an absence of complaints.
+                 */
+                balanced: string;
+                /**
+                 * The first state of the seasonal cycle, described the same way.
+                 */
+                accumulating: string;
+                /**
+                 * The second state of the seasonal cycle, described the same way.
+                 */
+                aggravated: string;
+                /**
+                 * The qualities that bring the dosha back to even, which is the like-increases-like rule applied in reverse.
+                 */
+                settlesWith: string;
+                /**
+                 * Where one claim in this response comes from.
+                 */
+                source: {
+                    /**
+                     * Title of the work the claim is taken from, as it should be cited.
+                     */
+                    text: string;
+                    /**
+                     * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                     */
+                    chapter: string;
+                    /**
+                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     */
+                    verse: string;
+                    /**
+                     * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                     */
+                    translation: string | null;
+                    /**
+                     * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                     */
+                    year: number | null;
+                    /**
+                     * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                     */
+                    publicDomain: boolean;
+                    /**
+                     * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                     */
+                    note?: string;
+                };
+            };
+            /**
+             * Where one claim in this response comes from.
+             */
+            source: {
+                /**
+                 * Title of the work the claim is taken from, as it should be cited.
+                 */
+                text: string;
+                /**
+                 * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+                 */
+                chapter: string;
+                /**
+                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 */
+                verse: string;
+                /**
+                 * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+                 */
+                translation: string | null;
+                /**
+                 * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+                 */
+                year: number | null;
+                /**
+                 * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+                 */
+                publicDomain: boolean;
+                /**
+                 * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+                 */
+                note?: string;
+            };
+        };
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type GetAyurvedaDoshasByIdResponse = GetAyurvedaDoshasByIdResponses[keyof GetAyurvedaDoshasByIdResponses];
+
+export type GetAyurvedaTastesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-6, default 6.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/ayurveda/tastes';
+};
+
+export type GetAyurvedaTastesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAyurvedaTastesError = GetAyurvedaTastesErrors[keyof GetAyurvedaTastesErrors];
+
+export type GetAyurvedaTastesResponses = {
+    /**
+     * The six tastes and the matrix.
+     */
+    200: {
+        /**
+         * Total number of tastes, which is always six.
+         */
+        total: number;
+        /**
+         * Maximum tastes returned in this page.
+         */
+        limit: number;
+        /**
+         * Number of tastes skipped before this page.
+         */
+        offset: number;
+        /**
+         * The six in the order the verse names them, which the verse then says is the order in which they give strength, most first. The order is a claim rather than a presentation choice, so it is published separately from the page above.
+         */
+        strengthOrder: Array<string>;
+        /**
+         * The tastes for this page, in the order the root verse names them.
+         */
+        rasas: Array<{
+            /**
+             * The taste as a Sanskrit identifier. Never translated, so it stays safe to compare against and to key a lookup on. The six are madhura, amla, lavana, tikta, katu and kashaya.
+             */
+            id: string;
+            /**
+             * The same name in the standard diacritic transliteration.
+             */
+            sanskritName: string;
+            /**
+             * The same name in Devanagari. Data, identical in every language.
+             */
+            devanagari: string;
+            /**
+             * The form the root verse itself uses, where it differs from the identifier. The verse spells the pungent taste one way and the rest of the literature spells it another, and both are carried so a reader checking the Sanskrit does not conclude a row is missing.
+             */
+            textForm: string;
+            /**
+             * The taste in the requested language. This is the gloss and it does translate.
+             */
+            english: string;
+            /**
+             * The mahabhutas the taste arises from. Single-sourced, and from an edition that is not public domain, so the reference ships and the wording does not. That edition gives the sweet taste ONE element where material in general circulation gives it a pair.
+             */
+            elements: Array<string>;
+            /**
+             * The doshas this taste lowers, as Sanskrit identifiers. Each taste lowers exactly three across the three doshas and raises the others, which is the structure that makes the matrix complete.
+             */
+            decreases: Array<string>;
+            /**
+             * The doshas this taste raises, as Sanskrit identifiers.
+             */
+            increases: Array<string>;
+        }>;
+        /**
+         * The same eighteen cells indexed by dosha rather than by taste, keyed vata, pitta and kapha. Derived from the rows above rather than restated, so the two views cannot disagree.
+         */
+        matrix: {
+            [key: string]: {
+                /**
+                 * The three tastes that lower this dosha.
+                 */
+                decreasedBy: Array<string>;
+                /**
+                 * The three tastes that raise it.
+                 */
+                increasedBy: Array<string>;
+            };
+        };
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type GetAyurvedaTastesResponse = GetAyurvedaTastesResponses[keyof GetAyurvedaTastesResponses];
+
+export type GetAyurvedaQualitiesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+        /**
+         * Maximum items to return per page. Range: 1-10, default 10.
+         */
+        limit?: number;
+        /**
+         * Number of items to skip for pagination. Default 0.
+         */
+        offset?: number | null;
+    };
+    url: '/ayurveda/qualities';
+};
+
+export type GetAyurvedaQualitiesErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type GetAyurvedaQualitiesError = GetAyurvedaQualitiesErrors[keyof GetAyurvedaQualitiesErrors];
+
+export type GetAyurvedaQualitiesResponses = {
+    /**
+     * The ten pairs and the rule they operate under.
+     */
+    200: {
+        /**
+         * Total number of pairs, which is always ten, covering twenty qualities.
+         */
+        total: number;
+        /**
+         * Maximum pairs returned in this page.
+         */
+        limit: number;
+        /**
+         * Number of pairs skipped before this page.
+         */
+        offset: number;
+        /**
+         * The half-verse the whole domain turns on, translated in place. It is stated of ALL things rather than of food, which is why the same sentence governs the dosha states, the taste matrix, the seasonal regimen and the daily routine alike.
+         */
+        rule: string;
+        /**
+         * The pairs for this page. The root verse names only the first member of each and then says twenty counting their opposites; the opposites and every action word come from the commentaries.
+         */
+        pairs: Array<{
+            /**
+             * Position of the pair, 1 to 10, in the order the root verse names the first member of each.
+             */
+            number: number;
+            /**
+             * One of the twenty qualities.
+             */
+            a: {
+                /**
+                 * The quality as a Sanskrit identifier. Never translated, so it stays safe to compare against and joins straight to the qualityGunas array on each dosha.
+                 */
+                id: string;
+                /**
+                 * The same name in the standard diacritic transliteration.
+                 */
+                sanskritName: string;
+                /**
+                 * The quality in the requested language. This is the gloss and it does translate.
+                 */
+                english: string;
+                /**
+                 * What this quality does, from the one action word the commentary gives each of the twenty. This is what turns the list from a glossary into the mechanism the rest of the domain runs on.
+                 */
+                action: string;
+                /**
+                 * The same action word in Sanskrit. Data rather than a translation, so a reader can find the clause it comes from.
+                 */
+                actionSanskrit: string;
+                /**
+                 * Which doshas carry this quality, as Sanskrit identifiers, taken from the dosha catalogue rather than restated here. Empty where no dosha carries it under the same Sanskrit word, and note that the three dosha sets overlap, so the twenty are not partitioned three ways.
+                 */
+                doshas: Array<string>;
+            };
+            /**
+             * One of the twenty qualities.
+             */
+            b: {
+                /**
+                 * The quality as a Sanskrit identifier. Never translated, so it stays safe to compare against and joins straight to the qualityGunas array on each dosha.
+                 */
+                id: string;
+                /**
+                 * The same name in the standard diacritic transliteration.
+                 */
+                sanskritName: string;
+                /**
+                 * The quality in the requested language. This is the gloss and it does translate.
+                 */
+                english: string;
+                /**
+                 * What this quality does, from the one action word the commentary gives each of the twenty. This is what turns the list from a glossary into the mechanism the rest of the domain runs on.
+                 */
+                action: string;
+                /**
+                 * The same action word in Sanskrit. Data rather than a translation, so a reader can find the clause it comes from.
+                 */
+                actionSanskrit: string;
+                /**
+                 * Which doshas carry this quality, as Sanskrit identifiers, taken from the dosha catalogue rather than restated here. Empty where no dosha carries it under the same Sanskrit word, and note that the three dosha sets overlap, so the twenty are not partitioned three ways.
+                 */
+                doshas: Array<string>;
+            };
+            /**
+             * A recorded disagreement about this pair, present only where one exists. It is stated rather than resolved silently because the choice changes which dosha the pair joins to.
+             */
+            note?: string;
+        }>;
+        /**
+         * Every work behind this response, once each.
+         */
+        sources: Array<{
+            /**
+             * Title of the work the claim is taken from, as it should be cited.
+             */
+            text: string;
+            /**
+             * Chapter or sthana, as printed in that edition. Use it with the verse to find the passage in any copy.
+             */
+            chapter: string;
+            /**
+             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             */
+            verse: string;
+            /**
+             * The named translator, or null where the English shipped here was written from the Sanskrit because no public-domain translation of that work exists.
+             */
+            translation: string | null;
+            /**
+             * Publication year of the named translation, or null where no translation is cited. Use it with publicDomain to judge what may be quoted.
+             */
+            year: number | null;
+            /**
+             * Whether the cited translation may be quoted. When false the verse reference is the citation and the translator wording is not reproduced anywhere in this API, so a caller reproducing a source must go to the verse rather than to us.
+             */
+            publicDomain: boolean;
+            /**
+             * A recorded disagreement between sources, or a stated limit on what the citation covers. Present only where one exists, and never resolved silently in favour of one reading.
+             */
+            note?: string;
+        }>;
+        /**
+         * Scope of the response.
+         */
+        meta: {
+            /**
+             * The scope of everything in this response, in the requested language. Present on every response from this API, and intended to be shown to the reader rather than stripped.
+             */
+            disclaimer: string;
+        };
+    };
+};
+
+export type GetAyurvedaQualitiesResponse = GetAyurvedaQualitiesResponses[keyof GetAyurvedaQualitiesResponses];
+
 export type PostIchingDailyData = {
     body?: {
         /**
@@ -48349,15 +61331,15 @@ export type PostIchingDailyErrors = {
         code: string;
     };
     /**
-     * Failed to generate daily hexagram
+     * Internal server error
      */
     500: {
         /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
+         * Human-readable error message. May change wording.
          */
         error: string;
         /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
+         * Machine-readable error code. Stable identifier.
          */
         code: string;
     };
@@ -51108,7 +64090,12 @@ export type GetCrystalsRandomResponse = GetCrystalsRandomResponses[keyof GetCrys
 export type GetCrystalsColorsData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
     url: '/crystals/colors';
 };
 
@@ -51237,7 +64224,12 @@ export type GetCrystalsColorsResponse = GetCrystalsColorsResponses[keyof GetCrys
 export type GetCrystalsPlanetsData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
     url: '/crystals/planets';
 };
 

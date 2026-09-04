@@ -10,7 +10,7 @@ const roxy = createRoxy(process.env.ROXY_API_KEY!);
 ```
 
 <!-- BEGIN:LANGS -->
-**Multi-language responses.** Interpretations are available in 10 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`, `zh-Hans`, `zh-Hant`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, forecast, humanDesign, chineseAstrology, fengShui, numerology, tarot, biorhythm, iching, crystals, angelNumbers, languages. English-only: dreams, location, usage. Languages without translations yet fall back to English.
+**Multi-language responses.** Interpretations are available in 10 languages: `en`, `tr`, `de`, `es`, `hi`, `pt`, `fr`, `ru`, `zh-Hans`, `zh-Hant`. Pass `query: { lang }` on any supported endpoint. Supported: astrology, vedicAstrology, forecast, humanDesign, chineseAstrology, fengShui, mesoamericanAstrology, vastu, numerology, kabbalah, tarot, biorhythm, ayurveda, iching, crystals, angelNumbers, languages. English-only: dreams, location, usage. Languages without translations yet fall back to English.
 <!-- END:LANGS -->
 
 ```typescript
@@ -248,7 +248,7 @@ const { data } = await roxy.astrology.generateCompositeChart({
   },
 });
 
-// Compatibility Score. Relationship compatibility analysis with category breakdown
+// Compatibility score - Relationship compatibility API
 const { data } = await roxy.astrology.calculateCompatibility({
   body: {
     person1: {
@@ -1534,6 +1534,235 @@ const { data } = await roxy.fengShui.listNinePeriods({ query: { date: '2026-08-2
 
 ---
 
+## Mesoamerican Astrology — `roxy.mesoamericanAstrology`
+
+Calculate Mayan astrology day signs, the Tzolkin sacred round, the Haab year, the full Long Count and the Aztec tonal...
+
+```typescript
+// Mayan day sign for a date - Tzolkin calculator API
+const { data } = await roxy.mesoamericanAstrology.calculateTzolkin({ body: { date: '2012-12-21', correlation: 'gmt-584283' } });
+
+// Generate a Mayan chart - Tzolkin, Haab and Long Count calculator API
+const { data } = await roxy.mesoamericanAstrology.generateMayanChart({
+  body: {
+    date: '2012-12-21',
+    correlation: 'gmt-584283',
+    yearBearerSystem: 'classic',
+  },
+});
+
+// Convert a Maya Long Count - Long Count calendar converter API
+const { data } = await roxy.mesoamericanAstrology.convertLongCount({
+  body: {
+    date: '2012-12-21',
+    longCount: '13.0.0.0.0',
+    correlation: 'gmt-584283',
+  },
+});
+
+// Daily Mayan energy reading - Tzolkin day sign of the day API
+const { data } = await roxy.mesoamericanAstrology.getDailyMayanReading({ query: { date: '2026-09-02', correlation: 'gmt-584283' } });
+
+// Monthly Tzolkin calendar grid - Maya calendar month API
+const { data } = await roxy.mesoamericanAstrology.getMonthlyTzolkinCalendar({
+  query: { year: 2026, month: 9, correlation: 'gmt-584283' },
+});
+
+// Mayan nawal compatibility - Tzolkin pair analysis API
+const { data } = await roxy.mesoamericanAstrology.calculateMayanCompatibility({
+  body: {
+    personA: { date: '2012-12-21' },
+    personB: { date: '2012-12-21' },
+    correlation: 'gmt-584283',
+    directionScheme: 'madrid-codex',
+  },
+});
+
+// List the 20 Mayan day signs - Tzolkin nawal catalogue API
+const { data } = await roxy.mesoamericanAstrology.listMayanDaySigns({
+  query: { directionScheme: 'madrid-codex', limit: 20, offset: 0 },
+});
+
+// Get one Mayan day sign - Nawal profile API
+const { data } = await roxy.mesoamericanAstrology.getMayanDaySign({
+  path: { id: 'imix' },
+  query: { directionScheme: 'madrid-codex' },
+});
+
+// List the 20 Mayan trecenas - Tzolkin thirteen day period API
+const { data } = await roxy.mesoamericanAstrology.listTrecenas({ query: { limit: 20, offset: 0 } });
+
+// Get one Mayan trecena - Thirteen day period profile API
+const { data } = await roxy.mesoamericanAstrology.getTrecena({ path: { number: 1 } });
+
+// List the 19 Haab periods - Maya solar calendar month API
+const { data } = await roxy.mesoamericanAstrology.listHaabMonths({ query: { limit: 19, offset: 0 } });
+
+// Get one Haab period - Maya solar calendar month profile API
+const { data } = await roxy.mesoamericanAstrology.getHaabMonth({ path: { id: 'pop' } });
+
+// Aztec day sign for a date - Tonalpohualli calculator API
+const { data } = await roxy.mesoamericanAstrology.calculateTonalpohualli({ body: { date: '2012-12-21' } });
+
+// Daily Aztec energy reading - Tonalpohualli day sign of the day API
+const { data } = await roxy.mesoamericanAstrology.getDailyAztecReading({ query: { date: '2026-09-02' } });
+
+// List the 20 Aztec day signs - Tonalpohualli sign catalogue API
+const { data } = await roxy.mesoamericanAstrology.listAztecDaySigns({ query: { limit: 20, offset: 0 } });
+
+// Get one Aztec day sign - Tonalpohualli sign profile API
+const { data } = await roxy.mesoamericanAstrology.getAztecDaySign({ path: { id: 'cipactli' } });
+
+// List the 20 Aztec trecenas - Tonalpohualli thirteen day period API
+const { data } = await roxy.mesoamericanAstrology.listAztecTrecenas({ query: { limit: 20, offset: 0 } });
+
+// Get one Aztec trecena - Tonalpohualli period profile API
+const { data } = await roxy.mesoamericanAstrology.getAztecTrecena({ path: { number: 1 } });
+```
+
+---
+
+## Vastu — `roxy.vastu`
+
+Vastu Shastra API for directional home and plot analysis: entrance padas with the classical effect of each of the 32...
+
+```typescript
+// Calculate entrance pada - Vastu main door direction API
+const { data } = await roxy.vastu.calculateEntrancePada({
+  body: {
+    plot: {
+      width: 30,
+      depth: 40,
+      polygon: [
+        { x: 0, y: 0 },
+        { x: 30, y: 0 },
+        { x: 30, y: 40 },
+        { x: 0, y: 40 },
+      ],
+      unit: 'feet',
+    },
+    facing: 'North',
+    facingDegrees: 15,
+    doorPosition: 0.4,
+    grid: '81-pada',
+  },
+});
+
+// Generate Vastu Purusha Mandala - 81 pada and 64 pada grid API
+const { data } = await roxy.vastu.generateMandala({
+  body: {
+    plot: {
+      width: 30,
+      depth: 40,
+      polygon: [
+        { x: 0, y: 0 },
+        { x: 30, y: 0 },
+        { x: 30, y: 40 },
+        { x: 0, y: 40 },
+      ],
+      unit: 'feet',
+    },
+    grid: '81-pada',
+  },
+});
+
+// Analyse a plot - Vastu land and site assessment API
+const { data } = await roxy.vastu.calculatePlotAnalysis({
+  body: {
+    plot: {
+      width: 30,
+      depth: 40,
+      polygon: [
+        { x: 0, y: 0 },
+        { x: 30, y: 0 },
+        { x: 30, y: 40 },
+        { x: 0, y: 40 },
+      ],
+      unit: 'feet',
+    },
+    facing: 'North',
+    facingDegrees: 15,
+    slopeLowDirection: 'Northeast',
+    road: 'North',
+    extensions: ['Northeast'],
+    cuts: ['Southwest'],
+    water: 'Northeast',
+    slopeSchool: 'brihat-samhita',
+  },
+});
+
+// Calculate Ayadi shadvarga - Vastu proportion and yoni calculator API
+const { data } = await roxy.vastu.calculateAyadi({
+  body: {
+    length: 11,
+    breadth: 11,
+    perimeter: 11,
+    circumference: 11,
+    unit: 'hasta',
+    hastaInches: 18,
+    ayadiText: 'manasara',
+    vyayaFormula: 'p9-10',
+  },
+});
+
+// Check room placement - Vastu room direction compliance API
+const { data } = await roxy.vastu.calculateRoomCompliance({
+  body: {
+    plot: {
+      width: 30,
+      depth: 40,
+      polygon: [
+        { x: 0, y: 0 },
+        { x: 30, y: 0 },
+        { x: 30, y: 40 },
+        { x: 0, y: 40 },
+      ],
+      unit: 'feet',
+    },
+    facing: 'North',
+    facingDegrees: 15,
+    rooms: [
+      {
+        type: 'kitchen',
+        direction: 'Southeast',
+        polygon: [
+          { x: 20, y: 2 },
+          { x: 28, y: 2 },
+          { x: 28, y: 12 },
+          { x: 20, y: 12 },
+        ],
+      },
+    ],
+  },
+});
+
+// Find griha pravesh dates - Vastu house warming muhurta API
+const { data } = await roxy.vastu.findGrihaPraveshDates({
+  body: {
+    startDate: '2027-01-20',
+    endDate: '2027-03-20',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 'America/New_York',
+    muhurtaText: 'muhurta-chintamani',
+  },
+});
+
+// List the eight directions - Vastu dikpala and direction reference API
+const { data } = await roxy.vastu.listDikpalaDirections({ query: { limit: 8, offset: 0 } });
+
+// Look up one direction - Vastu dikpala reference API
+const { data } = await roxy.vastu.getDikpalaDirection({ path: { id: 'Northeast' } });
+
+// List the 45 devatas - Vastu Purusha Mandala reference API
+const { data } = await roxy.vastu.listDevatas({ query: { limit: 45, offset: 0 } });
+
+// Look up one devata - Vastu mandala devata reference API
+const { data } = await roxy.vastu.getDevata({ path: { id: 'jayanta' } });
+```
+
+---
+
 ## Numerology — `roxy.numerology`
 
 Numerology API to calculate life path, expression, soul urge, personality, and maturity numbers, with Pinnacle and Ch...
@@ -1654,12 +1883,114 @@ const { data } = await roxy.numerology.calculateBusinessName({ body: { name: 'Fo
 
 ---
 
+## Kabbalah — `roxy.kabbalah`
+
+Kabbalah API for gematria, the 72 names, the Tree of Life and the Hebrew birthday, from one key
+
+```typescript
+// Calculate gematria - Hebrew gematria calculator API with every spelling shown
+const { data } = await roxy.kabbalah.calculateGematria({
+  body: {
+    text: 'Sarah',
+    textHebrew: 'שלום',
+    transliteration: 'letter-map-mathers',
+    ciphers: ['mispar-hechrachi', 'mispar-gadol'],
+    misparGadol: 'finals-500-900',
+    atbashOutput: 'both',
+    includeMatches: true,
+    latinCiphers: false,
+  },
+});
+
+// List gematria ciphers - gematria methods API with provenance on every row
+const { data } = await roxy.kabbalah.listGematriaCiphers();
+
+// Generate a name profile - Kabbalah name numerology API with the spelling shown
+const { data } = await roxy.kabbalah.generateNameProfile({
+  body: {
+    name: 'Sarah',
+    nameHebrew: 'שרה',
+    transliteration: 'letter-map-mathers',
+    misparGadol: 'finals-500-900',
+  },
+});
+
+// Generate a birth profile - Hebrew birthday and birth angel API
+const { data } = await roxy.kabbalah.generateBirthProfile({
+  body: {
+    date: '1990-06-15',
+    time: '14:30:00',
+    timezone: 'America/New_York',
+    angelDating: 'solar-longitude',
+    yearStart: 'march-21',
+    leapDayPolicy: 'extend-previous',
+    afterSunset: false,
+  },
+});
+
+// List the 72 names - Shem HaMephorash API derived from the verses
+const { data } = await roxy.kabbalah.listShemNames({ query: { limit: 20, offset: 0, longitude: 131.18 } });
+
+// Get one of the 72 names - 72 names of God API by index
+const { data } = await roxy.kabbalah.getShemName({ path: { number: 27 } });
+
+// Get the Tree of Life - sephirot and 22 paths API with typed school variants
+const { data } = await roxy.kabbalah.getTreeOfLife({
+  query: {
+    treeVariant: 'kircher',
+    sephirotSystem: 'classical',
+    letterAttribution: 'sefer-yetzirah-gra',
+  },
+});
+
+// Get one sephirah - sefirot meaning API with the paths that touch it
+const { data } = await roxy.kabbalah.getSephirah({
+  path: { id: 'tiferet' },
+  query: {
+    sephirotSystem: 'classical',
+    letterAttribution: 'sefer-yetzirah-gra',
+  },
+});
+
+// List the Hebrew letters - Hebrew alphabet API with the Sefer Yetzirah attributions
+const { data } = await roxy.kabbalah.listHebrewLetters({ query: { letterAttribution: 'sefer-yetzirah-gra' } });
+
+// Get one Hebrew letter - Hebrew letter meaning API
+const { data } = await roxy.kabbalah.getHebrewLetter({
+  path: { id: 'shin' },
+  query: { letterAttribution: 'sefer-yetzirah-gra' },
+});
+
+// Compare two names - gematria name compatibility API with every component published
+const { data } = await roxy.kabbalah.calculateNameCompatibility({
+  body: {
+    firstName: 'Sarah',
+    firstNameHebrew: 'שרה',
+    secondName: 'David',
+    secondNameHebrew: 'דוד',
+    transliteration: 'letter-map-mathers',
+    misparGadol: 'finals-500-900',
+  },
+});
+
+// Get the sephirah of the day - Omer count API with the sephirot pairing
+const { data } = await roxy.kabbalah.getDailySephirah({
+  query: {
+    date: '2026-04-04',
+    timezone: 'Asia/Jerusalem',
+    afterSunset: 'false',
+  },
+});
+```
+
+---
+
 ## Tarot — `roxy.tarot`
 
 Tarot reading API with the complete 78-card Rider-Waite-Smith deck and card meanings for love, career, health, and sp...
 
 ```typescript
-// List all 78 tarot cards
+// List all 78 tarot cards - Tarot deck catalog API
 const { data } = await roxy.tarot.listCards({
   query: {
     limit: 20,
@@ -1670,10 +2001,10 @@ const { data } = await roxy.tarot.listCards({
   },
 });
 
-// Get detailed tarot card information
+// Get tarot card by id - Tarot card meaning API
 const { data } = await roxy.tarot.getCard({ path: { id: 'fool' } });
 
-// Draw random tarot cards with reproducible results
+// Draw tarot cards - Seeded tarot draw API
 const { data } = await roxy.tarot.drawCards({
   body: {
     count: 3,
@@ -1683,10 +2014,10 @@ const { data } = await roxy.tarot.drawCards({
   },
 });
 
-// Get daily tarot card reading
+// Daily tarot card - Card of the day API
 const { data } = await roxy.tarot.getDailyCard({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// Get yes/no answer to your question
+// Yes or no answer - Yes no tarot reading API
 const { data } = await roxy.tarot.castYesNo({
   body: {
     question: 'Should I accept the job offer?',
@@ -1694,7 +2025,7 @@ const { data } = await roxy.tarot.castYesNo({
   },
 });
 
-// Three-Card Spread: Past, Present, Future
+// Three card spread, past present future - Tarot spread API
 const { data } = await roxy.tarot.castThreeCard({
   body: {
     question: 'What do I need to know about my career?',
@@ -1702,7 +2033,7 @@ const { data } = await roxy.tarot.castThreeCard({
   },
 });
 
-// Celtic Cross Spread (10 cards)
+// Celtic Cross spread, 10 cards - Tarot spread API
 const { data } = await roxy.tarot.castCelticCross({
   body: {
     question: 'What should I know about this situation?',
@@ -1710,7 +2041,7 @@ const { data } = await roxy.tarot.castCelticCross({
   },
 });
 
-// Love Spread (5 cards)
+// Love spread, 5 cards - Relationship tarot reading API
 const { data } = await roxy.tarot.castLoveSpread({
   body: {
     question: 'What do I need to know about my relationship?',
@@ -1718,7 +2049,7 @@ const { data } = await roxy.tarot.castLoveSpread({
   },
 });
 
-// Career Spread (7 cards)
+// Career spread, 7 cards - Career tarot reading API
 const { data } = await roxy.tarot.castCareerSpread({
   body: {
     question: 'What do I need to know about my career path?',
@@ -1726,7 +2057,7 @@ const { data } = await roxy.tarot.castCareerSpread({
   },
 });
 
-// Custom Spread Builder
+// Custom spread builder - Configurable tarot spread API
 const { data } = await roxy.tarot.castCustomSpread({
   body: {
     spreadName: 'My Custom Spread',
@@ -1797,36 +2128,101 @@ const { data } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user123
 
 ---
 
+## Ayurveda — `roxy.ayurveda`
+
+Ayurveda API for dosha profiles, the dinacharya daily routine and the ritucharya seasonal regimen, with a verse cited...
+
+```typescript
+// Ayurvedic constitution from a birth chart - Dosha profile API
+const { data } = await roxy.ayurveda.calculateAyurvedicConstitution({
+  body: {
+    date: '1990-07-04',
+    time: '10:12:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
+    signDoshaScheme: 'satyacharya',
+  },
+});
+
+// Dinacharya daily routine - Brahma muhurta and dosha clock API
+const { data } = await roxy.ayurveda.getDinacharyaSchedule({
+  body: {
+    date: '2026-06-21',
+    latitude: 51.5074,
+    longitude: -0.1278,
+    timezone: 'Europe/London',
+    doshaClock: 'sunrise-anchored',
+  },
+});
+
+// Ayurveda seasonal regimen - Ritucharya and ritu resolution API
+const { data } = await roxy.ayurveda.getRitucharya({
+  body: {
+    date: '2026-03-01',
+    ritucharyaScheme: 'sutrasthana-6',
+    rituZodiac: 'sayana',
+    hemisphere: 'northern',
+  },
+});
+
+// Daily Ayurveda reading - Dosha clock and brahma muhurta by location API
+const { data } = await roxy.ayurveda.getDailyAyurvedaReading({
+  query: {
+    date: '2026-06-21',
+    latitude: 51.5074,
+    longitude: -0.1278,
+    timezone: 'Europe/London',
+  },
+});
+
+// List the three doshas - Dosha catalogue API
+const { data } = await roxy.ayurveda.listDoshas({ query: { limit: 3, offset: 0 } });
+
+// Get one dosha - Vata pitta kapha profile API
+const { data } = await roxy.ayurveda.getDosha({ path: { id: 'vata' } });
+
+// List the six tastes - Ayurveda rasa and dosha matrix API
+const { data } = await roxy.ayurveda.listRasas({ query: { limit: 6, offset: 0 } });
+
+// List the twenty qualities - Ayurveda guna pairs API
+const { data } = await roxy.ayurveda.listGunas({ query: { limit: 10, offset: 0 } });
+```
+
+---
+
 ## I-Ching — `roxy.iching`
 
 I-Ching oracle API with all 64 hexagrams, 384 changing lines, 8 trigrams, and modern interpretations for love, career...
 
 ```typescript
-// Get daily I-Ching hexagram
+// Daily hexagram - Daily I-Ching oracle API
 const { data } = await roxy.iching.getDailyHexagram({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// Cast daily I-Ching reading with changing lines
+// Cast daily reading with changing lines - I-Ching divination API
 const { data } = await roxy.iching.castDailyReading({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// List all 64 hexagrams
+// List all 64 hexagrams - I-Ching hexagram catalog API
 const { data } = await roxy.iching.listHexagrams({ query: { limit: 20, offset: 0 } });
 
-// Get a random hexagram
+// Random hexagram - I-Ching hexagram picker API
 const { data } = await roxy.iching.getRandomHexagram();
 
-// Lookup hexagram by line pattern
+// Lookup hexagram by line pattern - I-Ching binary lookup API
 const { data } = await roxy.iching.lookupHexagram({ query: { lines: '111111' } });
 
-// Get hexagram by number
+// Get hexagram by number - I-Ching hexagram detail API
 const { data } = await roxy.iching.getHexagram({ path: { number: 1 } });
 
-// Cast an I-Ching reading
+// Cast an I-Ching reading - Hexagram divination API
 const { data } = await roxy.iching.castReading({ query: { seed: 'user123-question1' } });
 
-// List all 8 trigrams
+// List all 8 trigrams - Bagua trigram catalog API
 const { data } = await roxy.iching.listTrigrams();
 
-// Get trigram by number or name
+// Get trigram by number or name - Bagua trigram detail API
 const { data } = await roxy.iching.getTrigram({ path: { id: 'Heaven' } });
 ```
 
@@ -1837,46 +2233,46 @@ const { data } = await roxy.iching.getTrigram({ path: { id: 'Heaven' } });
 Crystal healing API covering the most popular and widely-searched healing crystals and gemstones, from Amethyst and R...
 
 ```typescript
-// Crystals by Zodiac Sign
+// Crystals by zodiac sign - Zodiac birthstone API
 const { data } = await roxy.crystals.getCrystalsByZodiac({
   path: { sign: 'pisces' },
   query: { limit: 20, offset: 0 },
 });
 
-// Crystals by Chakra
+// Crystals by chakra - Chakra healing stones API
 const { data } = await roxy.crystals.getCrystalsByChakra({
   path: { chakra: 'Heart' },
   query: { limit: 20, offset: 0 },
 });
 
-// Crystals by Element
+// Crystals by element - Elemental crystal lookup API
 const { data } = await roxy.crystals.getCrystalsByElement({
   path: { element: 'Water' },
   query: { limit: 20, offset: 0 },
 });
 
-// Birthstone Crystals by Month
+// Birthstones by month - Birthstone lookup API
 const { data } = await roxy.crystals.getBirthstones({ path: { month: 2 } });
 
-// Search Crystals
+// Search crystals - Crystal search API
 const { data } = await roxy.crystals.searchCrystals({ query: { q: 'love', limit: 20, offset: 0 } });
 
-// Crystal Pairings
+// Crystal pairings - Crystal combination API
 const { data } = await roxy.crystals.getCrystalPairings({ path: { id: 'amethyst' } });
 
-// Daily Crystal
+// Daily crystal - Crystal of the day API
 const { data } = await roxy.crystals.getDailyCrystal({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// Random Crystal
+// Random crystal - Crystal discovery API
 const { data } = await roxy.crystals.getRandomCrystal();
 
-// List Crystal Colors
+// List crystal colors - Crystal color filter API
 const { data } = await roxy.crystals.listCrystalColors();
 
-// List Crystal Planets
+// List crystal planets - Planetary ruler filter API
 const { data } = await roxy.crystals.listCrystalPlanets();
 
-// List All Crystals
+// List all crystals - Crystal healing database API
 const { data } = await roxy.crystals.listCrystals({
   query: {
     chakra: 'Heart',
@@ -1889,7 +2285,7 @@ const { data } = await roxy.crystals.listCrystals({
   },
 });
 
-// Get Crystal Healing Properties
+// Get crystal by id - Crystal healing properties API
 const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
 ```
 
@@ -1900,19 +2296,19 @@ const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
 Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,...
 
 ```typescript
-// List and search dream symbols
+// List and search dream symbols - Dream dictionary API
 const { data } = await roxy.dreams.searchDreamSymbols({ query: { q: 'water', letter: 'a', limit: 20, offset: 0 } });
 
-// Get random dream symbols
+// Random dream symbols - Dream symbol discovery API
 const { data } = await roxy.dreams.getRandomSymbols({ query: { count: 1 } });
 
-// Get symbol counts by letter
+// Symbol counts by letter - Dream dictionary index API
 const { data } = await roxy.dreams.getSymbolLetterCounts();
 
-// Get dream symbol details
+// Get dream symbol by id - Dream interpretation API
 const { data } = await roxy.dreams.getDreamSymbol({ path: { id: 'snake' } });
 
-// Get daily dream symbol
+// Daily dream symbol - Dream symbol of the day API
 const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { seed: 'user123', date: '2026-03-06' } });
 ```
 
@@ -1923,16 +2319,16 @@ const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { seed: 'user123'
 Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve...
 
 ```typescript
-// List All Angel Numbers
+// List all angel numbers - Angel number catalog API
 const { data } = await roxy.angelNumbers.listAngelNumbers({ query: { limit: 20, offset: 0, type: 'repeating' } });
 
-// Get Angel Number Meaning
+// Get angel number meaning - Angel number lookup API
 const { data } = await roxy.angelNumbers.getAngelNumber({ path: { number: '444' } });
 
-// Analyze Any Number Sequence
+// Analyze any number sequence - Angel number analysis API
 const { data } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234', context: 'clock' } });
 
-// Daily Angel Number
+// Daily angel number - Angel number of the day API
 const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'user123', date: '2026-03-06' } });
 ```
 
