@@ -40666,9 +40666,9 @@ export type PostMesoamericanAstrologyMayanTzolkinData = {
          */
         date: string;
         /**
-         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernandez-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is the Martínez Hernández correlation, after Juan Martínez Hernández.
          */
-        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        correlation?: 'gmt-584283' | 'martinez-hernandez-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
     };
     path?: never;
     query?: {
@@ -40884,9 +40884,9 @@ export type PostMesoamericanAstrologyMayanChartData = {
          */
         date: string;
         /**
-         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernandez-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is the Martínez Hernández correlation, after Juan Martínez Hernández.
          */
-        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        correlation?: 'gmt-584283' | 'martinez-hernandez-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
         /**
          * Which Haab day is read as the start of the year when naming its Year Bearer. Only four of the twenty day signs can ever carry a year, and which four depends entirely on this choice, so the three schools never agree. "classic" reads the seating of Pop and is the default, because it is the set highland daykeepers still use; its four bearers are Ikʼ, Manikʼ, Ebʼ and Kabʼan. "campeche" reads 1 Pop and gives Akʼbʼal, Lamat, Bʼen and Etzʼnabʼ. "colonial-yucatec" reads 2 Pop and gives Kʼan, Muluk, Ix and Kawak. The three sets share no member, so a bearer alone tells you which school produced it.
          */
@@ -41260,9 +41260,9 @@ export type PostMesoamericanAstrologyMayanLongCountConvertData = {
          */
         longCount?: string;
         /**
-         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernandez-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is the Martínez Hernández correlation, after Juan Martínez Hernández.
          */
-        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        correlation?: 'gmt-584283' | 'martinez-hernandez-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
     };
     path?: never;
     query?: {
@@ -41438,9 +41438,9 @@ export type GetMesoamericanAstrologyMayanDailyData = {
          */
         date?: string;
         /**
-         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernandez-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is the Martínez Hernández correlation, after Juan Martínez Hernández.
          */
-        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        correlation?: 'gmt-584283' | 'martinez-hernandez-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
     };
     url: '/mesoamerican-astrology/mayan/daily';
 };
@@ -41663,9 +41663,9 @@ export type GetMesoamericanAstrologyMayanCalendarMonthlyData = {
          */
         month?: number;
         /**
-         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernandez-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is the Martínez Hernández correlation, after Juan Martínez Hernández.
          */
-        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        correlation?: 'gmt-584283' | 'martinez-hernandez-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
     };
     url: '/mesoamerican-astrology/mayan/calendar/monthly';
 };
@@ -41859,9 +41859,9 @@ export type PostMesoamericanAstrologyMayanCompatibilityData = {
             date: string;
         };
         /**
-         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernando-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is attributed to Martinez and Hernando, printed in the literature as Martinéz-Hernando.
+         * Which correlation constant ties the day count to a civil date. This is the single choice that shifts every value in the response, so it is a parameter rather than a hidden default, and the resolved value comes back under conventions. "gmt-584283" is the commonly accepted constant and the default, and it is the one the major institutional converter runs on. "martinez-hernandez-584281" sits two days earlier, "astronomical-584285" two days later, and "martin-skidmore-584286" three days later, each shifting the Long Count by exactly its difference in days. Four of the eight published constants are offered: the other four sit tens of thousands of days away and are of historical interest only. The 584281 constant is the Martínez Hernández correlation, after Juan Martínez Hernández.
          */
-        correlation?: 'gmt-584283' | 'martinez-hernando-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
+        correlation?: 'gmt-584283' | 'martinez-hernandez-584281' | 'astronomical-584285' | 'martin-skidmore-584286';
         /**
          * Which reading of the world direction and colour to serve for a day sign. The two published assignments differ by exactly one quarter turn on all twenty signs, so neither is a rounding of the other and a silent pick would be a school choice. "madrid-codex" is the codex reading and the default; "landa" is the sixteenth century assignment recorded beside it.
          */
