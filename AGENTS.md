@@ -1,6 +1,6 @@
 # @roxyapi/sdk - Agent Guide
 
-TypeScript SDK for RoxyAPI. 14+ domains (Western astrology, Vedic astrology, forecast, human design, Chinese astrology, feng shui, numerology, tarot, biorhythm, I Ching, crystals, dreams, angel numbers, location) plus utility namespaces (usage, languages). One API key, fully typed, zero runtime dependencies.
+TypeScript SDK for RoxyAPI. 18+ domains (Western astrology, Vedic astrology, forecast, human design, Chinese astrology, feng shui, Mesoamerican astrology, Vastu, numerology, Kabbalah, tarot, biorhythm, Ayurveda, I Ching, crystals, dreams, angel numbers, location) plus utility namespaces (usage, languages). One API key, fully typed, zero runtime dependencies.
 
 > Before writing any code with this SDK, read `docs/llms-full.txt` in this package for the complete method reference with examples.
 
@@ -63,7 +63,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.languages` | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
-**Total:** 209+ endpoints across 14+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
+**Total:** 258+ endpoints across 18+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
 
 ## Quality guidelines for agents
 
