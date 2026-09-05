@@ -1517,13 +1517,13 @@ const { data } = await roxy.fengShui.getAnnualFlyingStars({ path: { year: 2026 }
 const { data } = await roxy.fengShui.getMonthlyFlyingStars({ query: { year: 2026, month: 1 } });
 
 // List the nine flying stars - Xuan Kong star reference API
-const { data } = await roxy.fengShui.listFlyingStars({ query: { limit: 20, offset: 0 } });
+const { data } = await roxy.fengShui.listFlyingStars({ query: { limit: 9, offset: 0 } });
 
 // Annual afflictions - Tai Sui, San Sha and Five Yellow API
 const { data } = await roxy.fengShui.getAnnualAfflictions({ path: { year: 2026 } });
 
 // List Bagua sectors - Feng shui bagua map API
-const { data } = await roxy.fengShui.listBaguaSectors({ query: { limit: 20, offset: 0 } });
+const { data } = await roxy.fengShui.listBaguaSectors({ query: { limit: 9, offset: 0 } });
 
 // Look up a Bagua sector - Life area reference API
 const { data } = await roxy.fengShui.getBaguaSector({ path: { id: 'wealth' } });

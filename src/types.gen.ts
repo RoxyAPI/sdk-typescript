@@ -3228,7 +3228,7 @@ export type BirthChartResponse = {
          */
         suppressedBy?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
         /**
-         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya.
+         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya. English in every language, like the per-graha stateSource on POST /daily, because it is provenance to be checked against a text rather than display copy.
          */
         evidence?: string;
     }>;
@@ -4312,7 +4312,7 @@ export type YogaDetectResponse = {
          */
         suppressedBy?: 'classical' | 'asraya' | 'dala' | 'akriti' | 'sankhya';
         /**
-         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya.
+         * Human-readable rationale naming the specific rule that triggered or failed the detection, including planetary positions, dignity, kendradhipati status, lordship, malefic drishti, sign modality, or whole-chart bhava distribution. For a Nabhasa yoga that matched its own rule but was outranked, this names the precedence norm that silenced it, for example that an Akriti yoga outranks Asraya or that any other Nabhasa family suppresses Sankhya. English in every language, like the per-graha stateSource on POST /daily, because it is provenance to be checked against a text rather than display copy.
          */
         evidence?: string;
     }>;
@@ -33037,6 +33037,10 @@ export type PostChineseAstrologyBaziLuckPillarsResponses = {
          */
         boundaryTerm: string;
         /**
+         * Display name of that same term, in the requested language. Always present, and English when lang is en. Several English renderings of a term are in circulation, so treat this as the label and boundaryTerm as the value.
+         */
+        boundaryTermName: string;
+        /**
          * The ten-year periods in order, each with the relation its stem holds to the natal Day Master.
          */
         luckPillars: Array<{
@@ -37345,6 +37349,10 @@ export type PostChineseAstrologyCalendarAuspiciousDaysResponses = {
          */
         avoidAnimal?: string;
         /**
+         * Display name of the protected animal in the requested language, beside the avoidAnimal identifier. Absent when no animal was sent and absent when lang is en, so an English response is unchanged.
+         */
+        avoidAnimalLocalized?: string;
+        /**
          * Number of favoured days found. This is the count after the clash filter, not the number of days searched.
          */
         total: number;
@@ -37951,9 +37959,13 @@ export type PostFengShuiKuaResponses = {
              */
             chinese: string;
             /**
-             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
              */
             english: string;
+            /**
+             * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
             /**
              * Tone-marked pinyin for the trigram. Data, identical in every language.
              */
@@ -37971,11 +37983,19 @@ export type PostFengShuiKuaResponses = {
              */
             element: string;
             /**
+             * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            elementLocalized?: string;
+            /**
              * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
              */
             direction: string;
             /**
-             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            directionLocalized?: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
              */
             familyMember: string;
         };
@@ -38008,7 +38028,7 @@ export type PostFengShuiKuaResponses = {
              */
             rank: number;
             /**
-             * The life domain this sector governs, in a few words.
+             * The life domain this sector governs, in a few words, written in the requested language.
              */
             domain: string;
         }>;
@@ -38180,9 +38200,13 @@ export type GetFengShuiKuaByNumberResponses = {
              */
             chinese: string;
             /**
-             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
              */
             english: string;
+            /**
+             * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
             /**
              * Tone-marked pinyin for the trigram. Data, identical in every language.
              */
@@ -38200,11 +38224,19 @@ export type GetFengShuiKuaByNumberResponses = {
              */
             element: string;
             /**
+             * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            elementLocalized?: string;
+            /**
              * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
              */
             direction: string;
             /**
-             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            directionLocalized?: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
              */
             familyMember: string;
         };
@@ -38237,7 +38269,7 @@ export type GetFengShuiKuaByNumberResponses = {
              */
             rank: number;
             /**
-             * The life domain this sector governs, in a few words.
+             * The life domain this sector governs, in a few words, written in the requested language.
              */
             domain: string;
         }>;
@@ -38409,9 +38441,13 @@ export type PostFengShuiEightMansionsResponses = {
              */
             chinese: string;
             /**
-             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
              */
             english: string;
+            /**
+             * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
             /**
              * Tone-marked pinyin for the trigram. Data, identical in every language.
              */
@@ -38429,11 +38465,19 @@ export type PostFengShuiEightMansionsResponses = {
              */
             element: string;
             /**
+             * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            elementLocalized?: string;
+            /**
              * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
              */
             direction: string;
             /**
-             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            directionLocalized?: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
              */
             familyMember: string;
         };
@@ -38474,7 +38518,7 @@ export type PostFengShuiEightMansionsResponses = {
              */
             rank: number;
             /**
-             * The life domain this sector governs, in a few words.
+             * The life domain this sector governs, in a few words, written in the requested language.
              */
             domain: string;
             trigram: {
@@ -38487,9 +38531,13 @@ export type PostFengShuiEightMansionsResponses = {
                  */
                 chinese: string;
                 /**
-                 * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+                 * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
                  */
                 english: string;
+                /**
+                 * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+                 */
+                nameLocalized?: string;
                 /**
                  * Tone-marked pinyin for the trigram. Data, identical in every language.
                  */
@@ -38507,11 +38555,19 @@ export type PostFengShuiEightMansionsResponses = {
                  */
                 element: string;
                 /**
+                 * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+                 */
+                elementLocalized?: string;
+                /**
                  * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
                  */
                 direction: string;
                 /**
-                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+                 * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+                 */
+                directionLocalized?: string;
+                /**
+                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
                  */
                 familyMember: string;
             };
@@ -39255,11 +39311,11 @@ export type GetFengShuiFlyingStarsStarsData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
-         * Maximum stars to return per page. Range 1 to 9, default 20.
+         * Maximum items to return per page. Range: 1-9, default 9.
          */
         limit?: number;
         /**
-         * Number of stars to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number | null;
     };
@@ -39909,11 +39965,11 @@ export type GetFengShuiBaguaData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
-         * Maximum sectors to return per page. Range 1 to 9, default 20.
+         * Maximum items to return per page. Range: 1-9, default 9.
          */
         limit?: number;
         /**
-         * Number of sectors to skip for pagination. Default 0.
+         * Number of items to skip for pagination. Default 0.
          */
         offset?: number | null;
     };
@@ -40090,9 +40146,13 @@ export type GetFengShuiBaguaResponses = {
                  */
                 chinese: string;
                 /**
-                 * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+                 * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
                  */
                 english: string;
+                /**
+                 * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+                 */
+                nameLocalized?: string;
                 /**
                  * Tone-marked pinyin for the trigram. Data, identical in every language.
                  */
@@ -40110,11 +40170,19 @@ export type GetFengShuiBaguaResponses = {
                  */
                 element: string;
                 /**
+                 * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+                 */
+                elementLocalized?: string;
+                /**
                  * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
                  */
                 direction: string;
                 /**
-                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+                 * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+                 */
+                directionLocalized?: string;
+                /**
+                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
                  */
                 familyMember: string;
             };
@@ -40131,9 +40199,13 @@ export type GetFengShuiBaguaResponses = {
                  */
                 chinese: string;
                 /**
-                 * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+                 * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
                  */
                 english: string;
+                /**
+                 * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+                 */
+                nameLocalized?: string;
                 /**
                  * Tone-marked pinyin for the trigram. Data, identical in every language.
                  */
@@ -40151,11 +40223,19 @@ export type GetFengShuiBaguaResponses = {
                  */
                 element: string;
                 /**
+                 * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+                 */
+                elementLocalized?: string;
+                /**
                  * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
                  */
                 direction: string;
                 /**
-                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+                 * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+                 */
+                directionLocalized?: string;
+                /**
+                 * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
                  */
                 familyMember: string;
             };
@@ -40357,9 +40437,13 @@ export type GetFengShuiBaguaByIdResponses = {
              */
             chinese: string;
             /**
-             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
              */
             english: string;
+            /**
+             * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
             /**
              * Tone-marked pinyin for the trigram. Data, identical in every language.
              */
@@ -40377,11 +40461,19 @@ export type GetFengShuiBaguaByIdResponses = {
              */
             element: string;
             /**
+             * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            elementLocalized?: string;
+            /**
              * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
              */
             direction: string;
             /**
-             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            directionLocalized?: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
              */
             familyMember: string;
         };
@@ -40398,9 +40490,13 @@ export type GetFengShuiBaguaByIdResponses = {
              */
             chinese: string;
             /**
-             * English name of the trigram, byte identical to the value the I-Ching trigram endpoints publish for this number.
+             * English name of the trigram, byte identical to the English value the I-Ching trigram endpoints publish for this number. Always English here, whatever the lang parameter says, so it stays safe to compare against. Use nameLocalized for anything a reader sees.
              */
             english: string;
+            /**
+             * Trigram name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat english exactly. Never compare against this value.
+             */
+            nameLocalized?: string;
             /**
              * Tone-marked pinyin for the trigram. Data, identical in every language.
              */
@@ -40418,11 +40514,19 @@ export type GetFengShuiBaguaByIdResponses = {
              */
             element: string;
             /**
+             * Five phase name in the requested language, for display only. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            elementLocalized?: string;
+            /**
              * Compass sector, one of North, Northeast, East, Southeast, South, Southwest, West, Northwest. Always English, whatever the lang parameter says, so it stays safe to compare against in code and against the same value on the I-Ching trigram endpoints.
              */
             direction: string;
             /**
-             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at.
+             * Compass sector in the requested language, for display only, the same word the composed readings use. Present only when lang is set to a language other than English. Never compare against this value.
+             */
+            directionLocalized?: string;
+            /**
+             * Family role of the trigram. Read alongside an affliction to know which member of the household a sector points at. Always English, and it carries no localized sibling: no vocabulary this package ships names the eight family roles.
              */
             familyMember: string;
         };
@@ -44345,7 +44449,7 @@ export type PostVastuEntranceData = {
             y: number;
         };
         /**
-         * Where the main door sits along the facing side, as a fraction from 0 to 1 measured from the corner the chapter starts that side at: the north-east for an east facing, the south-east for a south facing, the south-west for a west facing and the north-west for a north facing. Requires a cardinal facing, since an intercardinal facing names no single side. Send this or door, never both.
+         * Where the main door sits along the facing side, as a fraction from 0 to 1 measured from the corner the chapter starts that side at: the north-east for an east facing, the south-east for a south facing, the south-west for a west facing and the north-west for a north facing. The side carries 8 padas, so to aim at pada n of 8 send its midpoint, (n - 0.5) / 8: 0.0625 for the first pada, 0.4375 for the fourth, 0.9375 for the eighth. The response names the pada the fraction resolved to in ordinalOnSide. Requires a cardinal facing, since an intercardinal facing names no single side. Send this or door, never both.
          */
         doorPosition?: number;
         /**
@@ -44579,6 +44683,10 @@ export type PostVastuEntranceResponses = {
              * Which division of the ground was read. Echoes the resolved value whether it was sent or defaulted.
              */
             grid: string;
+            /**
+             * Unit every distance and area in the response is measured in, areas in its square. Echoes the resolved value whether it was sent or defaulted.
+             */
+            unit: 'feet' | 'metres';
         };
     };
 };
@@ -44772,7 +44880,7 @@ export type PostVastuMandalaResponses = {
             /**
              * Which ring of the mandala the devata belongs to: perimeter for the outer 32, innerRing for the eight around Brahma, innerCorner for the four on the inner diagonals, center for Brahma. Present only on the 81 pada grid.
              */
-            class?: string;
+            class?: 'perimeter' | 'innerRing' | 'innerCorner' | 'center';
             /**
              * How many squares the devata holds under the classification of 53.49 to 50: padika for one, dvipada for two, tripada for three. Absent for Brahma, which those verses leave outside the scheme, and on the 64 pada grid.
              */
@@ -44780,7 +44888,7 @@ export type PostVastuMandalaResponses = {
             /**
              * The structural role 53.55 to 56 gives this square of the 64 pada division: brahma, halved-inner-corner, halved-outer-corner, around-brahma, dvipada or outer. Present only on the 64 pada grid, which is the only thing that chapter states about it.
              */
-            role?: string;
+            role?: 'brahma' | 'halved-inner-corner' | 'halved-outer-corner' | 'around-brahma' | 'dvipada' | 'outer';
             /**
              * Centre of the square in plot coordinates. This point is the marmasthala of the square, the vital spot 53.57 forbids raising a pillar on.
              */
@@ -44947,6 +45055,10 @@ export type PostVastuMandalaResponses = {
              * Which division of the ground was projected. Echoes the resolved value whether it was sent or defaulted.
              */
             grid: string;
+            /**
+             * Unit every distance and area in the response is measured in, areas in its square. Echoes the resolved value whether it was sent or defaulted.
+             */
+            unit: 'feet' | 'metres';
         };
     };
 };
@@ -47215,7 +47327,7 @@ export type GetVastuDevatasResponses = {
             /**
              * Which ring of the mandala the devata belongs to: perimeter for the outer 32, innerRing for the eight around Brahma, innerCorner for the four on the inner diagonals, center for Brahma alone. 32 plus 8 plus 4 plus 1 is 45. Always English.
              */
-            class: string;
+            class: 'perimeter' | 'innerRing' | 'innerCorner' | 'center';
             /**
              * How many squares the devata holds under 53.49 to 50: padika for one, dvipada for two, tripada for three. Absent for Brahma, whom those verses leave outside the scheme while enumerating 44 devatas.
              */
@@ -47454,7 +47566,7 @@ export type GetVastuDevatasByIdResponses = {
         /**
          * Which ring of the mandala the devata belongs to: perimeter for the outer 32, innerRing for the eight around Brahma, innerCorner for the four on the inner diagonals, center for Brahma alone. 32 plus 8 plus 4 plus 1 is 45. Always English.
          */
-        class: string;
+        class: 'perimeter' | 'innerRing' | 'innerCorner' | 'center';
         /**
          * How many squares the devata holds under 53.49 to 50: padika for one, dvipada for two, tripada for three. Absent for Brahma, whom those verses leave outside the scheme while enumerating 44 devatas.
          */
@@ -52499,7 +52611,7 @@ export type PostKabbalahGematriaResponses = {
              */
             rule: string;
             /**
-             * Every cipher applied to this spelling.
+             * Every computed cipher applied to this spelling, in catalogue order. The rows carry no display name, because they are the same ciphers in the same order for every spelling: read the names off the top level values array once.
              */
             values: Array<{
                 /**
@@ -52507,9 +52619,9 @@ export type PostKabbalahGematriaResponses = {
                  */
                 id: string;
                 /**
-                 * The number this cipher gives for the string. Null on the one catalogued cipher this API does not compute, which is stated on its catalogue entry rather than left to guess.
+                 * The number this cipher gives for the string. Always a number: the one catalogued cipher this API does not compute is absent from this array rather than present without a value, so no row here has to be guarded. Its catalogue entry carries computed false and says why.
                  */
-                value: number | null;
+                value: number;
                 /**
                  * Other published totals for the same string, ascending. Present only where the cipher is not single valued: letter names have several accepted spellings, so several totals are equally published. Absent otherwise, so a caller can branch on presence.
                  */
@@ -52560,7 +52672,7 @@ export type PostKabbalahGematriaResponses = {
             rule: string;
         };
         /**
-         * Every requested cipher applied to the chosen spelling.
+         * Every requested cipher applied to the chosen spelling, in catalogue order, each named as the catalogue names it. Only computed ciphers appear, so every row carries a number.
          */
         values: Array<{
             /**
@@ -52568,9 +52680,9 @@ export type PostKabbalahGematriaResponses = {
              */
             id: string;
             /**
-             * The number this cipher gives for the string. Null on the one catalogued cipher this API does not compute, which is stated on its catalogue entry rather than left to guess.
+             * The number this cipher gives for the string. Always a number: the one catalogued cipher this API does not compute is absent from this array rather than present without a value, so no row here has to be guarded. Its catalogue entry carries computed false and says why.
              */
-            value: number | null;
+            value: number;
             /**
              * Other published totals for the same string, ascending. Present only where the cipher is not single valued: letter names have several accepted spellings, so several totals are equally published. Absent otherwise, so a caller can branch on presence.
              */
@@ -52583,6 +52695,10 @@ export type PostKabbalahGematriaResponses = {
              * The first published source this cipher was taken from.
              */
             source: string;
+            /**
+             * Display name of the cipher in the requested language, the same string the ciphers catalogue serves for this id. Present so a caller holding one response can label a row without humanizing the identifier or fetching the catalogue. Switch on id, never on this.
+             */
+            name: string;
         }>;
         /**
          * The two substitution transformations applied to the chosen spelling. Each exchanges letters and returns a new word, so the interesting output is often the string rather than the number.
@@ -52592,6 +52708,10 @@ export type PostKabbalahGematriaResponses = {
              * Machine identifier of the transformation.
              */
             id: string;
+            /**
+             * Display name of the transformation as the catalogue names it, in the requested language.
+             */
+            name: string;
             /**
              * The substituted Hebrew string. Absent when atbashOutput asked for the value alone.
              */
@@ -53092,7 +53212,7 @@ export type PostKabbalahNameProfileResponses = {
              */
             rule: string;
             /**
-             * Every cipher applied to this spelling.
+             * Every computed cipher applied to this spelling, in catalogue order. The rows carry no display name, because they are the same ciphers in the same order for every spelling: read the names off the top level values array once.
              */
             values: Array<{
                 /**
@@ -53100,9 +53220,9 @@ export type PostKabbalahNameProfileResponses = {
                  */
                 id: string;
                 /**
-                 * The number this cipher gives for the string. Null on the one catalogued cipher this API does not compute, which is stated on its catalogue entry rather than left to guess.
+                 * The number this cipher gives for the string. Always a number: the one catalogued cipher this API does not compute is absent from this array rather than present without a value, so no row here has to be guarded. Its catalogue entry carries computed false and says why.
                  */
-                value: number | null;
+                value: number;
                 /**
                  * Other published totals for the same string, ascending. Present only where the cipher is not single valued: letter names have several accepted spellings, so several totals are equally published. Absent otherwise, so a caller can branch on presence.
                  */
@@ -58557,7 +58677,7 @@ export type PostAyurvedaConstitutionResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -58694,7 +58814,7 @@ export type PostAyurvedaConstitutionResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -58727,7 +58847,7 @@ export type PostAyurvedaConstitutionResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -58949,7 +59069,7 @@ export type PostAyurvedaDinacharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59057,7 +59177,7 @@ export type PostAyurvedaDinacharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59095,7 +59215,7 @@ export type PostAyurvedaDinacharyaResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
@@ -59334,7 +59454,7 @@ export type PostAyurvedaRitucharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59393,7 +59513,7 @@ export type PostAyurvedaRitucharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59435,7 +59555,7 @@ export type PostAyurvedaRitucharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59485,7 +59605,7 @@ export type PostAyurvedaRitucharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59552,7 +59672,7 @@ export type PostAyurvedaRitucharyaResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -59590,7 +59710,7 @@ export type PostAyurvedaRitucharyaResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
@@ -59895,7 +60015,7 @@ export type GetAyurvedaDailyResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
@@ -60184,7 +60304,7 @@ export type GetAyurvedaDoshasResponses = {
                      */
                     chapter: string;
                     /**
-                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                      */
                     verse: string;
                     /**
@@ -60238,7 +60358,7 @@ export type GetAyurvedaDoshasResponses = {
                      */
                     chapter: string;
                     /**
-                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                      */
                     verse: string;
                     /**
@@ -60272,7 +60392,7 @@ export type GetAyurvedaDoshasResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -60306,7 +60426,7 @@ export type GetAyurvedaDoshasResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
@@ -60559,7 +60679,7 @@ export type GetAyurvedaDoshasByIdResponses = {
                      */
                     chapter: string;
                     /**
-                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                      */
                     verse: string;
                     /**
@@ -60613,7 +60733,7 @@ export type GetAyurvedaDoshasByIdResponses = {
                      */
                     chapter: string;
                     /**
-                     * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                     * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                      */
                     verse: string;
                     /**
@@ -60647,7 +60767,7 @@ export type GetAyurvedaDoshasByIdResponses = {
                  */
                 chapter: string;
                 /**
-                 * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+                 * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
                  */
                 verse: string;
                 /**
@@ -60681,7 +60801,7 @@ export type GetAyurvedaDoshasByIdResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
@@ -60925,7 +61045,7 @@ export type GetAyurvedaTastesResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
@@ -61188,7 +61308,7 @@ export type GetAyurvedaQualitiesResponses = {
              */
             chapter: string;
             /**
-             * Verse or verse range, as printed. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this says so.
+             * Verse or verse range, printed as the source prints it, so it is a string and not always numeric. Where the claim sits in an appended note or a commentary rather than in a numbered verse, this value is prose, as in "note to 20". Join it to the chapter with a dot only when it is numeric, and otherwise render it after the chapter with a comma, so the pair reads "18, note to 20" rather than "18.note to 20".
              */
             verse: string;
             /**
