@@ -482,7 +482,7 @@ Every request and response is fully typed. IDE autocomplete shows available meth
 - [API Reference](https://roxyapi.com/api-reference)
 - [Pricing](https://roxyapi.com/pricing)
 - [MCP setup for AI agents](https://roxyapi.com/docs/mcp)
-- [Starter apps](https://roxyapi.com/starters)
+- [Starter apps](https://roxyapi.com/templates)
 - [Python SDK](https://pypi.org/project/roxy-sdk/)
 - [Issues](https://github.com/RoxyAPI/sdk-typescript/issues)
 
