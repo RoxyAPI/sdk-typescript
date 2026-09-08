@@ -1176,7 +1176,7 @@ export class VedicAstrology extends HeyApiClient {
     /**
      * Find KP sublord changes
      *
-     * Track when planets cross KP sublord boundaries (1-249 divisions) for precise Krishnamurti Paddhati event timing. Returns exact timestamps when a planet transitions between sublords, essential for prashna kundali analysis and dasha predictions. Use this to find favorable windows when benefic sublords are active. Supports Sun, Moon, Mars, Mercury, Jupiter, Venus, and Saturn tracking over any date range.
+     * Track when planets cross KP sublord boundaries (1-249 divisions) for precise Krishnamurti Paddhati event timing. Returns exact timestamps when a planet transitions between sublords, essential for prashna kundali analysis and dasha predictions. Use this to find favorable windows when benefic sublords are active. Supports Sun, Moon, Mars, Mercury, Jupiter, Venus, and Saturn tracking over any window up to 365 days.
      */
     public getKpSublordChanges<ThrowOnError extends boolean = false>(options?: Options<PostVedicAstrologyKpSublordChangesData, ThrowOnError>): RequestResult<PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyKpSublordChangesErrors, ThrowOnError> {
         return (options?.client ?? this.client).post<PostVedicAstrologyKpSublordChangesResponses, PostVedicAstrologyKpSublordChangesErrors, ThrowOnError>({

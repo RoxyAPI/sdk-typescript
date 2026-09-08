@@ -4900,7 +4900,7 @@ export type KpChartResponse = {
                 planets: Array<string>;
             }>;
             /**
-             * All significators in order of strength
+             * The four levels flattened, strongest first, repeats included: a planet that reaches the house at two levels appears once per level, so the length counts level hits. The levels beside it are the per-level view.
              */
             all: Array<string>;
         }>;
@@ -4920,7 +4920,7 @@ export type KpChartResponse = {
                 houses: Array<number>;
             }>;
             /**
-             * All houses signified in order of strength
+             * The four levels flattened, strongest first, repeats included: a house appears once per level the planet reaches it at, so the length counts level hits. The levels beside it are the per-level view.
              */
             allHouses: Array<number>;
         }>;
@@ -5273,7 +5273,7 @@ export type KpSublordChangesResponse = {
      */
     endDate: string;
     /**
-     * Total Krishnamurti sublord transitions detected. Moon crosses ~14 sublords per day due to its fast motion.
+     * Total Krishnamurti sublord transitions detected. The Moon, the fastest body, crosses about 9 sublords a day.
      */
     totalChanges: number;
     /**
@@ -5285,7 +5285,7 @@ export type KpSublordChangesResponse = {
          */
         date: string;
         /**
-         * Precise sublord transition time (HH:MM, 24-hour). Refined via binary search to ~1 minute accuracy. Adjusted to requested timezone.
+         * Sublord transition time (HH:MM, 24-hour): the instant is found to the second and shown to the minute it falls in. Adjusted to requested timezone.
          */
         time: string;
         /**
@@ -5323,17 +5323,17 @@ export type KpSublordChangesRequest = {
     /**
      * Planet to track (case-insensitive). Valid values: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn
      */
-    planet: string;
+    planet: 'Sun' | 'Moon' | 'Mars' | 'Mercury' | 'Jupiter' | 'Venus' | 'Saturn';
     /**
-     * Start date for sublord change search (YYYY-MM-DD format)
+     * First day of the search (YYYY-MM-DD), a calendar day in `timezone`.
      */
     startDate: string;
     /**
-     * End date for sublord change search (YYYY-MM-DD format)
+     * Last day of the search, inclusive (YYYY-MM-DD), a calendar day in `timezone`. Not before startDate, at most 365 days after it.
      */
     endDate: string;
     /**
-     * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC. IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
+     * IANA name (e.g. "America/New_York", "Europe/London"), a fixed offset like "+05:30", OR decimal hours from UTC. One offset is taken from startDate (DST-correct for that date) and used for the whole range, so a window crossing a daylight-saving change is read on the earlier offset throughout; send a fixed offset if you need that explicit. The two dates are read as calendar days in this timezone and output times are converted to it, so one date with 5.5 is that whole Indian day. Defaults to 0 (UTC).
      */
     timezone?: number | string;
     /**
@@ -5372,7 +5372,7 @@ export type KpRasiChangesResponse = {
          */
         date: string;
         /**
-         * Precise ingress time (HH:MM, 24-hour). Calculated via binary search refinement to ~1 minute accuracy. Adjusted to requested timezone.
+         * Ingress time (HH:MM, 24-hour): the instant is found to the second and shown to the minute it falls in. Adjusted to requested timezone.
          */
         time: string;
         /**
@@ -5402,17 +5402,17 @@ export type KpRasiChangesRequest = {
     /**
      * Planet to track (case-insensitive). Valid values: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn
      */
-    planet: string;
+    planet: 'Sun' | 'Moon' | 'Mars' | 'Mercury' | 'Jupiter' | 'Venus' | 'Saturn';
     /**
-     * Start date for sign ingress search (YYYY-MM-DD format)
+     * First day of the search (YYYY-MM-DD), a calendar day in `timezone`.
      */
     startDate: string;
     /**
-     * End date for sign ingress search (YYYY-MM-DD format)
+     * Last day of the search, inclusive (YYYY-MM-DD), a calendar day in `timezone`. Not before startDate, at most 365 days after it.
      */
     endDate: string;
     /**
-     * IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC. IANA resolved to the DST-correct offset for startDate. Output times are converted to this timezone. Defaults to 0 (UTC).
+     * IANA name (e.g. "America/New_York", "Europe/London"), a fixed offset like "+05:30", OR decimal hours from UTC. One offset is taken from startDate (DST-correct for that date) and used for the whole range, so a window crossing a daylight-saving change is read on the earlier offset throughout; send a fixed offset if you need that explicit. The two dates are read as calendar days in this timezone and output times are converted to it, so one date with 5.5 is that whole Indian day. Defaults to 0 (UTC).
      */
     timezone?: number | string;
     /**
@@ -5759,7 +5759,7 @@ export type KpHoraryResponse = {
                 planets: Array<string>;
             }>;
             /**
-             * All significators in order of strength
+             * The four levels flattened, strongest first, repeats included: a planet that reaches the house at two levels appears once per level, so the length counts level hits. The levels beside it are the per-level view.
              */
             all: Array<string>;
         }>;
@@ -5779,7 +5779,7 @@ export type KpHoraryResponse = {
                 houses: Array<number>;
             }>;
             /**
-             * All houses signified in order of strength
+             * The four levels flattened, strongest first, repeats included: a house appears once per level the planet reaches it at, so the length counts level hits. The levels beside it are the per-level view.
              */
             allHouses: Array<number>;
         }>;
@@ -21594,7 +21594,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
             endsAt: string | null;
         };
         /**
-         * Panchang element transition times. exact timing of when each element (tithi, yoga, karana, nakshatra, Moon sign) changes. Calculated using binary search for ~1 minute precision. Essential for precise muhurta determination and panchang calendars.
+         * Panchang element transition times: when each element (tithi, yoga, karana, nakshatra, Moon sign) changes, found to the second. Essential for precise muhurta determination and panchang calendars.
          */
         transitions: {
             /**
