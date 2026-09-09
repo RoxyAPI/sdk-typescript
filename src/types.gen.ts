@@ -22655,19 +22655,6 @@ export type GetVedicAstrologyYogaByIdErrors = {
         code: string;
     };
     /**
-     * Yoga not found
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
      */
     405: {
@@ -26120,19 +26107,6 @@ export type GetVedicAstrologyRashisByIdErrors = {
         code: string;
     };
     /**
-     * Rashi not found
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
      */
     405: {
@@ -26384,19 +26358,6 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
         error: string;
         /**
          * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * Nakshatra not found
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
     };
@@ -27042,19 +27003,6 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
         error: string;
         /**
          * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * No avastha state matches that slug.
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
     };
@@ -44618,7 +44566,7 @@ export type PostVastuEntranceResponses = {
              */
             id: string;
             /**
-             * Display name of the devata, with the diacritics the transliteration carries.
+             * Display name of the devata. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi. Compare on id, never on this.
              */
             name: string;
             /**
@@ -44874,7 +44822,7 @@ export type PostVastuMandalaResponses = {
              */
             devata?: string;
             /**
-             * Display name of that devata, with the diacritics the transliteration carries. Present only on the 81 pada grid.
+             * Display name of that devata. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi. Present only on the 81 pada grid.
              */
             devataName?: string;
             /**
@@ -46232,9 +46180,9 @@ export type PostVastuRoomsResponses = {
              */
             reading: string;
             /**
-             * What to do when the room is not where it belongs. Original prose, translated in place when lang is set.
+             * What to do when the room is not where it belongs. Present when the verdict is acceptable or avoid, and absent on an ideal placement, which has nothing to fix. Original prose, translated in place when lang is set.
              */
-            remedy: string;
+            remedy?: string;
             /**
              * Where a verdict comes from: a chapter and verse of a named public-domain edition, or the literal convention with the practice it rests on. Every verdict in this domain carries one.
              */
@@ -46852,7 +46800,7 @@ export type GetVastuDirectionsResponses = {
              */
             id: string;
             /**
-             * The lord of this quarter of the horizon, per Brihat Samhita 54.3. Always English transliteration, safe to compare against. These are NOT the 45 mandala devatas and the two sets must not be merged: Agni is the north-east mandala square and the south-east dikpala.
+             * The lord of this quarter of the horizon, per Brihat Samhita 54.3. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi. Compare on id, never on this. These are NOT the 45 mandala devatas and the two sets must not be merged: Agni is the north-east mandala square and the south-east dikpala.
              */
             dikpala: string;
             /**
@@ -46880,7 +46828,7 @@ export type GetVastuDirectionsResponses = {
                  */
                 id: string;
                 /**
-                 * Display name of the devata, with the diacritics the transliteration carries.
+                 * Display name of the devata. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi.
                  */
                 name: string;
             }>;
@@ -47017,19 +46965,6 @@ export type GetVastuDirectionsByIdErrors = {
         code: string;
     };
     /**
-     * No direction with that id
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
      */
     405: {
@@ -47084,7 +47019,7 @@ export type GetVastuDirectionsByIdResponses = {
          */
         id: string;
         /**
-         * The lord of this quarter of the horizon, per Brihat Samhita 54.3. Always English transliteration, safe to compare against. These are NOT the 45 mandala devatas and the two sets must not be merged: Agni is the north-east mandala square and the south-east dikpala.
+         * The lord of this quarter of the horizon, per Brihat Samhita 54.3. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi. Compare on id, never on this. These are NOT the 45 mandala devatas and the two sets must not be merged: Agni is the north-east mandala square and the south-east dikpala.
          */
         dikpala: string;
         /**
@@ -47112,7 +47047,7 @@ export type GetVastuDirectionsByIdResponses = {
              */
             id: string;
             /**
-             * Display name of the devata, with the diacritics the transliteration carries.
+             * Display name of the devata. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi.
              */
             name: string;
         }>;
@@ -47321,7 +47256,7 @@ export type GetVastuDevatasResponses = {
              */
             id: string;
             /**
-             * Display name of the devata, with the diacritics the transliteration carries. A Sanskrit proper noun, so it stays as it is in every language.
+             * Display name of the devata. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi. Compare on id, never on this.
              */
             name: string;
             /**
@@ -47493,19 +47428,6 @@ export type GetVastuDevatasByIdErrors = {
         code: string;
     };
     /**
-     * No devata with that id
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
      */
     405: {
@@ -47560,7 +47482,7 @@ export type GetVastuDevatasByIdResponses = {
          */
         id: string;
         /**
-         * Display name of the devata, with the diacritics the transliteration carries. A Sanskrit proper noun, so it stays as it is in every language.
+         * Display name of the devata. A Sanskrit proper noun: romanised with the diacritics the transliteration carries in every language, and written in Devanagari as the Sanskrit text prints it when lang is hi. Compare on id, never on this.
          */
         name: string;
         /**
@@ -54501,19 +54423,6 @@ export type GetKabbalahSephirotByIdErrors = {
         code: string;
     };
     /**
-     * No sephirah carries that identifier.
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
-         */
-        code: string;
-    };
-    /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
      */
     405: {
@@ -54976,19 +54885,6 @@ export type GetKabbalahLettersByIdErrors = {
         error: string;
         /**
          * Machine-readable error code. Stable identifier.
-         */
-        code: string;
-    };
-    /**
-     * No letter carries that identifier.
-     */
-    404: {
-        /**
-         * Human-readable error message. The wording may change, so do not parse it programmatically. Switch on the stable code instead.
-         */
-        error: string;
-        /**
-         * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
     };
