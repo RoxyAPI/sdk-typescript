@@ -543,6 +543,7 @@ const { data } = await roxy.vedicAstrology.getCurrentDasha({
     ayanamsaValue: 24,
     significators: false,
     nodeType: 'mean',
+    datetime: '2026-08-23T13:47:46',
   },
 });
 

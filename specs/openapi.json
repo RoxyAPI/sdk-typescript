@@ -35776,7 +35776,7 @@
           "Vedic Astrology"
         ],
         "summary": "Get current Mahadasha, Antardasha, Pratyantardasha, Sookshma, Prana - Dasha Calculator API",
-        "description": "Calculate all five running Vimshottari Dasha levels (Mahadasha, Antardasha, Pratyantardasha, Sookshma, Prana) with remaining time in each. Accurate dasha calculator API for life phase prediction and planetary period analysis. Returns the dasha timeline with start/end dates for every level, ready for a current DBA readout down to hour-level timing. Set significators true to add the KP star lord, sub lord, signified houses and strength grade of each running lord, plus the houses they have in common. Essential for understanding current planetary influences, dasha transitions, and timing events in Vedic astrology. 120-year dasha system based on moon nakshatra at birth, with selectable Lahiri or KP ayanamsa.",
+        "description": "Calculate all five running Vimshottari Dasha levels (Mahadasha, Antardasha, Pratyantardasha, Sookshma, Prana) with remaining time in each. Accurate dasha calculator API for life phase prediction and planetary period analysis. Returns the dasha timeline with start/end dates for every level, ready for a current DBA readout down to hour-level timing. Pass datetime to read the five lords at any moment instead of now, which is what a reading prepared for tomorrow or a backtest over a past day needs. Set significators true to add the KP star lord, sub lord, signified houses and strength grade of each running lord, plus the houses they have in common. Essential for understanding current planetary influences, dasha transitions, and timing events in Vedic astrology. 120-year dasha system based on moon nakshatra at birth, with selectable Lahiri or KP ayanamsa.",
         "security": [
           {
             "apiKey": []
@@ -35904,6 +35904,12 @@
                     "default": "mean",
                     "example": "mean",
                     "description": "Lunar node type for Rahu and Ketu, used ONLY when \"significators\" is true. Dasha dates themselves come from the Moon and never move with this field. \"mean\" uses the smooth mean node (traditional default). \"true\" uses the osculating node, which swings up to 1.5 degrees either side of mean over a 173-day cycle and can therefore change which house or star a node falls in. Defaults to \"mean\"."
+                  },
+                  "datetime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-23T13:47:46",
+                    "description": "ISO 8601 datetime (YYYY-MM-DDTHH:MM:SS) to read the running periods at, for a reading prepared for a future day, a backtest, or a chart cast for a past moment. Defaults to the current instant. Interpreted as local time in the request timezone (a trailing Z is accepted but ignored); with timezone 0 it is UTC."
                   }
                 },
                 "required": [
@@ -43580,6 +43586,76 @@
                               },
                               "description": "Every negative-group connection, strongest KP level first. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score."
                             },
+                            "composite": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "score": {
+                                  "type": "number",
+                                  "example": 30,
+                                  "description": "The mean itself, 0 to 100, rounded. Every term is printed in the layers below, so the division can be redone rather than trusted."
+                                },
+                                "band": {
+                                  "type": "string",
+                                  "enum": [
+                                    "very-strong",
+                                    "strong",
+                                    "moderate",
+                                    "weak"
+                                  ],
+                                  "example": "moderate",
+                                  "description": "The band the composite falls in, on the same ladder the top-level verdict uses: \"very-strong\" at 75 and above, \"strong\" at 50 and above, \"moderate\" at 25 and above, \"weak\" below 25."
+                                },
+                                "layers": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "layer": {
+                                        "type": "string",
+                                        "enum": [
+                                          "day",
+                                          "finance",
+                                          "natal"
+                                        ],
+                                        "example": "finance",
+                                        "description": "Which term this row carries: \"day\" the top-level score of this reading, \"finance\" the KP net score in this area, \"natal\" the natal wealth count. Canonical English machine value, so it stays safe to switch on in code."
+                                      },
+                                      "score": {
+                                        "type": "number",
+                                        "example": 67,
+                                        "description": "The term that went into the mean, 0 to 100. Each one is either printed elsewhere in this response or counted off a block that is, so no number enters the average unseen."
+                                      },
+                                      "band": {
+                                        "type": "string",
+                                        "enum": [
+                                          "very-strong",
+                                          "strong",
+                                          "moderate",
+                                          "weak"
+                                        ],
+                                        "example": "strong",
+                                        "description": "Where that one term lands on its own, on the same ladder as the composite band above: \"very-strong\" at 75 and above, \"strong\" at 50 and above, \"moderate\" at 25 and above, \"weak\" below 25."
+                                      }
+                                    },
+                                    "required": [
+                                      "layer",
+                                      "score",
+                                      "band"
+                                    ]
+                                  },
+                                  "description": "The three terms of the mean, always in the order day, finance, natal. Published so a caller who wants different weights can apply them to these same three numbers instead of asking for a second reading."
+                                }
+                              },
+                              "required": [
+                                "score",
+                                "band",
+                                "layers"
+                              ],
+                              "description": "The equal-weight mean of the three day-level layer scores printed beside it, recomputable as round((day + finance + natal) / 3). WHICH LAYER IS WHICH: \"day\" is the top-level score of this reading, \"finance\" is areas.finance.score above, and \"natal\" is the share of the natal wealth yoga rows that speak for the native, positive yogas present plus negative yogas absent over the rows evaluated, so it is 0, 25, 50, 75 or 100. Equal weights are a RoxyAPI convention: no classical authority weights the natal chart, the running dasha and the transiting sky against each other, so the three are averaged as they are and printed beside the result, and the band uses the same ladder as verdict. The composite measures how much of this reading backs the native on this day and never the outcome of any matter: read it as support, not as a prediction. NULL IN TWO CASES, and neither is a low score. Null when the running lords reach none of the six houses, because an absence of connection is not a verdict and must not be averaged as one. Null above latitude 66.56, where the Placidus cusps the KP significators are read from have no solution: the question does not apply there rather than the answer being no, so never render it as zero or as a weak verdict. The natal block beside it is unaffected and still ships, and degraded names areas.finance.score."
+                            },
                             "natal": {
                               "type": "array",
                               "items": {
@@ -43624,7 +43700,7 @@
                                   "evidence"
                                 ]
                               },
-                              "description": "The natal basis of this area: whether the chart is wealthy AT ALL, as the four classical wealth and poverty verdicts dhana, daridra, lakshmi, dhanamalika, each with the evidence that decided it. A PROPERTY OF THE BIRTH CHART AND NOT OF THE DAY, so it is the same block on every date this native is ever read for, which is exactly why it is CONTEXT rather than a term: it deliberately does not enter score, verdict, tally or evaluated, above or here. Folding a constant into a per-day number would shift every day by the identical amount, carrying no information into the only comparison those numbers support, and it would break the published closed form that makes the top-level score reproducible by hand from grahas alone. Read it as the standing question the day is being read against. The verdicts are the same ones POST /yoga/detect and POST /birth-chart return for this chart, computed in the Lahiri natal frame rather than in the KP-Newcomb frame the significators above use. PRESENT AT EVERY LATITUDE, including above the polar circle: these verdicts need only whole-sign houses from the Lagna, so nothing about them depends on the cusps the KP members above lose there."
+                              "description": "The natal basis of this area: whether the chart is wealthy AT ALL, as the four classical wealth and poverty verdicts dhana, daridra, lakshmi, dhanamalika, each with the evidence that decided it. A PROPERTY OF THE BIRTH CHART AND NOT OF THE DAY, so it is the same block on every date this native is ever read for, which is exactly why it is CONTEXT rather than a term: it deliberately does not enter score, verdict, tally or evaluated, above or here, and the one number it does enter is the composite beside it, where it is printed as its own layer rather than folded in. Folding a constant into a per-day number would shift every day by the identical amount, carrying no information into the only comparison those numbers support, and it would break the published closed form that makes the top-level score reproducible by hand from grahas alone. Read it as the standing question the day is being read against. The verdicts are the same ones POST /yoga/detect and POST /birth-chart return for this chart, computed in the Lahiri natal frame rather than in the KP-Newcomb frame the significators above use. PRESENT AT EVERY LATITUDE, including above the polar circle: these verdicts need only whole-sign houses from the Lagna, so nothing about them depends on the cusps the KP members above lose there."
                             }
                           },
                           "required": [
@@ -43634,9 +43710,10 @@
                             "negative",
                             "drivers",
                             "cautions",
+                            "composite",
                             "natal"
                           ],
-                          "description": "The finance area: the positive house group 2, 5, 11 netted against the negative group 6, 8, 12, read off the lords of the running dasha, bhukti and antara, because that is the KP rule for when a matter fructifies, plus the natal basis the day is read against. ALWAYS AN OBJECT. Above latitude 66.56 the six netted members are null, because the Placidus cusps behind the significators have no solution there, while natal is still populated because it is a property of the birth chart and needs no cusps; the reading also still carries its gochara, panchanga and dasha and names the omission in degraded. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and TWO houses are live disagreements rather than one. The 6th: some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. The 5th: it is named as a speculative GAIN house in the same KP sources that elsewhere call it a negation house, reading it as the 12th from the 6th and therefore loss of earning capacity, and both readings appear in one publication. The 1st is treated as a negation house by some authors on the same logic, as the 12th from the 2nd, and is not on either side here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship."
+                          "description": "The finance area: the positive house group 2, 5, 11 netted against the negative group 6, 8, 12, read off the lords of the running dasha, bhukti and antara, because that is the KP rule for when a matter fructifies, plus the natal basis the day is read against. ALWAYS AN OBJECT. Above latitude 66.56 the seven netted members are null, because the Placidus cusps behind the significators have no solution there, while natal is still populated because it is a property of the birth chart and needs no cusps; the reading also still carries its gochara, panchanga and dasha and names the omission in degraded. The two house groups are Krishnamurti Paddhati practice, but the NET is a KP practitioner convention rather than a classical operation: the KP sources that carry these groups use them as a promise test and an avoidance test, never as arithmetic. The groups also vary by author, and TWO houses are live disagreements rather than one. The 6th: some KP authors place it on the POSITIVE side as service income and salary, the exact opposite of the assignment used here. The 5th: it is named as a speculative GAIN house in the same KP sources that elsewhere call it a negation house, reading it as the 12th from the 6th and therefore loss of earning capacity, and both readings appear in one publication. The 1st is treated as a negation house by some authors on the same logic, as the 12th from the 2nd, and is not on either side here. This is a six house net and it is NOT the focus=finance lens, which re-reads all twelve bhavas in money vocabulary and moves no number. The two are orthogonal and both ship."
                         }
                       },
                       "required": [
@@ -43709,7 +43786,7 @@
                               "areas.finance.score"
                             ],
                             "example": "areas.finance.score",
-                            "description": "Which part of the reading this location or date could not supply. \"areas.finance.score\" names the KP net by the member it is read through: the finance area itself always ships and its natal block is always populated, and it is the six netted members that are null."
+                            "description": "Which part of the reading this location or date could not supply. \"areas.finance.score\" names the KP net by the member it is read through: the finance area itself always ships and its natal block is always populated, and it is the seven netted members that are null."
                           },
                           "reason": {
                             "type": "string",
