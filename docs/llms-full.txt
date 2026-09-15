@@ -888,6 +888,24 @@ const { data } = await roxy.vedicAstrology.castKpHoraryChart({
   },
 });
 
+// Score the day for money with four sub lord layers - KP Daily Finance API
+const { data } = await roxy.vedicAstrology.getKpDailyFinance({
+  body: {
+    birthDate: '1990-06-15',
+    birthTime: '07:30:00',
+    latitude: 28.6139,
+    longitude: 77.209,
+    timezone: 5.5,
+    date: '2026-09-14',
+    time: '12:00:00',
+    ayanamsa: 'kp-newcomb',
+    nodeType: 'mean',
+    gainHouses: [2, 11],
+    lossHouses: [6, 8, 12],
+    weights: { cusps: 30, dasha: 40, rulingPlanets: 15, moonWindows: 15 },
+  },
+});
+
 // Get planetary aspects (Drishti) - Mutual aspects between all planets
 const { data } = await roxy.vedicAstrology.calculateDrishti({
   body: {

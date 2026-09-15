@@ -4761,6 +4761,10 @@ export type KpChartResponse = {
          */
         sign: string;
         /**
+         * Rashi lord (sign ruler). First level of the KP significator hierarchy. Its house ownership determines L4 significations.
+         */
+        signLord: string;
+        /**
          * House number (1-12) based on Placidus cusps.
          */
         house: number;
@@ -4814,6 +4818,10 @@ export type KpChartResponse = {
              */
             sign: string;
             /**
+             * Rashi lord of the sign Rahu occupies. Rahu has no sign of its own and acts as agent of this lord.
+             */
+            signLord: string;
+            /**
              * Occupied house number (1-12) based on Placidus cusps.
              */
             house: number;
@@ -4850,6 +4858,10 @@ export type KpChartResponse = {
              * Zodiac sign Ketu occupies.
              */
             sign: string;
+            /**
+             * Rashi lord of the sign Ketu occupies. Ketu has no sign of its own and acts as agent of this lord.
+             */
+            signLord: string;
             /**
              * Occupied house number (1-12) based on Placidus cusps.
              */
@@ -5833,6 +5845,414 @@ export type KpHoraryRequest = {
      * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
      */
     nodeType?: 'mean' | 'true';
+};
+
+export type KpDailyFinanceResponse = {
+    /**
+     * The civil date read.
+     */
+    date: string;
+    /**
+     * The reading moment, local datetime in the request timezone. The ruling planets and the dasha lords are read here.
+     */
+    readingAt: string;
+    /**
+     * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula, the most common choice for KP astrology. "kp-old" uses the Krishnamurti original table from KP Reader-1 with constant precession rate. "lahiri" uses Lahiri/Chitrapaksha ayanamsa, matching most traditional Vedic software. "raman" uses the B.V. Raman ayanamsa from Hindu Predictive Astrology, a recognised traditional school that sits about 1.45 degrees below Lahiri. Defaults to "kp-newcomb".
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman';
+    /**
+     * Degrees subtracted from the tropical longitudes, resolved at the birth date. One frame for the whole reading: cusps, significators, Vimshottari balance, ruling planets and Moon windows alike.
+     */
+    ayanamsaDegrees: number;
+    houses: {
+        /**
+         * The gain houses this reading used, the request override or the convention.
+         */
+        gain: Array<number>;
+        /**
+         * The loss houses this reading used, the request override or the convention.
+         */
+        loss: Array<number>;
+    };
+    significators: {
+        /**
+         * Every planet that signifies at least one gain house at any tier. The set every row is judged against.
+         */
+        gain: Array<string>;
+        /**
+         * Every planet that signifies at least one loss house at any tier. A planet in both sets reads "mixed" everywhere.
+         */
+        loss: Array<string>;
+        /**
+         * The per-house evidence the two sets are built from, so any row can be traced to the tier that put its planet in a set.
+         */
+        byHouse: Array<{
+            /**
+             * The house, 1 to 12.
+             */
+            house: number;
+            /**
+             * Which set this house feeds. Canonical English machine value.
+             */
+            group: 'gain' | 'loss';
+            /**
+             * The four tier significators of the house, strongest tier first: planets in the star of an occupant, occupants, planets in the star of the sign lord, the sign lord. A planet appears once per tier it reaches the house at, exactly as the KP chart route lists them.
+             */
+            significators: Array<string>;
+        }>;
+    };
+    layers: {
+        /**
+         * Structural promise: each cusp of the two groups judged by its sub lord, the loss cusps inverted, the mean over the rows.
+         */
+        cusps: {
+            /**
+             * Which layer this is. Canonical English machine value, the same as its key.
+             */
+            layer: 'cusps';
+            /**
+             * Percent of the final score this layer carries. The four weights are cusps 30, dasha 40, rulingPlanets 15, moonWindows 15.
+             */
+            weight: number;
+            /**
+             * The layer on its own, 0 to 100, one decimal: the mean of its rows, or for the dasha layer the level-weighted sum. The final score is the weight-sum of the four layer scores.
+             */
+            score: number;
+            rows: Array<{
+                /**
+                 * Whether the planet signifies at least one gain house at any of the four tiers.
+                 */
+                inGain: boolean;
+                /**
+                 * Whether the planet signifies at least one loss house at any of the four tiers.
+                 */
+                inLoss: boolean;
+                /**
+                 * The one classification every layer uses: "favourable" when the planet signifies a gain house and no loss house (100), "mixed" when it signifies both (50), "unfavourable" when it signifies a loss house and no gain house (0), "neutral" when it signifies neither (50). Canonical English machine value.
+                 */
+                verdict: 'favourable' | 'mixed' | 'unfavourable' | 'neutral';
+                /**
+                 * The cusp judged, 1 to 12.
+                 */
+                house: number;
+                /**
+                 * Sidereal longitude of the cusp in the requested ayanamsa, degrees.
+                 */
+                longitude: number;
+                /**
+                 * Lord of the sign the cusp falls in.
+                 */
+                signLord: string;
+                /**
+                 * Lord of the nakshatra the cusp falls in.
+                 */
+                starLord: string;
+                /**
+                 * The KP sub lord of the cusp, the one lord that decides whether the house delivers. It is the planet the row classifies.
+                 */
+                subLord: string;
+                /**
+                 * True on a loss house, where the verdict score is inverted: a loss cusp whose sub lord signifies only loss scores 100, because a denied loss is good news for the native.
+                 */
+                inverted: boolean;
+                /**
+                 * The verdict score, 100 / 50 / 0 / 50, after the inversion on a loss house.
+                 */
+                score: number;
+            }>;
+        };
+        /**
+         * Timing: the four running Vimshottari lords at the reading moment, in the same sidereal frame as the chart, each judged and penalised if retrograde, then weighed by level.
+         */
+        dasha: {
+            /**
+             * Which layer this is. Canonical English machine value, the same as its key.
+             */
+            layer: 'dasha';
+            /**
+             * Percent of the final score this layer carries. The four weights are cusps 30, dasha 40, rulingPlanets 15, moonWindows 15.
+             */
+            weight: number;
+            /**
+             * The layer on its own, 0 to 100, one decimal: the mean of its rows, or for the dasha layer the level-weighted sum. The final score is the weight-sum of the four layer scores.
+             */
+            score: number;
+            rows: Array<{
+                /**
+                 * Whether the planet signifies at least one gain house at any of the four tiers.
+                 */
+                inGain: boolean;
+                /**
+                 * Whether the planet signifies at least one loss house at any of the four tiers.
+                 */
+                inLoss: boolean;
+                /**
+                 * The one classification every layer uses: "favourable" when the planet signifies a gain house and no loss house (100), "mixed" when it signifies both (50), "unfavourable" when it signifies a loss house and no gain house (0), "neutral" when it signifies neither (50). Canonical English machine value.
+                 */
+                verdict: 'favourable' | 'mixed' | 'unfavourable' | 'neutral';
+                /**
+                 * Which Vimshottari level this lord runs, outermost first.
+                 */
+                level: 'mahadasha' | 'antardasha' | 'pratyantardasha' | 'sookshmaDasha';
+                /**
+                 * The running lord at this level.
+                 */
+                lord: string;
+                /**
+                 * ISO instant the period began.
+                 */
+                startDate: string;
+                /**
+                 * ISO instant the period ends.
+                 */
+                endDate: string;
+                /**
+                 * Whether the lord is retrograde in transit at the reading moment. Rahu and Ketu always are. Costs 10 points, floored at 0.
+                 */
+                retrograde: boolean;
+                /**
+                 * The verdict score after the retrograde penalty.
+                 */
+                score: number;
+                /**
+                 * Percent of the dasha layer this level carries, the finer levels weighed more: mahadasha 10, antardasha 20, pratyantardasha 30, sookshmaDasha 40.
+                 */
+                weight: number;
+            }>;
+        };
+        /**
+         * The pulse of the moment: the KP ruling planets at the reading moment, each once, judged and penalised if retrograde, the mean over the rows.
+         */
+        rulingPlanets: {
+            /**
+             * Which layer this is. Canonical English machine value, the same as its key.
+             */
+            layer: 'rulingPlanets';
+            /**
+             * Percent of the final score this layer carries. The four weights are cusps 30, dasha 40, rulingPlanets 15, moonWindows 15.
+             */
+            weight: number;
+            /**
+             * The layer on its own, 0 to 100, one decimal: the mean of its rows, or for the dasha layer the level-weighted sum. The final score is the weight-sum of the four layer scores.
+             */
+            score: number;
+            rows: Array<{
+                /**
+                 * Whether the planet signifies at least one gain house at any of the four tiers.
+                 */
+                inGain: boolean;
+                /**
+                 * Whether the planet signifies at least one loss house at any of the four tiers.
+                 */
+                inLoss: boolean;
+                /**
+                 * The one classification every layer uses: "favourable" when the planet signifies a gain house and no loss house (100), "mixed" when it signifies both (50), "unfavourable" when it signifies a loss house and no gain house (0), "neutral" when it signifies neither (50). Canonical English machine value.
+                 */
+                verdict: 'favourable' | 'mixed' | 'unfavourable' | 'neutral';
+                /**
+                 * One ruling planet of the reading moment, listed once: the day lord, the sign and star lords of the Moon, and the sign and star lords of the ascendant.
+                 */
+                planet: string;
+                /**
+                 * Whether the planet is retrograde in transit at the reading moment. Costs 10 points, floored at 0.
+                 */
+                retrograde: boolean;
+                /**
+                 * The verdict score after the penalty.
+                 */
+                score: number;
+            }>;
+        };
+        /**
+         * The hour hand: every stretch of the civil day over which the Moon holds one sub lord, each judged, the mean over the windows. Window boundaries are found by bisection and printed to the second.
+         */
+        moonWindows: {
+            /**
+             * Which layer this is. Canonical English machine value, the same as its key.
+             */
+            layer: 'moonWindows';
+            /**
+             * Percent of the final score this layer carries. The four weights are cusps 30, dasha 40, rulingPlanets 15, moonWindows 15.
+             */
+            weight: number;
+            /**
+             * The layer on its own, 0 to 100, one decimal: the mean of its rows, or for the dasha layer the level-weighted sum. The final score is the weight-sum of the four layer scores.
+             */
+            score: number;
+            rows: Array<{
+                /**
+                 * Whether the planet signifies at least one gain house at any of the four tiers.
+                 */
+                inGain: boolean;
+                /**
+                 * Whether the planet signifies at least one loss house at any of the four tiers.
+                 */
+                inLoss: boolean;
+                /**
+                 * The one classification every layer uses: "favourable" when the planet signifies a gain house and no loss house (100), "mixed" when it signifies both (50), "unfavourable" when it signifies a loss house and no gain house (0), "neutral" when it signifies neither (50). Canonical English machine value.
+                 */
+                verdict: 'favourable' | 'mixed' | 'unfavourable' | 'neutral';
+                /**
+                 * Local datetime the window opens, in the request timezone.
+                 */
+                from: string;
+                /**
+                 * Local datetime the window closes. The last window of the day closes at the next midnight.
+                 */
+                to: string;
+                /**
+                 * The KP sub lord the Moon holds through this window, the planet the row classifies.
+                 */
+                subLord: string;
+                /**
+                 * The verdict score of the window.
+                 */
+                score: number;
+            }>;
+        };
+    };
+    /**
+     * The weight-sum of the four layer scores, 0 to 100, one decimal: cusps 30, dasha 40, rulingPlanets 15, moonWindows 15, each divided by 100. Recomputable from the layers printed above. The house groups, the classification, the inversion on the loss cusps, the retrograde penalty, the level weights and the layer weights are a KP practitioner convention adopted as the published convention of this route: no classical KP text weighs these four layers against each other, and every table behind the number is printed so the result can be checked line by line rather than trusted. The score measures what the method outputs for the day, never the probability of a gain or a loss.
+     */
+    score: number;
+    /**
+     * The score as one of five bands, each entered at its edge: "strong" from 70, "favourable" from 55, "mixed" from 45, "caution" from 30, "unfavourable" below 30. "mixed" is the ordinary day. Canonical English machine values.
+     */
+    band: 'strong' | 'favourable' | 'mixed' | 'caution' | 'unfavourable';
+    /**
+     * The favourable Moon window of the day, the longest when several qualify, or null when the day has none. The one stretch the method backs outright.
+     */
+    bestWindow: {
+        /**
+         * Whether the planet signifies at least one gain house at any of the four tiers.
+         */
+        inGain: boolean;
+        /**
+         * Whether the planet signifies at least one loss house at any of the four tiers.
+         */
+        inLoss: boolean;
+        /**
+         * The one classification every layer uses: "favourable" when the planet signifies a gain house and no loss house (100), "mixed" when it signifies both (50), "unfavourable" when it signifies a loss house and no gain house (0), "neutral" when it signifies neither (50). Canonical English machine value.
+         */
+        verdict: 'favourable' | 'mixed' | 'unfavourable' | 'neutral';
+        /**
+         * Local datetime the window opens, in the request timezone.
+         */
+        from: string;
+        /**
+         * Local datetime the window closes. The last window of the day closes at the next midnight.
+         */
+        to: string;
+        /**
+         * The KP sub lord the Moon holds through this window, the planet the row classifies.
+         */
+        subLord: string;
+        /**
+         * The verdict score of the window.
+         */
+        score: number;
+    } | null;
+    /**
+     * Every unfavourable Moon window of the day, in clock order.
+     */
+    worstWindows: Array<{
+        /**
+         * Whether the planet signifies at least one gain house at any of the four tiers.
+         */
+        inGain: boolean;
+        /**
+         * Whether the planet signifies at least one loss house at any of the four tiers.
+         */
+        inLoss: boolean;
+        /**
+         * The one classification every layer uses: "favourable" when the planet signifies a gain house and no loss house (100), "mixed" when it signifies both (50), "unfavourable" when it signifies a loss house and no gain house (0), "neutral" when it signifies neither (50). Canonical English machine value.
+         */
+        verdict: 'favourable' | 'mixed' | 'unfavourable' | 'neutral';
+        /**
+         * Local datetime the window opens, in the request timezone.
+         */
+        from: string;
+        /**
+         * Local datetime the window closes. The last window of the day closes at the next midnight.
+         */
+        to: string;
+        /**
+         * The KP sub lord the Moon holds through this window, the planet the row classifies.
+         */
+        subLord: string;
+        /**
+         * The verdict score of the window.
+         */
+        score: number;
+    }>;
+};
+
+export type KpDailyFinanceRequest = {
+    /**
+     * Birth date, YYYY-MM-DD. Fixes the Placidus cusps, the four tier significators and the Vimshottari balance every layer reads.
+     */
+    birthDate: string;
+    /**
+     * Birth time, HH:MM:SS, 24 hour, local to the birth place. The cusp sub lords move about one sub every four minutes of clock time, so this is the input the whole reading is most sensitive to.
+     */
+    birthTime: string;
+    /**
+     * Birth latitude in decimal degrees. Sets the Placidus cusps; also the place the ruling planets and the Moon windows are read at.
+     */
+    latitude: number;
+    /**
+     * Birth longitude in decimal degrees, east positive.
+     */
+    longitude: number;
+    /**
+     * Timezone as an IANA name (Asia/Kolkata) or decimal hours from UTC. Applies to the birth time, to the reading date and time, and to every local timestamp in the response. IANA names resolve to the offset in force on the date being read.
+     */
+    timezone?: number | string;
+    /**
+     * Civil date to read, YYYY-MM-DD in the request timezone. Defaults to today (UTC). The Moon windows cover this date from midnight to midnight.
+     */
+    date?: string;
+    /**
+     * Reading moment on that date, HH:MM:SS local. The ruling planets and the running sookshma lord are read at this instant. Defaults to 12:00:00; pass a market open or any hour for an intraday read.
+     */
+    time?: string;
+    /**
+     * Ayanamsa system for sidereal conversion. "kp-newcomb" uses the KP-Newcomb dynamic formula, the most common choice for KP astrology. "kp-old" uses the Krishnamurti original table from KP Reader-1 with constant precession rate. "lahiri" uses Lahiri/Chitrapaksha ayanamsa, matching most traditional Vedic software. "raman" uses the B.V. Raman ayanamsa from Hindu Predictive Astrology, a recognised traditional school that sits about 1.45 degrees below Lahiri. Defaults to "kp-newcomb".
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman';
+    /**
+     * Lunar node convention. "mean" is the smoothed average node, which always moves retrograde; "true" is the osculating node, which tracks the real perturbed node, oscillates up to about 1.5 degrees either side of the mean on a 173-day cycle, and can briefly turn direct. Neither is more correct and they almost always fall in the same sign. Applies to the Rahu and Ketu positions. Mean is the traditional Vedic default and what printed panchangs use; the choice can move a KP sub-lord in narrow boundary cases, where a span can be as small as 0.5 degrees. Defaults to "mean".
+     */
+    nodeType?: 'mean' | 'true';
+    /**
+     * Houses whose significators count as gain, 1 to 12. Defaults to the convention, 2 and 11. Override it to run your own school: the two lists may not share a house.
+     */
+    gainHouses?: Array<number>;
+    /**
+     * Houses whose significators count as loss, 1 to 12. Defaults to the convention, 6 and 8 and 12. Override it to run your own school: the two lists may not share a house.
+     */
+    lossHouses?: Array<number>;
+    /**
+     * Layer weights in percent, all four required, summing to 100. Defaults to the convention, cusps 30, dasha 40, rulingPlanets 15, moonWindows 15. Seventy percent of the default sits on the cusps and the outer dasha levels, which hold for months, so a chart reads inside a narrow band all month and the bands separate charts more than days. Move weight onto rulingPlanets and moonWindows for a reading that turns with the day.
+     */
+    weights?: {
+        /**
+         * Percent of the final score the cusps layer carries.
+         */
+        cusps: number;
+        /**
+         * Percent of the final score the dasha layer carries.
+         */
+        dasha: number;
+        /**
+         * Percent of the final score the rulingPlanets layer carries.
+         */
+        rulingPlanets: number;
+        /**
+         * Percent of the final score the moonWindows layer carries.
+         */
+        moonWindows: number;
+    };
 };
 
 export type RashiListResponse = Array<{
@@ -24186,6 +24606,126 @@ export type PostVedicAstrologyKpHoraryResponses = {
 };
 
 export type PostVedicAstrologyKpHoraryResponse = PostVedicAstrologyKpHoraryResponses[keyof PostVedicAstrologyKpHoraryResponses];
+
+export type PostVedicAstrologyKpDailyFinanceData = {
+    body?: KpDailyFinanceRequest;
+    path?: never;
+    query?: never;
+    url: '/vedic-astrology/kp/daily-finance';
+};
+
+export type PostVedicAstrologyKpDailyFinanceErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+    };
+};
+
+export type PostVedicAstrologyKpDailyFinanceError = PostVedicAstrologyKpDailyFinanceErrors[keyof PostVedicAstrologyKpDailyFinanceErrors];
+
+export type PostVedicAstrologyKpDailyFinanceResponses = {
+    /**
+     * The four layers, the weighted score, the band and the day windows.
+     */
+    200: KpDailyFinanceResponse;
+};
+
+export type PostVedicAstrologyKpDailyFinanceResponse = PostVedicAstrologyKpDailyFinanceResponses[keyof PostVedicAstrologyKpDailyFinanceResponses];
 
 export type PostVedicAstrologyAspectsData = {
     body?: {
