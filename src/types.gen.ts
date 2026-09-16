@@ -52937,9 +52937,9 @@ export type PostKabbalahGematriaData = {
          */
         textHebrew?: string;
         /**
-         * How a Latin name is written in Hebrew before it is scored. One member, a deterministic published letter map. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction, and every published Hebrew standard romanizes the other way. Send textHebrew to control the spelling yourself.
+         * How a Latin name is written in Hebrew before it is scored. Two members. letter-map-mathers is the 1887 Hermetic letter map, with e read as its author practised it: a point inside a word and alef at the start of one. It writes no c, f, w or x, so a name carrying one of them outside a two letter group returns 400 naming the letter. letter-map-modern follows the modern Israeli transcription rules for the sound each Latin letter carries in English and French spelling, covers every Latin letter, drops the geresh and does not double vav or yod, so send textHebrew for the ktiv male form. Every form states the readings it used in rule. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction.
          */
-        transliteration?: 'letter-map-mathers';
+        transliteration?: 'letter-map-mathers' | 'letter-map-modern';
         /**
          * Which ciphers to return, by identifier. Omit for every computed cipher. Valid values are mispar-hechrachi, mispar-gadol, otiyot-be-milui, mispar-katan, mispar-kidmi, mispar-prati, mispar-ha-merubah-ha-klali, mispar-meshulash, mispar-musafi, kolel.
          */
@@ -53103,7 +53103,7 @@ export type PostKabbalahGematriaResponses = {
              */
             romanization: string;
             /**
-             * Why this spelling came out of the map, so a caller can tell the parses apart.
+             * Why this spelling came out of the map: the parse rule first, then one sentence for every reading the scheme applied that the letters alone would not show, so a caller can tell the parses apart.
              */
             rule: string;
             /**
@@ -53144,7 +53144,7 @@ export type PostKabbalahGematriaResponses = {
                  */
                 letterId: string;
                 /**
-                 * Display name of the letter.
+                 * Display name of the letter, in the requested language. Branch on letterId, never on this.
                  */
                 name: string;
                 /**
@@ -53554,9 +53554,9 @@ export type PostKabbalahNameProfileData = {
          */
         nameHebrew?: string;
         /**
-         * How a Latin name is written in Hebrew before it is scored. One member, a deterministic published letter map. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction, and every published Hebrew standard romanizes the other way. Send textHebrew to control the spelling yourself.
+         * How a Latin name is written in Hebrew before it is scored. Two members. letter-map-mathers is the 1887 Hermetic letter map, with e read as its author practised it: a point inside a word and alef at the start of one. It writes no c, f, w or x, so a name carrying one of them outside a two letter group returns 400 naming the letter. letter-map-modern follows the modern Israeli transcription rules for the sound each Latin letter carries in English and French spelling, covers every Latin letter, drops the geresh and does not double vav or yod, so send textHebrew for the ktiv male form. Every form states the readings it used in rule. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction.
          */
-        transliteration?: 'letter-map-mathers';
+        transliteration?: 'letter-map-mathers' | 'letter-map-modern';
         /**
          * Which method the name mispar gadol means, because the sources use it for two. Use finals-500-900 to score the five word final letters as 500 to 900, or milui to score each letter as the value of its own spelled out name.
          */
@@ -53704,7 +53704,7 @@ export type PostKabbalahNameProfileResponses = {
              */
             romanization: string;
             /**
-             * Why this spelling came out of the map, so a caller can tell the parses apart.
+             * Why this spelling came out of the map: the parse rule first, then one sentence for every reading the scheme applied that the letters alone would not show, so a caller can tell the parses apart.
              */
             rule: string;
             /**
@@ -53745,7 +53745,7 @@ export type PostKabbalahNameProfileResponses = {
                  */
                 letterId: string;
                 /**
-                 * Display name of the letter.
+                 * Display name of the letter, in the requested language. Branch on letterId, never on this.
                  */
                 name: string;
                 /**
@@ -55608,9 +55608,9 @@ export type PostKabbalahCompatibilityData = {
          */
         secondNameHebrew?: string;
         /**
-         * How a Latin name is written in Hebrew before it is scored. One member, a deterministic published letter map. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction, and every published Hebrew standard romanizes the other way. Send textHebrew to control the spelling yourself.
+         * How a Latin name is written in Hebrew before it is scored. Two members. letter-map-mathers is the 1887 Hermetic letter map, with e read as its author practised it: a point inside a word and alef at the start of one. It writes no c, f, w or x, so a name carrying one of them outside a two letter group returns 400 naming the letter. letter-map-modern follows the modern Israeli transcription rules for the sound each Latin letter carries in English and French spelling, covers every Latin letter, drops the geresh and does not double vav or yod, so send textHebrew for the ktiv male form. Every form states the readings it used in rule. Phonetic Ashkenazi and Sephardi schemes are not offered because no two references agree on a rule for that direction.
          */
-        transliteration?: 'letter-map-mathers';
+        transliteration?: 'letter-map-mathers' | 'letter-map-modern';
         /**
          * Which method the name mispar gadol means, because the sources use it for two. Use finals-500-900 to score the five word final letters as 500 to 900, or milui to score each letter as the value of its own spelled out name.
          */
@@ -55853,12 +55853,9 @@ export type PostKabbalahCompatibilityResponses = {
          * The composed reading, in the requested language. It states that the score is ours.
          */
         reading: string;
-        /**
-         * The conventions this answer was computed under.
-         */
         conventions: {
             /**
-             * The Latin to Hebrew scheme applied. Absent when both names arrived in Hebrew.
+             * The Latin to Hebrew scheme applied. Absent when the caller sent Hebrew directly.
              */
             transliteration?: string;
             /**

@@ -888,7 +888,7 @@ const { data } = await roxy.vedicAstrology.castKpHoraryChart({
   },
 });
 
-// Score the day for money with four sub lord layers - KP Daily Finance API
+// Daily finance score from four KP sub lord layers - KP Daily Finance API
 const { data } = await roxy.vedicAstrology.getKpDailyFinance({
   body: {
     birthDate: '1990-06-15',
