@@ -1850,22 +1850,22 @@ const { data } = await roxy.numerology.calculatePersonalYear({ body: { month: 7,
 const { data } = await roxy.numerology.calculateNumCompatibility({
   body: {
     person1: {
-      lifePath: 5,
-      expression: 7,
-      soulUrge: 6,
       fullName: 'John William Smith',
       year: 1990,
       month: 7,
       day: 15,
+      lifePath: 5,
+      expression: 7,
+      soulUrge: 6,
     },
     person2: {
-      lifePath: 3,
-      expression: 9,
-      soulUrge: 2,
       fullName: 'Jane Marie Doe',
       year: 1992,
       month: 3,
       day: 22,
+      lifePath: 3,
+      expression: 9,
+      soulUrge: 2,
     },
   },
 });
