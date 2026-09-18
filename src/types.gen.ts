@@ -30087,6 +30087,10 @@ export type PostHumanDesignBodygraphResponses = {
             [key: string]: string;
         };
         /**
+         * The Design moment as an ISO 8601 UTC instant: the exact time the Sun stood 88 degrees of solar arc before its natal longitude, and the instant every Design activation was computed at. Compare it with the Design date a reference tool prints to validate the chart on the moment itself.
+         */
+        designInstantUtc: string;
+        /**
          * The incarnation cross built from the four cardinal gates and the profile angle.
          */
         incarnationCross: {

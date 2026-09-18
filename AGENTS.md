@@ -42,10 +42,10 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | Namespace | What it covers |
 |-----------|----------------|
 | `roxy.astrology` | Western astrology API for natal birth charts, daily, weekly, monthly, and yearly horoscopes with unique content per s... |
-| `roxy.vedicAstrology` | Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), Ashtakoot Gun Milan ku... |
-| `roxy.forecast` | Forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm... |
-| `roxy.humanDesign` | Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i... |
-| `roxy.chineseAstrology` | Calculate BaZi Four Pillars charts, Chinese zodiac signs, and the Chinese lunisolar calendar from any birth moment: y... |
+| `roxy.vedicAstrology` | Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), panchang with choghadi... |
+| `roxy.forecast` | Astrology forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons,... |
+| `roxy.humanDesign` | Human Design API that generates the full bodygraph from a birth moment: type, strategy, inner authority, profile, def... |
+| `roxy.chineseAstrology` | Chinese zodiac and BaZi astrology API: Four Pillars charts, Chinese zodiac signs and the Chinese lunisolar calendar f... |
 | `roxy.fengShui` | Compute classical feng shui from one API: Xuan Kong flying star natal charts for any of the nine periods and 24 mount... |
 | `roxy.mesoamericanAstrology` | Calculate Mayan astrology day signs, the Tzolkin sacred round, the Haab year, the full Long Count and the Aztec tonal... |
 | `roxy.vastu` | Vastu Shastra API for directional home and plot analysis: entrance padas with the classical effect of each of the 32... |
@@ -58,7 +58,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.crystals` | Crystal healing API covering the most popular and widely-searched healing crystals and gemstones, from Amethyst and R... |
 | `roxy.dreams` | Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,... |
 | `roxy.angelNumbers` | Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve... |
-| `roxy.location` | Location and timezone API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude... |
+| `roxy.location` | Timezone and location API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude... |
 | `roxy.usage` | Monitor your API usage, check rate limits, and track request consumption |
 | `roxy.languages` | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->

@@ -444,7 +444,7 @@ const { data } = await roxy.astrology.generateProfections({
 
 ## Vedic Astrology — `roxy.vedicAstrology`
 
-Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), Ashtakoot Gun Milan ku...
+Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), panchang with choghadi...
 
 ```typescript
 // Get birth chart (D1 Rashi chart) - Kundli Calculator API
@@ -1109,7 +1109,7 @@ const { data } = await roxy.vedicAstrology.getHeliacalVisibility({
 
 ## Forecast — `roxy.forecast`
 
-Forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons, biorhythm...
+Astrology forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons,...
 
 ```typescript
 // Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
@@ -1200,7 +1200,7 @@ const { data } = await roxy.forecast.forecastSolarReturn({
 
 ## Human Design — `roxy.humanDesign`
 
-Generate the full Human Design bodygraph from a birth moment: type, strategy, inner authority, profile, definition, i...
+Human Design API that generates the full bodygraph from a birth moment: type, strategy, inner authority, profile, def...
 
 ```typescript
 // Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
@@ -1352,7 +1352,7 @@ const { data } = await roxy.humanDesign.calculateVariables({
 
 ## Chinese Astrology — `roxy.chineseAstrology`
 
-Calculate BaZi Four Pillars charts, Chinese zodiac signs, and the Chinese lunisolar calendar from any birth moment: y...
+Chinese zodiac and BaZi astrology API: Four Pillars charts, Chinese zodiac signs and the Chinese lunisolar calendar f...
 
 ```typescript
 // Generate BaZi chart - Four Pillars of Destiny calculator API
@@ -2355,7 +2355,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 ## Location and Timezone — `roxy.location`
 
-Location and timezone API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude...
+Timezone and location API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude...
 
 ```typescript
 // Search cities worldwide - Geocoding autocomplete with coordinates and timezone
