@@ -155,7 +155,7 @@ console.log(data.sign, data.overview);
 | 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
 | 401 | `api_key_revoked` | Key was deleted from the account |
 | 404 | `not_found` | Resource not found |
-| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a future birth date |
+| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a date window whose `endDate` precedes `startDate` |
 | 429 | `rate_limit_exceeded` | Monthly quota reached |
 | 500 | `internal_error` | Server error |
 

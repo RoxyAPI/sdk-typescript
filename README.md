@@ -164,7 +164,7 @@ const { data: dasha } = await roxy.vedicAstrology.getCurrentDasha({ body: birth 
 
 // Mangal Dosha. The most asked matrimonial check.
 const { data: dosha } = await roxy.vedicAstrology.checkManglikDosha({ body: birth });
-// dosha.present, dosha.severity, dosha.remedies
+// dosha.present; dosha.severity and dosha.remedies are set only when present is true
 
 // Guna Milan. The 36-point Ashtakoota score behind kundli matching, both people from the lookups above.
 const { data: milan } = await roxy.vedicAstrology.calculateGunMilan({
@@ -325,7 +325,7 @@ Gematria of a Latin name under a declared transliteration convention, the 72 nam
 ```typescript
 // Gematria. A Latin name transliterated under a declared convention, ten ciphers, each with its tradition and source.
 const { data: gematria } = await roxy.kabbalah.calculateGematria({ body: { text: 'Sarah' } });
-// gematria.chosen, gematria.values[n].cipher, .value, gematria.matches, gematria.conventions
+// gematria.chosen.hebrew, gematria.values[n].id, .name, .value, .tradition; gematria.matches, gematria.conventions
 
 // Birth profile. The Hebrew date and birthday, the three birth angels and the birth sephirah from the instant above.
 const { data: kabbalah } = await roxy.kabbalah.generateBirthProfile({
@@ -379,7 +379,7 @@ The dosha profile read from a verified sidereal chart with the verse on each fac
 ```typescript
 // Constitution. The dosha profile read from the sidereal chart of the same birth, each factor with its verse.
 const { data: constitution } = await roxy.ayurveda.calculateAyurvedicConstitution({ body: birth });
-// constitution.composite, constitution.factors[n].factor, .doshas, .source, constitution.meta.disclaimer
+// constitution.composite.dominant, .type; constitution.factors[n].id, .input, .doshas, .source; constitution.meta.disclaimer
 
 // Dinacharya. Brahma muhurta, the dosha periods and the routine for a date at the place looked up above.
 const { data: dinacharya } = await roxy.ayurveda.getDinacharyaSchedule({
@@ -534,7 +534,7 @@ if (error) {
 | 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
 | 401 | `api_key_revoked` | Key was deleted from the account |
 | 404 | `not_found` | Resource not found |
-| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a future birth date |
+| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a date window whose `endDate` precedes `startDate` |
 | 429 | `rate_limit_exceeded` | Monthly quota reached |
 | 500 | `internal_error` | Server error |
 
