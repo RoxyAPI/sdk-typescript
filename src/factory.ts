@@ -2,11 +2,11 @@
  * Hand-written entry point — NOT auto-generated. Safe to edit.
  * Re-exports all generated SDK classes and types, plus the createRoxy factory.
  */
-export * from './index';
+export * from './index.js';
 
-import { createClient, createConfig } from './client';
-import { Roxy } from './sdk.gen';
-import { VERSION } from './version';
+import { createClient, createConfig } from './client/index.js';
+import { Roxy } from './sdk.gen.js';
+import { VERSION } from './version.js';
 
 type AuthToken = string | (() => Promise<string> | string);
 

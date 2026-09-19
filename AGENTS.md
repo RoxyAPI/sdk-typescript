@@ -27,7 +27,7 @@ const { data } = await roxy.location.searchCities({ query: { q: 'New York' } });
 const { latitude, longitude, timezone } = data.cities[0];
 // `timezone` is the IANA string ("America/New_York"). Pass it directly to any chart
 // endpoint and the server resolves it to the DST-correct decimal offset using
-// the chart's own `date`, so a January 1990 New York chart picks EST (-5) even
+// the `date` of the chart itself, so a January 1990 New York chart picks EST (-5) even
 // when you looked the city up in July. If you prefer numbers, `utcOffset`
 // (5.5, -5, 9, ...) also works and produces identical charts.
 ```
@@ -70,23 +70,25 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 Five rules to follow when writing any call with this SDK. Get these right and the generated types do the rest.
 
 - **One options object, hey-api wrapped.** Every method takes a single object with `path`, `query`, and `body` keys. Path params go in `path`, query params in `query`, request body in `body`. Never flat named args. Right: `roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' } })`. Wrong: `roxy.astrology.getDailyHoroscope({ sign: 'aries' })`.
-- **Always `await`. Always destructure `{ data, error, response }`.** All methods are async. `data` is the typed success response (undefined on error). `error` is the typed API error (`{ error: string, code: string }`, undefined on success). `response` is the raw `fetch` Response. Switch on `error.code`, not on `error.error`.
+- **Always `await`. Always destructure `{ data, error, response }`.** All methods are async. `data` is the typed success response (undefined on error). `error` is the typed API error (`{ error: string, code: string }`, undefined on success). `response` is the raw `fetch` Response. Switch on `error.code`, not on `error.error`. The pair is a discriminated union, so `data` is typed as possibly undefined until `error` is checked: write `if (error) throw error;` before reading `data` in a `strict` project, or pass `throwOnError: true` in the call options to have failures throw and `data` typed as always present.
 - **Method names match the OpenAPI `operationId` verbatim.** When in doubt, autocomplete `roxy.{domain}.` in your editor or `grep 'public ' node_modules/@roxyapi/sdk/dist/factory.d.ts`. Never invent a method from the URL path or a guess.
-- **Response field names come from the spec's response schema.** Field access is typed dot syntax (`data.cities[0].timezone`). TypeScript will catch any invented field at compile time via the generated types - if `tsc` complains, the field does not exist.
-- **Do not hand-roll requests.** No raw `fetch`, no axios. The SDK injects auth, base URL, retries, and typed responses. Use `createRoxy(key)` for the common case, or `new Roxy({ client })` with `createClient` from `@roxyapi/sdk/client` when you need a custom fetch or interceptors.
+- **Response field names come from the response schema of the spec.** Field access is typed dot syntax (`data.cities[0].timezone`). TypeScript will catch any invented field at compile time via the generated types - if `tsc` complains, the field does not exist.
+- **Do not hand-roll requests.** No raw `fetch`, no axios. The SDK injects auth, the base URL and typed responses; it does not retry, so wrap calls you want retried. Use `createRoxy(key)` for the common case, or `new Roxy({ client })` with `createClient` from `@roxyapi/sdk/client` when you need a custom fetch or interceptors.
 
 ## Critical patterns
 
 ### Two-step pattern for coordinate-dependent endpoints
 
 ```typescript
-const { data } = await roxy.location.searchCities({ query: { q: 'London' } });
+const { data, error } = await roxy.location.searchCities({ query: { q: 'London' } });
+if (error) throw error;
 const { latitude, longitude, timezone } = data.cities[0];
+const birth = { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone };
 
-const { data: chart } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
-});
+const { data: chart } = await roxy.astrology.generateNatalChart({ body: birth });
 ```
+
+One lookup feeds every domain. The same `birth` object is the body for `astrology.generateNatalChart`, `vedicAstrology.generateBirthChart`, `vedicAstrology.getCurrentDasha`, `ayurveda.calculateAyurvedicConstitution` and the `birthData` of `forecast.forecastTransits`; the instant alone (`date`, `time`, `timezone`) is the body for `humanDesign.generateBodygraph`, `chineseAstrology.generateBaziChart` and `kabbalah.generateBirthProfile`. Never look the city up twice for one person.
 
 ### GET endpoints - use `path` for URL params, `query` for query params
 
@@ -126,7 +128,7 @@ await roxy.numerology.calculateLifePath({
 });
 ```
 
-Supported: `astrology`, `vedicAstrology`, `forecast`, `humanDesign`, `chineseAstrology`, `fengShui`, `mesoamericanAstrology`, `vastu`, `numerology`, `kabbalah`, `tarot`, `biorhythm`, `ayurveda`, `iching`, `crystals`, `angelNumbers`. English-only: `dreams`, `location`, `usage`, `languages`. The two Chinese scripts (`zh-Hans`, `zh-Hant`) currently ship on Chinese astrology and feng shui; every other domain answers those codes in English per field. To list supported codes at runtime, call `roxy.languages.listLanguages()`.
+Supported: `astrology`, `vedicAstrology`, `forecast`, `humanDesign`, `chineseAstrology`, `fengShui`, `mesoamericanAstrology`, `vastu`, `numerology`, `kabbalah`, `tarot`, `biorhythm`, `ayurveda`, `iching`, `crystals`, `angelNumbers`, `languages`. English-only: `dreams`, `location`, `usage`. The two Chinese scripts (`zh-Hans`, `zh-Hant`) currently ship on Chinese astrology and feng shui; every other domain answers those codes in English per field. To list supported codes at runtime, call `roxy.languages.listLanguages()`.
 
 ### Error handling
 
@@ -151,54 +153,72 @@ console.log(data.sign, data.overview);
 | 401 | `invalid_api_key` | Key format invalid or tampered |
 | 401 | `subscription_not_found` | Key references non-existent subscription |
 | 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
+| 401 | `api_key_revoked` | Key was deleted from the account |
 | 404 | `not_found` | Resource not found |
+| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a future birth date |
 | 429 | `rate_limit_exceeded` | Monthly quota reached |
 | 500 | `internal_error` | Server error |
 
 ## Common tasks
 
-Ordered by domain priority (Western, Vedic, Forecast, Human Design, Chinese Astrology, Feng Shui, Numerology, Tarot, Biorhythm, I Ching, Crystals, Dreams, Angel Numbers, Location, Usage, Languages).
+In the catalog order (Western astrology, Vedic astrology, forecast, Human Design, Chinese astrology, feng shui, Mesoamerican astrology, Vastu, numerology, Kabbalah, tarot, biorhythm, Ayurveda, I Ching, crystals, dreams, angel numbers, location, usage, languages). `birth` is `{ date, time, latitude, longitude, timezone }` from the two-step pattern above.
 
 | Task | Code |
 |------|------|
+| Find city coordinates (do this first) | `roxy.location.searchCities({ query: { q: 'Berlin' } })` |
 | Daily horoscope | `roxy.astrology.getDailyHoroscope({ path: { sign } })` |
-| Natal chart (Western) | `roxy.astrology.generateNatalChart({ body: { date, time, latitude, longitude, timezone } })` |
+| Natal chart (Western) | `roxy.astrology.generateNatalChart({ body: birth })` |
 | Synastry | `roxy.astrology.calculateSynastry({ body: { person1, person2 } })` |
 | Compatibility score | `roxy.astrology.calculateCompatibility({ body: { person1, person2 } })` |
-| Current moon phase | `roxy.astrology.getCurrentMoonPhase()` |
+| Current moon phase | `roxy.astrology.getCurrentMoonPhase({})` |
 | Transits | `roxy.astrology.calculateTransits({ body: { natalChart } })` |
-| Kundli (Vedic birth chart) | `roxy.vedicAstrology.generateBirthChart({ body: { date, time, latitude, longitude } })` |
-| Panchang (detailed) | `roxy.vedicAstrology.getDetailedPanchang({ body: { date, latitude, longitude } })` |
-| Choghadiya | `roxy.vedicAstrology.getChoghadiya({ body: { date, latitude, longitude } })` |
-| Current dasha | `roxy.vedicAstrology.getCurrentDasha({ body: { date, time, latitude, longitude } })` |
-| Mangal Dosha | `roxy.vedicAstrology.checkManglikDosha({ body: { date, time, latitude, longitude } })` |
+| Kundli (Vedic birth chart) | `roxy.vedicAstrology.generateBirthChart({ body: birth })` |
+| Panchang (detailed) | `roxy.vedicAstrology.getDetailedPanchang({ body: { date, latitude, longitude, timezone } })` |
+| Choghadiya | `roxy.vedicAstrology.getChoghadiya({ body: { date, latitude, longitude, timezone } })` |
+| Current dasha | `roxy.vedicAstrology.getCurrentDasha({ body: birth })` |
+| Mangal Dosha | `roxy.vedicAstrology.checkManglikDosha({ body: birth })` |
 | Guna Milan (matching) | `roxy.vedicAstrology.calculateGunMilan({ body: { person1, person2 } })` |
-| Navamsa (D9) | `roxy.vedicAstrology.generateNavamsa({ body: { date, time, latitude, longitude } })` |
-| KP chart | `roxy.vedicAstrology.generateKpChart({ body: { date, time, latitude, longitude } })` |
+| Navamsa (D9) | `roxy.vedicAstrology.generateNavamsa({ body: birth })` |
+| KP chart | `roxy.vedicAstrology.generateKpChart({ body: birth })` |
+| KP ruling planets | `roxy.vedicAstrology.getKpRulingPlanets({ body: { latitude, longitude, timezone } })` |
 | Nakshatra detail | `roxy.vedicAstrology.getNakshatra({ path: { id: 'ashwini' } })` |
+| Transit forecast | `roxy.forecast.forecastTransits({ body: { birthData: birth, startDate, endDate } })` |
+| Cross-domain timeline | `roxy.forecast.generateTimeline({ body: { birthData: birth, startDate, endDate } })` |
+| Human Design bodygraph | `roxy.humanDesign.generateBodygraph({ body: { date, time, timezone } })` |
+| Human Design connection | `roxy.humanDesign.calculateConnection({ body: { personA, personB } })` |
+| BaZi Four Pillars | `roxy.chineseAstrology.generateBaziChart({ body: { date, time, timezone } })` |
+| Chinese zodiac animal | `roxy.chineseAstrology.calculateZodiacAnimal({ body: { date } })` |
+| Almanac day (Tong Shu) | `roxy.chineseAstrology.getAlmanacDay({ path: { date } })` |
+| Kua number | `roxy.fengShui.calculateKuaNumber({ body: { date, gender } })` |
+| Flying star natal chart | `roxy.fengShui.generateFlyingStarChart({ body: { period, facing } })` |
+| Tzolkin day sign | `roxy.mesoamericanAstrology.calculateTzolkin({ body: { date } })` |
+| Full Maya chart | `roxy.mesoamericanAstrology.generateMayanChart({ body: { date } })` |
+| Vastu entrance | `roxy.vastu.calculateEntrancePada({ body: { plot, facing, doorPosition } })` |
+| Vastu room compliance | `roxy.vastu.calculateRoomCompliance({ body: { plot, facing, rooms } })` |
 | Life path number | `roxy.numerology.calculateLifePath({ body: { year, month, day } })` |
 | Full numerology chart | `roxy.numerology.generateNumerologyChart({ body: { fullName, year, month, day } })` |
 | Personal year | `roxy.numerology.calculatePersonalYear({ body: { month, day } })` |
+| Gematria | `roxy.kabbalah.calculateGematria({ body: { text } })` |
+| Kabbalah birth profile | `roxy.kabbalah.generateBirthProfile({ body: { date, time, timezone } })` |
 | Daily tarot card | `roxy.tarot.getDailyCard({ body: { seed } })` |
 | Three-card spread | `roxy.tarot.castThreeCard({ body: { question } })` |
 | Celtic Cross | `roxy.tarot.castCelticCross({ body: { question } })` |
 | Yes / no tarot | `roxy.tarot.castYesNo({ body: { question } })` |
-| Human Design bodygraph | `roxy.humanDesign.generateBodygraph({ body: { date, time, latitude, longitude, timezone } })` |
-| Forecast timeline | `roxy.forecast.generateTimeline({ body: { birthData, startDate, endDate } })` |
-| Daily biorhythm | `roxy.biorhythm.getDailyBiorhythm({ body: { seed } })` |
+| Daily biorhythm reading | `roxy.biorhythm.getDailyBiorhythm({ body: { seed } })` |
 | Biorhythm forecast | `roxy.biorhythm.getForecast({ body: { birthDate } })` |
 | Biorhythm compatibility | `roxy.biorhythm.calculateBioCompatibility({ body: { person1, person2 } })` |
+| Ayurvedic constitution | `roxy.ayurveda.calculateAyurvedicConstitution({ body: birth })` |
+| Dinacharya | `roxy.ayurveda.getDinacharyaSchedule({ body: { date, latitude, longitude, timezone } })` |
 | Daily hexagram | `roxy.iching.getDailyHexagram({ body: { seed } })` |
-| Cast I Ching reading | `roxy.iching.castReading()` |
+| Cast I Ching reading | `roxy.iching.castReading({})` |
 | Hexagram detail | `roxy.iching.getHexagram({ path: { number: 1 } })` |
 | Crystal by zodiac | `roxy.crystals.getCrystalsByZodiac({ path: { sign } })` |
 | Crystal by chakra | `roxy.crystals.getCrystalsByChakra({ path: { chakra } })` |
 | Dream symbol lookup | `roxy.dreams.getDreamSymbol({ path: { id: 'flying' } })` |
 | Angel number meaning | `roxy.angelNumbers.getAngelNumber({ path: { number: '1111' } })` |
 | Universal number lookup | `roxy.angelNumbers.analyzeNumberSequence({ query: { number: '1234' } })` |
-| Find city coordinates | `roxy.location.searchCities({ query: { q: 'Berlin' } })` |
-| Check API usage | `roxy.usage.getUsageStats()` |
-| List supported languages | `roxy.languages.listLanguages()` |
+| Check API usage | `roxy.usage.getUsageStats({})` |
+| List supported languages | `roxy.languages.listLanguages({})` |
 
 ## Field formats that trip agents
 
@@ -232,7 +252,7 @@ These are the fields AI agents most often get wrong. Copy the format column exac
 |--------|---------|--------|---------|
 | UTC / London (winter) | `0` | Dubai | `4` |
 | London (summer, BST) | `1` | Karachi | `5` |
-| Berlin / Paris | `1` (winter) / `2` (summer) | Delhi / Mumbai (IST) | `5.5` |
+| Berlin / Paris | `1` (winter) / `2` (summer) | Delhi (IST) | `5.5` |
 | Istanbul | `3` | Kathmandu (NPT) | `5.75` |
 | Moscow | `3` | Dhaka | `6` |
 | Tehran | `3.5` (winter) / `4.5` (summer) | Bangkok | `7` |
@@ -242,7 +262,7 @@ These are the fields AI agents most often get wrong. Copy the format column exac
 | Denver (MST / MDT) | `-7` / `-6` | Auckland | `12` (winter) / `13` (summer) |
 | Los Angeles (PST / PDT) | `-8` / `-7` | Honolulu | `-10` |
 
-DST matters. If the birth date falls inside a daylight-saving window, use the summer / DST offset. For Vedic endpoints this is rarely an issue (most users are in India, fixed 5.5), but Western natal charts must respect DST at the time of birth.
+DST matters. If the birth date falls inside a daylight-saving window, use the summer / DST offset, or pass the IANA string from the location lookup and let the server resolve it. India observes no DST, so a fixed `5.5` is always right there; anywhere else, a natal chart must carry the offset in force at the time of birth.
 
 ## Astrology domain gotchas for LLMs
 
@@ -280,7 +300,7 @@ Use the SDK for typed TypeScript apps. Use MCP for AI agents (Claude Desktop, Cu
 - **Western `timezone` is required** and accepts either a decimal (`-5` for EST, `5.5` for IST, `0` for UTC) or an IANA string (`"America/New_York"`, `"Asia/Kolkata"`, `"UTC"`). IANA is resolved to the DST-correct offset for the request `date`. Vedic endpoints accept an optional `timezone` that defaults to `5.5` (IST).
 - **`data` and `error` are mutually exclusive.** If `error` is set, `data` is `undefined` and vice versa.
 - **Switch on `error.code`, not `error.error`.** The message may change; the code is stable.
-- **List endpoints may return paginated objects** (`{ items, total }`) instead of raw arrays. Check the type.
+- **List endpoints return a paginated envelope**, `{ total, limit, offset }` plus a named array (`cities`, `crystals`, `hexagrams`, `symbols`), never a bare array. Pass `query: { limit }` to widen a page; `listHexagrams` defaults to 20 of 64.
 
 ## Links
 

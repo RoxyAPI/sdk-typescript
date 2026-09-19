@@ -13,6 +13,9 @@ export default defineConfig({
 	output: {
 		path: 'src',
 		clean: false,
+		// Node ESM resolution (`moduleResolution: NodeNext`) needs fully specified relative imports.
+		// Without this every `.d.ts` re-export silently fails to resolve there and the SDK types collapse to `any`.
+		importFileExtension: '.js',
 	},
 	plugins: [
 		'@hey-api/typescript',

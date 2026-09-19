@@ -34,7 +34,8 @@ import { createRoxy } from '@roxyapi/sdk';
 
 const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
-const { data } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' } });
+const { data, error } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' } });
+if (error) throw error;
 console.log(data.overview, data.love, data.luckyNumber);
 ```
 
@@ -47,38 +48,25 @@ import { createRoxy } from '@roxyapi/sdk';
 
 const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
-// Step 1: geocode the birth city (required for any chart endpoint)
-const { data } = await roxy.location.searchCities({
-  query: { q: 'London, UK' },
-});
-const { latitude, longitude, timezone } = data.cities[0];
+// Step 1: geocode the birth city once. Every chart endpoint takes these three values.
+const { data: place, error: lookupError } = await roxy.location.searchCities({ query: { q: 'London' } });
+if (lookupError) throw lookupError;
+const { latitude, longitude, timezone } = place.cities[0];
 
-// Step 2: Western natal chart. `timezone` can be the IANA string from the
-// location response. The server resolves it to the DST-correct offset for
-// the chart's own date.
+// Step 2: a Western natal chart. `timezone` is the IANA string from the lookup
+// ("Europe/London"); the server resolves it to the DST-correct offset for the
+// date of the chart.
 const { data: chart } = await roxy.astrology.generateNatalChart({
   body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
 
-// Vedic kundli uses the same inputs (timezone optional, defaults to 5.5 IST)
+// Step 3: the same birth as a Vedic kundli. Same inputs, sidereal zodiac.
 const { data: kundli } = await roxy.vedicAstrology.generateBirthChart({
   body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
 ```
 
-`createRoxy` sets the base URL (`https://roxyapi.com/api/v2`) and injects the auth header and SDK identification header on every request.
-
-## Location first
-
-Every chart, horoscope, panchang, dasha, dosha, navamsa, KP, synastry, compatibility, and natal endpoint needs `latitude`, `longitude`, and (for Western) `timezone`. **Never ask users to type coordinates.** Call `roxy.location.searchCities({ query: { q: city } })` first, then feed the result into the chart method.
-
-```typescript
-const { data } = await roxy.location.searchCities({ query: { q: 'Tokyo' } });
-const { latitude, longitude, timezone } = data.cities[0];
-// `timezone` is the IANA string ("Asia/Tokyo"). Pass it straight into any
-// chart endpoint and the server resolves it to the DST-correct offset for the
-// chart's date. If you prefer a decimal, `data.cities[0].utcOffset` also works.
-```
+`createRoxy` sets the base URL (`https://roxyapi.com/api/v2`) and injects the auth header and SDK identification header on every request. Every method returns `{ data, error, response }`; check `error` first, or pass `throwOnError: true` in the call options to have failures throw and `data` typed as always present (see Error handling).
 
 ## Domains
 
@@ -109,280 +97,354 @@ const { latitude, longitude, timezone } = data.cities[0];
 
 ## Most-used endpoints
 
-The highest-demand endpoints by domain, in the order you are most likely to ship them. Each block shows the most-searched API call in that domain so you can pick the feature that drives the most user value first. Full endpoint catalog in the [API reference](https://roxyapi.com/api-reference).
+The highest-demand endpoints by domain, in the order you are most likely to ship them. Every example below reads the same birth through a different domain, and every coordinate comes from one location lookup at the top: one API key, one lookup, and eighteen domains that compose into a single product instead of eighteen separate ones. Full catalog in the [API reference](https://roxyapi.com/api-reference).
+
+### Location first: one lookup feeds every chart
+
+Every chart, horoscope, panchang, dasha, dosha, synastry and compatibility endpoint needs `latitude`, `longitude` and `timezone`. Never ask users to type coordinates. Look the city up once and reuse the result in every domain below.
+
+```typescript
+// One lookup feeds every chart below. `timezone` is the IANA name from the city
+// record; the server resolves it to the DST-correct offset for the date of each chart.
+const { data: place, error } = await roxy.location.searchCities({ query: { q: 'New York' } });
+if (error) throw error;
+const { latitude, longitude, timezone } = place.cities[0];
+const birth = { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone };
+
+// A second person for the two-chart calls (synastry, Guna Milan, Human Design connection).
+const { data: london, error: error2 } = await roxy.location.searchCities({ query: { q: 'London' } });
+if (error2) throw error2;
+const { latitude: lat2, longitude: lon2, timezone: tz2 } = london.cities[0];
+const partner = { date: '1992-07-22', time: '09:00:00', latitude: lat2, longitude: lon2, timezone: tz2 };
+```
 
 ### 1. Western astrology API (natal chart, daily horoscope, synastry)
 
-The global astrology app market is $6.27B and almost entirely Western. These endpoints power zodiac dating apps, Co-Star-style natal chart products, daily horoscope features, and lunar-cycle wellness apps.
+Natal chart products, daily horoscope features, dating and compatibility apps, and lunar-cycle wellness apps start here.
 
 ```typescript
-// Natal chart. The #1 Western query, called on every onboarding.
-const { data: natal } = await roxy.astrology.generateNatalChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 40.7128, longitude: -74.006, timezone: -5 },
-});
+// Natal chart. The most requested Western call, run once at onboarding.
+// `birth` carries the latitude, longitude and timezone from the location lookup above.
+const { data: natal } = await roxy.astrology.generateNatalChart({ body: birth });
+// natal.planets[n].name, .sign, .house, .interpretation?.summary; natal.ascendant.sign; natal.aspects
 
-// Daily horoscope. Highest per-user call frequency in the catalog, drives DAUs and push.
+// Daily horoscope. The highest per-user call frequency in the catalog: daily content, streaks, push.
 const { data: horoscope } = await roxy.astrology.getDailyHoroscope({ path: { sign: 'aries' } });
-// horoscope.overview, horoscope.love, horoscope.career, horoscope.luckyNumber
+// horoscope.overview, horoscope.love, horoscope.career, horoscope.column, horoscope.events, horoscope.luckyNumber
 
-// Synastry. The dating-app pro-tier feature, full inter-aspect analysis between two charts.
+// Synastry. Full inter-aspect analysis between two charts, the relationship feature of dating apps.
 const { data: synastry } = await roxy.astrology.calculateSynastry({
-  body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 40.71, longitude: -74.01, timezone: -5 },
-    person2: { date: '1992-07-22', time: '09:00:00', latitude: 51.51, longitude: -0.13, timezone: 1 },
-  },
+  body: { person1: birth, person2: partner },
 });
 // synastry.compatibilityScore, synastry.interAspects, synastry.analysis.strengths
 
-// Moon phase. Viral for wellness, cycle-tracking, and meditation apps.
+// Moon phase. A zero-setup GET for wellness, cycle-tracking and meditation apps.
 const { data: moon } = await roxy.astrology.getCurrentMoonPhase({});
+// moon.phase, moon.illumination, moon.sign, moon.meaning?.description
 ```
 
 ### 2. Vedic astrology API (kundli, panchang, dasha, Guna Milan, KP)
 
-The depth moat. India astrology market: $163M in 2024, projected $1.8B by 2030 (49% CAGR). Kundli, panchang, dasha, dosha, and KP are the five Google-dominant queries for every matrimonial platform, kundli generator, and muhurat app.
+Kundli generators, matrimonial matching, muhurta and panchang apps, and KP practitioners. The same `birth` object, read sidereally.
 
 ```typescript
-// Vedic kundli. Top India astrology keyword. Entry point for every Jyotish product.
-const { data: kundli } = await roxy.vedicAstrology.generateBirthChart({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209, timezone: 5.5 },
-});
+// Vedic kundli. The same birth read sidereally: `birth` reuses the location lookup above.
+const { data: kundli } = await roxy.vedicAstrology.generateBirthChart({ body: birth });
+// kundli.meta.Moon.rashi, kundli.meta.Moon.nakshatra, kundli.houses, kundli.combustion
 
-// Panchang. Tithi, nakshatra, yoga, karana, rahu kaal, abhijit muhurta in one call.
+// Detailed panchang. Tithi, nakshatra, yoga, karana, rahu kaal and the muhurtas for a date and place.
 const { data: panchang } = await roxy.vedicAstrology.getDetailedPanchang({
-  body: { date: '2026-04-22', latitude: 28.6139, longitude: 77.209 },
+  body: { date: '2026-10-01', latitude, longitude, timezone },
 });
+// panchang.tithi, panchang.nakshatra, panchang.rahuKaal, panchang.abhijitMuhurta
 
-// Vimshottari dasha. Highest-value single-shot Vedic query.
-const { data: dasha } = await roxy.vedicAstrology.getCurrentDasha({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209, timezone: 5.5 },
-});
+// Vimshottari dasha. The mahadasha, antardasha and pratyantardasha running right now.
+const { data: dasha } = await roxy.vedicAstrology.getCurrentDasha({ body: birth });
+// dasha.mahadasha, dasha.antardasha, dasha.remainingInMahadasha
 
-// Mangal Dosha. Most-asked matrimonial question in India.
-const { data: dosha } = await roxy.vedicAstrology.checkManglikDosha({
-  body: { date: '1990-01-15', time: '14:30:00', latitude: 28.6139, longitude: 77.209, timezone: 5.5 },
-});
+// Mangal Dosha. The most asked matrimonial check.
+const { data: dosha } = await roxy.vedicAstrology.checkManglikDosha({ body: birth });
+// dosha.present, dosha.severity, dosha.remedies
 
-// Guna Milan. 36-point Ashtakoota matrimonial compatibility score.
+// Guna Milan. The 36-point Ashtakoota score behind kundli matching, both people from the lookups above.
 const { data: milan } = await roxy.vedicAstrology.calculateGunMilan({
-  body: {
-    person1: { date: '1990-01-15', time: '14:30:00', latitude: 28.61, longitude: 77.20 },
-    person2: { date: '1992-07-22', time: '09:00:00', latitude: 19.07, longitude: 72.87 },
-  },
+  body: { person1: birth, person2: partner },
 });
+// milan.total, milan.percentage, milan.isCompatible, milan.breakdown
 
-// KP ruling planets. Horary answers for "will X happen" questions in real time.
+// KP ruling planets. Horary answers at the moment of the question, for the place looked up above.
 const { data: kp } = await roxy.vedicAstrology.getKpRulingPlanets({
-  body: { latitude: 28.6139, longitude: 77.209, timezone: 5.5 },
+  body: { latitude, longitude, timezone },
 });
+// kp.dayLord, kp.moonSublord, kp.rulingPlanets
 ```
 
-### 3. Numerology API (life path, full chart, personal year)
+### 3. Astrology forecast API (transit forecast, cross-domain timeline)
 
-Commodity content with durable demand. `life path number calculator` is among the highest-volume spiritual searches globally. Works without birth time, the easiest domain to integrate.
+Forecast feeds, transit alerts and timing tools. One call returns a dated, significance-scored event list; the timeline variant merges Vedic dasha boundaries and biorhythm critical days into the same list, which no single-domain API can do.
 
 ```typescript
-// Life Path. The #1 numerology keyword, every calculator page starts here.
-const { data: lp } = await roxy.numerology.calculateLifePath({
-  body: { year: 1990, month: 1, day: 15 },
+// Transit forecast. Transit-to-natal aspects, sign ingresses and retrograde stations over a window.
+// `birthData` is the same `birth` object: date, time, latitude, longitude, timezone.
+const { data: transits } = await roxy.forecast.forecastTransits({
+  body: { birthData: birth, startDate: '2026-10-01', endDate: '2026-10-31' },
 });
-// lp.number, lp.type ("single" | "master"), lp.meaning
+// transits.count, transits.events[n].date, .type, .body, .target, .aspect, .significance
 
-// Full numerology chart. Premium one-shot: all six core numbers plus karmic, personal year.
-const { data: chart } = await roxy.numerology.generateNumerologyChart({
+// Cross-domain timeline. The same window with Vedic dasha boundaries and biorhythm critical days merged in.
+const { data: timeline } = await roxy.forecast.generateTimeline({
+  body: { birthData: birth, startDate: '2026-10-01', endDate: '2026-10-31' },
+});
+// timeline.events[n].domain ('western' | 'vedic' | 'biorhythm'), .description, .significance
+```
+
+### 4. Human Design API (bodygraph, connection)
+
+Self-discovery apps, coaching bots and compatibility products. The full bodygraph is one call, and the Design side is solved on the exact 88-degree solar arc rather than approximated as calendar days.
+
+```typescript
+// Bodygraph. Type, strategy, authority, profile, definition, centers, channels and all 26 gates in one call.
+// Human Design needs only the birth instant, so it takes the date, time and timezone from the lookup above.
+const { data: hd } = await roxy.humanDesign.generateBodygraph({
+  body: { date: birth.date, time: birth.time, timezone: birth.timezone },
+});
+// hd.type, hd.strategy, hd.authority, hd.profile, hd.definition, hd.incarnationCross.name, hd.centers, hd.channels, hd.gates
+
+// Connection. Two bodygraphs combined, each of the 36 channels classified by how the pair forms it.
+const { data: connection } = await roxy.humanDesign.calculateConnection({
+  body: {
+    personA: { date: birth.date, time: birth.time, timezone: birth.timezone },
+    personB: { date: partner.date, time: partner.time, timezone: partner.timezone },
+  },
+});
+// connection.totalChannels, connection.summary.electromagnetic, connection.combinedDefinition
+```
+
+### 5. Chinese zodiac API (BaZi four pillars, zodiac animal, almanac)
+
+BaZi readings, zodiac content and Tong Shu date pages. The school splits that make two calculators disagree (`dayBoundary`, `yearBoundary`, `hourClock`) are typed request parameters with named defaults.
+
+```typescript
+// BaZi Four Pillars. The anchor call of the domain, from the same birth instant as every chart above.
+// Each response echoes the `conventions` it was computed under, so a chart can be reproduced, not guessed.
+const { data: bazi } = await roxy.chineseAstrology.generateBaziChart({
+  body: { date: birth.date, time: birth.time, timezone: birth.timezone },
+});
+// bazi.pillars[n].position ('year' | 'month' | 'day' | 'hour'), .stem.element, .branch.animal, .tenGod.name
+// bazi.dayMaster.element, bazi.zodiacAnimal, bazi.fiveElements, bazi.conventions
+
+// Chinese zodiac animal. Defaults `yearBoundary` to the Lunar New Year, the folk rule people mean
+// when they ask which animal they are. Pass 'li-chun' for the classical BaZi boundary.
+const { data: animal } = await roxy.chineseAstrology.calculateZodiacAnimal({ body: { date: birth.date } });
+// animal.animal.name, animal.animal.element, animal.element (the year stem element), animal.interpretation
+
+// Almanac day. The Tong Shu view of a date: day officer, mansion, clash animal, favours and avoids.
+const { data: almanac } = await roxy.chineseAstrology.getAlmanacDay({ path: { date: '2026-10-01' } });
+// almanac.dayPillar, almanac.dayOfficer, almanac.clashAnimal, almanac.favours, almanac.avoids
+```
+
+### 6. Feng shui API (Kua number, flying star chart)
+
+Kua numbers with the Eight Mansions map, Xuan Kong flying star charts for any of the nine periods and 24 mountains, annual and monthly star plates, and the annual afflictions.
+
+```typescript
+// Kua number. One birth date and a gender give the personal directions everything else reads off.
+const { data: kua } = await roxy.fengShui.calculateKuaNumber({ body: { date: birth.date, gender: 'female' } });
+// kua.kua, kua.group ('east' | 'west'), kua.trigram.english, kua.sectors[n].direction, .nature, .rank
+
+// Flying star natal chart. Period plus facing gives the nine palaces with base, mountain and water stars.
+// Send `facing` (a mountain id like 'bing' or a compass label like 'S2') or `facingDegrees`, not neither.
+const { data: stars } = await roxy.fengShui.generateFlyingStarChart({ body: { period: 9, facing: 'S2' } });
+// stars.facing.label, stars.sitting.label, stars.structure.name, stars.palaces[n].palace, .base, .mountain, .water, .reading
+```
+
+### 7. Mayan astrology API (Tzolkin day sign, full Maya chart)
+
+Maya day signs, the Haab and Long Count, and the Aztec tonalpohualli, every value a function of the date under a typed `correlation` convention echoed back in `conventions`.
+
+```typescript
+// Tzolkin day sign. The most asked Maya question, answered from a date alone.
+const { data: tzolkin } = await roxy.mesoamericanAstrology.calculateTzolkin({ body: { date: birth.date } });
+// tzolkin.daySign, tzolkin.daySignName, tzolkin.number, tzolkin.trecena, tzolkin.reading
+
+// Full Maya chart. Tzolkin, Haab, Long Count, Calendar Round, Lord of the Night, Year Bearer and the Cruz Maya.
+const { data: maya } = await roxy.mesoamericanAstrology.generateMayanChart({ body: { date: birth.date } });
+// maya.tzolkin, maya.haab, maya.longCount, maya.calendarRound, maya.yearBearer, maya.cross, maya.conventions.correlation
+```
+
+### 8. Vastu Shastra API (entrance analysis, room compliance)
+
+Home and plot analysis from typed geometry. Every verdict carries a `source` object naming the text, chapter and verse it rests on, or a convention label where the texts are silent.
+
+```typescript
+// Entrance analysis. Plot, facing and door in; the pada, its devata, the classical effect and the recommended padas out.
+const { data: entrance } = await roxy.vastu.calculateEntrancePada({
+  body: { plot: { width: 30, depth: 40, unit: 'feet' }, facing: 'North', doorPosition: 0.4 },
+});
+// entrance.pada, entrance.devata, entrance.effect, entrance.auspiciousness, entrance.recommendedPadas, entrance.source
+
+// Room compliance. A verdict per room with the verse or the convention it rests on, and a scored composite.
+const { data: rooms } = await roxy.vastu.calculateRoomCompliance({
+  body: {
+    plot: { width: 30, depth: 40, unit: 'feet' },
+    facing: 'North',
+    rooms: [
+      { type: 'kitchen', direction: 'Southeast' },
+      { type: 'master-bedroom', direction: 'Southwest' },
+      { type: 'puja', direction: 'Northeast' },
+    ],
+  },
+});
+// rooms.score, rooms.rooms[n].type, .verdict, .idealDirections, .source
+```
+
+### 9. Numerology API (life path, full chart, personal year)
+
+Works from the birth date and name alone, no coordinates, which makes it the easiest domain to integrate.
+
+```typescript
+// Life Path. The most searched numerology number, from the birth date alone.
+const { data: lifePath } = await roxy.numerology.calculateLifePath({ body: { year: 1990, month: 1, day: 15 } });
+// lifePath.number, lifePath.type ('single' | 'master'), lifePath.meaning
+
+// Full numerology chart. All six core numbers plus karmic lessons, pinnacles and the personal year in one call.
+const { data: numerology } = await roxy.numerology.generateNumerologyChart({
   body: { fullName: 'Jane Smith', year: 1990, month: 1, day: 15 },
 });
+// numerology.coreNumbers.lifePath, .expression, .soulUrge, numerology.additionalInsights.personalYear
 
-// Personal Year. Annual forecast, drives January traffic spikes.
-const { data: pyear } = await roxy.numerology.calculatePersonalYear({
-  body: { month: 1, day: 15, year: 2026 },
-});
+// Personal Year. The annual theme, the January feature of every numerology app.
+const { data: personalYear } = await roxy.numerology.calculatePersonalYear({ body: { month: 1, day: 15, year: 2026 } });
+// personalYear.personalYear, personalYear.theme, personalYear.advice
 ```
 
-### 4. Tarot API (daily card, Celtic Cross, three-card, yes / no)
+### 10. Kabbalah API (gematria, birth profile)
 
-High search volume, evergreen. The tarot card database is the highest per-endpoint call count in the catalog because apps fetch once and cache.
+Gematria of a Latin name under a declared transliteration convention, the 72 names, the Tree of Life, and a Hebrew birthday computed from the same birth instant as every chart above.
 
 ```typescript
-// Daily card. Stickiest tarot feature. Seed per user for deterministic once-per-day behavior.
+// Gematria. A Latin name transliterated under a declared convention, ten ciphers, each with its tradition and source.
+const { data: gematria } = await roxy.kabbalah.calculateGematria({ body: { text: 'Sarah' } });
+// gematria.chosen, gematria.values[n].cipher, .value, gematria.matches, gematria.conventions
+
+// Birth profile. The Hebrew date and birthday, the three birth angels and the birth sephirah from the instant above.
+const { data: kabbalah } = await roxy.kabbalah.generateBirthProfile({
+  body: { date: birth.date, time: birth.time, timezone: birth.timezone },
+});
+// kabbalah.hebrewDate, kabbalah.hebrewBirthday, kabbalah.angels, kabbalah.sephirah
+```
+
+### 11. Tarot API (daily card, three-card, Celtic Cross, yes or no)
+
+The complete 78-card deck with meanings for love, career, health and spirit. Pass a `seed` per user for deterministic once-per-day draws.
+
+```typescript
+// Daily card. Deterministic per (seed, date), so one user sees one card per day.
 const { data: card } = await roxy.tarot.getDailyCard({ body: { seed: 'user-42' } });
-// card.card.name, card.card.imageUrl, card.dailyMessage
+// card.card.name, card.card.reversed, card.card.imageUrl, card.dailyMessage
 
-// Celtic Cross. Professional-reader spread. Premium-tier, ten positions.
-const { data: cc } = await roxy.tarot.castCelticCross({
-  body: { question: 'What should I focus on?', seed: 'user-42' },
-});
+// Three-card spread. Past, present, future: the most drawn spread on every tarot platform.
+const { data: three } = await roxy.tarot.castThreeCard({ body: { question: 'My next quarter', seed: 'user-42' } });
+// three.positions[n].name, .card.name, .interpretation; three.summary
 
-// Three-card past-present-future. Most-drawn spread on every tarot platform.
-const { data: three } = await roxy.tarot.castThreeCard({
-  body: { question: 'My next quarter', seed: 'user-42' },
-});
+// Celtic Cross. The ten-position professional reading.
+const { data: celtic } = await roxy.tarot.castCelticCross({ body: { question: 'What should I focus on?', seed: 'user-42' } });
+// celtic.positions[n].name, .card.name, .interpretation; celtic.summary
 
-// Yes / No. Impulse micro-query, highest conversion-to-first-call on tarot surfaces.
+// Yes or no. One card, one answer, with its strength.
 const { data: answer } = await roxy.tarot.castYesNo({ body: { question: 'Should I take the offer?' } });
-// answer.answer ("Yes" | "No" | "Maybe"), answer.strength
+// answer.answer ('Yes' | 'No' | 'Maybe'), answer.strength, answer.card.name
 ```
 
-### 5. Human Design API (bodygraph in one call)
+### 12. Biorhythm API (daily reading, forecast)
 
-The breakout 2026 self-discovery category. One call returns the full bodygraph from a birth moment: energy type, strategy, authority, profile, definition, incarnation cross, the 9 centers, defined channels, and all 26 gate activations. The Design side is solved on the exact 88-degree solar arc, not approximated as calendar days. No coordinates needed beyond the birth instant, so there is no location setup step.
+Ten cycle types across primary, secondary and extended cycles, for wellness, productivity, sports and couples apps.
 
 ```typescript
-// Full bodygraph. Type, strategy, profile, and definition are always populated.
-const { data: hd } = await roxy.humanDesign.generateBodygraph({
-  body: {
-    date: '1990-07-04',
-    time: '10:12:00',
-    latitude: 40.7128,
-    longitude: -74.006,
-    timezone: -4,
-  },
+// Daily biorhythm reading. Deterministic per (seed, date): a spotlight cycle, an energy rating and a daily message.
+const { data: bio } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user-42' } });
+// bio.spotlight, bio.energyRating, bio.overallPhase, bio.quickRead, bio.dailyMessage
+
+// Forecast. Every cycle for every day of a window, with the best and worst days named.
+const { data: bioForecast } = await roxy.biorhythm.getForecast({
+  body: { birthDate: birth.date, startDate: '2026-10-01', endDate: '2026-10-31' },
 });
-// hd.type, hd.strategy, hd.profile, hd.definition
-// hd.centers, hd.channels, hd.gates, hd.incarnationCross
+// bioForecast.summary.bestDay, .worstDay, .averageEnergy; bioForecast.days[n].date, .physical, .emotional, .intellectual, .isCritical
 ```
 
-### 6. Forecast API (cross-domain timeline)
+### 13. Ayurveda API (dosha constitution, dinacharya)
 
-The first cross-domain, stateless forecast in the catalog. One call merges Western transit-to-natal aspects, sign ingresses, retrograde stations, Vedic Vimshottari dasha boundaries, and biorhythm critical days into a single significance-scored, time-ordered timeline. The window is clamped to a 90-day horizon. Forecast feeds, transit alerts, and timing tools are the buyers.
+The dosha profile read from a verified sidereal chart with the verse on each factor, a daily routine anchored on the local sunrise, and the six seasons from real solar ingresses. Every response carries `meta.disclaimer`.
 
 ```typescript
-// Merged timeline. Each event carries date, domain, type, description, and significance.
-const { data: timeline } = await roxy.forecast.generateTimeline({
-  body: {
-    birthData: {
-      date: '1990-07-04',
-      time: '10:12:00',
-      latitude: 40.7128,
-      longitude: -74.006,
-      timezone: -4,
-    },
-    startDate: '2026-06-01',
-    endDate: '2026-06-30',
-  },
+// Constitution. The dosha profile read from the sidereal chart of the same birth, each factor with its verse.
+const { data: constitution } = await roxy.ayurveda.calculateAyurvedicConstitution({ body: birth });
+// constitution.composite, constitution.factors[n].factor, .doshas, .source, constitution.meta.disclaimer
+
+// Dinacharya. Brahma muhurta, the dosha periods and the routine for a date at the place looked up above.
+const { data: dinacharya } = await roxy.ayurveda.getDinacharyaSchedule({
+  body: { date: '2026-10-01', latitude, longitude, timezone },
 });
-// timeline.count, timeline.events
-// timeline.events[0].date, timeline.events[0].domain, timeline.events[0].description, timeline.events[0].significance
+// dinacharya.brahmaMuhurta, dinacharya.doshaPeriods, dinacharya.routine
 ```
 
-### 7. Chinese astrology API (BaZi four pillars, zodiac sign)
+### 14. I Ching API (cast a reading, hexagram catalog)
 
-BaZi (Four Pillars of Destiny), the twelve-animal zodiac, and the lunisolar calendar with its almanac. The school splits that make two calculators disagree are typed request parameters with named defaults, echoed back in a `conventions` object on every response, so a chart can be reproduced rather than guessed at. The zodiac routes answer the high-volume consumer questions; BaZi and the almanac are where an app goes deeper.
-
-```typescript
-// BaZi Four Pillars. The anchor call: the rest of the domain reads off these four pillars.
-// `timezone` takes the IANA name, resolved to the DST-correct offset for the birth date.
-const { data: bazi } = await roxy.chineseAstrology.generateBaziChart({
-  body: { date: '1990-07-04', time: '10:12:00', timezone: 'America/New_York' },
-});
-// bazi.pillars[n].position ('year' | 'month' | 'day' | 'hour'), .stem.element, .branch.animal
-// bazi.pillars[n].tenGod.name, .hiddenStems, .naYin
-// bazi.dayMaster.element, bazi.zodiacAnimal, bazi.fiveElements, bazi.conventions, bazi.summary
-
-// Chinese zodiac sign. Defaults `yearBoundary` to 'lunar-new-year', the folk rule people mean
-// when they say which animal they are. Pass 'li-chun' to match the classical BaZi boundary.
-const { data: sign } = await roxy.chineseAstrology.calculateZodiacAnimal({
-  body: { date: '1990-07-04' },
-});
-// sign.animal.name ('Horse'), sign.animal.element ('Fire'), sign.animal.polarity
-// sign.element is the YEAR STEM element ('Metal'), not the element of the animal
-// sign.yearPillar, sign.interpretation
-```
-
-### 8. Feng shui API (Kua number, flying star chart)
-
-Kua numbers with the full Eight Mansions map ranked best to worst, Xuan Kong flying star natal charts for any of the nine periods and 24 mountains, annual and monthly star plates, and the four annual afflictions with exact degree spans. Chinese years resolve at Li Chun, computed astronomically rather than assumed, so the annual charts change over on the real boundary.
+All 64 hexagrams, 384 changing lines and 8 trigrams, for meditation apps, decision tools and wisdom chatbots.
 
 ```typescript
-// Kua number: one birth date and a gender gives the personal directions everything else reads off.
-const { data: kua } = await roxy.fengShui.calculateKuaNumber({
-  body: { date: '1990-07-04', gender: 'female' },
-});
-// kua.kua (8), kua.group ('east' | 'west'), kua.trigram.english ('Mountain')
-// kua.sectors[n].direction, .starName, .nature ('auspicious' | 'inauspicious'), .rank, .domain
-
-// Flying star natal chart. Period plus facing gives the nine palaces with base, mountain
-// and water stars. Send `facing` (a mountain id like 'bing' or a compass label like 'S2')
-// or `facingDegrees`, not neither.
-const { data: chart } = await roxy.fengShui.generateFlyingStarChart({
-  body: { period: 9, facing: 'S2' },
-});
-// chart.facing.label ('S2'), chart.sitting.label, chart.structure.name ('Double Star at Sitting')
-// chart.palaces[n].palace, .base, .mountain, .water, .reading
-// chart.mountainCenterStar, chart.waterCenterStar, chart.straddling
-```
-
-### 9. Biorhythm API (daily check-in, forecast, compatibility)
-
-Zero competition domain. Steady search volume with the top Google result being a static calculator page. Pure land-grab for wellness, productivity, sports, and couples apps.
-
-```typescript
-// Daily biorhythm. Physical, emotional, intellectual, intuitive, plus seven extended cycles.
-const { data: bio } = await roxy.biorhythm.getDailyBiorhythm({
-  body: { seed: 'user-1', date: '2026-04-23' },
-});
-
-// Multi-day forecast. Best-day / worst-day planner for calendar and coaching products.
-const { data: forecast } = await roxy.biorhythm.getForecast({
-  body: { birthDate: '1990-01-15', startDate: '2026-04-01', endDate: '2026-04-30' },
-});
-```
-
-### 10. I Ching API (daily hexagram, coin cast, 64-hexagram catalog)
-
-Meditation apps, decision-making tools, and wisdom chatbots. `i ching API` and `hexagram API` are the keywords.
-
-```typescript
-// Cast a reading. Active divination, primary hexagram plus changing lines and transformed hexagram.
+// Cast a reading. Three coins six times: the primary hexagram, the changing lines and the resulting hexagram.
 const { data: reading } = await roxy.iching.castReading({ query: { seed: 'user-42' } });
-// reading.hexagram, reading.changingLinePositions, reading.resultingHexagram
+// reading.hexagram?.number, reading.hexagram?.english, reading.lines, reading.changingLinePositions, reading.resultingHexagram
 
-// Hexagram catalog. Cache once for all 64 hexagrams.
-const { data: hexagrams } = await roxy.iching.listHexagrams({});
-// hexagrams.hexagrams has 64 entries
+// Hexagram catalog. Paginated, 20 per page by default; ask for all 64 once and cache them.
+const { data: hexagrams } = await roxy.iching.listHexagrams({ query: { limit: 64 } });
+// hexagrams.total, hexagrams.hexagrams[n].number, .english, .pinyin; fetch roxy.iching.getHexagram({ path: { number } }) for the judgment and lines
 ```
 
-### 11. Crystals API (by zodiac, by chakra, birthstone)
+### 15. Crystal healing API (by zodiac, by chakra, birthstone)
 
-Crystal retail and metaphysical shops use these to build "crystals for [sign]" and "[chakra] chakra stones" pages.
+Crystal retail and metaphysical content: "crystals for [sign]" and "[chakra] chakra stones" pages, plus the birthstone for each month.
 
 ```typescript
-// By zodiac. Highest-search crystal query pattern.
+// By zodiac. The most searched crystal query pattern.
 const { data: bySign } = await roxy.crystals.getCrystalsByZodiac({ path: { sign: 'scorpio' } });
-// bySign.crystals is a list of { id, name, imageUrl, colors }. Use /crystals/{id} for full properties.
+// bySign.crystals[n].id, .name, .imageUrl, .colors; fetch roxy.crystals.getCrystal({ path: { id } }) for full properties
 
-// By chakra. Second-highest crystal query pattern.
+// By chakra. Wellness and yoga content pages.
 const { data: byChakra } = await roxy.crystals.getCrystalsByChakra({ path: { chakra: 'Heart' } });
+// byChakra.crystals[n].name, .colors
 
-// Birthstone. Evergreen gift and jewelry SEO.
-const { data: birthstone } = await roxy.crystals.getBirthstones({ path: { month: 4 } });
+// Birthstone. Evergreen gift and jewelry pages.
+const { data: birthstone } = await roxy.crystals.getBirthstones({ path: { month: 1 } });
 ```
 
-### 12. Dream interpretation API (symbol dictionary, search)
+### 16. Dream interpretation API (symbol dictionary, search)
 
-Thousands of dream symbols. `dream meaning` is among the highest-volume spiritual searches on Google. Journal apps, AI therapy chatbots, and self-discovery products are the buyers.
+A 2,000+ symbol dream dictionary for journal apps, AI companions and self-discovery products.
 
 ```typescript
 // Symbol detail. Every "what does it mean to dream about X" page lands here.
 const { data: symbol } = await roxy.dreams.getDreamSymbol({ path: { id: 'flying' } });
 // symbol.id, symbol.name, symbol.meaning
 
-// Symbol search. Chatbots cache the dictionary locally after one call.
-const { data: results } = await roxy.dreams.searchDreamSymbols({ query: { q: 'flying' } });
-// results.symbols is an array of matching symbols
+// Symbol search. Chatbots fetch the dictionary once and keep it locally.
+const { data: symbols } = await roxy.dreams.searchDreamSymbols({ query: { q: 'water' } });
+// symbols.symbols[n].id, .name
 ```
 
-### 13. Angel Numbers API (1111, 222, 333 meanings plus universal lookup)
+### 17. Angel numbers API (1111, 222, 333 meanings plus universal lookup)
 
-Gen Z spiritual-tok fuel. `111 meaning`, `222 meaning`, `333 angel number` are evergreen viral queries with massive shareability.
+Meanings for every common sequence, and a lookup that answers any positive integer through its digit root.
 
 ```typescript
-// By number. Every "meaning of 1111" page is backed by this.
+// By number. Every "meaning of 1111" page is backed by this. The path param is a string.
 const { data: angel } = await roxy.angelNumbers.getAngelNumber({ path: { number: '1111' } });
-// angel.meaning.spiritual, angel.meaning.love, angel.affirmation
+// angel.title, angel.coreMessage, angel.meaning.spiritual, angel.meaning.love, angel.affirmation
 
-// Universal lookup. Works for any positive integer via digit-root fallback.
-const { data: anyNumber } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '4242' } });
+// Universal lookup. Any positive integer, with the digit root carrying the answer when no curated entry exists.
+const { data: sequence } = await roxy.angelNumbers.analyzeNumberSequence({ query: { number: '4242' } });
+// sequence.digitRoot, sequence.isRepeating, sequence.knownMeaning (null when not curated), sequence.digitRootMeaning?.title
 ```
 
 ## Built for AI agents (Cursor, Claude Code, Copilot, Codex, Gemini CLI)
@@ -449,6 +511,8 @@ Supported: `astrology`, `vedicAstrology`, `forecast`, `humanDesign`, `chineseAst
 
 Every method returns `{ data, error, response }`. On 4xx / 5xx the error shape is `{ error: string, code: string }`. Switch on `code` for programmatic handling.
 
+`data` and `error` are a discriminated pair, so `data` is typed as possibly undefined until `error` is checked; a `strict` project narrows with `if (error)` first. Pass `throwOnError: true` in any call to have failures throw instead, which makes `data` non-optional on that call.
+
 ```typescript
 const { data, error } = await roxy.astrology.getDailyHoroscope({
   path: { sign: 'aries' },
@@ -468,7 +532,9 @@ if (error) {
 | 401 | `invalid_api_key` | Key format invalid or tampered |
 | 401 | `subscription_not_found` | Key references non-existent subscription |
 | 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
+| 401 | `api_key_revoked` | Key was deleted from the account |
 | 404 | `not_found` | Resource not found |
+| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a future birth date |
 | 429 | `rate_limit_exceeded` | Monthly quota reached |
 | 500 | `internal_error` | Server error |
 
@@ -482,7 +548,7 @@ Every request and response is fully typed. IDE autocomplete shows available meth
 - [API Reference](https://roxyapi.com/api-reference)
 - [Pricing](https://roxyapi.com/pricing)
 - [MCP setup for AI agents](https://roxyapi.com/docs/mcp)
-- [Starter apps](https://roxyapi.com/templates)
+- [Templates](https://roxyapi.com/templates)
 - [Python SDK](https://pypi.org/project/roxy-sdk/)
 - [Issues](https://github.com/RoxyAPI/sdk-typescript/issues)
 

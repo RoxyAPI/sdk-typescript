@@ -32,7 +32,7 @@ jobs:
           ROXYAPI_SPEC_FILE: specs/openapi.json
         run: |
           bun run generate
-          git diff --exit-code -- specs/openapi.json src/client.gen.ts src/sdk.gen.ts src/types.gen.ts src/client src/core README.md AGENTS.md docs/llms-full.txt \
+          git diff --exit-code -- specs/openapi.json src/index.ts src/client.gen.ts src/sdk.gen.ts src/types.gen.ts src/client src/core README.md AGENTS.md docs/llms-full.txt \
             || { echo 'codegen drift: commit the regenerated files'; exit 1; }
 
       - name: Lint

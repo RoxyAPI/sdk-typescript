@@ -1,4 +1,4 @@
-# @roxyapi/sdk — Complete Method Reference
+# @roxyapi/sdk: Complete Method Reference
 
 > TypeScript SDK for RoxyAPI. Multi-domain spiritual and metaphysical intelligence API. Fully typed, zero runtime dependencies. Install: `npm install @roxyapi/sdk`
 
@@ -25,7 +25,7 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 <!-- Method sections below are generated from the OpenAPI spec by scripts/sync-docs.ts. Do not hand-edit between the BEGIN/END:METHODS markers; edit the spec instead. The intro above and the Error Handling / Advanced / Links sections below are curated. -->
 <!-- BEGIN:METHODS -->
 
-## Western Astrology — `roxy.astrology`
+## Western Astrology: `roxy.astrology`
 
 Western astrology API for natal birth charts, daily, weekly, monthly, and yearly horoscopes with unique content per s...
 
@@ -442,7 +442,7 @@ const { data } = await roxy.astrology.generateProfections({
 
 ---
 
-## Vedic Astrology — `roxy.vedicAstrology`
+## Vedic Astrology: `roxy.vedicAstrology`
 
 Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), panchang with choghadi...
 
@@ -1107,7 +1107,7 @@ const { data } = await roxy.vedicAstrology.getHeliacalVisibility({
 
 ---
 
-## Forecast — `roxy.forecast`
+## Forecast: `roxy.forecast`
 
 Astrology forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons,...
 
@@ -1198,7 +1198,7 @@ const { data } = await roxy.forecast.forecastSolarReturn({
 
 ---
 
-## Human Design — `roxy.humanDesign`
+## Human Design: `roxy.humanDesign`
 
 Human Design API that generates the full bodygraph from a birth moment: type, strategy, inner authority, profile, def...
 
@@ -1350,7 +1350,7 @@ const { data } = await roxy.humanDesign.calculateVariables({
 
 ---
 
-## Chinese Astrology — `roxy.chineseAstrology`
+## Chinese Astrology: `roxy.chineseAstrology`
 
 Chinese zodiac and BaZi astrology API: Four Pillars charts, Chinese zodiac signs and the Chinese lunisolar calendar f...
 
@@ -1498,7 +1498,7 @@ const { data } = await roxy.chineseAstrology.listFiveElements({ query: { limit: 
 
 ---
 
-## Feng Shui — `roxy.fengShui`
+## Feng Shui: `roxy.fengShui`
 
 Compute classical feng shui from one API: Xuan Kong flying star natal charts for any of the nine periods and 24 mount...
 
@@ -1553,7 +1553,7 @@ const { data } = await roxy.fengShui.listNinePeriods({ query: { date: '2026-08-2
 
 ---
 
-## Mesoamerican Astrology — `roxy.mesoamericanAstrology`
+## Mesoamerican Astrology: `roxy.mesoamericanAstrology`
 
 Calculate Mayan astrology day signs, the Tzolkin sacred round, the Haab year, the full Long Count and the Aztec tonal...
 
@@ -1641,7 +1641,7 @@ const { data } = await roxy.mesoamericanAstrology.getAztecTrecena({ path: { numb
 
 ---
 
-## Vastu — `roxy.vastu`
+## Vastu: `roxy.vastu`
 
 Vastu Shastra API for directional home and plot analysis: entrance padas with the classical effect of each of the 32...
 
@@ -1782,7 +1782,7 @@ const { data } = await roxy.vastu.getDevata({ path: { id: 'jayanta' } });
 
 ---
 
-## Numerology — `roxy.numerology`
+## Numerology: `roxy.numerology`
 
 Numerology API to calculate life path, expression, soul urge, personality, and maturity numbers, with Pinnacle and Ch...
 
@@ -1902,7 +1902,7 @@ const { data } = await roxy.numerology.calculateBusinessName({ body: { name: 'Fo
 
 ---
 
-## Kabbalah — `roxy.kabbalah`
+## Kabbalah: `roxy.kabbalah`
 
 Kabbalah API for gematria, the 72 names, the Tree of Life and the Hebrew birthday, from one key
 
@@ -2004,7 +2004,7 @@ const { data } = await roxy.kabbalah.getDailySephirah({
 
 ---
 
-## Tarot — `roxy.tarot`
+## Tarot: `roxy.tarot`
 
 Tarot reading API with the complete 78-card Rider-Waite-Smith deck and card meanings for love, career, health, and sp...
 
@@ -2099,7 +2099,7 @@ const { data } = await roxy.tarot.castCustomSpread({
 
 ---
 
-## Biorhythm — `roxy.biorhythm`
+## Biorhythm: `roxy.biorhythm`
 
 The most complete biorhythm API: 10 cycle types across 3 primary (physical, emotional, intellectual), 4 secondary (in...
 
@@ -2147,7 +2147,7 @@ const { data } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user123
 
 ---
 
-## Ayurveda — `roxy.ayurveda`
+## Ayurveda: `roxy.ayurveda`
 
 Ayurveda API for dosha profiles, the dinacharya daily routine and the ritucharya seasonal regimen, with a verse cited...
 
@@ -2212,7 +2212,7 @@ const { data } = await roxy.ayurveda.listGunas({ query: { limit: 10, offset: 0 }
 
 ---
 
-## I-Ching — `roxy.iching`
+## I-Ching: `roxy.iching`
 
 I-Ching oracle API with all 64 hexagrams, 384 changing lines, 8 trigrams, and modern interpretations for love, career...
 
@@ -2247,7 +2247,7 @@ const { data } = await roxy.iching.getTrigram({ path: { id: 'Heaven' } });
 
 ---
 
-## Crystals and Healing Stones — `roxy.crystals`
+## Crystals and Healing Stones: `roxy.crystals`
 
 Crystal healing API covering the most popular and widely-searched healing crystals and gemstones, from Amethyst and R...
 
@@ -2310,7 +2310,7 @@ const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
 
 ---
 
-## Dreams — `roxy.dreams`
+## Dreams: `roxy.dreams`
 
 Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,...
 
@@ -2333,7 +2333,7 @@ const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { seed: 'user123'
 
 ---
 
-## Angel Numbers — `roxy.angelNumbers`
+## Angel Numbers: `roxy.angelNumbers`
 
 Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve...
 
@@ -2353,7 +2353,7 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 ---
 
-## Location and Timezone — `roxy.location`
+## Location and Timezone: `roxy.location`
 
 Timezone and location API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude...
 
@@ -2370,7 +2370,7 @@ const { data } = await roxy.location.getCitiesByCountry({ path: { iso2: 'DE' }, 
 
 ---
 
-## Usage — `roxy.usage`
+## Usage: `roxy.usage`
 
 Monitor your API usage, check rate limits, and track request consumption
 
@@ -2381,7 +2381,7 @@ const { data } = await roxy.usage.getUsageStats();
 
 ---
 
-## Languages — `roxy.languages`
+## Languages: `roxy.languages`
 
 List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint
 
@@ -2400,8 +2400,10 @@ const { data } = await roxy.languages.listLanguages();
 ## Error Handling
 
 Every method returns `{ data, error, response }`. All errors have `{ error: string, code: string }`:
-- `error` — human-readable message (may change wording, do not parse)
-- `code` — machine-readable identifier (stable, safe to switch on)
+- `error` is the human-readable message (may change wording, do not parse)
+- `code` is the machine-readable identifier (stable, safe to switch on)
+
+`data` and `error` are a discriminated pair: `data` is typed as possibly undefined until `error` is checked, so narrow with `if (error)` first, or pass `throwOnError: true` in the call options to have failures throw and `data` typed as always present.
 
 ```typescript
 const { data, error, response } = await roxy.astrology.getDailyHoroscope({
@@ -2431,7 +2433,9 @@ Error codes:
 | 401 | `invalid_api_key` | Key format invalid or tampered |
 | 401 | `subscription_not_found` | Key references non-existent subscription |
 | 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
+| 401 | `api_key_revoked` | Key was deleted from the account |
 | 404 | `not_found` | Resource not found |
+| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a future birth date |
 | 429 | `rate_limit_exceeded` | Monthly quota reached |
 | 500 | `internal_error` | Server error |
 

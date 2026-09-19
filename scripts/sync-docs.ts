@@ -81,7 +81,7 @@ const spec = JSON.parse(readFileSync(SPEC_PATH, 'utf-8')) as OpenApiSpec;
 const specTagObjects = spec.tags ?? [];
 const specTags = specTagObjects.map((t) => t.name);
 if (specTags.length === 0)
-	fail(`${SPEC_PATH} has no .tags[] — spec is malformed?`);
+	fail(`${SPEC_PATH} has no .tags[], spec is malformed?`);
 
 const tagByName = new Map(specTagObjects.map((t) => [t.name, t]));
 
@@ -303,7 +303,7 @@ function renderMethodSections(): string {
 		const calls = (opsByTag.get(tag) ?? [])
 			.map(({ path, verb, op }) => renderCall(ns, path, verb, op))
 			.join('\n\n');
-		return `## ${tag} — \`${ns}\`\n\n${summary}\n\n\`\`\`typescript\n${calls}\n\`\`\``;
+		return `## ${tag}: \`${ns}\`\n\n${summary}\n\n\`\`\`typescript\n${calls}\n\`\`\``;
 	});
 	return `${METHODS_BEGIN}\n\n${sections.join('\n\n---\n\n')}\n\n${METHODS_END}`;
 }
