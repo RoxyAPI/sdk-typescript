@@ -3122,8 +3122,8 @@ export class Kabbalah extends HeyApiClient {
      *
      * Return one of the seventy two names by its index: the three letters read out of the verses, the exact positions they were read from, the suffixed name, the ecliptic arc it governs, the sign and the choir. The positions are on the response so a reader can check the derivation against the verses rather than trust it. Built for birth angel detail pages and reference features.
      */
-    public getShemName<ThrowOnError extends boolean = false>(options?: Options<GetKabbalahNamesByNumberData, ThrowOnError>): RequestResult<GetKabbalahNamesByNumberResponses, GetKabbalahNamesByNumberErrors, ThrowOnError> {
-        return (options?.client ?? this.client).get<GetKabbalahNamesByNumberResponses, GetKabbalahNamesByNumberErrors, ThrowOnError>({
+    public getShemName<ThrowOnError extends boolean = false>(options: Options<GetKabbalahNamesByNumberData, ThrowOnError>): RequestResult<GetKabbalahNamesByNumberResponses, GetKabbalahNamesByNumberErrors, ThrowOnError> {
+        return (options.client ?? this.client).get<GetKabbalahNamesByNumberResponses, GetKabbalahNamesByNumberErrors, ThrowOnError>({
             security: [{ name: 'X-API-Key', type: 'apiKey' }],
             url: '/kabbalah/names/{number}',
             ...options
