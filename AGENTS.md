@@ -204,7 +204,8 @@ In the catalog order (Western astrology, Vedic astrology, forecast, Human Design
 | Three-card spread | `roxy.tarot.castThreeCard({ body: { question } })` |
 | Celtic Cross | `roxy.tarot.castCelticCross({ body: { question } })` |
 | Yes / no tarot | `roxy.tarot.castYesNo({ body: { question } })` |
-| Daily biorhythm reading | `roxy.biorhythm.getDailyBiorhythm({ body: { seed } })` |
+| Biorhythm reading | `roxy.biorhythm.getReading({ body: { birthDate } })` |
+| Daily biorhythm (seeded) | `roxy.biorhythm.getDailyBiorhythm({ body: { seed } })` |
 | Biorhythm forecast | `roxy.biorhythm.getForecast({ body: { birthDate } })` |
 | Biorhythm compatibility | `roxy.biorhythm.calculateBioCompatibility({ body: { person1, person2 } })` |
 | Ayurvedic constitution | `roxy.ayurveda.calculateAyurvedicConstitution({ body: birth })` |

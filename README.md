@@ -356,14 +356,14 @@ const { data: answer } = await roxy.tarot.castYesNo({ body: { question: 'Should 
 // answer.answer ('Yes' | 'No' | 'Maybe'), answer.strength, answer.card.name
 ```
 
-### 12. Biorhythm API (daily reading, forecast)
+### 12. Biorhythm API (reading, forecast)
 
 Ten cycle types across primary, secondary and extended cycles, for wellness, productivity, sports and couples apps.
 
 ```typescript
-// Daily biorhythm reading. Deterministic per (seed, date): a spotlight cycle, an energy rating and a daily message.
-const { data: bio } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user-42' } });
-// bio.spotlight, bio.energyRating, bio.overallPhase, bio.quickRead, bio.dailyMessage
+// Biorhythm reading. All ten cycles for a date, from the same birth date as every chart above.
+const { data: bio } = await roxy.biorhythm.getReading({ body: { birthDate: birth.date, targetDate: '2026-10-01' } });
+// bio.cycles.physical.value, .phase; bio.energyRating, bio.overallPhase, bio.criticalAlerts, bio.interpretation
 
 // Forecast. Every cycle for every day of a window, with the best and worst days named.
 const { data: bioForecast } = await roxy.biorhythm.getForecast({
