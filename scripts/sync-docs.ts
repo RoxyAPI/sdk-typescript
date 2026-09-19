@@ -10,18 +10,14 @@
  * Run with: bun run docs:sync
  *
  * The OpenAPI spec is the single source of truth. Adding a new API domain requires NO manual
- * doc edit: the namespace is derived via camelCase (see tag-descriptions.ts) and a method
- * section is generated here. Fails loudly only if:
- *   - An entry in NAMESPACE_ALIASES refers to a tag that no longer exists in the spec.
+ * doc edit: the namespace is derived from the URL path exactly as the generator derives it
+ * (see namespace.ts) and a method section is generated here. Fails loudly only if:
+ *   - A tag spans more than one path segment, or none, so its namespace is ambiguous.
  *   - README.md / AGENTS.md / docs/llms-full.txt is missing its BEGIN/END markers.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
-import {
-	NAMESPACE_ALIASES,
-	type OpenApiTag,
-	tagSummary,
-	tagToNamespace,
-} from './tag-descriptions';
+import { pathNamespace } from './namespace';
+import { type OpenApiTag, tagSummary } from './tag-descriptions';
 
 type Json = string | number | boolean | null | Json[] | { [k: string]: Json };
 
@@ -85,15 +81,6 @@ if (specTags.length === 0)
 
 const tagByName = new Map(specTagObjects.map((t) => [t.name, t]));
 
-const staleAliases = Object.keys(NAMESPACE_ALIASES).filter(
-	(t) => !specTags.includes(t),
-);
-if (staleAliases.length > 0) {
-	fail(
-		`Stale namespace alias(es) in scripts/tag-descriptions.ts (tag not in spec): ${staleAliases.map((t) => `"${t}"`).join(', ')}. Remove them.`,
-	);
-}
-
 /** Operations bucketed by their first tag, walked once and shared by every renderer. */
 const opsByTag = new Map<
 	string,
@@ -107,6 +94,21 @@ for (const [path, methods] of Object.entries(spec.paths ?? {})) {
 		opsByTag.get(tag)?.push({ path, verb, op });
 	}
 }
+
+/** The namespace of each tag, derived from its operations the way the generator derives it; a tag whose operations sit under two path segments has no single namespace and fails here. */
+const namespaceByTag = new Map<string, string>();
+for (const tag of specTags) {
+	const namespaces = new Set(
+		(opsByTag.get(tag) ?? []).map(({ path }) => pathNamespace(path)),
+	);
+	if (namespaces.size !== 1)
+		fail(
+			`Tag "${tag}" maps to ${namespaces.size} path segments (${[...namespaces].join(', ')}); expected exactly one`,
+		);
+	namespaceByTag.set(tag, [...namespaces][0] as string);
+}
+const tagToNamespace = (tag: string): string =>
+	namespaceByTag.get(tag) ?? fail(`Tag "${tag}" has no operations`);
 
 // ─── Spec walking ────────────────────────────────────────────────────────────
 

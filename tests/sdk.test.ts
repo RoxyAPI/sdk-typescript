@@ -1,128 +1,98 @@
-import { describe, expect, it } from 'vitest';
-import {
-	AngelNumbers,
-	Astrology,
-	Crystals,
-	Dreams,
-	Iching,
-	Location,
-	Numerology,
-	Roxy,
-	Tarot,
-	Usage,
-	VedicAstrology,
-} from '../src';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { pathNamespace } from '../scripts/namespace';
+import spec from '../specs/openapi.json';
+import { createRoxy, Roxy } from '../src/factory';
+import { VERSION } from '../src/version';
 
-describe('SDK exports', () => {
-	it('exports Roxy class', () => {
-		expect(Roxy).toBeDefined();
-		expect(typeof Roxy).toBe('function');
+type Operation = { operationId?: string; tags?: string[] };
+
+/** Every operation of the committed spec: the only list the SDK surface is checked against. */
+const operations = Object.entries(spec.paths).flatMap(([path, methods]) =>
+	Object.values(methods as Record<string, Operation>).map((op) => ({
+		path,
+		namespace: pathNamespace(path),
+		operationId: op.operationId,
+		tag: op.tags?.[0],
+	})),
+);
+
+describe('the generated surface mirrors the spec', () => {
+	const roxy = new Roxy() as unknown as Record<string, Record<string, unknown>>;
+
+	it('has a method for every operation, on the namespace of its path', () => {
+		expect(operations.length).toBeGreaterThan(200);
+		for (const { namespace, operationId } of operations) {
+			expect(
+				operationId,
+				`${namespace} operation without operationId`,
+			).toBeTruthy();
+			expect(
+				typeof roxy[namespace]?.[operationId as string],
+				`roxy.${namespace}.${operationId}`,
+			).toBe('function');
+		}
 	});
 
-	it('exports all namespace classes', () => {
-		expect(AngelNumbers).toBeDefined();
-		expect(Astrology).toBeDefined();
-		expect(VedicAstrology).toBeDefined();
-		expect(Tarot).toBeDefined();
-		expect(Numerology).toBeDefined();
-		expect(Dreams).toBeDefined();
-		expect(Iching).toBeDefined();
-		expect(Crystals).toBeDefined();
-		expect(Location).toBeDefined();
-		expect(Usage).toBeDefined();
-	});
-});
-
-describe('Roxy class', () => {
-	it('can be instantiated', () => {
-		const roxy = new Roxy();
-		expect(roxy).toBeInstanceOf(Roxy);
+	it('maps each spec tag to exactly one namespace', () => {
+		for (const { name } of spec.tags) {
+			const namespaces = new Set(
+				operations.filter((o) => o.tag === name).map((o) => o.namespace),
+			);
+			expect(namespaces.size, name).toBe(1);
+		}
 	});
 
-	it('exposes all domain namespaces as getters', () => {
-		const roxy = new Roxy();
-
-		expect(roxy.angelNumbers).toBeInstanceOf(AngelNumbers);
-		expect(roxy.astrology).toBeInstanceOf(Astrology);
-		expect(roxy.vedicAstrology).toBeInstanceOf(VedicAstrology);
-		expect(roxy.tarot).toBeInstanceOf(Tarot);
-		expect(roxy.numerology).toBeInstanceOf(Numerology);
-		expect(roxy.dreams).toBeInstanceOf(Dreams);
-		expect(roxy.iching).toBeInstanceOf(Iching);
-		expect(roxy.crystals).toBeInstanceOf(Crystals);
-		expect(roxy.location).toBeInstanceOf(Location);
-		expect(roxy.usage).toBeInstanceOf(Usage);
-	});
-
-	it('lazily initializes namespace instances', () => {
-		const roxy = new Roxy();
-		const first = roxy.astrology;
-		const second = roxy.astrology;
-		expect(first).toBe(second);
+	it('caches a namespace instance after first access', () => {
+		const instance = new Roxy();
+		expect(instance.astrology).toBe(instance.astrology);
 	});
 });
 
-describe('namespace methods exist', () => {
-	const roxy = new Roxy();
+describe('createRoxy', () => {
+	const json = (status: number, body: unknown) =>
+		new Response(JSON.stringify(body), {
+			status,
+			headers: { 'Content-Type': 'application/json' },
+		});
 
-	it('angelNumbers has expected methods', () => {
-		expect(typeof roxy.angelNumbers.listAngelNumbers).toBe('function');
-		expect(typeof roxy.angelNumbers.getAngelNumber).toBe('function');
-		expect(typeof roxy.angelNumbers.analyzeNumberSequence).toBe('function');
-		expect(typeof roxy.angelNumbers.getDailyAngelNumber).toBe('function');
+	afterEach(() => vi.unstubAllGlobals());
+
+	it('calls the production base URL with the key and the SDK header', async () => {
+		const fetchMock = vi.fn<(request: Request) => Promise<Response>>(async () =>
+			json(200, { sign: 'aries' }),
+		);
+		vi.stubGlobal('fetch', fetchMock);
+
+		const { data, error } = await createRoxy(
+			'test-key',
+		).astrology.getDailyHoroscope({ path: { sign: 'aries' } });
+
+		expect(error).toBeUndefined();
+		expect(data).toEqual({ sign: 'aries' });
+		const request = fetchMock.mock.calls[0]?.[0];
+		if (!request) throw new Error('fetch was not called');
+		expect(request.url).toBe(
+			'https://roxyapi.com/api/v2/astrology/horoscope/aries/daily',
+		);
+		expect(request.headers.get('X-API-Key')).toBe('test-key');
+		expect(request.headers.get('X-SDK-Client')).toBe(
+			`roxy-sdk-typescript/${VERSION}`,
+		);
 	});
 
-	it('astrology has expected methods', () => {
-		expect(typeof roxy.astrology.listZodiacSigns).toBe('function');
-		expect(typeof roxy.astrology.generateNatalChart).toBe('function');
-		expect(typeof roxy.astrology.getDailyHoroscope).toBe('function');
-		expect(typeof roxy.astrology.calculateSynastry).toBe('function');
-		expect(typeof roxy.astrology.getCurrentMoonPhase).toBe('function');
-	});
+	it('returns the API error shape instead of throwing on a non-2xx response', async () => {
+		const body = { error: 'API key required', code: 'api_key_required' };
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => json(401, body)),
+		);
 
-	it('vedicAstrology has expected methods', () => {
-		expect(typeof roxy.vedicAstrology.generateBirthChart).toBe('function');
-		expect(typeof roxy.vedicAstrology.generateKpChart).toBe('function');
-		expect(typeof roxy.vedicAstrology.getCurrentDasha).toBe('function');
-		expect(typeof roxy.vedicAstrology.listNakshatras).toBe('function');
-	});
+		const { data, error, response } = await createRoxy(
+			'test-key',
+		).astrology.getDailyHoroscope({ path: { sign: 'aries' } });
 
-	it('tarot has expected methods', () => {
-		expect(typeof roxy.tarot.listCards).toBe('function');
-		expect(typeof roxy.tarot.castCelticCross).toBe('function');
-		expect(typeof roxy.tarot.castYesNo).toBe('function');
-		expect(typeof roxy.tarot.drawCards).toBe('function');
-	});
-
-	it('numerology has expected methods', () => {
-		expect(typeof roxy.numerology.calculateLifePath).toBe('function');
-		expect(typeof roxy.numerology.calculateExpression).toBe('function');
-		expect(typeof roxy.numerology.generateNumerologyChart).toBe('function');
-	});
-
-	it('crystals has expected methods', () => {
-		expect(typeof roxy.crystals.listCrystals).toBe('function');
-		expect(typeof roxy.crystals.getCrystal).toBe('function');
-		expect(typeof roxy.crystals.getDailyCrystal).toBe('function');
-	});
-
-	it('iching has expected methods', () => {
-		expect(typeof roxy.iching.listHexagrams).toBe('function');
-		expect(typeof roxy.iching.castReading).toBe('function');
-		expect(typeof roxy.iching.getHexagram).toBe('function');
-	});
-
-	it('dreams has expected methods', () => {
-		expect(typeof roxy.dreams.searchDreamSymbols).toBe('function');
-		expect(typeof roxy.dreams.getDreamSymbol).toBe('function');
-	});
-
-	it('location has expected methods', () => {
-		expect(typeof roxy.location.listCountries).toBe('function');
-		expect(typeof roxy.location.searchCities).toBe('function');
-	});
-
-	it('usage has expected methods', () => {
-		expect(typeof roxy.usage.getUsageStats).toBe('function');
+		expect(data).toBeUndefined();
+		expect(error).toEqual(body);
+		expect(response?.status).toBe(401);
 	});
 });

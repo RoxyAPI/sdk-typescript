@@ -1,12 +1,5 @@
-import { defineConfig, OperationPath } from '@hey-api/openapi-ts';
-
-/**
- * Converts a kebab-case path segment to camelCase.
- * e.g., "angel-numbers" -> "angelNumbers", "vedic-astrology" -> "vedicAstrology"
- */
-function kebabToCamel(s: string): string {
-	return s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-}
+import { defineConfig } from '@hey-api/openapi-ts';
+import { pathNamespace } from './scripts/namespace';
 
 export default defineConfig({
 	input: './specs/openapi.json',
@@ -24,16 +17,10 @@ export default defineConfig({
 			operations: {
 				strategy: 'single',
 				containerName: 'Roxy',
-				nesting(operation) {
-					const path = operation.path as string;
-					const segment = path.split('/').filter(Boolean)[0];
-					if (!segment) {
-						return OperationPath.id()(operation);
-					}
-					const namespace = kebabToCamel(segment);
-					const operationId = operation.operationId ?? operation.id;
-					return [namespace, operationId];
-				},
+				nesting: (operation) => [
+					pathNamespace(operation.path as string),
+					operation.operationId ?? operation.id,
+				],
 			},
 		},
 		'@hey-api/client-fetch',
