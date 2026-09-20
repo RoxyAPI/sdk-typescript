@@ -444,7 +444,7 @@ const { data } = await roxy.astrology.generateProfections({
 
 ## Vedic Astrology: `roxy.vedicAstrology`
 
-Vedic astrology (Jyotish) and KP API for kundli generation with 15 divisional charts (D1-D60), panchang with choghadi...
+Vedic astrology (Jyotish) and KP API for kundli generation with the sixteen Shodasavarga divisional charts (D1 to D60...
 
 ```typescript
 // Get birth chart (D1 Rashi chart) - Kundli Calculator API
@@ -492,6 +492,50 @@ const { data } = await roxy.vedicAstrology.generateDivisionalChart({
 
 // Calculate compatibility score - Gun Milan API (Ashtakoot Matching)
 const { data } = await roxy.vedicAstrology.calculateGunMilan({
+  body: {
+    person1: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+    person2: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
+  },
+});
+
+// Calculate ten porutham match - Dashakoot South Indian Kundli Matching API
+const { data } = await roxy.vedicAstrology.calculateDashakoot({
+  body: {
+    person1: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+    person2: {
+      date: '1990-07-04',
+      time: '10:12:00',
+      latitude: 28.6139,
+      longitude: 77.209,
+      timezone: 5.5,
+    },
+    ayanamsa: 'lahiri',
+    ayanamsaValue: 24,
+  },
+});
+
+// Compare malefic affliction - Papasamyam Kundli Matching API
+const { data } = await roxy.vedicAstrology.calculatePapasamyam({
   body: {
     person1: {
       date: '1990-07-04',

@@ -3856,6 +3856,313 @@ export type CompatibilityRequest = {
     ayanamsaValue?: number;
 };
 
+export type DashakootResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
+    /**
+     * Poruthams matched, 0 to 10. Each porutham is a pass or a fail in the South Indian system rather than a weighted score, so this is a plain count and never a fraction. A total says nothing on its own while a veto is active, which is why verdict exists.
+     */
+    total: number;
+    /**
+     * Poruthams on the sheet, always 10. The South Indian system counts ten equal agreements where the Ashtakoot system weights eight kootas across 36 points.
+     */
+    maxTotal: number;
+    /**
+     * Overall reading. "rejected" means Rajju or Vedha fired, which the tradition treats as disqualifying however many poruthams matched, so it can appear on a high total. "recommended" means no veto and the total reached the working threshold. "marginal" means no veto and the total fell short of it. The threshold is a RoxyAPI convention because the tradition names a minimum SET of poruthams rather than a number, and that set varies by desk.
+     */
+    verdict: 'recommended' | 'marginal' | 'rejected';
+    /**
+     * One sentence stating the verdict and why, localized by the lang query parameter. Renders directly; the machine value to branch on is verdict.
+     */
+    recommendation: string;
+    /**
+     * Rajju veto. The 27 nakshatras divide into five limbs of a body, Paada the foot, Kati the waist, Udara the stomach, Kantha the neck and Siro the head, and a couple whose birth stars share a limb is refused. Published at the top level as well as on its breakdown row because it overrides the total, and a caller must not have to scan the sheet to find it.
+     */
+    rajju: {
+        /**
+         * True when both Moon nakshatras fall on the same Rajju limb, which is the first of the two hard vetoes. A true here sets verdict to rejected regardless of total.
+         */
+        active: boolean;
+        /**
+         * Why the veto is or is not active, localized by the lang query parameter. The same sentence appears on the Rajju row of breakdown, which also carries the limb each person falls on.
+         */
+        reason: string;
+    };
+    /**
+     * Vedha veto. Thirteen nakshatra pairs are held to obstruct each other and a couple falling on one is refused. Chitra belongs to no pair and can never trigger this veto.
+     */
+    vedha: {
+        /**
+         * True when the two Moon nakshatras are a mutually obstructing vedha pair, which is the second hard veto. A true here sets verdict to rejected regardless of total.
+         */
+        active: boolean;
+        /**
+         * Why the veto is or is not active, localized by the lang query parameter. The same sentence appears on the Vedha row of breakdown.
+         */
+        reason: string;
+    };
+    /**
+     * The ten poruthams in the order a Tamil panchangam prints them: Dina, Gana, Mahendra, Stree Deergha, Yoni, Rasi, Rasyadhipati, Vasya, Rajju, Vedha. Dina, Mahendra, Stree Deergha, Rasi and Vasya are directional and read from the bride toward the groom.
+     */
+    breakdown: Array<{
+        /**
+         * Which of the ten poruthams this row decides. Canonical English, never translated, so it is safe to switch on. Rasyadhipati is the South Indian name for the agreement the North calls Graha Maitri.
+         */
+        name: 'Dina' | 'Gana' | 'Mahendra' | 'Stree Deergha' | 'Yoni' | 'Rasi' | 'Rasyadhipati' | 'Vasya' | 'Rajju' | 'Vedha';
+        /**
+         * One when this porutham matched and zero when it did not. Every porutham carries equal weight in this system, unlike the Ashtakoot kootas.
+         */
+        points: number;
+        /**
+         * Always one, since each porutham is a single pass or fail.
+         */
+        maxPoints: number;
+        /**
+         * The outcome as a word rather than a number, for a caller keying a badge or a filter off it. Canonical English, never translated.
+         */
+        verdict: 'matched' | 'unmatched';
+        /**
+         * How the GROOM classifies for this porutham: a Rajju limb, a Gana class, a Yoni animal, a Moon rashi, a Moon rashi lord, or the Moon nakshatra where the rule counts stars. Canonical English, so the note never has to name it.
+         */
+        person1: string;
+        /**
+         * How the BRIDE classifies for this porutham, same vocabulary.
+         */
+        person2: string;
+        /**
+         * One sentence explaining what decided this porutham, localized by the lang query parameter. Only counts are written into it; every classification stays on person1 and person2 so a translated sentence never carries an English term.
+         */
+        note: string;
+    }>;
+};
+
+export type DashakootRequest = {
+    /**
+     * Birth data of the GROOM. Direction is load bearing in this system: Dina, Mahendra, Stree Deergha, Rasi and Vasya all count from the bride toward the groom, so sending the two people the wrong way round returns a different and wrong sheet without any error.
+     */
+    person1: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the offset in force at the given date and time, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+    };
+    /**
+     * Birth data of the BRIDE. Five of the ten poruthams count FROM this birth star, so this field is not interchangeable with person1. Date, time and location determine the Moon nakshatra and Moon rashi every porutham reads.
+     */
+    person2: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the offset in force at the given date and time, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+    };
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+};
+
+export type PapasamyamResponse = {
+    /**
+     * The sidereal frame this response was computed in, so a cached or forwarded payload is self describing.
+     */
+    frame: {
+        /**
+         * Sidereal frame this chart was cast in, echoing the ayanamsa request field. "lahiri" when the field was omitted.
+         */
+        ayanamsa: string;
+        /**
+         * Degrees actually subtracted from every tropical longitude to produce this chart, read at the birth instant. Subtract it back to recover the tropical positions, or compare it against your reference software to confirm you are in the same frame before chasing a placement difference.
+         */
+        ayanamsaDegrees: number;
+    };
+    /**
+     * Papa count of the groom chart, with the working shown per reference.
+     */
+    person1: {
+        /**
+         * Papa points this chart carries, summed across the three reference points with each hit multiplied by that reference weight. The range is 0 to 7, and quarter points are normal because a hit read from Venus is worth 0.25. The number is never a verdict on one person: only the comparison between the two totals means anything.
+         */
+        total: number;
+        /**
+         * The count broken out by the three reference points, in the order Lagna, Moon, Venus. A Kuja Dosha check reads only the first of these and only Mars, which is why a Manglik verdict and a Papasamyam count answer different questions.
+         */
+        byReference: Array<{
+            /**
+             * Which point the houses on this row were counted from. Lagna is the Ascendant, Moon is the Chandra lagna and Venus is the karaka of marriage. Canonical English, never translated.
+             */
+            reference: 'Lagna' | 'Moon' | 'Venus';
+            /**
+             * What one affliction seen from this reference is worth: 1 from the Lagna, 0.5 from the Moon, 0.25 from Venus. Published rather than assumed because a school that weights the three equally exists, and a caller reconciling against one can see exactly which number to change. The points from this row are the length of afflictions multiplied by this weight.
+             */
+            weight: number;
+            /**
+             * Every malefic this reference point sees in an afflicting bhava, one entry per point contributed. An empty array means this reference point contributes nothing, which is a clean reading rather than missing data. The length of the array is the points from this reference, so it is not published a second time as a number.
+             */
+            afflictions: Array<{
+                /**
+                 * The malefic contributing this point. Canonical English, never translated, so it is safe to switch on or use as a glyph key.
+                 */
+                graha: 'Mars' | 'Saturn' | 'Sun' | 'Rahu';
+                /**
+                 * Whole-sign bhava 1 to 12 counted from the reference on this row, which is NOT the bhava from the Lagna unless the reference is the Lagna. Only the six afflicting bhavas 1, 2, 4, 7, 8 and 12 appear here, because a malefic anywhere else contributes nothing.
+                 */
+                house: number;
+            }>;
+        }>;
+    };
+    /**
+     * Papa count of the bride chart, with the working shown per reference.
+     */
+    person2: {
+        /**
+         * Papa points this chart carries, summed across the three reference points with each hit multiplied by that reference weight. The range is 0 to 7, and quarter points are normal because a hit read from Venus is worth 0.25. The number is never a verdict on one person: only the comparison between the two totals means anything.
+         */
+        total: number;
+        /**
+         * The count broken out by the three reference points, in the order Lagna, Moon, Venus. A Kuja Dosha check reads only the first of these and only Mars, which is why a Manglik verdict and a Papasamyam count answer different questions.
+         */
+        byReference: Array<{
+            /**
+             * Which point the houses on this row were counted from. Lagna is the Ascendant, Moon is the Chandra lagna and Venus is the karaka of marriage. Canonical English, never translated.
+             */
+            reference: 'Lagna' | 'Moon' | 'Venus';
+            /**
+             * What one affliction seen from this reference is worth: 1 from the Lagna, 0.5 from the Moon, 0.25 from Venus. Published rather than assumed because a school that weights the three equally exists, and a caller reconciling against one can see exactly which number to change. The points from this row are the length of afflictions multiplied by this weight.
+             */
+            weight: number;
+            /**
+             * Every malefic this reference point sees in an afflicting bhava, one entry per point contributed. An empty array means this reference point contributes nothing, which is a clean reading rather than missing data. The length of the array is the points from this reference, so it is not published a second time as a number.
+             */
+            afflictions: Array<{
+                /**
+                 * The malefic contributing this point. Canonical English, never translated, so it is safe to switch on or use as a glyph key.
+                 */
+                graha: 'Mars' | 'Saturn' | 'Sun' | 'Rahu';
+                /**
+                 * Whole-sign bhava 1 to 12 counted from the reference on this row, which is NOT the bhava from the Lagna unless the reference is the Lagna. Only the six afflicting bhavas 1, 2, 4, 7, 8 and 12 appear here, because a malefic anywhere else contributes nothing.
+                 */
+                house: number;
+            }>;
+        }>;
+    };
+    /**
+     * Whether the two charts carry comparable affliction. "balanced" when the bride total is equal to or below the groom total, "unbalanced" when the bride carries more. Canonical English, never translated, so it is safe to branch on. Both totals are published, so a desk that also caps how far the groom may exceed the bride, or that allows the bride a small tolerance, can apply its own band without a second request.
+     */
+    verdict: 'balanced' | 'unbalanced';
+    /**
+     * One sentence stating the comparison and what it means, localized by the lang query parameter. Renders directly; the machine value to branch on is verdict.
+     */
+    recommendation: string;
+};
+
+export type PapasamyamRequest = {
+    /**
+     * Birth data of the GROOM. The comparison is directional, so this field is not interchangeable with person2: the match reads as balanced only when the bride carries no more affliction than the groom, and swapping the two people can flip the verdict.
+     */
+    person1: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the offset in force at the given date and time, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+    };
+    /**
+     * Birth data of the BRIDE. Date, time and location determine the Lagna, the Moon and Venus, which are the three points every papa point is counted from.
+     */
+    person2: {
+        /**
+         * Birth date in YYYY-MM-DD format. Date determines planetary positions and nakshatra calculations for Vedic kundli (janam patri). Accurate birth date is essential for dashas, yoga calculations, and divisional charts (vargas).
+         */
+        date: string;
+        /**
+         * Birth time in 24-hour HH:MM:SS format. Time is CRITICAL for Lagna (Ascendant) calculation and house divisions. It changes every two hours roughly. Even minutes matter for accurate nakshatra pada and divisional chart (D9, D10) calculations. Without exact time, Lagna and house-based predictions will be incorrect.
+         */
+        time: string;
+        /**
+         * Birth location latitude in decimal degrees. Location determines local sidereal time for Lagna calculation and affects bhava (house) cusps. Example: Delhi 28.6139, Mumbai 19.0760, Kathmandu 27.7172.
+         */
+        latitude: number;
+        /**
+         * Birth location longitude in decimal degrees. Affects local time calculations and ayanamsha adjustments. Example: Delhi 77.2090, Mumbai 72.8777, Kathmandu 85.3240.
+         */
+        longitude: number;
+        /**
+         * Timezone: IANA name (e.g. "America/New_York", "Europe/London") OR decimal hours from UTC (e.g. -5 for EST, 1 for CET). IANA strings are resolved to the offset in force at the given date and time, so you can pass `cities[0].timezone` from /location/search directly. Defaults to 5.5.
+         */
+        timezone?: number | string;
+    };
+    /**
+     * Sidereal frame (ayanamsa) the chart is cast in. "lahiri" is Lahiri/Chitrapaksha, the traditional Vedic standard used by most software, and is the default. "raman" is the B.V. Raman ayanamsa from Hindu Predictive Astrology, about 1.45 degrees below Lahiri. "kp-newcomb" and "kp-old" are the two Krishnamurti Paddhati frames. "custom" takes your own value in degrees via ayanamsaValue, for reconciling exactly against a specific reference program. The frame rotates the whole zodiac, so a graha sitting within 1.45 degrees of a boundary can change rashi or nakshatra when you switch: pick the one your reference software uses and keep it.
+     */
+    ayanamsa?: 'kp-newcomb' | 'kp-old' | 'lahiri' | 'raman' | 'custom';
+    /**
+     * Custom ayanamsa value in degrees. When provided, overrides the computed ayanamsa from the selected type. Use for testing with specific ayanamsa values or matching a particular reference source.
+     */
+    ayanamsaValue?: number;
+};
+
 /**
  * Every graha keyed by its English name: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu, plus Lagna for the Ascendant. Read a placement straight off the key you want, such as `response.Sun`, and iterate the keys to render a full navagraha table.
  */
@@ -7992,6 +8299,10 @@ export type GetLanguagesFieldLabelsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -8039,6 +8350,10 @@ export type GetLanguagesFieldLabelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -8046,6 +8361,10 @@ export type GetLanguagesFieldLabelsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -8067,6 +8386,10 @@ export type GetLanguagesFieldLabelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -8080,6 +8403,10 @@ export type GetLanguagesFieldLabelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -8134,6 +8461,10 @@ export type GetAstrologySignsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -8181,6 +8512,10 @@ export type GetAstrologySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -8188,6 +8523,10 @@ export type GetAstrologySignsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -8209,6 +8548,10 @@ export type GetAstrologySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -8222,6 +8565,10 @@ export type GetAstrologySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -8302,6 +8649,10 @@ export type GetAstrologySignsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -8349,6 +8700,10 @@ export type GetAstrologySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Zodiac sign not found
@@ -8362,6 +8717,10 @@ export type GetAstrologySignsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -8369,6 +8728,10 @@ export type GetAstrologySignsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -8390,6 +8753,10 @@ export type GetAstrologySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -8403,6 +8770,10 @@ export type GetAstrologySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -8539,6 +8910,10 @@ export type GetAstrologyPlanetMeaningsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -8586,6 +8961,10 @@ export type GetAstrologyPlanetMeaningsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -8593,6 +8972,10 @@ export type GetAstrologyPlanetMeaningsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -8614,6 +8997,10 @@ export type GetAstrologyPlanetMeaningsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -8627,6 +9014,10 @@ export type GetAstrologyPlanetMeaningsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -8698,6 +9089,10 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -8745,6 +9140,10 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Planet not found
@@ -8758,6 +9157,10 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -8765,6 +9168,10 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -8786,6 +9193,10 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -8799,6 +9210,10 @@ export type GetAstrologyPlanetMeaningsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -8915,6 +9330,10 @@ export type PostAstrologyNatalChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -8962,6 +9381,10 @@ export type PostAstrologyNatalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -8969,6 +9392,10 @@ export type PostAstrologyNatalChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -8990,6 +9417,10 @@ export type PostAstrologyNatalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -9003,6 +9434,10 @@ export type PostAstrologyNatalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -9065,6 +9500,10 @@ export type PostAstrologyPlanetsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -9112,6 +9551,10 @@ export type PostAstrologyPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -9119,6 +9562,10 @@ export type PostAstrologyPlanetsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -9140,6 +9587,10 @@ export type PostAstrologyPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -9153,6 +9604,10 @@ export type PostAstrologyPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -9270,6 +9725,10 @@ export type PostAstrologyPlanetsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -9317,6 +9776,10 @@ export type PostAstrologyPlanetsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -9324,6 +9787,10 @@ export type PostAstrologyPlanetsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -9345,6 +9812,10 @@ export type PostAstrologyPlanetsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -9358,6 +9829,10 @@ export type PostAstrologyPlanetsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -9458,6 +9933,10 @@ export type GetAstrologyMoonPhaseCurrentErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -9505,6 +9984,10 @@ export type GetAstrologyMoonPhaseCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -9512,6 +9995,10 @@ export type GetAstrologyMoonPhaseCurrentErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -9533,6 +10020,10 @@ export type GetAstrologyMoonPhaseCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -9546,6 +10037,10 @@ export type GetAstrologyMoonPhaseCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -9649,6 +10144,10 @@ export type GetAstrologyMoonPhaseUpcomingErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -9696,6 +10195,10 @@ export type GetAstrologyMoonPhaseUpcomingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -9703,6 +10206,10 @@ export type GetAstrologyMoonPhaseUpcomingErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -9724,6 +10231,10 @@ export type GetAstrologyMoonPhaseUpcomingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -9737,6 +10248,10 @@ export type GetAstrologyMoonPhaseUpcomingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -9797,6 +10312,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -9844,6 +10363,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -9851,6 +10374,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -9872,6 +10399,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -9885,6 +10416,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -10017,6 +10552,10 @@ export type PostAstrologySynastryErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -10064,6 +10603,10 @@ export type PostAstrologySynastryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -10071,6 +10614,10 @@ export type PostAstrologySynastryErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -10092,6 +10639,10 @@ export type PostAstrologySynastryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -10105,6 +10656,10 @@ export type PostAstrologySynastryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -10461,6 +11016,10 @@ export type PostAstrologyHousesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -10508,6 +11067,10 @@ export type PostAstrologyHousesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -10515,6 +11078,10 @@ export type PostAstrologyHousesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -10536,6 +11103,10 @@ export type PostAstrologyHousesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -10549,6 +11120,10 @@ export type PostAstrologyHousesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -10586,6 +11161,10 @@ export type PostAstrologyAspectsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -10633,6 +11212,10 @@ export type PostAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -10640,6 +11223,10 @@ export type PostAstrologyAspectsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -10661,6 +11248,10 @@ export type PostAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -10674,6 +11265,10 @@ export type PostAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -10728,6 +11323,10 @@ export type PostAstrologyAspectsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -10775,6 +11374,10 @@ export type PostAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -10782,6 +11385,10 @@ export type PostAstrologyAspectsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -10803,6 +11410,10 @@ export type PostAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -10816,6 +11427,10 @@ export type PostAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -10939,6 +11554,10 @@ export type PostAstrologyAspectPatternsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -10986,6 +11605,10 @@ export type PostAstrologyAspectPatternsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -10993,6 +11616,10 @@ export type PostAstrologyAspectPatternsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -11014,6 +11641,10 @@ export type PostAstrologyAspectPatternsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -11027,6 +11658,10 @@ export type PostAstrologyAspectPatternsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -11064,6 +11699,10 @@ export type PostAstrologyTransitsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -11111,6 +11750,10 @@ export type PostAstrologyTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -11118,6 +11761,10 @@ export type PostAstrologyTransitsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -11139,6 +11786,10 @@ export type PostAstrologyTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -11152,6 +11803,10 @@ export type PostAstrologyTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -11206,6 +11861,10 @@ export type PostAstrologyTransitsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -11253,6 +11912,10 @@ export type PostAstrologyTransitsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -11260,6 +11923,10 @@ export type PostAstrologyTransitsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -11281,6 +11948,10 @@ export type PostAstrologyTransitsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -11294,6 +11965,10 @@ export type PostAstrologyTransitsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -11468,6 +12143,10 @@ export type PostAstrologyTransitAspectsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -11515,6 +12194,10 @@ export type PostAstrologyTransitAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -11522,6 +12205,10 @@ export type PostAstrologyTransitAspectsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -11543,6 +12230,10 @@ export type PostAstrologyTransitAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -11556,6 +12247,10 @@ export type PostAstrologyTransitAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -11934,6 +12629,10 @@ export type PostAstrologyParallelsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -11981,6 +12680,10 @@ export type PostAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -11988,6 +12691,10 @@ export type PostAstrologyParallelsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -12009,6 +12716,10 @@ export type PostAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -12022,6 +12733,10 @@ export type PostAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -12134,6 +12849,10 @@ export type PostAstrologyEclipticCrossingsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -12181,6 +12900,10 @@ export type PostAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -12188,6 +12911,10 @@ export type PostAstrologyEclipticCrossingsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -12209,6 +12936,10 @@ export type PostAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -12222,6 +12953,10 @@ export type PostAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -12338,6 +13073,10 @@ export type PostAstrologySolarReturnErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -12385,6 +13124,10 @@ export type PostAstrologySolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -12392,6 +13135,10 @@ export type PostAstrologySolarReturnErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -12413,6 +13160,10 @@ export type PostAstrologySolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -12426,6 +13177,10 @@ export type PostAstrologySolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -12731,6 +13486,10 @@ export type PostAstrologyLunarReturnErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -12778,6 +13537,10 @@ export type PostAstrologyLunarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -12785,6 +13548,10 @@ export type PostAstrologyLunarReturnErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -12806,6 +13573,10 @@ export type PostAstrologyLunarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -12819,6 +13590,10 @@ export type PostAstrologyLunarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -13154,6 +13929,10 @@ export type PostAstrologyCompositeChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -13201,6 +13980,10 @@ export type PostAstrologyCompositeChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -13208,6 +13991,10 @@ export type PostAstrologyCompositeChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -13229,6 +14016,10 @@ export type PostAstrologyCompositeChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -13242,6 +14033,10 @@ export type PostAstrologyCompositeChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -13552,6 +14347,10 @@ export type PostAstrologyCompatibilityScoreErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -13599,6 +14398,10 @@ export type PostAstrologyCompatibilityScoreErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -13606,6 +14409,10 @@ export type PostAstrologyCompatibilityScoreErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -13627,6 +14434,10 @@ export type PostAstrologyCompatibilityScoreErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -13640,6 +14451,10 @@ export type PostAstrologyCompatibilityScoreErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -14046,6 +14861,10 @@ export type GetAstrologyHoroscopeBySignDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -14093,6 +14912,10 @@ export type GetAstrologyHoroscopeBySignDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -14100,6 +14923,10 @@ export type GetAstrologyHoroscopeBySignDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -14121,6 +14948,10 @@ export type GetAstrologyHoroscopeBySignDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -14134,6 +14965,10 @@ export type GetAstrologyHoroscopeBySignDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -14282,6 +15117,10 @@ export type GetAstrologyHoroscopeBySignWeeklyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -14329,6 +15168,10 @@ export type GetAstrologyHoroscopeBySignWeeklyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -14336,6 +15179,10 @@ export type GetAstrologyHoroscopeBySignWeeklyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -14357,6 +15204,10 @@ export type GetAstrologyHoroscopeBySignWeeklyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -14370,6 +15221,10 @@ export type GetAstrologyHoroscopeBySignWeeklyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -14502,6 +15357,10 @@ export type GetAstrologyHoroscopeBySignMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -14549,6 +15408,10 @@ export type GetAstrologyHoroscopeBySignMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -14556,6 +15419,10 @@ export type GetAstrologyHoroscopeBySignMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -14577,6 +15444,10 @@ export type GetAstrologyHoroscopeBySignMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -14590,6 +15461,10 @@ export type GetAstrologyHoroscopeBySignMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -14752,6 +15627,10 @@ export type GetAstrologyHoroscopeBySignYearlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -14799,6 +15678,10 @@ export type GetAstrologyHoroscopeBySignYearlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -14806,6 +15689,10 @@ export type GetAstrologyHoroscopeBySignYearlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -14827,6 +15714,10 @@ export type GetAstrologyHoroscopeBySignYearlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -14840,6 +15731,10 @@ export type GetAstrologyHoroscopeBySignYearlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -15165,6 +16060,10 @@ export type PostAstrologyPlanetaryReturnsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -15212,6 +16111,10 @@ export type PostAstrologyPlanetaryReturnsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -15219,6 +16122,10 @@ export type PostAstrologyPlanetaryReturnsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -15240,6 +16147,10 @@ export type PostAstrologyPlanetaryReturnsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -15253,6 +16164,10 @@ export type PostAstrologyPlanetaryReturnsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -15558,6 +16473,10 @@ export type PostAstrologyAstrocartographyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -15605,6 +16524,10 @@ export type PostAstrologyAstrocartographyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -15612,6 +16535,10 @@ export type PostAstrologyAstrocartographyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -15633,6 +16560,10 @@ export type PostAstrologyAstrocartographyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -15646,6 +16577,10 @@ export type PostAstrologyAstrocartographyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -15683,6 +16618,10 @@ export type PostAstrologyRelocationChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -15730,6 +16669,10 @@ export type PostAstrologyRelocationChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -15737,6 +16680,10 @@ export type PostAstrologyRelocationChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -15758,6 +16705,10 @@ export type PostAstrologyRelocationChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -15771,6 +16722,10 @@ export type PostAstrologyRelocationChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -15833,6 +16788,10 @@ export type PostAstrologyLocalSpaceErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -15880,6 +16839,10 @@ export type PostAstrologyLocalSpaceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -15887,6 +16850,10 @@ export type PostAstrologyLocalSpaceErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -15908,6 +16875,10 @@ export type PostAstrologyLocalSpaceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -15921,6 +16892,10 @@ export type PostAstrologyLocalSpaceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -15987,6 +16962,10 @@ export type PostAstrologyFixedStarsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16034,6 +17013,10 @@ export type PostAstrologyFixedStarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16041,6 +17024,10 @@ export type PostAstrologyFixedStarsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16062,6 +17049,10 @@ export type PostAstrologyFixedStarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16075,6 +17066,10 @@ export type PostAstrologyFixedStarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16112,6 +17107,10 @@ export type PostAstrologyArabicLotsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16159,6 +17158,10 @@ export type PostAstrologyArabicLotsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16166,6 +17169,10 @@ export type PostAstrologyArabicLotsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16187,6 +17194,10 @@ export type PostAstrologyArabicLotsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16200,6 +17211,10 @@ export type PostAstrologyArabicLotsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16237,6 +17252,10 @@ export type PostAstrologyAsteroidsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16284,6 +17303,10 @@ export type PostAstrologyAsteroidsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16291,6 +17314,10 @@ export type PostAstrologyAsteroidsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16312,6 +17339,10 @@ export type PostAstrologyAsteroidsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16325,6 +17356,10 @@ export type PostAstrologyAsteroidsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16362,6 +17397,10 @@ export type PostAstrologyLilithErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16409,6 +17448,10 @@ export type PostAstrologyLilithErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16416,6 +17459,10 @@ export type PostAstrologyLilithErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16437,6 +17484,10 @@ export type PostAstrologyLilithErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16450,6 +17501,10 @@ export type PostAstrologyLilithErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16487,6 +17542,10 @@ export type PostAstrologyProgressionsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16534,6 +17593,10 @@ export type PostAstrologyProgressionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16541,6 +17604,10 @@ export type PostAstrologyProgressionsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16562,6 +17629,10 @@ export type PostAstrologyProgressionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16575,6 +17646,10 @@ export type PostAstrologyProgressionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16612,6 +17687,10 @@ export type PostAstrologySolarArcErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16659,6 +17738,10 @@ export type PostAstrologySolarArcErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16666,6 +17749,10 @@ export type PostAstrologySolarArcErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16687,6 +17774,10 @@ export type PostAstrologySolarArcErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16700,6 +17791,10 @@ export type PostAstrologySolarArcErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16737,6 +17832,10 @@ export type PostAstrologyProfectionsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16784,6 +17883,10 @@ export type PostAstrologyProfectionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16791,6 +17894,10 @@ export type PostAstrologyProfectionsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16812,6 +17919,10 @@ export type PostAstrologyProfectionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16825,6 +17936,10 @@ export type PostAstrologyProfectionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16866,6 +17981,10 @@ export type PostVedicAstrologyBirthChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -16913,6 +18032,10 @@ export type PostVedicAstrologyBirthChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -16920,6 +18043,10 @@ export type PostVedicAstrologyBirthChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -16941,6 +18068,10 @@ export type PostVedicAstrologyBirthChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -16954,6 +18085,10 @@ export type PostVedicAstrologyBirthChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -16991,6 +18126,10 @@ export type PostVedicAstrologyNavamsaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -17038,6 +18177,10 @@ export type PostVedicAstrologyNavamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -17045,6 +18188,10 @@ export type PostVedicAstrologyNavamsaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -17066,6 +18213,10 @@ export type PostVedicAstrologyNavamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -17079,6 +18230,10 @@ export type PostVedicAstrologyNavamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -17116,6 +18271,10 @@ export type PostVedicAstrologyDivisionalChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -17163,6 +18322,10 @@ export type PostVedicAstrologyDivisionalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -17170,6 +18333,10 @@ export type PostVedicAstrologyDivisionalChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -17191,6 +18358,10 @@ export type PostVedicAstrologyDivisionalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -17204,6 +18375,10 @@ export type PostVedicAstrologyDivisionalChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -17241,6 +18416,10 @@ export type PostVedicAstrologyCompatibilityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -17288,6 +18467,10 @@ export type PostVedicAstrologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -17295,6 +18478,10 @@ export type PostVedicAstrologyCompatibilityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -17316,6 +18503,10 @@ export type PostVedicAstrologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -17329,6 +18520,10 @@ export type PostVedicAstrologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -17342,6 +18537,296 @@ export type PostVedicAstrologyCompatibilityResponses = {
 };
 
 export type PostVedicAstrologyCompatibilityResponse = PostVedicAstrologyCompatibilityResponses[keyof PostVedicAstrologyCompatibilityResponses];
+
+export type PostVedicAstrologyCompatibilityDashakootData = {
+    body?: DashakootRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vedic-astrology/compatibility/dashakoot';
+};
+
+export type PostVedicAstrologyCompatibilityDashakootErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+    };
+};
+
+export type PostVedicAstrologyCompatibilityDashakootError = PostVedicAstrologyCompatibilityDashakootErrors[keyof PostVedicAstrologyCompatibilityDashakootErrors];
+
+export type PostVedicAstrologyCompatibilityDashakootResponses = {
+    /**
+     * Ten porutham sheet with a pass or fail and an explanation on every porutham, the total out of ten, the Rajju and Vedha vetoes, and an overall verdict.
+     */
+    200: DashakootResponse;
+};
+
+export type PostVedicAstrologyCompatibilityDashakootResponse = PostVedicAstrologyCompatibilityDashakootResponses[keyof PostVedicAstrologyCompatibilityDashakootResponses];
+
+export type PostVedicAstrologyCompatibilityPapasamyamData = {
+    body?: PapasamyamRequest;
+    path?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
+    url: '/vedic-astrology/compatibility/papasamyam';
+};
+
+export type PostVedicAstrologyCompatibilityPapasamyamErrors = {
+    /**
+     * Validation error. `issues[]` lists every failed field.
+     */
+    400: {
+        /**
+         * First issue summary.
+         */
+        error: string;
+        code: 'validation_error';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
+         * Every validation failure. Use this to rebuild a valid request.
+         */
+        issues: Array<{
+            /**
+             * Dot-separated field path, or "(root)" for top-level.
+             */
+            path: string;
+            message: string;
+            /**
+             * Zod issue code (invalid_type, too_small, too_big, invalid_string, ...).
+             */
+            code?: string;
+            /**
+             * Expected type for invalid_type.
+             */
+            expected?: string;
+            /**
+             * Minimum bound for too_small issues.
+             */
+            minimum?: number | string;
+            /**
+             * Maximum bound for too_big issues.
+             */
+            maximum?: number | string;
+            inclusive?: boolean;
+            /**
+             * Format name for string issues (regex, email, url, uuid).
+             */
+            format?: string;
+            /**
+             * Regex pattern when format is regex.
+             */
+            pattern?: string;
+        }>;
+    };
+    /**
+     * Invalid or missing API key
+     */
+    401: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+    };
+    /**
+     * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
+     */
+    405: {
+        error: string;
+        code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
+         * Allowed HTTP methods for this path. Mirrors the Allow response header.
+         */
+        allow: Array<string>;
+        /**
+         * Link to the product page for this domain.
+         */
+        docs?: string;
+    };
+    /**
+     * Monthly rate limit exceeded
+     */
+    429: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+    };
+    /**
+     * Internal server error
+     */
+    500: {
+        /**
+         * Human-readable error message. May change wording.
+         */
+        error: string;
+        /**
+         * Machine-readable error code. Stable identifier.
+         */
+        code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+    };
+};
+
+export type PostVedicAstrologyCompatibilityPapasamyamError = PostVedicAstrologyCompatibilityPapasamyamErrors[keyof PostVedicAstrologyCompatibilityPapasamyamErrors];
+
+export type PostVedicAstrologyCompatibilityPapasamyamResponses = {
+    /**
+     * Papa point totals for both charts with the graha and bhava behind every point, and a balanced or unbalanced verdict on the comparison.
+     */
+    200: PapasamyamResponse;
+};
+
+export type PostVedicAstrologyCompatibilityPapasamyamResponse = PostVedicAstrologyCompatibilityPapasamyamResponses[keyof PostVedicAstrologyCompatibilityPapasamyamResponses];
 
 export type PostVedicAstrologyPlanetaryPositionsData = {
     body?: PlanetaryPositionsRequest;
@@ -17366,6 +18851,10 @@ export type PostVedicAstrologyPlanetaryPositionsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -17413,6 +18902,10 @@ export type PostVedicAstrologyPlanetaryPositionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -17420,6 +18913,10 @@ export type PostVedicAstrologyPlanetaryPositionsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -17441,6 +18938,10 @@ export type PostVedicAstrologyPlanetaryPositionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -17454,6 +18955,10 @@ export type PostVedicAstrologyPlanetaryPositionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -17504,6 +19009,10 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -17551,6 +19060,10 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -17558,6 +19071,10 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -17579,6 +19096,10 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -17592,6 +19113,10 @@ export type PostVedicAstrologyPlanetaryPositionsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -17725,6 +19250,10 @@ export type PostVedicAstrologyDashaCurrentErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -17772,6 +19301,10 @@ export type PostVedicAstrologyDashaCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -17779,6 +19312,10 @@ export type PostVedicAstrologyDashaCurrentErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -17800,6 +19337,10 @@ export type PostVedicAstrologyDashaCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -17813,6 +19354,10 @@ export type PostVedicAstrologyDashaCurrentErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -18544,6 +20089,10 @@ export type PostVedicAstrologyDashaMajorErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -18591,6 +20140,10 @@ export type PostVedicAstrologyDashaMajorErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -18598,6 +20151,10 @@ export type PostVedicAstrologyDashaMajorErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -18619,6 +20176,10 @@ export type PostVedicAstrologyDashaMajorErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -18632,6 +20193,10 @@ export type PostVedicAstrologyDashaMajorErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -18867,6 +20432,10 @@ export type PostVedicAstrologyDashaSubByMahadashaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -18914,6 +20483,10 @@ export type PostVedicAstrologyDashaSubByMahadashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -18921,6 +20494,10 @@ export type PostVedicAstrologyDashaSubByMahadashaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -18942,6 +20519,10 @@ export type PostVedicAstrologyDashaSubByMahadashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -18955,6 +20536,10 @@ export type PostVedicAstrologyDashaSubByMahadashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -19257,6 +20842,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -19304,6 +20893,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -19311,6 +20904,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -19332,6 +20929,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -19345,6 +20946,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -19663,6 +21268,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaEr
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -19710,6 +21319,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaEr
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -19717,6 +21330,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaEr
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -19738,6 +21355,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaEr
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -19751,6 +21372,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaEr
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -20085,6 +21710,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -20132,6 +21761,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -20139,6 +21772,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -20160,6 +21797,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -20173,6 +21814,10 @@ export type PostVedicAstrologyDashaSubByMahadashaByAntardashaByPratyantardashaBy
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -20494,6 +22139,10 @@ export type PostVedicAstrologyDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -20541,6 +22190,10 @@ export type PostVedicAstrologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -20548,6 +22201,10 @@ export type PostVedicAstrologyDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -20569,6 +22226,10 @@ export type PostVedicAstrologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -20582,6 +22243,10 @@ export type PostVedicAstrologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -21235,6 +22900,10 @@ export type PostVedicAstrologyPanchangBasicErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -21282,6 +22951,10 @@ export type PostVedicAstrologyPanchangBasicErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -21289,6 +22962,10 @@ export type PostVedicAstrologyPanchangBasicErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -21310,6 +22987,10 @@ export type PostVedicAstrologyPanchangBasicErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -21323,6 +23004,10 @@ export type PostVedicAstrologyPanchangBasicErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -21490,6 +23175,10 @@ export type PostVedicAstrologyPanchangDetailedErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -21537,6 +23226,10 @@ export type PostVedicAstrologyPanchangDetailedErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -21544,6 +23237,10 @@ export type PostVedicAstrologyPanchangDetailedErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -21565,6 +23262,10 @@ export type PostVedicAstrologyPanchangDetailedErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -21578,6 +23279,10 @@ export type PostVedicAstrologyPanchangDetailedErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -22165,6 +23870,10 @@ export type PostVedicAstrologyPanchangChoghadiyaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -22212,6 +23921,10 @@ export type PostVedicAstrologyPanchangChoghadiyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -22219,6 +23932,10 @@ export type PostVedicAstrologyPanchangChoghadiyaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -22240,6 +23957,10 @@ export type PostVedicAstrologyPanchangChoghadiyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -22253,6 +23974,10 @@ export type PostVedicAstrologyPanchangChoghadiyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -22357,6 +24082,10 @@ export type PostVedicAstrologyPanchangHoraErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -22404,6 +24133,10 @@ export type PostVedicAstrologyPanchangHoraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -22411,6 +24144,10 @@ export type PostVedicAstrologyPanchangHoraErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -22432,6 +24169,10 @@ export type PostVedicAstrologyPanchangHoraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -22445,6 +24186,10 @@ export type PostVedicAstrologyPanchangHoraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -22529,6 +24274,10 @@ export type PostVedicAstrologyDoshaManglikErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -22576,6 +24325,10 @@ export type PostVedicAstrologyDoshaManglikErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -22583,6 +24336,10 @@ export type PostVedicAstrologyDoshaManglikErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -22604,6 +24361,10 @@ export type PostVedicAstrologyDoshaManglikErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -22617,6 +24378,10 @@ export type PostVedicAstrologyDoshaManglikErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -22654,6 +24419,10 @@ export type PostVedicAstrologyDoshaKalsarpaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -22701,6 +24470,10 @@ export type PostVedicAstrologyDoshaKalsarpaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -22708,6 +24481,10 @@ export type PostVedicAstrologyDoshaKalsarpaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -22729,6 +24506,10 @@ export type PostVedicAstrologyDoshaKalsarpaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -22742,6 +24523,10 @@ export type PostVedicAstrologyDoshaKalsarpaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -22779,6 +24564,10 @@ export type PostVedicAstrologyDoshaSadhesatiErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -22826,6 +24615,10 @@ export type PostVedicAstrologyDoshaSadhesatiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -22833,6 +24626,10 @@ export type PostVedicAstrologyDoshaSadhesatiErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -22854,6 +24651,10 @@ export type PostVedicAstrologyDoshaSadhesatiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -22867,6 +24668,10 @@ export type PostVedicAstrologyDoshaSadhesatiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -22908,6 +24713,10 @@ export type GetVedicAstrologyYogaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -22955,6 +24764,10 @@ export type GetVedicAstrologyYogaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -22962,6 +24775,10 @@ export type GetVedicAstrologyYogaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -22983,6 +24800,10 @@ export type GetVedicAstrologyYogaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -22996,6 +24817,10 @@ export type GetVedicAstrologyYogaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23060,6 +24885,10 @@ export type GetVedicAstrologyYogaByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23107,6 +24936,10 @@ export type GetVedicAstrologyYogaByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23114,6 +24947,10 @@ export type GetVedicAstrologyYogaByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23135,6 +24972,10 @@ export type GetVedicAstrologyYogaByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23148,6 +24989,10 @@ export type GetVedicAstrologyYogaByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23185,6 +25030,10 @@ export type PostVedicAstrologyYogaDetectErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23232,6 +25081,10 @@ export type PostVedicAstrologyYogaDetectErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23239,6 +25092,10 @@ export type PostVedicAstrologyYogaDetectErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23260,6 +25117,10 @@ export type PostVedicAstrologyYogaDetectErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23273,6 +25134,10 @@ export type PostVedicAstrologyYogaDetectErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23318,6 +25183,10 @@ export type GetVedicAstrologyKpAyanamsaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23365,6 +25234,10 @@ export type GetVedicAstrologyKpAyanamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23372,6 +25245,10 @@ export type GetVedicAstrologyKpAyanamsaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23393,6 +25270,10 @@ export type GetVedicAstrologyKpAyanamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23406,6 +25287,10 @@ export type GetVedicAstrologyKpAyanamsaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23438,6 +25323,10 @@ export type PostVedicAstrologyKpPlanetsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23485,6 +25374,10 @@ export type PostVedicAstrologyKpPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23492,6 +25385,10 @@ export type PostVedicAstrologyKpPlanetsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23513,6 +25410,10 @@ export type PostVedicAstrologyKpPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23526,6 +25427,10 @@ export type PostVedicAstrologyKpPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23567,6 +25472,10 @@ export type PostVedicAstrologyKpCuspsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23614,6 +25523,10 @@ export type PostVedicAstrologyKpCuspsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23621,6 +25534,10 @@ export type PostVedicAstrologyKpCuspsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23642,6 +25559,10 @@ export type PostVedicAstrologyKpCuspsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23655,6 +25576,10 @@ export type PostVedicAstrologyKpCuspsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23696,6 +25621,10 @@ export type PostVedicAstrologyKpChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23743,6 +25672,10 @@ export type PostVedicAstrologyKpChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23750,6 +25683,10 @@ export type PostVedicAstrologyKpChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23771,6 +25708,10 @@ export type PostVedicAstrologyKpChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23784,6 +25725,10 @@ export type PostVedicAstrologyKpChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -23854,6 +25799,10 @@ export type PostVedicAstrologyKpRulingPlanetsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -23901,6 +25850,10 @@ export type PostVedicAstrologyKpRulingPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -23908,6 +25861,10 @@ export type PostVedicAstrologyKpRulingPlanetsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -23929,6 +25886,10 @@ export type PostVedicAstrologyKpRulingPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -23942,6 +25903,10 @@ export type PostVedicAstrologyKpRulingPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24016,6 +25981,10 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24063,6 +26032,10 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24070,6 +26043,10 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24091,6 +26068,10 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24104,6 +26085,10 @@ export type PostVedicAstrologyKpRulingPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24136,6 +26121,10 @@ export type PostVedicAstrologyKpSublordChangesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24183,6 +26172,10 @@ export type PostVedicAstrologyKpSublordChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24190,6 +26183,10 @@ export type PostVedicAstrologyKpSublordChangesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24211,6 +26208,10 @@ export type PostVedicAstrologyKpSublordChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24224,6 +26225,10 @@ export type PostVedicAstrologyKpSublordChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24256,6 +26261,10 @@ export type PostVedicAstrologyKpRasiChangesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24303,6 +26312,10 @@ export type PostVedicAstrologyKpRasiChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24310,6 +26323,10 @@ export type PostVedicAstrologyKpRasiChangesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24331,6 +26348,10 @@ export type PostVedicAstrologyKpRasiChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24344,6 +26365,10 @@ export type PostVedicAstrologyKpRasiChangesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24376,6 +26401,10 @@ export type PostVedicAstrologyKpPlanetsIntervalErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24423,6 +26452,10 @@ export type PostVedicAstrologyKpPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24430,6 +26463,10 @@ export type PostVedicAstrologyKpPlanetsIntervalErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24451,6 +26488,10 @@ export type PostVedicAstrologyKpPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24464,6 +26505,10 @@ export type PostVedicAstrologyKpPlanetsIntervalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24505,6 +26550,10 @@ export type PostVedicAstrologyKpHoraryErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24552,6 +26601,10 @@ export type PostVedicAstrologyKpHoraryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24559,6 +26612,10 @@ export type PostVedicAstrologyKpHoraryErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24580,6 +26637,10 @@ export type PostVedicAstrologyKpHoraryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24593,6 +26654,10 @@ export type PostVedicAstrologyKpHoraryErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24625,6 +26690,10 @@ export type PostVedicAstrologyKpDailyFinanceErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24672,6 +26741,10 @@ export type PostVedicAstrologyKpDailyFinanceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24679,6 +26752,10 @@ export type PostVedicAstrologyKpDailyFinanceErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24700,6 +26777,10 @@ export type PostVedicAstrologyKpDailyFinanceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24713,6 +26794,10 @@ export type PostVedicAstrologyKpDailyFinanceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -24770,6 +26855,10 @@ export type PostVedicAstrologyAspectsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -24817,6 +26906,10 @@ export type PostVedicAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -24824,6 +26917,10 @@ export type PostVedicAstrologyAspectsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -24845,6 +26942,10 @@ export type PostVedicAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -24858,6 +26959,10 @@ export type PostVedicAstrologyAspectsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -25002,6 +27107,10 @@ export type PostVedicAstrologyAspectsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -25049,6 +27158,10 @@ export type PostVedicAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -25056,6 +27169,10 @@ export type PostVedicAstrologyAspectsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -25077,6 +27194,10 @@ export type PostVedicAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -25090,6 +27211,10 @@ export type PostVedicAstrologyAspectsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -25210,6 +27335,10 @@ export type PostVedicAstrologyAspectsLunarErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -25257,6 +27386,10 @@ export type PostVedicAstrologyAspectsLunarErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -25264,6 +27397,10 @@ export type PostVedicAstrologyAspectsLunarErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -25285,6 +27422,10 @@ export type PostVedicAstrologyAspectsLunarErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -25298,6 +27439,10 @@ export type PostVedicAstrologyAspectsLunarErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -25421,6 +27566,10 @@ export type PostVedicAstrologyTransitErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -25468,6 +27617,10 @@ export type PostVedicAstrologyTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -25475,6 +27628,10 @@ export type PostVedicAstrologyTransitErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -25496,6 +27653,10 @@ export type PostVedicAstrologyTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -25509,6 +27670,10 @@ export type PostVedicAstrologyTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -25727,6 +27892,10 @@ export type PostVedicAstrologyTransitMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -25774,6 +27943,10 @@ export type PostVedicAstrologyTransitMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -25781,6 +27954,10 @@ export type PostVedicAstrologyTransitMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -25802,6 +27979,10 @@ export type PostVedicAstrologyTransitMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -25815,6 +27996,10 @@ export type PostVedicAstrologyTransitMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -25955,6 +28140,10 @@ export type PostVedicAstrologyParallelsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26002,6 +28191,10 @@ export type PostVedicAstrologyParallelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26009,6 +28202,10 @@ export type PostVedicAstrologyParallelsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26030,6 +28227,10 @@ export type PostVedicAstrologyParallelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26043,6 +28244,10 @@ export type PostVedicAstrologyParallelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -26144,6 +28349,10 @@ export type PostVedicAstrologyParallelsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26191,6 +28400,10 @@ export type PostVedicAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26198,6 +28411,10 @@ export type PostVedicAstrologyParallelsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26219,6 +28436,10 @@ export type PostVedicAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26232,6 +28453,10 @@ export type PostVedicAstrologyParallelsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -26335,6 +28560,10 @@ export type PostVedicAstrologyEclipticCrossingsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26382,6 +28611,10 @@ export type PostVedicAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26389,6 +28622,10 @@ export type PostVedicAstrologyEclipticCrossingsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26410,6 +28647,10 @@ export type PostVedicAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26423,6 +28664,10 @@ export type PostVedicAstrologyEclipticCrossingsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -26502,6 +28747,10 @@ export type GetVedicAstrologyRashisErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26549,6 +28798,10 @@ export type GetVedicAstrologyRashisErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26556,6 +28809,10 @@ export type GetVedicAstrologyRashisErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26577,6 +28834,10 @@ export type GetVedicAstrologyRashisErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26590,6 +28851,10 @@ export type GetVedicAstrologyRashisErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -26632,6 +28897,10 @@ export type GetVedicAstrologyRashisByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26679,6 +28948,10 @@ export type GetVedicAstrologyRashisByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26686,6 +28959,10 @@ export type GetVedicAstrologyRashisByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26707,6 +28984,10 @@ export type GetVedicAstrologyRashisByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26720,6 +29001,10 @@ export type GetVedicAstrologyRashisByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -26757,6 +29042,10 @@ export type GetVedicAstrologyNakshatrasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26804,6 +29093,10 @@ export type GetVedicAstrologyNakshatrasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26811,6 +29104,10 @@ export type GetVedicAstrologyNakshatrasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26832,6 +29129,10 @@ export type GetVedicAstrologyNakshatrasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26845,6 +29146,10 @@ export type GetVedicAstrologyNakshatrasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -26887,6 +29192,10 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -26934,6 +29243,10 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -26941,6 +29254,10 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -26962,6 +29279,10 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -26975,6 +29296,10 @@ export type GetVedicAstrologyNakshatrasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27007,6 +29332,10 @@ export type PostVedicAstrologyUpagrahaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27054,6 +29383,10 @@ export type PostVedicAstrologyUpagrahaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27061,6 +29394,10 @@ export type PostVedicAstrologyUpagrahaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27082,6 +29419,10 @@ export type PostVedicAstrologyUpagrahaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27095,6 +29436,10 @@ export type PostVedicAstrologyUpagrahaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27127,6 +29472,10 @@ export type PostVedicAstrologyAshtakavargaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27174,6 +29523,10 @@ export type PostVedicAstrologyAshtakavargaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27181,6 +29534,10 @@ export type PostVedicAstrologyAshtakavargaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27202,6 +29559,10 @@ export type PostVedicAstrologyAshtakavargaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27215,6 +29576,10 @@ export type PostVedicAstrologyAshtakavargaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27252,6 +29617,10 @@ export type PostVedicAstrologyShadbalaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27299,6 +29668,10 @@ export type PostVedicAstrologyShadbalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27306,6 +29679,10 @@ export type PostVedicAstrologyShadbalaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27327,6 +29704,10 @@ export type PostVedicAstrologyShadbalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27340,6 +29721,10 @@ export type PostVedicAstrologyShadbalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27381,6 +29766,10 @@ export type GetVedicAstrologyAvasthasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27428,6 +29817,10 @@ export type GetVedicAstrologyAvasthasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27435,6 +29828,10 @@ export type GetVedicAstrologyAvasthasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27456,6 +29853,10 @@ export type GetVedicAstrologyAvasthasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27469,6 +29870,10 @@ export type GetVedicAstrologyAvasthasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27532,6 +29937,10 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27579,6 +29988,10 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27586,6 +29999,10 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27607,6 +30024,10 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27620,6 +30041,10 @@ export type GetVedicAstrologyAvasthasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27678,6 +30103,10 @@ export type PostVedicAstrologyArudhaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27725,6 +30154,10 @@ export type PostVedicAstrologyArudhaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27732,6 +30165,10 @@ export type PostVedicAstrologyArudhaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27753,6 +30190,10 @@ export type PostVedicAstrologyArudhaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27766,6 +30207,10 @@ export type PostVedicAstrologyArudhaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27803,6 +30248,10 @@ export type PostVedicAstrologyCharaKarakasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27850,6 +30299,10 @@ export type PostVedicAstrologyCharaKarakasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27857,6 +30310,10 @@ export type PostVedicAstrologyCharaKarakasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -27878,6 +30335,10 @@ export type PostVedicAstrologyCharaKarakasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -27891,6 +30352,10 @@ export type PostVedicAstrologyCharaKarakasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -27932,6 +30397,10 @@ export type PostVedicAstrologyBhavaBalaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -27979,6 +30448,10 @@ export type PostVedicAstrologyBhavaBalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -27986,6 +30459,10 @@ export type PostVedicAstrologyBhavaBalaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -28007,6 +30484,10 @@ export type PostVedicAstrologyBhavaBalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -28020,6 +30501,10 @@ export type PostVedicAstrologyBhavaBalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -28061,6 +30546,10 @@ export type PostVedicAstrologyBhavChalitErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -28108,6 +30597,10 @@ export type PostVedicAstrologyBhavChalitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -28115,6 +30608,10 @@ export type PostVedicAstrologyBhavChalitErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -28136,6 +30633,10 @@ export type PostVedicAstrologyBhavChalitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -28149,6 +30650,10 @@ export type PostVedicAstrologyBhavChalitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -28181,6 +30686,10 @@ export type PostVedicAstrologyHeliacalErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -28228,6 +30737,10 @@ export type PostVedicAstrologyHeliacalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -28235,6 +30748,10 @@ export type PostVedicAstrologyHeliacalErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -28256,6 +30773,10 @@ export type PostVedicAstrologyHeliacalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -28269,6 +30790,10 @@ export type PostVedicAstrologyHeliacalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -28365,6 +30890,10 @@ export type PostForecastTimelineErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -28412,6 +30941,10 @@ export type PostForecastTimelineErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -28419,6 +30952,10 @@ export type PostForecastTimelineErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -28440,6 +30977,10 @@ export type PostForecastTimelineErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -28453,6 +30994,10 @@ export type PostForecastTimelineErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -28627,6 +31172,10 @@ export type PostForecastTransitsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -28674,6 +31223,10 @@ export type PostForecastTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -28681,6 +31234,10 @@ export type PostForecastTransitsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -28702,6 +31259,10 @@ export type PostForecastTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -28715,6 +31276,10 @@ export type PostForecastTransitsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -28910,6 +31475,10 @@ export type PostForecastSignificantDatesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -28957,6 +31526,10 @@ export type PostForecastSignificantDatesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -28964,6 +31537,10 @@ export type PostForecastSignificantDatesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -28985,6 +31562,10 @@ export type PostForecastSignificantDatesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -28998,6 +31579,10 @@ export type PostForecastSignificantDatesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -29193,6 +31778,10 @@ export type PostForecastDigestErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -29240,6 +31829,10 @@ export type PostForecastDigestErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -29247,6 +31840,10 @@ export type PostForecastDigestErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -29268,6 +31865,10 @@ export type PostForecastDigestErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -29281,6 +31882,10 @@ export type PostForecastDigestErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -29513,6 +32118,10 @@ export type PostForecastSolarReturnErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -29560,6 +32169,10 @@ export type PostForecastSolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -29567,6 +32180,10 @@ export type PostForecastSolarReturnErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -29588,6 +32205,10 @@ export type PostForecastSolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -29601,6 +32222,10 @@ export type PostForecastSolarReturnErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -29885,6 +32510,10 @@ export type PostHumanDesignBodygraphErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -29932,6 +32561,10 @@ export type PostHumanDesignBodygraphErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -29939,6 +32572,10 @@ export type PostHumanDesignBodygraphErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -29960,6 +32597,10 @@ export type PostHumanDesignBodygraphErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -29973,6 +32614,10 @@ export type PostHumanDesignBodygraphErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -30350,6 +32995,10 @@ export type PostHumanDesignConnectionErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -30397,6 +33046,10 @@ export type PostHumanDesignConnectionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -30404,6 +33057,10 @@ export type PostHumanDesignConnectionErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -30425,6 +33082,10 @@ export type PostHumanDesignConnectionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -30438,6 +33099,10 @@ export type PostHumanDesignConnectionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -30613,6 +33278,10 @@ export type PostHumanDesignPentaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -30660,6 +33329,10 @@ export type PostHumanDesignPentaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -30667,6 +33340,10 @@ export type PostHumanDesignPentaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -30688,6 +33365,10 @@ export type PostHumanDesignPentaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -30701,6 +33382,10 @@ export type PostHumanDesignPentaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -30876,6 +33561,10 @@ export type PostHumanDesignTransitErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -30923,6 +33612,10 @@ export type PostHumanDesignTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -30930,6 +33623,10 @@ export type PostHumanDesignTransitErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -30951,6 +33648,10 @@ export type PostHumanDesignTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -30964,6 +33665,10 @@ export type PostHumanDesignTransitErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -31155,6 +33860,10 @@ export type PostHumanDesignTypeErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -31202,6 +33911,10 @@ export type PostHumanDesignTypeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -31209,6 +33922,10 @@ export type PostHumanDesignTypeErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -31230,6 +33947,10 @@ export type PostHumanDesignTypeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -31243,6 +33964,10 @@ export type PostHumanDesignTypeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -31366,6 +34091,10 @@ export type PostHumanDesignGatesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -31413,6 +34142,10 @@ export type PostHumanDesignGatesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -31420,6 +34153,10 @@ export type PostHumanDesignGatesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -31441,6 +34178,10 @@ export type PostHumanDesignGatesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -31454,6 +34195,10 @@ export type PostHumanDesignGatesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -31613,6 +34358,10 @@ export type GetHumanDesignGatesByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -31660,6 +34409,10 @@ export type GetHumanDesignGatesByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -31667,6 +34420,10 @@ export type GetHumanDesignGatesByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -31688,6 +34445,10 @@ export type GetHumanDesignGatesByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -31701,6 +34462,10 @@ export type GetHumanDesignGatesByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -31818,6 +34583,10 @@ export type PostHumanDesignChannelsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -31865,6 +34634,10 @@ export type PostHumanDesignChannelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -31872,6 +34645,10 @@ export type PostHumanDesignChannelsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -31893,6 +34670,10 @@ export type PostHumanDesignChannelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -31906,6 +34687,10 @@ export type PostHumanDesignChannelsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -32018,6 +34803,10 @@ export type PostHumanDesignCentersErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -32065,6 +34854,10 @@ export type PostHumanDesignCentersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -32072,6 +34865,10 @@ export type PostHumanDesignCentersErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -32093,6 +34890,10 @@ export type PostHumanDesignCentersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -32106,6 +34907,10 @@ export type PostHumanDesignCentersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -32198,6 +35003,10 @@ export type GetHumanDesignCentersByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -32245,6 +35054,10 @@ export type GetHumanDesignCentersByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -32252,6 +35065,10 @@ export type GetHumanDesignCentersByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -32273,6 +35090,10 @@ export type GetHumanDesignCentersByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -32286,6 +35107,10 @@ export type GetHumanDesignCentersByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -32377,6 +35202,10 @@ export type PostHumanDesignProfileErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -32424,6 +35253,10 @@ export type PostHumanDesignProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -32431,6 +35264,10 @@ export type PostHumanDesignProfileErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -32452,6 +35289,10 @@ export type PostHumanDesignProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -32465,6 +35306,10 @@ export type PostHumanDesignProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -32548,6 +35393,10 @@ export type PostHumanDesignVariablesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -32595,6 +35444,10 @@ export type PostHumanDesignVariablesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -32602,6 +35455,10 @@ export type PostHumanDesignVariablesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -32623,6 +35480,10 @@ export type PostHumanDesignVariablesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -32636,6 +35497,10 @@ export type PostHumanDesignVariablesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -32850,6 +35715,10 @@ export type PostChineseAstrologyBaziChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -32897,6 +35766,10 @@ export type PostChineseAstrologyBaziChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -32904,6 +35777,10 @@ export type PostChineseAstrologyBaziChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -32925,6 +35802,10 @@ export type PostChineseAstrologyBaziChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -32938,6 +35819,10 @@ export type PostChineseAstrologyBaziChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -33385,6 +36270,10 @@ export type PostChineseAstrologyBaziLuckPillarsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -33432,6 +36321,10 @@ export type PostChineseAstrologyBaziLuckPillarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -33439,6 +36332,10 @@ export type PostChineseAstrologyBaziLuckPillarsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -33460,6 +36357,10 @@ export type PostChineseAstrologyBaziLuckPillarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -33473,6 +36374,10 @@ export type PostChineseAstrologyBaziLuckPillarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -33804,6 +36709,10 @@ export type PostChineseAstrologyBaziDayMasterErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -33851,6 +36760,10 @@ export type PostChineseAstrologyBaziDayMasterErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -33858,6 +36771,10 @@ export type PostChineseAstrologyBaziDayMasterErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -33879,6 +36796,10 @@ export type PostChineseAstrologyBaziDayMasterErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -33892,6 +36813,10 @@ export type PostChineseAstrologyBaziDayMasterErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -34170,6 +37095,10 @@ export type PostChineseAstrologyBaziCompatibilityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -34217,6 +37146,10 @@ export type PostChineseAstrologyBaziCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -34224,6 +37157,10 @@ export type PostChineseAstrologyBaziCompatibilityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -34245,6 +37182,10 @@ export type PostChineseAstrologyBaziCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -34258,6 +37199,10 @@ export type PostChineseAstrologyBaziCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -34918,6 +37863,10 @@ export type PostChineseAstrologyBaziAnnualForecastErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -34965,6 +37914,10 @@ export type PostChineseAstrologyBaziAnnualForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -34972,6 +37925,10 @@ export type PostChineseAstrologyBaziAnnualForecastErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -34993,6 +37950,10 @@ export type PostChineseAstrologyBaziAnnualForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -35006,6 +37967,10 @@ export type PostChineseAstrologyBaziAnnualForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -35324,6 +38289,10 @@ export type GetChineseAstrologyZodiacAnimalsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -35371,6 +38340,10 @@ export type GetChineseAstrologyZodiacAnimalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -35378,6 +38351,10 @@ export type GetChineseAstrologyZodiacAnimalsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -35399,6 +38376,10 @@ export type GetChineseAstrologyZodiacAnimalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -35412,6 +38393,10 @@ export type GetChineseAstrologyZodiacAnimalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -35512,6 +38497,10 @@ export type GetChineseAstrologyZodiacAnimalsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -35559,6 +38548,10 @@ export type GetChineseAstrologyZodiacAnimalsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -35566,6 +38559,10 @@ export type GetChineseAstrologyZodiacAnimalsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -35587,6 +38584,10 @@ export type GetChineseAstrologyZodiacAnimalsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -35600,6 +38601,10 @@ export type GetChineseAstrologyZodiacAnimalsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -35865,6 +38870,10 @@ export type PostChineseAstrologyZodiacSignErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -35912,6 +38921,10 @@ export type PostChineseAstrologyZodiacSignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -35919,6 +38932,10 @@ export type PostChineseAstrologyZodiacSignErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -35940,6 +38957,10 @@ export type PostChineseAstrologyZodiacSignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -35953,6 +38974,10 @@ export type PostChineseAstrologyZodiacSignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -36091,6 +39116,10 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -36138,6 +39167,10 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -36145,6 +39178,10 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -36166,6 +39203,10 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -36179,6 +39220,10 @@ export type GetChineseAstrologyZodiacCompatibilityBySign1BySign2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -36363,6 +39408,10 @@ export type GetChineseAstrologyZodiacByIdDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -36410,6 +39459,10 @@ export type GetChineseAstrologyZodiacByIdDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -36417,6 +39470,10 @@ export type GetChineseAstrologyZodiacByIdDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -36438,6 +39495,10 @@ export type GetChineseAstrologyZodiacByIdDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -36451,6 +39512,10 @@ export type GetChineseAstrologyZodiacByIdDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -36621,6 +39686,10 @@ export type GetChineseAstrologyCalendarSolarTermsByYearErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -36668,6 +39737,10 @@ export type GetChineseAstrologyCalendarSolarTermsByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -36675,6 +39748,10 @@ export type GetChineseAstrologyCalendarSolarTermsByYearErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -36696,6 +39773,10 @@ export type GetChineseAstrologyCalendarSolarTermsByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -36709,6 +39790,10 @@ export type GetChineseAstrologyCalendarSolarTermsByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -36821,6 +39906,10 @@ export type PostChineseAstrologyCalendarLunarDateErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -36868,6 +39957,10 @@ export type PostChineseAstrologyCalendarLunarDateErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -36875,6 +39968,10 @@ export type PostChineseAstrologyCalendarLunarDateErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -36896,6 +39993,10 @@ export type PostChineseAstrologyCalendarLunarDateErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -36909,6 +40010,10 @@ export type PostChineseAstrologyCalendarLunarDateErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -36990,6 +40095,10 @@ export type GetChineseAstrologyCalendarDayByDateErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -37037,6 +40146,10 @@ export type GetChineseAstrologyCalendarDayByDateErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * The date is outside the supported range.
@@ -37050,6 +40163,10 @@ export type GetChineseAstrologyCalendarDayByDateErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -37057,6 +40174,10 @@ export type GetChineseAstrologyCalendarDayByDateErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -37078,6 +40199,10 @@ export type GetChineseAstrologyCalendarDayByDateErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -37091,6 +40216,10 @@ export type GetChineseAstrologyCalendarDayByDateErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -37347,6 +40476,10 @@ export type GetChineseAstrologyCalendarMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -37394,6 +40527,10 @@ export type GetChineseAstrologyCalendarMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -37401,6 +40538,10 @@ export type GetChineseAstrologyCalendarMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -37422,6 +40563,10 @@ export type GetChineseAstrologyCalendarMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -37435,6 +40580,10 @@ export type GetChineseAstrologyCalendarMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -37739,6 +40888,10 @@ export type PostChineseAstrologyCalendarAuspiciousDaysErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -37786,6 +40939,10 @@ export type PostChineseAstrologyCalendarAuspiciousDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -37793,6 +40950,10 @@ export type PostChineseAstrologyCalendarAuspiciousDaysErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -37814,6 +40975,10 @@ export type PostChineseAstrologyCalendarAuspiciousDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -37827,6 +40992,10 @@ export type PostChineseAstrologyCalendarAuspiciousDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -38120,6 +41289,10 @@ export type GetChineseAstrologyElementsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -38167,6 +41340,10 @@ export type GetChineseAstrologyElementsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -38174,6 +41351,10 @@ export type GetChineseAstrologyElementsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -38195,6 +41376,10 @@ export type GetChineseAstrologyElementsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -38208,6 +41393,10 @@ export type GetChineseAstrologyElementsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -38336,6 +41525,10 @@ export type PostFengShuiKuaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -38383,6 +41576,10 @@ export type PostFengShuiKuaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -38390,6 +41587,10 @@ export type PostFengShuiKuaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -38411,6 +41612,10 @@ export type PostFengShuiKuaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -38424,6 +41629,10 @@ export type PostFengShuiKuaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -38584,6 +41793,10 @@ export type GetFengShuiKuaByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -38631,6 +41844,10 @@ export type GetFengShuiKuaByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * No Kua chart for that number
@@ -38644,6 +41861,10 @@ export type GetFengShuiKuaByNumberErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -38651,6 +41872,10 @@ export type GetFengShuiKuaByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -38672,6 +41897,10 @@ export type GetFengShuiKuaByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -38685,6 +41914,10 @@ export type GetFengShuiKuaByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -38838,6 +42071,10 @@ export type PostFengShuiEightMansionsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -38885,6 +42122,10 @@ export type PostFengShuiEightMansionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -38892,6 +42133,10 @@ export type PostFengShuiEightMansionsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -38913,6 +42158,10 @@ export type PostFengShuiEightMansionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -38926,6 +42175,10 @@ export type PostFengShuiEightMansionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -39161,6 +42414,10 @@ export type PostFengShuiFlyingStarsNatalErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -39208,6 +42465,10 @@ export type PostFengShuiFlyingStarsNatalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -39215,6 +42476,10 @@ export type PostFengShuiFlyingStarsNatalErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -39236,6 +42501,10 @@ export type PostFengShuiFlyingStarsNatalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -39249,6 +42518,10 @@ export type PostFengShuiFlyingStarsNatalErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -39468,6 +42741,10 @@ export type GetFengShuiFlyingStarsAnnualByYearErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -39515,6 +42792,10 @@ export type GetFengShuiFlyingStarsAnnualByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -39522,6 +42803,10 @@ export type GetFengShuiFlyingStarsAnnualByYearErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -39543,6 +42828,10 @@ export type GetFengShuiFlyingStarsAnnualByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -39556,6 +42845,10 @@ export type GetFengShuiFlyingStarsAnnualByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -39655,6 +42948,10 @@ export type GetFengShuiFlyingStarsMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -39702,6 +42999,10 @@ export type GetFengShuiFlyingStarsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -39709,6 +43010,10 @@ export type GetFengShuiFlyingStarsMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -39730,6 +43035,10 @@ export type GetFengShuiFlyingStarsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -39743,6 +43052,10 @@ export type GetFengShuiFlyingStarsMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -39846,6 +43159,10 @@ export type GetFengShuiFlyingStarsStarsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -39893,6 +43210,10 @@ export type GetFengShuiFlyingStarsStarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -39900,6 +43221,10 @@ export type GetFengShuiFlyingStarsStarsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -39921,6 +43246,10 @@ export type GetFengShuiFlyingStarsStarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -39934,6 +43263,10 @@ export type GetFengShuiFlyingStarsStarsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -40067,6 +43400,10 @@ export type GetFengShuiAfflictionsByYearErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -40114,6 +43451,10 @@ export type GetFengShuiAfflictionsByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -40121,6 +43462,10 @@ export type GetFengShuiAfflictionsByYearErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -40142,6 +43487,10 @@ export type GetFengShuiAfflictionsByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -40155,6 +43504,10 @@ export type GetFengShuiAfflictionsByYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -40500,6 +43853,10 @@ export type GetFengShuiBaguaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -40547,6 +43904,10 @@ export type GetFengShuiBaguaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -40554,6 +43915,10 @@ export type GetFengShuiBaguaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -40575,6 +43940,10 @@ export type GetFengShuiBaguaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -40588,6 +43957,10 @@ export type GetFengShuiBaguaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -40794,6 +44167,10 @@ export type GetFengShuiBaguaByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -40841,6 +44218,10 @@ export type GetFengShuiBaguaByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * No Bagua sector with that life area id
@@ -40854,6 +44235,10 @@ export type GetFengShuiBaguaByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -40861,6 +44246,10 @@ export type GetFengShuiBaguaByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -40882,6 +44271,10 @@ export type GetFengShuiBaguaByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -40895,6 +44288,10 @@ export type GetFengShuiBaguaByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -41083,6 +44480,10 @@ export type GetFengShuiPeriodsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -41130,6 +44531,10 @@ export type GetFengShuiPeriodsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -41137,6 +44542,10 @@ export type GetFengShuiPeriodsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -41158,6 +44567,10 @@ export type GetFengShuiPeriodsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -41171,6 +44584,10 @@ export type GetFengShuiPeriodsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -41308,6 +44725,10 @@ export type PostMesoamericanAstrologyMayanTzolkinErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -41355,6 +44776,10 @@ export type PostMesoamericanAstrologyMayanTzolkinErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -41362,6 +44787,10 @@ export type PostMesoamericanAstrologyMayanTzolkinErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -41383,6 +44812,10 @@ export type PostMesoamericanAstrologyMayanTzolkinErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -41396,6 +44829,10 @@ export type PostMesoamericanAstrologyMayanTzolkinErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -41530,6 +44967,10 @@ export type PostMesoamericanAstrologyMayanChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -41577,6 +45018,10 @@ export type PostMesoamericanAstrologyMayanChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -41584,6 +45029,10 @@ export type PostMesoamericanAstrologyMayanChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -41605,6 +45054,10 @@ export type PostMesoamericanAstrologyMayanChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -41618,6 +45071,10 @@ export type PostMesoamericanAstrologyMayanChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -41902,6 +45359,10 @@ export type PostMesoamericanAstrologyMayanLongCountConvertErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -41949,6 +45410,10 @@ export type PostMesoamericanAstrologyMayanLongCountConvertErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -41956,6 +45421,10 @@ export type PostMesoamericanAstrologyMayanLongCountConvertErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -41977,6 +45446,10 @@ export type PostMesoamericanAstrologyMayanLongCountConvertErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -41990,6 +45463,10 @@ export type PostMesoamericanAstrologyMayanLongCountConvertErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -42073,6 +45550,10 @@ export type GetMesoamericanAstrologyMayanDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -42120,6 +45601,10 @@ export type GetMesoamericanAstrologyMayanDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -42127,6 +45612,10 @@ export type GetMesoamericanAstrologyMayanDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -42148,6 +45637,10 @@ export type GetMesoamericanAstrologyMayanDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -42161,6 +45654,10 @@ export type GetMesoamericanAstrologyMayanDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -42298,6 +45795,10 @@ export type GetMesoamericanAstrologyMayanCalendarMonthlyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -42345,6 +45846,10 @@ export type GetMesoamericanAstrologyMayanCalendarMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -42352,6 +45857,10 @@ export type GetMesoamericanAstrologyMayanCalendarMonthlyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -42373,6 +45882,10 @@ export type GetMesoamericanAstrologyMayanCalendarMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -42386,6 +45899,10 @@ export type GetMesoamericanAstrologyMayanCalendarMonthlyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -42505,6 +46022,10 @@ export type PostMesoamericanAstrologyMayanCompatibilityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -42552,6 +46073,10 @@ export type PostMesoamericanAstrologyMayanCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -42559,6 +46084,10 @@ export type PostMesoamericanAstrologyMayanCompatibilityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -42580,6 +46109,10 @@ export type PostMesoamericanAstrologyMayanCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -42593,6 +46126,10 @@ export type PostMesoamericanAstrologyMayanCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -42793,6 +46330,10 @@ export type GetMesoamericanAstrologyMayanDaySignsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -42840,6 +46381,10 @@ export type GetMesoamericanAstrologyMayanDaySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -42847,6 +46392,10 @@ export type GetMesoamericanAstrologyMayanDaySignsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -42868,6 +46417,10 @@ export type GetMesoamericanAstrologyMayanDaySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -42881,6 +46434,10 @@ export type GetMesoamericanAstrologyMayanDaySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -42990,6 +46547,10 @@ export type GetMesoamericanAstrologyMayanDaySignsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -43037,6 +46598,10 @@ export type GetMesoamericanAstrologyMayanDaySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -43044,6 +46609,10 @@ export type GetMesoamericanAstrologyMayanDaySignsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -43065,6 +46634,10 @@ export type GetMesoamericanAstrologyMayanDaySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -43078,6 +46651,10 @@ export type GetMesoamericanAstrologyMayanDaySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -43206,6 +46783,10 @@ export type GetMesoamericanAstrologyMayanTrecenasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -43253,6 +46834,10 @@ export type GetMesoamericanAstrologyMayanTrecenasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -43260,6 +46845,10 @@ export type GetMesoamericanAstrologyMayanTrecenasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -43281,6 +46870,10 @@ export type GetMesoamericanAstrologyMayanTrecenasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -43294,6 +46887,10 @@ export type GetMesoamericanAstrologyMayanTrecenasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -43378,6 +46975,10 @@ export type GetMesoamericanAstrologyMayanTrecenasByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -43425,6 +47026,10 @@ export type GetMesoamericanAstrologyMayanTrecenasByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -43432,6 +47037,10 @@ export type GetMesoamericanAstrologyMayanTrecenasByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -43453,6 +47062,10 @@ export type GetMesoamericanAstrologyMayanTrecenasByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -43466,6 +47079,10 @@ export type GetMesoamericanAstrologyMayanTrecenasByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -43536,6 +47153,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -43583,6 +47204,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -43590,6 +47215,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -43611,6 +47240,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -43624,6 +47257,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -43712,6 +47349,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -43759,6 +47400,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -43766,6 +47411,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -43787,6 +47436,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -43800,6 +47453,10 @@ export type GetMesoamericanAstrologyMayanHaabMonthsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -43871,6 +47528,10 @@ export type PostMesoamericanAstrologyAztecTonalpohualliErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -43918,6 +47579,10 @@ export type PostMesoamericanAstrologyAztecTonalpohualliErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -43925,6 +47590,10 @@ export type PostMesoamericanAstrologyAztecTonalpohualliErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -43946,6 +47615,10 @@ export type PostMesoamericanAstrologyAztecTonalpohualliErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -43959,6 +47632,10 @@ export type PostMesoamericanAstrologyAztecTonalpohualliErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -44067,6 +47744,10 @@ export type GetMesoamericanAstrologyAztecDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -44114,6 +47795,10 @@ export type GetMesoamericanAstrologyAztecDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -44121,6 +47806,10 @@ export type GetMesoamericanAstrologyAztecDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -44142,6 +47831,10 @@ export type GetMesoamericanAstrologyAztecDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -44155,6 +47848,10 @@ export type GetMesoamericanAstrologyAztecDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -44271,6 +47968,10 @@ export type GetMesoamericanAstrologyAztecDaySignsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -44318,6 +48019,10 @@ export type GetMesoamericanAstrologyAztecDaySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -44325,6 +48030,10 @@ export type GetMesoamericanAstrologyAztecDaySignsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -44346,6 +48055,10 @@ export type GetMesoamericanAstrologyAztecDaySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -44359,6 +48072,10 @@ export type GetMesoamericanAstrologyAztecDaySignsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -44451,6 +48168,10 @@ export type GetMesoamericanAstrologyAztecDaySignsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -44498,6 +48219,10 @@ export type GetMesoamericanAstrologyAztecDaySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -44505,6 +48230,10 @@ export type GetMesoamericanAstrologyAztecDaySignsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -44526,6 +48255,10 @@ export type GetMesoamericanAstrologyAztecDaySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -44539,6 +48272,10 @@ export type GetMesoamericanAstrologyAztecDaySignsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -44617,6 +48354,10 @@ export type GetMesoamericanAstrologyAztecTrecenasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -44664,6 +48405,10 @@ export type GetMesoamericanAstrologyAztecTrecenasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -44671,6 +48416,10 @@ export type GetMesoamericanAstrologyAztecTrecenasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -44692,6 +48441,10 @@ export type GetMesoamericanAstrologyAztecTrecenasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -44705,6 +48458,10 @@ export type GetMesoamericanAstrologyAztecTrecenasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -44785,6 +48542,10 @@ export type GetMesoamericanAstrologyAztecTrecenasByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -44832,6 +48593,10 @@ export type GetMesoamericanAstrologyAztecTrecenasByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -44839,6 +48604,10 @@ export type GetMesoamericanAstrologyAztecTrecenasByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -44860,6 +48629,10 @@ export type GetMesoamericanAstrologyAztecTrecenasByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -44873,6 +48646,10 @@ export type GetMesoamericanAstrologyAztecTrecenasByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -44991,6 +48768,10 @@ export type PostVastuEntranceErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -45038,6 +48819,10 @@ export type PostVastuEntranceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -45045,6 +48830,10 @@ export type PostVastuEntranceErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -45066,6 +48855,10 @@ export type PostVastuEntranceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -45079,6 +48872,10 @@ export type PostVastuEntranceErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -45264,6 +49061,10 @@ export type PostVastuMandalaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -45311,6 +49112,10 @@ export type PostVastuMandalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -45318,6 +49123,10 @@ export type PostVastuMandalaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -45339,6 +49148,10 @@ export type PostVastuMandalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -45352,6 +49165,10 @@ export type PostVastuMandalaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -45664,6 +49481,10 @@ export type PostVastuPlotErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -45711,6 +49532,10 @@ export type PostVastuPlotErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -45718,6 +49543,10 @@ export type PostVastuPlotErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -45739,6 +49568,10 @@ export type PostVastuPlotErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -45752,6 +49585,10 @@ export type PostVastuPlotErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -46241,6 +50078,10 @@ export type PostVastuAyadiErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -46288,6 +50129,10 @@ export type PostVastuAyadiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -46295,6 +50140,10 @@ export type PostVastuAyadiErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -46316,6 +50165,10 @@ export type PostVastuAyadiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -46329,6 +50182,10 @@ export type PostVastuAyadiErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -46618,6 +50475,10 @@ export type PostVastuRoomsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -46665,6 +50526,10 @@ export type PostVastuRoomsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -46672,6 +50537,10 @@ export type PostVastuRoomsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -46693,6 +50562,10 @@ export type PostVastuRoomsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -46706,6 +50579,10 @@ export type PostVastuRoomsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -46901,6 +50778,10 @@ export type PostVastuTimingGrihaPraveshErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -46948,6 +50829,10 @@ export type PostVastuTimingGrihaPraveshErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -46955,6 +50840,10 @@ export type PostVastuTimingGrihaPraveshErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -46976,6 +50865,10 @@ export type PostVastuTimingGrihaPraveshErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -46989,6 +50882,10 @@ export type PostVastuTimingGrihaPraveshErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -47246,6 +51143,10 @@ export type GetVastuDirectionsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -47293,6 +51194,10 @@ export type GetVastuDirectionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -47300,6 +51205,10 @@ export type GetVastuDirectionsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -47321,6 +51230,10 @@ export type GetVastuDirectionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -47334,6 +51247,10 @@ export type GetVastuDirectionsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -47481,6 +51398,10 @@ export type GetVastuDirectionsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -47528,6 +51449,10 @@ export type GetVastuDirectionsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -47535,6 +51460,10 @@ export type GetVastuDirectionsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -47556,6 +51485,10 @@ export type GetVastuDirectionsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -47569,6 +51502,10 @@ export type GetVastuDirectionsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -47702,6 +51639,10 @@ export type GetVastuDevatasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -47749,6 +51690,10 @@ export type GetVastuDevatasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -47756,6 +51701,10 @@ export type GetVastuDevatasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -47777,6 +51726,10 @@ export type GetVastuDevatasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -47790,6 +51743,10 @@ export type GetVastuDevatasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -47944,6 +51901,10 @@ export type GetVastuDevatasByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -47991,6 +51952,10 @@ export type GetVastuDevatasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -47998,6 +51963,10 @@ export type GetVastuDevatasByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -48019,6 +51988,10 @@ export type GetVastuDevatasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -48032,6 +52005,10 @@ export type GetVastuDevatasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -48177,6 +52154,10 @@ export type PostNumerologyLifePathErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -48224,6 +52205,10 @@ export type PostNumerologyLifePathErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -48231,6 +52216,10 @@ export type PostNumerologyLifePathErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -48252,6 +52241,10 @@ export type PostNumerologyLifePathErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -48265,6 +52258,10 @@ export type PostNumerologyLifePathErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -48379,6 +52376,10 @@ export type PostNumerologyExpressionErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -48426,6 +52427,10 @@ export type PostNumerologyExpressionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -48433,6 +52438,10 @@ export type PostNumerologyExpressionErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -48454,6 +52463,10 @@ export type PostNumerologyExpressionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -48467,6 +52480,10 @@ export type PostNumerologyExpressionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -48593,6 +52610,10 @@ export type PostNumerologyBridgeErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -48640,6 +52661,10 @@ export type PostNumerologyBridgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -48647,6 +52672,10 @@ export type PostNumerologyBridgeErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -48668,6 +52697,10 @@ export type PostNumerologyBridgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -48681,6 +52714,10 @@ export type PostNumerologyBridgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -48823,6 +52860,10 @@ export type PostNumerologySoulUrgeErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -48870,6 +52911,10 @@ export type PostNumerologySoulUrgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -48877,6 +52922,10 @@ export type PostNumerologySoulUrgeErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -48898,6 +52947,10 @@ export type PostNumerologySoulUrgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -48911,6 +52964,10 @@ export type PostNumerologySoulUrgeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -49025,6 +53082,10 @@ export type PostNumerologyPersonalityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -49072,6 +53133,10 @@ export type PostNumerologyPersonalityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -49079,6 +53144,10 @@ export type PostNumerologyPersonalityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -49100,6 +53169,10 @@ export type PostNumerologyPersonalityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -49113,6 +53186,10 @@ export type PostNumerologyPersonalityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -49227,6 +53304,10 @@ export type PostNumerologyBirthDayErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -49274,6 +53355,10 @@ export type PostNumerologyBirthDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -49281,6 +53366,10 @@ export type PostNumerologyBirthDayErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -49302,6 +53391,10 @@ export type PostNumerologyBirthDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -49315,6 +53408,10 @@ export type PostNumerologyBirthDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -49449,6 +53546,10 @@ export type PostNumerologyMaturityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -49496,6 +53597,10 @@ export type PostNumerologyMaturityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -49503,6 +53608,10 @@ export type PostNumerologyMaturityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -49524,6 +53633,10 @@ export type PostNumerologyMaturityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -49537,6 +53650,10 @@ export type PostNumerologyMaturityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -49651,6 +53768,10 @@ export type PostNumerologyKarmicLessonsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -49698,6 +53819,10 @@ export type PostNumerologyKarmicLessonsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -49705,6 +53830,10 @@ export type PostNumerologyKarmicLessonsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -49726,6 +53855,10 @@ export type PostNumerologyKarmicLessonsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -49739,6 +53872,10 @@ export type PostNumerologyKarmicLessonsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -49822,6 +53959,10 @@ export type PostNumerologyKarmicDebtErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -49869,6 +54010,10 @@ export type PostNumerologyKarmicDebtErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -49876,6 +54021,10 @@ export type PostNumerologyKarmicDebtErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -49897,6 +54046,10 @@ export type PostNumerologyKarmicDebtErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -49910,6 +54063,10 @@ export type PostNumerologyKarmicDebtErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -49991,6 +54148,10 @@ export type PostNumerologyPersonalDayErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -50038,6 +54199,10 @@ export type PostNumerologyPersonalDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -50045,6 +54210,10 @@ export type PostNumerologyPersonalDayErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -50066,6 +54235,10 @@ export type PostNumerologyPersonalDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -50079,6 +54252,10 @@ export type PostNumerologyPersonalDayErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -50166,6 +54343,10 @@ export type PostNumerologyPersonalMonthErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -50213,6 +54394,10 @@ export type PostNumerologyPersonalMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -50220,6 +54405,10 @@ export type PostNumerologyPersonalMonthErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -50241,6 +54430,10 @@ export type PostNumerologyPersonalMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -50254,6 +54447,10 @@ export type PostNumerologyPersonalMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -50329,6 +54526,10 @@ export type PostNumerologyPersonalYearErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -50376,6 +54577,10 @@ export type PostNumerologyPersonalYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -50383,6 +54588,10 @@ export type PostNumerologyPersonalYearErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -50404,6 +54613,10 @@ export type PostNumerologyPersonalYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -50417,6 +54630,10 @@ export type PostNumerologyPersonalYearErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -50544,6 +54761,10 @@ export type PostNumerologyCompatibilityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -50591,6 +54812,10 @@ export type PostNumerologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -50598,6 +54823,10 @@ export type PostNumerologyCompatibilityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -50619,6 +54848,10 @@ export type PostNumerologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -50632,6 +54865,10 @@ export type PostNumerologyCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -50765,6 +55002,10 @@ export type PostNumerologyChartErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -50812,6 +55053,10 @@ export type PostNumerologyChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -50819,6 +55064,10 @@ export type PostNumerologyChartErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -50840,6 +55089,10 @@ export type PostNumerologyChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -50853,6 +55106,10 @@ export type PostNumerologyChartErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -51688,6 +55945,10 @@ export type GetNumerologyMeaningsByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -51735,6 +55996,10 @@ export type GetNumerologyMeaningsByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Number meaning not found
@@ -51748,6 +56013,10 @@ export type GetNumerologyMeaningsByNumberErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -51755,6 +56024,10 @@ export type GetNumerologyMeaningsByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -51776,6 +56049,10 @@ export type GetNumerologyMeaningsByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -51789,6 +56066,10 @@ export type GetNumerologyMeaningsByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -51878,6 +56159,10 @@ export type PostNumerologyDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -51925,6 +56210,10 @@ export type PostNumerologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -51932,6 +56221,10 @@ export type PostNumerologyDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -51953,6 +56246,10 @@ export type PostNumerologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -51966,6 +56263,10 @@ export type PostNumerologyDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -52063,6 +56364,10 @@ export type PostNumerologyChaldeanErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -52110,6 +56415,10 @@ export type PostNumerologyChaldeanErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -52117,6 +56426,10 @@ export type PostNumerologyChaldeanErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -52138,6 +56451,10 @@ export type PostNumerologyChaldeanErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -52151,6 +56468,10 @@ export type PostNumerologyChaldeanErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -52370,6 +56691,10 @@ export type GetNumerologyCompoundNumberByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -52417,6 +56742,10 @@ export type GetNumerologyCompoundNumberByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -52424,6 +56753,10 @@ export type GetNumerologyCompoundNumberByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -52445,6 +56778,10 @@ export type GetNumerologyCompoundNumberByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -52458,6 +56795,10 @@ export type GetNumerologyCompoundNumberByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -52525,6 +56866,10 @@ export type PostNumerologyDualErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -52572,6 +56917,10 @@ export type PostNumerologyDualErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -52579,6 +56928,10 @@ export type PostNumerologyDualErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -52600,6 +56953,10 @@ export type PostNumerologyDualErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -52613,6 +56970,10 @@ export type PostNumerologyDualErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -52745,6 +57106,10 @@ export type PostNumerologyBusinessNameErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -52792,6 +57157,10 @@ export type PostNumerologyBusinessNameErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -52799,6 +57168,10 @@ export type PostNumerologyBusinessNameErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -52820,6 +57193,10 @@ export type PostNumerologyBusinessNameErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -52833,6 +57210,10 @@ export type PostNumerologyBusinessNameErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -52973,6 +57354,10 @@ export type PostKabbalahGematriaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -53020,6 +57405,10 @@ export type PostKabbalahGematriaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -53027,6 +57416,10 @@ export type PostKabbalahGematriaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -53048,6 +57441,10 @@ export type PostKabbalahGematriaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -53061,6 +57458,10 @@ export type PostKabbalahGematriaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -53316,6 +57717,10 @@ export type GetKabbalahCiphersErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -53363,6 +57768,10 @@ export type GetKabbalahCiphersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -53370,6 +57779,10 @@ export type GetKabbalahCiphersErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -53391,6 +57804,10 @@ export type GetKabbalahCiphersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -53404,6 +57821,10 @@ export type GetKabbalahCiphersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -53574,6 +57995,10 @@ export type PostKabbalahNameProfileErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -53621,6 +58046,10 @@ export type PostKabbalahNameProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -53628,6 +58057,10 @@ export type PostKabbalahNameProfileErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -53649,6 +58082,10 @@ export type PostKabbalahNameProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -53662,6 +58099,10 @@ export type PostKabbalahNameProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -53942,6 +58383,10 @@ export type PostKabbalahBirthProfileErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -53989,6 +58434,10 @@ export type PostKabbalahBirthProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -53996,6 +58445,10 @@ export type PostKabbalahBirthProfileErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -54017,6 +58470,10 @@ export type PostKabbalahBirthProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -54030,6 +58487,10 @@ export type PostKabbalahBirthProfileErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -54234,6 +58695,10 @@ export type GetKabbalahNamesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -54281,6 +58746,10 @@ export type GetKabbalahNamesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -54288,6 +58757,10 @@ export type GetKabbalahNamesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -54309,6 +58782,10 @@ export type GetKabbalahNamesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -54322,6 +58799,10 @@ export type GetKabbalahNamesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -54444,6 +58925,10 @@ export type GetKabbalahNamesByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -54491,6 +58976,10 @@ export type GetKabbalahNamesByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -54498,6 +58987,10 @@ export type GetKabbalahNamesByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -54519,6 +59012,10 @@ export type GetKabbalahNamesByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -54532,6 +59029,10 @@ export type GetKabbalahNamesByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -54643,6 +59144,10 @@ export type GetKabbalahTreeErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -54690,6 +59195,10 @@ export type GetKabbalahTreeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -54697,6 +59206,10 @@ export type GetKabbalahTreeErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -54718,6 +59231,10 @@ export type GetKabbalahTreeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -54731,6 +59248,10 @@ export type GetKabbalahTreeErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -54926,6 +59447,10 @@ export type GetKabbalahSephirotByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -54973,6 +59498,10 @@ export type GetKabbalahSephirotByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -54980,6 +59509,10 @@ export type GetKabbalahSephirotByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -55001,6 +59534,10 @@ export type GetKabbalahSephirotByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -55014,6 +59551,10 @@ export type GetKabbalahSephirotByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -55158,6 +59699,10 @@ export type GetKabbalahLettersErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -55205,6 +59750,10 @@ export type GetKabbalahLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -55212,6 +59761,10 @@ export type GetKabbalahLettersErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -55233,6 +59786,10 @@ export type GetKabbalahLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -55246,6 +59803,10 @@ export type GetKabbalahLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -55392,6 +59953,10 @@ export type GetKabbalahLettersByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -55439,6 +60004,10 @@ export type GetKabbalahLettersByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -55446,6 +60015,10 @@ export type GetKabbalahLettersByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -55467,6 +60040,10 @@ export type GetKabbalahLettersByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -55480,6 +60057,10 @@ export type GetKabbalahLettersByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -55615,6 +60196,10 @@ export type PostKabbalahCompatibilityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -55662,6 +60247,10 @@ export type PostKabbalahCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -55669,6 +60258,10 @@ export type PostKabbalahCompatibilityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -55690,6 +60283,10 @@ export type PostKabbalahCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -55703,6 +60300,10 @@ export type PostKabbalahCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -55881,6 +60482,10 @@ export type GetKabbalahDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -55928,6 +60533,10 @@ export type GetKabbalahDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -55935,6 +60544,10 @@ export type GetKabbalahDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -55956,6 +60569,10 @@ export type GetKabbalahDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -55969,6 +60586,10 @@ export type GetKabbalahDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -56105,6 +60726,10 @@ export type GetTarotCardsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -56152,6 +60777,10 @@ export type GetTarotCardsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -56159,6 +60788,10 @@ export type GetTarotCardsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -56180,6 +60813,10 @@ export type GetTarotCardsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -56193,6 +60830,10 @@ export type GetTarotCardsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -56252,6 +60893,10 @@ export type GetTarotCardsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -56299,6 +60944,10 @@ export type GetTarotCardsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Card not found
@@ -56312,6 +60961,10 @@ export type GetTarotCardsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -56319,6 +60972,10 @@ export type GetTarotCardsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -56340,6 +60997,10 @@ export type GetTarotCardsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -56353,6 +61014,10 @@ export type GetTarotCardsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -56407,6 +61072,10 @@ export type PostTarotDrawErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -56454,6 +61123,10 @@ export type PostTarotDrawErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -56461,6 +61134,10 @@ export type PostTarotDrawErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -56482,6 +61159,10 @@ export type PostTarotDrawErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -56495,6 +61176,10 @@ export type PostTarotDrawErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -56550,6 +61235,10 @@ export type PostTarotDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -56597,6 +61286,10 @@ export type PostTarotDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -56604,6 +61297,10 @@ export type PostTarotDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -56625,6 +61322,10 @@ export type PostTarotDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -56638,6 +61339,10 @@ export type PostTarotDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -56698,6 +61403,10 @@ export type PostTarotYesNoErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -56745,6 +61454,10 @@ export type PostTarotYesNoErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -56752,6 +61465,10 @@ export type PostTarotYesNoErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -56773,6 +61490,10 @@ export type PostTarotYesNoErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -56786,6 +61507,10 @@ export type PostTarotYesNoErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -56879,6 +61604,10 @@ export type PostTarotSpreadsThreeCardErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -56926,6 +61655,10 @@ export type PostTarotSpreadsThreeCardErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -56933,6 +61666,10 @@ export type PostTarotSpreadsThreeCardErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -56954,6 +61691,10 @@ export type PostTarotSpreadsThreeCardErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -56967,6 +61708,10 @@ export type PostTarotSpreadsThreeCardErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -57048,6 +61793,10 @@ export type PostTarotSpreadsCelticCrossErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -57095,6 +61844,10 @@ export type PostTarotSpreadsCelticCrossErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -57102,6 +61855,10 @@ export type PostTarotSpreadsCelticCrossErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -57123,6 +61880,10 @@ export type PostTarotSpreadsCelticCrossErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -57136,6 +61897,10 @@ export type PostTarotSpreadsCelticCrossErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -57217,6 +61982,10 @@ export type PostTarotSpreadsLoveErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -57264,6 +62033,10 @@ export type PostTarotSpreadsLoveErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -57271,6 +62044,10 @@ export type PostTarotSpreadsLoveErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -57292,6 +62069,10 @@ export type PostTarotSpreadsLoveErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -57305,6 +62086,10 @@ export type PostTarotSpreadsLoveErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -57386,6 +62171,10 @@ export type PostTarotSpreadsCareerErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -57433,6 +62222,10 @@ export type PostTarotSpreadsCareerErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -57440,6 +62233,10 @@ export type PostTarotSpreadsCareerErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -57461,6 +62258,10 @@ export type PostTarotSpreadsCareerErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -57474,6 +62275,10 @@ export type PostTarotSpreadsCareerErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -57572,6 +62377,10 @@ export type PostTarotSpreadsCustomErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -57619,6 +62428,10 @@ export type PostTarotSpreadsCustomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -57626,6 +62439,10 @@ export type PostTarotSpreadsCustomErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -57647,6 +62464,10 @@ export type PostTarotSpreadsCustomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -57660,6 +62481,10 @@ export type PostTarotSpreadsCustomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -57737,6 +62562,10 @@ export type PostBiorhythmReadingErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -57784,6 +62613,10 @@ export type PostBiorhythmReadingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -57791,6 +62624,10 @@ export type PostBiorhythmReadingErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -57812,6 +62649,10 @@ export type PostBiorhythmReadingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -57825,6 +62666,10 @@ export type PostBiorhythmReadingErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -57972,6 +62817,10 @@ export type PostBiorhythmForecastErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -58019,6 +62868,10 @@ export type PostBiorhythmForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -58026,6 +62879,10 @@ export type PostBiorhythmForecastErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -58047,6 +62904,10 @@ export type PostBiorhythmForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -58060,6 +62921,10 @@ export type PostBiorhythmForecastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -58190,6 +63055,10 @@ export type PostBiorhythmCriticalDaysErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -58237,6 +63106,10 @@ export type PostBiorhythmCriticalDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -58244,6 +63117,10 @@ export type PostBiorhythmCriticalDaysErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -58265,6 +63142,10 @@ export type PostBiorhythmCriticalDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -58278,6 +63159,10 @@ export type PostBiorhythmCriticalDaysErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -58386,6 +63271,10 @@ export type PostBiorhythmCompatibilityErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -58433,6 +63322,10 @@ export type PostBiorhythmCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -58440,6 +63333,10 @@ export type PostBiorhythmCompatibilityErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -58461,6 +63358,10 @@ export type PostBiorhythmCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -58474,6 +63375,10 @@ export type PostBiorhythmCompatibilityErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -58602,6 +63507,10 @@ export type PostBiorhythmPhasesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -58649,6 +63558,10 @@ export type PostBiorhythmPhasesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -58656,6 +63569,10 @@ export type PostBiorhythmPhasesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -58677,6 +63594,10 @@ export type PostBiorhythmPhasesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -58690,6 +63611,10 @@ export type PostBiorhythmPhasesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -58788,6 +63713,10 @@ export type PostBiorhythmDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -58835,6 +63764,10 @@ export type PostBiorhythmDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -58842,6 +63775,10 @@ export type PostBiorhythmDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -58863,6 +63800,10 @@ export type PostBiorhythmDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -58876,6 +63817,10 @@ export type PostBiorhythmDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -58970,6 +63915,10 @@ export type PostAyurvedaConstitutionErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -59017,6 +63966,10 @@ export type PostAyurvedaConstitutionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -59024,6 +63977,10 @@ export type PostAyurvedaConstitutionErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -59045,6 +64002,10 @@ export type PostAyurvedaConstitutionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -59058,6 +64019,10 @@ export type PostAyurvedaConstitutionErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -59367,6 +64332,10 @@ export type PostAyurvedaDinacharyaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -59414,6 +64383,10 @@ export type PostAyurvedaDinacharyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -59421,6 +64394,10 @@ export type PostAyurvedaDinacharyaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -59442,6 +64419,10 @@ export type PostAyurvedaDinacharyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -59455,6 +64436,10 @@ export type PostAyurvedaDinacharyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -59726,6 +64711,10 @@ export type PostAyurvedaRitucharyaErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -59773,6 +64762,10 @@ export type PostAyurvedaRitucharyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -59780,6 +64773,10 @@ export type PostAyurvedaRitucharyaErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -59801,6 +64798,10 @@ export type PostAyurvedaRitucharyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -59814,6 +64815,10 @@ export type PostAyurvedaRitucharyaErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -60245,6 +65250,10 @@ export type GetAyurvedaDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -60292,6 +65301,10 @@ export type GetAyurvedaDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -60299,6 +65312,10 @@ export type GetAyurvedaDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -60320,6 +65337,10 @@ export type GetAyurvedaDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -60333,6 +65354,10 @@ export type GetAyurvedaDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -60546,6 +65571,10 @@ export type GetAyurvedaDoshasErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -60593,6 +65622,10 @@ export type GetAyurvedaDoshasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -60600,6 +65633,10 @@ export type GetAyurvedaDoshasErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -60621,6 +65658,10 @@ export type GetAyurvedaDoshasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -60634,6 +65675,10 @@ export type GetAyurvedaDoshasErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -60933,6 +65978,10 @@ export type GetAyurvedaDoshasByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -60980,6 +66029,10 @@ export type GetAyurvedaDoshasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -60987,6 +66040,10 @@ export type GetAyurvedaDoshasByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -61008,6 +66065,10 @@ export type GetAyurvedaDoshasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -61021,6 +66082,10 @@ export type GetAyurvedaDoshasByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -61311,6 +66376,10 @@ export type GetAyurvedaTastesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -61358,6 +66427,10 @@ export type GetAyurvedaTastesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -61365,6 +66438,10 @@ export type GetAyurvedaTastesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -61386,6 +66463,10 @@ export type GetAyurvedaTastesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -61399,6 +66480,10 @@ export type GetAyurvedaTastesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -61555,6 +66640,10 @@ export type GetAyurvedaQualitiesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -61602,6 +66691,10 @@ export type GetAyurvedaQualitiesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -61609,6 +66702,10 @@ export type GetAyurvedaQualitiesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -61630,6 +66727,10 @@ export type GetAyurvedaQualitiesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -61643,6 +66744,10 @@ export type GetAyurvedaQualitiesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -61819,6 +66924,10 @@ export type PostIchingDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -61866,6 +66975,10 @@ export type PostIchingDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -61873,6 +66986,10 @@ export type PostIchingDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -61894,6 +67011,10 @@ export type PostIchingDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -61907,6 +67028,10 @@ export type PostIchingDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -62029,6 +67154,10 @@ export type PostIchingDailyCastErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -62076,6 +67205,10 @@ export type PostIchingDailyCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -62083,6 +67216,10 @@ export type PostIchingDailyCastErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -62104,6 +67241,10 @@ export type PostIchingDailyCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -62117,6 +67258,10 @@ export type PostIchingDailyCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -62312,6 +67457,10 @@ export type GetIchingHexagramsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -62359,6 +67508,10 @@ export type GetIchingHexagramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -62366,6 +67519,10 @@ export type GetIchingHexagramsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -62387,6 +67544,10 @@ export type GetIchingHexagramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -62400,6 +67561,10 @@ export type GetIchingHexagramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -62454,6 +67619,10 @@ export type GetIchingHexagramsRandomErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -62501,6 +67670,10 @@ export type GetIchingHexagramsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * No hexagrams available.
@@ -62514,6 +67687,10 @@ export type GetIchingHexagramsRandomErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -62521,6 +67698,10 @@ export type GetIchingHexagramsRandomErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -62542,6 +67723,10 @@ export type GetIchingHexagramsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -62555,6 +67740,10 @@ export type GetIchingHexagramsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -62596,6 +67785,10 @@ export type GetIchingHexagramsLookupErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -62643,6 +67836,10 @@ export type GetIchingHexagramsLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * No hexagram found for pattern.
@@ -62656,6 +67853,10 @@ export type GetIchingHexagramsLookupErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -62663,6 +67864,10 @@ export type GetIchingHexagramsLookupErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -62684,6 +67889,10 @@ export type GetIchingHexagramsLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -62697,6 +67906,10 @@ export type GetIchingHexagramsLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -62739,6 +67952,10 @@ export type GetIchingHexagramsByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -62786,6 +68003,10 @@ export type GetIchingHexagramsByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Hexagram not found.
@@ -62799,6 +68020,10 @@ export type GetIchingHexagramsByNumberErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -62806,6 +68031,10 @@ export type GetIchingHexagramsByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -62827,6 +68056,10 @@ export type GetIchingHexagramsByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -62840,6 +68073,10 @@ export type GetIchingHexagramsByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -62881,6 +68118,10 @@ export type GetIchingCastErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -62928,6 +68169,10 @@ export type GetIchingCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -62935,6 +68180,10 @@ export type GetIchingCastErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -62956,6 +68205,10 @@ export type GetIchingCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -62969,6 +68222,10 @@ export type GetIchingCastErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -63021,6 +68278,10 @@ export type GetIchingTrigramsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -63068,6 +68329,10 @@ export type GetIchingTrigramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -63075,6 +68340,10 @@ export type GetIchingTrigramsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -63096,6 +68365,10 @@ export type GetIchingTrigramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -63109,6 +68382,10 @@ export type GetIchingTrigramsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -63160,6 +68437,10 @@ export type GetIchingTrigramsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -63207,6 +68488,10 @@ export type GetIchingTrigramsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Trigram not found.
@@ -63220,6 +68505,10 @@ export type GetIchingTrigramsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -63227,6 +68516,10 @@ export type GetIchingTrigramsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -63248,6 +68541,10 @@ export type GetIchingTrigramsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -63261,6 +68558,10 @@ export type GetIchingTrigramsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -63311,6 +68612,10 @@ export type GetCrystalsZodiacBySignErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -63358,6 +68663,10 @@ export type GetCrystalsZodiacBySignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -63365,6 +68674,10 @@ export type GetCrystalsZodiacBySignErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -63386,6 +68699,10 @@ export type GetCrystalsZodiacBySignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -63399,6 +68716,10 @@ export type GetCrystalsZodiacBySignErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -63487,6 +68808,10 @@ export type GetCrystalsChakraByChakraErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -63534,6 +68859,10 @@ export type GetCrystalsChakraByChakraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -63541,6 +68870,10 @@ export type GetCrystalsChakraByChakraErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -63562,6 +68895,10 @@ export type GetCrystalsChakraByChakraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -63575,6 +68912,10 @@ export type GetCrystalsChakraByChakraErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -63663,6 +69004,10 @@ export type GetCrystalsElementByElementErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -63710,6 +69055,10 @@ export type GetCrystalsElementByElementErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -63717,6 +69066,10 @@ export type GetCrystalsElementByElementErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -63738,6 +69091,10 @@ export type GetCrystalsElementByElementErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -63751,6 +69108,10 @@ export type GetCrystalsElementByElementErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -63831,6 +69192,10 @@ export type GetCrystalsBirthstoneByMonthErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -63878,6 +69243,10 @@ export type GetCrystalsBirthstoneByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -63885,6 +69254,10 @@ export type GetCrystalsBirthstoneByMonthErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -63906,6 +69279,10 @@ export type GetCrystalsBirthstoneByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -63919,6 +69296,10 @@ export type GetCrystalsBirthstoneByMonthErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64002,6 +69383,10 @@ export type GetCrystalsSearchErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -64049,6 +69434,10 @@ export type GetCrystalsSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -64056,6 +69445,10 @@ export type GetCrystalsSearchErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -64077,6 +69470,10 @@ export type GetCrystalsSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -64090,6 +69487,10 @@ export type GetCrystalsSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64170,6 +69571,10 @@ export type GetCrystalsPairingsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -64217,6 +69622,10 @@ export type GetCrystalsPairingsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Crystal not found in database
@@ -64230,6 +69639,10 @@ export type GetCrystalsPairingsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -64237,6 +69650,10 @@ export type GetCrystalsPairingsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -64258,6 +69675,10 @@ export type GetCrystalsPairingsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -64271,6 +69692,10 @@ export type GetCrystalsPairingsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64359,6 +69784,10 @@ export type PostCrystalsDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -64406,6 +69835,10 @@ export type PostCrystalsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -64413,6 +69846,10 @@ export type PostCrystalsDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -64434,6 +69871,10 @@ export type PostCrystalsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -64447,6 +69888,10 @@ export type PostCrystalsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64521,6 +69966,10 @@ export type GetCrystalsRandomErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -64568,6 +70017,10 @@ export type GetCrystalsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -64575,6 +70028,10 @@ export type GetCrystalsRandomErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -64596,6 +70053,10 @@ export type GetCrystalsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -64609,6 +70070,10 @@ export type GetCrystalsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64675,6 +70140,10 @@ export type GetCrystalsColorsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -64722,6 +70191,10 @@ export type GetCrystalsColorsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -64729,6 +70202,10 @@ export type GetCrystalsColorsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -64750,6 +70227,10 @@ export type GetCrystalsColorsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -64763,6 +70244,10 @@ export type GetCrystalsColorsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64809,6 +70294,10 @@ export type GetCrystalsPlanetsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -64856,6 +70345,10 @@ export type GetCrystalsPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -64863,6 +70356,10 @@ export type GetCrystalsPlanetsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -64884,6 +70381,10 @@ export type GetCrystalsPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -64897,6 +70398,10 @@ export type GetCrystalsPlanetsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -64971,6 +70476,10 @@ export type GetCrystalsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65018,6 +70527,10 @@ export type GetCrystalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65025,6 +70538,10 @@ export type GetCrystalsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65046,6 +70563,10 @@ export type GetCrystalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65059,6 +70580,10 @@ export type GetCrystalsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -65139,6 +70664,10 @@ export type GetCrystalsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65186,6 +70715,10 @@ export type GetCrystalsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Crystal not found in database
@@ -65199,6 +70732,10 @@ export type GetCrystalsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65206,6 +70743,10 @@ export type GetCrystalsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65227,6 +70768,10 @@ export type GetCrystalsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65240,6 +70785,10 @@ export type GetCrystalsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -65367,6 +70916,10 @@ export type GetDreamsSymbolsErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65414,6 +70967,10 @@ export type GetDreamsSymbolsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65421,6 +70978,10 @@ export type GetDreamsSymbolsErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65442,6 +71003,10 @@ export type GetDreamsSymbolsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65455,6 +71020,10 @@ export type GetDreamsSymbolsErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -65509,6 +71078,10 @@ export type GetDreamsSymbolsRandomErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65556,6 +71129,10 @@ export type GetDreamsSymbolsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65563,6 +71140,10 @@ export type GetDreamsSymbolsRandomErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65584,6 +71165,10 @@ export type GetDreamsSymbolsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65597,6 +71182,10 @@ export type GetDreamsSymbolsRandomErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -65631,6 +71220,10 @@ export type GetDreamsSymbolsLettersErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65678,6 +71271,10 @@ export type GetDreamsSymbolsLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65685,6 +71282,10 @@ export type GetDreamsSymbolsLettersErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65706,6 +71307,10 @@ export type GetDreamsSymbolsLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65719,6 +71324,10 @@ export type GetDreamsSymbolsLettersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -65767,6 +71376,10 @@ export type GetDreamsSymbolsByIdErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65814,6 +71427,10 @@ export type GetDreamsSymbolsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Symbol not found.
@@ -65827,6 +71444,10 @@ export type GetDreamsSymbolsByIdErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65834,6 +71455,10 @@ export type GetDreamsSymbolsByIdErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65855,6 +71480,10 @@ export type GetDreamsSymbolsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65868,6 +71497,10 @@ export type GetDreamsSymbolsByIdErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -65909,6 +71542,10 @@ export type PostDreamsDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -65956,6 +71593,10 @@ export type PostDreamsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -65963,6 +71604,10 @@ export type PostDreamsDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -65984,6 +71629,10 @@ export type PostDreamsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -65997,6 +71646,10 @@ export type PostDreamsDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -66077,6 +71730,10 @@ export type GetAngelNumbersNumbersErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -66124,6 +71781,10 @@ export type GetAngelNumbersNumbersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -66131,6 +71792,10 @@ export type GetAngelNumbersNumbersErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -66152,6 +71817,10 @@ export type GetAngelNumbersNumbersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -66165,6 +71834,10 @@ export type GetAngelNumbersNumbersErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -66253,6 +71926,10 @@ export type GetAngelNumbersNumbersByNumberErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -66300,6 +71977,10 @@ export type GetAngelNumbersNumbersByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Angel number not found in database
@@ -66313,6 +71994,10 @@ export type GetAngelNumbersNumbersByNumberErrors = {
          * Machine-readable error code. Stable identifier for programmatic error handling.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself. The same URL in every environment, so it is safe to log, print in a CLI, or paste into a bug report.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -66320,6 +72005,10 @@ export type GetAngelNumbersNumbersByNumberErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -66341,6 +72030,10 @@ export type GetAngelNumbersNumbersByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -66354,6 +72047,10 @@ export type GetAngelNumbersNumbersByNumberErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -66466,6 +72163,10 @@ export type GetAngelNumbersLookupErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -66513,6 +72214,10 @@ export type GetAngelNumbersLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -66520,6 +72225,10 @@ export type GetAngelNumbersLookupErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -66541,6 +72250,10 @@ export type GetAngelNumbersLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -66554,6 +72267,10 @@ export type GetAngelNumbersLookupErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -66745,6 +72462,10 @@ export type PostAngelNumbersDailyErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -66792,6 +72513,10 @@ export type PostAngelNumbersDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -66799,6 +72524,10 @@ export type PostAngelNumbersDailyErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -66820,6 +72549,10 @@ export type PostAngelNumbersDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -66833,6 +72566,10 @@ export type PostAngelNumbersDailyErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -66956,6 +72693,10 @@ export type GetLocationSearchErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -67003,6 +72744,10 @@ export type GetLocationSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -67010,6 +72755,10 @@ export type GetLocationSearchErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -67031,6 +72780,10 @@ export type GetLocationSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -67044,6 +72797,10 @@ export type GetLocationSearchErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -67139,6 +72896,10 @@ export type GetLocationCountriesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -67186,6 +72947,10 @@ export type GetLocationCountriesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -67193,6 +72958,10 @@ export type GetLocationCountriesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -67214,6 +72983,10 @@ export type GetLocationCountriesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -67227,6 +73000,10 @@ export type GetLocationCountriesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -67307,6 +73084,10 @@ export type GetLocationCountriesByIso2Errors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -67354,6 +73135,10 @@ export type GetLocationCountriesByIso2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -67361,6 +73146,10 @@ export type GetLocationCountriesByIso2Errors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -67382,6 +73171,10 @@ export type GetLocationCountriesByIso2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -67395,6 +73188,10 @@ export type GetLocationCountriesByIso2Errors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -67481,6 +73278,10 @@ export type GetUsageErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -67528,6 +73329,10 @@ export type GetUsageErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Subscription not found
@@ -67541,6 +73346,10 @@ export type GetUsageErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -67562,6 +73371,10 @@ export type GetUsageErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -67575,6 +73388,10 @@ export type GetUsageErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
@@ -67636,6 +73453,10 @@ export type GetLanguagesErrors = {
         error: string;
         code: 'validation_error';
         /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
+        /**
          * Every validation failure. Use this to rebuild a valid request.
          */
         issues: Array<{
@@ -67683,6 +73504,10 @@ export type GetLanguagesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Method not allowed. The path exists but only responds to the methods listed in `allow[]` and the `Allow` response header.
@@ -67690,6 +73515,10 @@ export type GetLanguagesErrors = {
     405: {
         error: string;
         code: 'method_not_allowed';
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
         /**
          * Allowed HTTP methods for this path. Mirrors the Allow response header.
          */
@@ -67711,6 +73540,10 @@ export type GetLanguagesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
     /**
      * Internal server error
@@ -67724,6 +73557,10 @@ export type GetLanguagesErrors = {
          * Machine-readable error code. Stable identifier.
          */
         code: string;
+        /**
+         * Absolute URL of the documented explanation of this code, anchored at the code itself, for example https://roxyapi.com/docs/errors#not_found.
+         */
+        doc_url: string;
     };
 };
 
