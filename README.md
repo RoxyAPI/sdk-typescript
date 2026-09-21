@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://roxyapi.com">
-    <img src="https://raw.githubusercontent.com/RoxyAPI/sdk-typescript/main/assets/hero.png" alt="Roxy TypeScript SDK. Astrology, Vedic, numerology, tarot, and more behind one API key." width="100%">
+    <img src="https://raw.githubusercontent.com/RoxyAPI/sdk-typescript/main/assets/hero.png" alt="RoxyAPI TypeScript SDK: the Spiritual OS layer for agentic AI. One key, flat pricing." width="100%">
   </a>
 </p>
 
