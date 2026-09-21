@@ -1510,15 +1510,7 @@ const { data } = await roxy.chineseAstrology.getDailyZodiacReading({
 const { data } = await roxy.chineseAstrology.listSolarTerms({ path: { year: 2026 } });
 
 // Convert lunar and Gregorian dates - Chinese lunisolar calendar API
-const { data } = await roxy.chineseAstrology.calculateLunarDate({
-  body: {
-    date: '1990-06-15',
-    lunarYear: 1990,
-    lunarMonth: 5,
-    lunarDay: 23,
-    isLeapMonth: false,
-  },
-});
+const { data } = await roxy.chineseAstrology.calculateLunarDate({ body: { date: '1990-06-15' } });
 
 // Get the almanac for a day - Tong Shu API with day officers and mansions
 const { data } = await roxy.chineseAstrology.getAlmanacDay({ path: { date: '1990-06-15' } });
@@ -1615,13 +1607,7 @@ const { data } = await roxy.mesoamericanAstrology.generateMayanChart({
 });
 
 // Convert a Maya Long Count - Long Count calendar converter API
-const { data } = await roxy.mesoamericanAstrology.convertLongCount({
-  body: {
-    date: '2012-12-21',
-    longCount: '13.0.0.0.0',
-    correlation: 'gmt-584283',
-  },
-});
+const { data } = await roxy.mesoamericanAstrology.convertLongCount({ body: { date: '2012-12-21' } });
 
 // Daily Mayan energy reading - Tzolkin day sign of the day API
 const { data } = await roxy.mesoamericanAstrology.getDailyMayanReading({ query: { date: '2026-09-02', correlation: 'gmt-584283' } });
@@ -1693,38 +1679,16 @@ Vastu Shastra API for directional home and plot analysis: entrance padas with th
 // Calculate entrance pada - Vastu main door direction API
 const { data } = await roxy.vastu.calculateEntrancePada({
   body: {
-    plot: {
-      width: 30,
-      depth: 40,
-      polygon: [
-        { x: 0, y: 0 },
-        { x: 30, y: 0 },
-        { x: 30, y: 40 },
-        { x: 0, y: 40 },
-      ],
-      unit: 'feet',
-    },
+    plot: { width: 30, depth: 40, unit: 'feet' },
     facing: 'North',
-    facingDegrees: 15,
     doorPosition: 0.4,
-    grid: '81-pada',
   },
 });
 
 // Generate Vastu Purusha Mandala - 81 pada and 64 pada grid API
 const { data } = await roxy.vastu.generateMandala({
   body: {
-    plot: {
-      width: 30,
-      depth: 40,
-      polygon: [
-        { x: 0, y: 0 },
-        { x: 30, y: 0 },
-        { x: 30, y: 40 },
-        { x: 0, y: 40 },
-      ],
-      unit: 'feet',
-    },
+    plot: { width: 30, depth: 40, unit: 'feet' },
     grid: '81-pada',
   },
 });
@@ -1732,25 +1696,13 @@ const { data } = await roxy.vastu.generateMandala({
 // Analyse a plot - Vastu land and site assessment API
 const { data } = await roxy.vastu.calculatePlotAnalysis({
   body: {
-    plot: {
-      width: 30,
-      depth: 40,
-      polygon: [
-        { x: 0, y: 0 },
-        { x: 30, y: 0 },
-        { x: 30, y: 40 },
-        { x: 0, y: 40 },
-      ],
-      unit: 'feet',
-    },
+    plot: { width: 30, depth: 40, unit: 'feet' },
     facing: 'North',
-    facingDegrees: 15,
     slopeLowDirection: 'Northeast',
     road: 'North',
     extensions: ['Northeast'],
     cuts: ['Southwest'],
     water: 'Northeast',
-    slopeSchool: 'brihat-samhita',
   },
 });
 
@@ -1771,30 +1723,11 @@ const { data } = await roxy.vastu.calculateAyadi({
 // Check room placement - Vastu room direction compliance API
 const { data } = await roxy.vastu.calculateRoomCompliance({
   body: {
-    plot: {
-      width: 30,
-      depth: 40,
-      polygon: [
-        { x: 0, y: 0 },
-        { x: 30, y: 0 },
-        { x: 30, y: 40 },
-        { x: 0, y: 40 },
-      ],
-      unit: 'feet',
-    },
+    plot: { width: 30, depth: 40, unit: 'feet' },
     facing: 'North',
-    facingDegrees: 15,
     rooms: [
-      {
-        type: 'kitchen',
-        direction: 'Southeast',
-        polygon: [
-          { x: 20, y: 2 },
-          { x: 28, y: 2 },
-          { x: 28, y: 12 },
-          { x: 20, y: 12 },
-        ],
-      },
+      { type: 'kitchen', direction: 'Southeast' },
+      { type: 'master-bedroom', direction: 'Southwest' },
     ],
   },
 });
@@ -1955,13 +1888,7 @@ Kabbalah API for gematria, the 72 names, the Tree of Life and the Hebrew birthda
 const { data } = await roxy.kabbalah.calculateGematria({
   body: {
     text: 'Sarah',
-    textHebrew: 'שלום',
-    transliteration: 'letter-map-mathers',
     ciphers: ['mispar-hechrachi', 'mispar-gadol'],
-    misparGadol: 'finals-500-900',
-    atbashOutput: 'both',
-    includeMatches: true,
-    latinCiphers: false,
   },
 });
 
@@ -1969,14 +1896,7 @@ const { data } = await roxy.kabbalah.calculateGematria({
 const { data } = await roxy.kabbalah.listGematriaCiphers();
 
 // Generate a name profile - Kabbalah name numerology API with the spelling shown
-const { data } = await roxy.kabbalah.generateNameProfile({
-  body: {
-    name: 'Sarah',
-    nameHebrew: 'שרה',
-    transliteration: 'letter-map-mathers',
-    misparGadol: 'finals-500-900',
-  },
-});
+const { data } = await roxy.kabbalah.generateNameProfile({ body: { name: 'Sarah' } });
 
 // Generate a birth profile - Hebrew birthday and birth angel API
 const { data } = await roxy.kabbalah.generateBirthProfile({
@@ -2025,16 +1945,7 @@ const { data } = await roxy.kabbalah.getHebrewLetter({
 });
 
 // Compare two names - gematria name compatibility API with every component published
-const { data } = await roxy.kabbalah.calculateNameCompatibility({
-  body: {
-    firstName: 'Sarah',
-    firstNameHebrew: 'שרה',
-    secondName: 'David',
-    secondNameHebrew: 'דוד',
-    transliteration: 'letter-map-mathers',
-    misparGadol: 'finals-500-900',
-  },
-});
+const { data } = await roxy.kabbalah.calculateNameCompatibility({ body: { firstName: 'Sarah', secondName: 'David' } });
 
 // Get the sephirah of the day - Omer count API with the sephirot pairing
 const { data } = await roxy.kabbalah.getDailySephirah({

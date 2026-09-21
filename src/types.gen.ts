@@ -5137,6 +5137,10 @@ export type KpChartResponse = {
              */
             nakshatra: string;
             /**
+             * Nakshatra pada (1-4) of Rahu.
+             */
+            pada: number;
+            /**
              * KP star lord of Rahu.
              */
             starLord: string;
@@ -5177,6 +5181,10 @@ export type KpChartResponse = {
              * Nakshatra of Ketu.
              */
             nakshatra: string;
+            /**
+             * Nakshatra pada (1-4) of Ketu.
+             */
+            pada: number;
             /**
              * KP star lord of Ketu.
              */
@@ -16946,7 +16954,7 @@ export type PostAstrologyFixedStarsData = {
         /**
          * Conjunction orb in degrees, the maximum separation for a star to count as conjunct a chart point. Defaults to 1, maximum 3. Widen it to surface looser contacts or tighten it for only the closest hits.
          */
-        orb?: number | null;
+        orb?: number;
     };
     url: '/astrology/fixed-stars';
 };
@@ -28711,11 +28719,11 @@ export type PostVedicAstrologyEclipticCrossingsResponses = {
              */
             direction: 'ascending' | 'descending';
             /**
-             * Sidereal longitude of the planet at the moment of crossing (Lahiri ayanamsa).
+             * Longitude of the planet at the moment of crossing, in the requested coordinateSystem: sidereal (Lahiri ayanamsa) by default, tropical when asked.
              */
             longitude: number;
             /**
-             * Vedic zodiac sign (rashi) the planet occupies at the crossing.
+             * Zodiac sign the planet occupies at the crossing, read in the same coordinateSystem as longitude: the rashi under sidereal, the tropical sign under tropical.
              */
             sign: string;
         }>;
@@ -38273,7 +38281,7 @@ export type GetChineseAstrologyZodiacAnimalsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/chinese-astrology/zodiac/animals';
 };
@@ -39861,7 +39869,7 @@ export type GetChineseAstrologyCalendarSolarTermsByYearResponse = GetChineseAstr
 
 export type PostChineseAstrologyCalendarLunarDateData = {
     /**
-     * Send a Gregorian date to convert forward, or a lunar year, month and day to convert back.
+     * Send a Gregorian date to convert forward, or a lunar year, month and day to convert back. The two sides are exclusive, which is why the whole body carries one example rather than leaving the per field ones to be read together.
      */
     body?: {
         /**
@@ -41273,7 +41281,7 @@ export type GetChineseAstrologyElementsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/chinese-astrology/elements';
 };
@@ -43143,7 +43151,7 @@ export type GetFengShuiFlyingStarsStarsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/feng-shui/flying-stars/stars';
 };
@@ -43837,7 +43845,7 @@ export type GetFengShuiBaguaData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/feng-shui/bagua';
 };
@@ -45324,6 +45332,9 @@ export type PostMesoamericanAstrologyMayanChartResponses = {
 export type PostMesoamericanAstrologyMayanChartResponse = PostMesoamericanAstrologyMayanChartResponses[keyof PostMesoamericanAstrologyMayanChartResponses];
 
 export type PostMesoamericanAstrologyMayanLongCountConvertData = {
+    /**
+     * What to convert, and under which correlation. Exactly one of date and longCount is present, which is why the whole body carries one example rather than leaving the per field ones to be read together.
+     */
     body: {
         /**
          * Proleptic Gregorian date to convert INTO a Long Count. Supply this or longCount, never both and never neither.
@@ -46314,7 +46325,7 @@ export type GetMesoamericanAstrologyMayanDaySignsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/mesoamerican-astrology/mayan/day-signs';
 };
@@ -46767,7 +46778,7 @@ export type GetMesoamericanAstrologyMayanTrecenasData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/mesoamerican-astrology/mayan/trecenas';
 };
@@ -47137,7 +47148,7 @@ export type GetMesoamericanAstrologyMayanHaabMonthsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/mesoamerican-astrology/mayan/haab-months';
 };
@@ -47952,7 +47963,7 @@ export type GetMesoamericanAstrologyAztecDaySignsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/mesoamerican-astrology/aztec/day-signs';
 };
@@ -48338,7 +48349,7 @@ export type GetMesoamericanAstrologyAztecTrecenasData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/mesoamerican-astrology/aztec/trecenas';
 };
@@ -48686,6 +48697,9 @@ export type GetMesoamericanAstrologyAztecTrecenasByNumberResponses = {
 export type GetMesoamericanAstrologyAztecTrecenasByNumberResponse = GetMesoamericanAstrologyAztecTrecenasByNumberResponses[keyof GetMesoamericanAstrologyAztecTrecenasByNumberResponses];
 
 export type PostVastuEntranceData = {
+    /**
+     * Where the main door sits on the plot. Send facing or facingDegrees, never both, and locate the door with either door coordinates or doorPosition, never both.
+     */
     body?: {
         /**
          * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
@@ -49396,6 +49410,9 @@ export type PostVastuMandalaResponses = {
 export type PostVastuMandalaResponse = PostVastuMandalaResponses[keyof PostVastuMandalaResponses];
 
 export type PostVastuPlotData = {
+    /**
+     * The site to read: the ground, which way the front looks, and whichever of the slope, road, extensions, cuts and water you know. Send facing or facingDegrees, never both, and the same for the two plot forms.
+     */
     body?: {
         /**
          * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
@@ -50388,6 +50405,9 @@ export type PostVastuAyadiResponses = {
 export type PostVastuAyadiResponse = PostVastuAyadiResponses[keyof PostVastuAyadiResponses];
 
 export type PostVastuRoomsData = {
+    /**
+     * The floor plan to check. Send facing or facingDegrees, never both, and give each room either its quarter or its outline, never both.
+     */
     body?: {
         /**
          * The ground the mandala is projected over. Send width and depth for a compass-aligned rectangle, or polygon for anything else. The x axis runs east and the y axis north, and the mandala is aligned to the compass rather than to the building.
@@ -51127,7 +51147,7 @@ export type GetVastuDirectionsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/vastu/directions';
 };
@@ -51623,7 +51643,7 @@ export type GetVastuDevatasData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/vastu/devatas';
 };
@@ -57299,6 +57319,9 @@ export type PostNumerologyBusinessNameResponses = {
 export type PostNumerologyBusinessNameResponse = PostNumerologyBusinessNameResponses[keyof PostNumerologyBusinessNameResponses];
 
 export type PostKabbalahGematriaData = {
+    /**
+     * What to score and how. Send text for a Latin input or textHebrew for a Hebrew one, never both: which one you send decides whether a transliteration step runs at all. Every other field has a default.
+     */
     body: {
         /**
          * Latin text to write in Hebrew and then score, up to 200 characters. Non Latin scripts are folded to Latin first, so a Cyrillic or Devanagari name works. Send textHebrew instead to control the Hebrew spelling yourself.
@@ -57315,7 +57338,7 @@ export type PostKabbalahGematriaData = {
         /**
          * Which ciphers to return, by identifier. Omit for every computed cipher. Valid values are mispar-hechrachi, mispar-gadol, otiyot-be-milui, mispar-katan, mispar-kidmi, mispar-prati, mispar-ha-merubah-ha-klali, mispar-meshulash, mispar-musafi, kolel.
          */
-        ciphers?: Array<string>;
+        ciphers?: Array<'mispar-hechrachi' | 'mispar-gadol' | 'otiyot-be-milui' | 'mispar-katan' | 'mispar-kidmi' | 'mispar-prati' | 'mispar-ha-merubah-ha-klali' | 'mispar-meshulash' | 'mispar-musafi' | 'kolel'>;
         /**
          * Which method the name mispar gadol means, because the sources use it for two. Use finals-500-900 to score the five word final letters as 500 to 900, or milui to score each letter as the value of its own spelled out name.
          */
@@ -57956,6 +57979,9 @@ export type GetKabbalahCiphersResponses = {
 export type GetKabbalahCiphersResponse = GetKabbalahCiphersResponses[keyof GetKabbalahCiphersResponses];
 
 export type PostKabbalahNameProfileData = {
+    /**
+     * The name to profile. Send name for a Latin input or nameHebrew for a Hebrew one, never both: which one you send decides whether a transliteration step runs at all.
+     */
     body: {
         /**
          * The name in Latin script, to be written in Hebrew and then scored. Non Latin scripts are folded to Latin first. Send nameHebrew instead to control the spelling yourself.
@@ -58675,11 +58701,11 @@ export type GetKabbalahNamesData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
         /**
          * Ecliptic longitude in degrees, 0 inclusive to 360 exclusive, measured from 0 Aries. Returns the single name governing that degree instead of the list. 360 is rejected because it is the same point as 0 and the arcs are half open at the top.
          */
-        longitude?: number | null;
+        longitude?: number;
     };
     url: '/kabbalah/names';
 };
@@ -60149,6 +60175,9 @@ export type GetKabbalahLettersByIdResponses = {
 export type GetKabbalahLettersByIdResponse = GetKabbalahLettersByIdResponses[keyof GetKabbalahLettersByIdResponses];
 
 export type PostKabbalahCompatibilityData = {
+    /**
+     * The two names to compare. Each side takes the Latin field or the Hebrew one, never both: which one you send decides whether a transliteration step runs for that side.
+     */
     body: {
         /**
          * First name in Latin script. Send firstNameHebrew instead to control the spelling.
@@ -60698,7 +60727,7 @@ export type GetTarotCardsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
         /**
          * Filter by arcana type. Major arcana (0-21) represents life lessons and spiritual themes. Minor arcana (Ace-King in 4 suits) represents daily situations and practical matters.
          */
@@ -60710,7 +60739,7 @@ export type GetTarotCardsData = {
         /**
          * Filter by card number. Major Arcana: 0 (The Fool) through 21 (The World). Minor Arcana: 1 (Ace) through 14 (King). Combine with arcana or suit filters for precise results.
          */
-        number?: number | null;
+        number?: number;
     };
     url: '/tarot/cards';
 };
@@ -65214,7 +65243,7 @@ export type PostAyurvedaRitucharyaResponse = PostAyurvedaRitucharyaResponses[key
 export type GetAyurvedaDailyData = {
     body?: never;
     path?: never;
-    query?: {
+    query: {
         /**
          * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
          */
@@ -65226,11 +65255,11 @@ export type GetAyurvedaDailyData = {
         /**
          * Latitude in decimal degrees. It sets how long the day and the night actually are, which is what the dosha periods are cut from.
          */
-        latitude?: number | null;
+        latitude: number;
         /**
          * Longitude in decimal degrees. It sets the clock time of sunrise at this place.
          */
-        longitude?: number | null;
+        longitude: number;
         /**
          * Selects which day counts as current when date is omitted, and which local day sunrise is computed for. Defaults to UTC, so the reading rolls over at 00:00 UTC. Accepts an IANA name (e.g. "Europe/London"), decimal hours (e.g. 5.5 for IST), or a fixed UTC offset (e.g. "-05:00").
          */
@@ -65555,7 +65584,7 @@ export type GetAyurvedaDoshasData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/ayurveda/doshas';
 };
@@ -66360,7 +66389,7 @@ export type GetAyurvedaTastesData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/ayurveda/tastes';
 };
@@ -66624,7 +66653,7 @@ export type GetAyurvedaQualitiesData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/ayurveda/qualities';
 };
@@ -67441,7 +67470,7 @@ export type GetIchingHexagramsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/iching/hexagrams';
 };
@@ -68596,7 +68625,7 @@ export type GetCrystalsZodiacBySignData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/crystals/zodiac/{sign}';
 };
@@ -68792,7 +68821,7 @@ export type GetCrystalsChakraByChakraData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/crystals/chakra/{chakra}';
 };
@@ -68988,7 +69017,7 @@ export type GetCrystalsElementByElementData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/crystals/element/{element}';
 };
@@ -69367,7 +69396,7 @@ export type GetCrystalsSearchData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/crystals/search';
 };
@@ -70460,7 +70489,7 @@ export type GetCrystalsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/crystals';
 };
@@ -70900,7 +70929,7 @@ export type GetDreamsSymbolsData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/dreams/symbols';
 };
@@ -71710,7 +71739,7 @@ export type GetAngelNumbersNumbersData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
         /**
          * Filter results by angel number pattern type. "repeating" returns numbers like 111, 444, 7777. "sequential" returns patterns like 1234. "mirror" returns palindrome or alternating patterns like 1212, 717. "master" returns 11, 22, 33. "root" returns single digits 0-9. "compound" returns mixed sequences with no pure pattern like 911, 1122.
          */
@@ -72677,7 +72706,7 @@ export type GetLocationSearchData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/location/search';
 };
@@ -72880,7 +72909,7 @@ export type GetLocationCountriesData = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/location/countries';
 };
@@ -73068,7 +73097,7 @@ export type GetLocationCountriesByIso2Data = {
         /**
          * Number of items to skip for pagination. Default 0.
          */
-        offset?: number | null;
+        offset?: number;
     };
     url: '/location/countries/{iso2}';
 };
