@@ -364,7 +364,7 @@ export type NatalChartResponse = {
      */
     summary: {
         /**
-         * Most represented element in the chart (Fire, Earth, Air, Water). Always English, whatever the lang parameter says. Use dominantElementLocalized for anything a reader sees.
+         * Element holding the most of the ten planets, Sun through Pluto (Fire, Earth, Air, Water). A tie goes to the tied element holding the Sun, else the Moon, else the Ascendant, else the first of Mercury through Pluto. Always English, whatever the lang parameter says. Use dominantElementLocalized for anything a reader sees.
          */
         dominantElement: string;
         /**
@@ -372,7 +372,7 @@ export type NatalChartResponse = {
          */
         dominantElementLocalized?: string;
         /**
-         * Most represented modality in the chart (Cardinal, Fixed, Mutable). Always English, whatever the lang parameter says. Use dominantModalityLocalized for anything a reader sees.
+         * Modality holding the most of the ten planets, Sun through Pluto (Cardinal, Fixed, Mutable). A tie is broken as for dominantElement: the Sun, then the Moon, then the Ascendant, then Mercury through Pluto. Always English, whatever the lang parameter says. Use dominantModalityLocalized for anything a reader sees.
          */
         dominantModality: string;
         /**
@@ -380,7 +380,7 @@ export type NatalChartResponse = {
          */
         dominantModalityLocalized?: string;
         /**
-         * Planets in retrograde motion at the time of birth. Always English, whatever the lang parameter says. Use retrogradePlanetsLocalized for anything a reader sees.
+         * Bodies in retrograde motion at the time of birth: the ten planets and the chart points (lunar nodes, Chiron, Lilith) alike. Always English, whatever the lang parameter says. Use retrogradePlanetsLocalized for anything a reader sees.
          */
         retrogradePlanets: Array<string>;
         /**
@@ -388,13 +388,13 @@ export type NatalChartResponse = {
          */
         retrogradePlanetsLocalized?: Array<string>;
         /**
-         * Count of planets in each element. Shows elemental emphasis in the personality.
+         * Count of the ten planets, Sun through Pluto, in each element; the four counts sum to 10. The lunar nodes, Chiron and Lilith are points, not planets, and are not counted. Shows elemental emphasis in the personality.
          */
         elementDistribution: {
             [key: string]: number;
         };
         /**
-         * Count of planets in each modality. Shows the dominant operating mode.
+         * Count of the ten planets, Sun through Pluto, in each modality; the three counts sum to 10, and the lunar nodes, Chiron and Lilith are not counted. Shows the dominant operating mode.
          */
         modalityDistribution: {
             [key: string]: number;
@@ -28553,7 +28553,12 @@ export type PostVedicAstrologyEclipticCrossingsData = {
         coordinateSystem?: 'sidereal' | 'tropical';
     };
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Response language (BCP 47). Supported: en, tr, de, es, hi, pt, fr, ru, zh-Hans, zh-Hant. Defaults to en. Coverage varies by domain, and a field with no translation in the requested language returns English.
+         */
+        lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
+    };
     url: '/vedic-astrology/ecliptic-crossings';
 };
 
@@ -28699,9 +28704,13 @@ export type PostVedicAstrologyEclipticCrossingsResponses = {
          */
         events: Array<{
             /**
-             * Planet crossing the ecliptic plane. Sun is excluded (always on the ecliptic by definition).
+             * Planet crossing the ecliptic plane. Sun is excluded (always on the ecliptic by definition). Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use planetLocalized for anything a reader sees.
              */
             planet: string;
+            /**
+             * Planet name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat planet exactly.
+             */
+            planetLocalized?: string;
             /**
              * Date of the ecliptic crossing (YYYY-MM-DD). Adjusted to requested timezone.
              */
@@ -28723,9 +28732,13 @@ export type PostVedicAstrologyEclipticCrossingsResponses = {
              */
             longitude: number;
             /**
-             * Zodiac sign the planet occupies at the crossing, read in the same coordinateSystem as longitude: the rashi under sidereal, the tropical sign under tropical.
+             * Zodiac sign the planet occupies at the crossing, read in the same coordinateSystem as longitude: the rashi under sidereal, the tropical sign under tropical. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use signLocalized for anything a reader sees.
              */
             sign: string;
+            /**
+             * Zodiac sign name in the requested language, for display. Present only when lang is set to a language other than English, since in English it would repeat sign exactly.
+             */
+            signLocalized?: string;
         }>;
     };
 };
@@ -36078,9 +36091,13 @@ export type PostChineseAstrologyBaziChartResponses = {
              */
             naYinChinese: string;
             /**
-             * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in.
+             * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in. Always English, whatever the lang parameter says. Use naYinElementLocalized for anything a reader sees.
              */
             naYinElement: string;
+            /**
+             * Na Yin element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+             */
+            naYinElementLocalized?: string;
         }>;
         /**
          * The day stem, which is the subject of the whole chart. Everything else in the response is named by what it does to this one.
@@ -37420,9 +37437,13 @@ export type PostChineseAstrologyBaziCompatibilityResponses = {
                  */
                 naYinChinese: string;
                 /**
-                 * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in.
+                 * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in. Always English, whatever the lang parameter says. Use naYinElementLocalized for anything a reader sees.
                  */
                 naYinElement: string;
+                /**
+                 * Na Yin element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                naYinElementLocalized?: string;
             }>;
             /**
              * The day stem of this person.
@@ -37678,9 +37699,13 @@ export type PostChineseAstrologyBaziCompatibilityResponses = {
                  */
                 naYinChinese: string;
                 /**
-                 * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in.
+                 * Element the Na Yin resolves to. Independent of the stem element and often different from it, which is why it is reported separately rather than folded in. Always English, whatever the lang parameter says. Use naYinElementLocalized for anything a reader sees.
                  */
                 naYinElement: string;
+                /**
+                 * Na Yin element name in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+                 */
+                naYinElementLocalized?: string;
             }>;
             /**
              * The day stem of this person.
@@ -67371,6 +67396,14 @@ export type PostIchingDailyCastResponses = {
                  */
                 advice: string;
             };
+            /**
+             * Binary line pattern (6 digits, bottom to top). 1 = yang (solid line), 0 = yin (broken line). Lines 1-3 form the lower trigram, lines 4-6 form the upper trigram.
+             */
+            binary: string;
+            /**
+             * The oracle statement and meaning of each line that came up CHANGING, and only those. The changing lines are what the cast is actually about, so this saves a second call to read them and stops a consuming agent from having to invent them.
+             */
+            changingLines?: Array<ChangingLine>;
         };
         /**
          * Line values (6-9) from bottom to top. 6=old yin (changing), 7=young yang, 8=young yin, 9=old yang (changing).
