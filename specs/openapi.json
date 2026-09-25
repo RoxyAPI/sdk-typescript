@@ -145193,6 +145193,9 @@
             "apiKey": []
           }
         ],
+        "x-key-types": [
+          "secret"
+        ],
         "responses": {
           "200": {
             "description": "Usage statistics retrieved",
