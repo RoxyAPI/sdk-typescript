@@ -63,7 +63,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | `roxy.languages` | List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint |
 <!-- END:DOMAINS -->
 
-**Total:** 258+ endpoints across 18+ product domains plus usage and languages. The table above auto-syncs from `specs/openapi.json` at release time.
+The table above covers every endpoint across 18+ product domains plus usage and languages, and auto-syncs from `specs/openapi.json` at release time.
 
 ## Quality guidelines for agents
 
@@ -73,6 +73,7 @@ Five rules to follow when writing any call with this SDK. Get these right and th
 - **Always `await`. Always destructure `{ data, error, response }`.** All methods are async. `data` is the typed success response (undefined on error). `error` is the typed API error (`{ error: string, code: string }`, undefined on success). `response` is the raw `fetch` Response. Switch on `error.code`, not on `error.error`. The pair is a discriminated union, so `data` is typed as possibly undefined until `error` is checked: write `if (error) throw error;` before reading `data` in a `strict` project, or pass `throwOnError: true` in the call options to have failures throw and `data` typed as always present.
 - **Method names match the OpenAPI `operationId` verbatim.** When in doubt, autocomplete `roxy.{domain}.` in your editor or `grep 'public ' node_modules/@roxyapi/sdk/dist/factory.d.ts`. Never invent a method from the URL path or a guess.
 - **Response field names come from the response schema of the spec.** Field access is typed dot syntax (`data.cities[0].timezone`). TypeScript will catch any invented field at compile time via the generated types - if `tsc` complains, the field does not exist.
+- **Look up any operation or field beyond this guide.** Query the combined OpenAPI spec at `https://roxyapi.com/api/v2/openapi.json` with the jq recipe in `https://roxyapi.com/AGENTS.md`, or search the keyless Docs MCP server at `https://roxyapi.com/mcp/docs` (one tool, `search_docs`).
 - **Do not hand-roll requests.** No raw `fetch`, no axios. The SDK injects auth, the base URL and typed responses; it does not retry, so wrap calls you want retried. Use `createRoxy(key)` for the common case, or `new Roxy({ client })` with `createClient` from `@roxyapi/sdk/client` when you need a custom fetch or interceptors.
 
 ## Critical patterns
