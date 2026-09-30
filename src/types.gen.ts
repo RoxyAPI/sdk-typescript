@@ -514,7 +514,7 @@ export type HousesResponse = {
         degree: number;
     }>;
     /**
-     * Side-by-side house cusp comparison keyed by house system id: placidus, whole-sign, equal, koch. Only included when houseSystem is set to "all". Useful for educational tools and system comparison.
+     * Side-by-side house cusp comparison keyed by house system id: placidus, whole-sign, equal, koch. Only included when houseSystem is set to "all". A system that cannot be computed at the latitude (Placidus and Koch beyond 66 degrees 33 minutes north or south) is omitted, so every key present carries its own cusps, and the top level houses array is the first system present in that order. Useful for educational tools and system comparison.
      */
     comparison?: {
         [key: string]: {
@@ -1013,7 +1013,7 @@ export type TransitsRequest = {
      */
     natalChart?: {
         /**
-         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected. Calculations that read planetary positions support 1550-01-02 to 2650-01-22; outside that span they answer 400 with code date_out_of_range, and a calculation that reads a window around the date (a sunrise search, a run of days) may answer the same 400 for a date within a few days of either end.
          */
         date: string;
         /**
@@ -8011,7 +8011,7 @@ export type AyurvedaDinacharyaRequest = {
      */
     longitude: number;
     /**
-     * Timezone as an IANA name such as "Europe/London", or as decimal hours from UTC such as 5.5. An IANA name is resolved to the offset in force on the requested date. It decides which local day is meant and, on the clock-hour grid, where the blocks fall. Defaults to 0.
+     * Timezone as an IANA name such as "Europe/London", or as decimal hours from UTC such as 5.5. An IANA name is resolved to the offset in force on the requested date, and on the clock-hour grid at the local hour each block opens, so on a daylight-saving change every block keeps its printed hour and one that falls in the skipped hour moves forward past it. It decides which local day is meant and, on the clock-hour grid, where the blocks fall. Defaults to 0.
      */
     timezone?: number | string;
     /**
@@ -8022,7 +8022,7 @@ export type AyurvedaDinacharyaRequest = {
 
 export type AyurvedaRitucharyaRequest = {
     /**
-     * The date to resolve, in YYYY-MM-DD format. The season is read at midday UTC on this date, because a season boundary is an instant and a calendar day has to be reduced to one; on a day that carries a boundary, the half the midday falls in is the answer.
+     * The date to resolve, in YYYY-MM-DD format. The season is read at midday UTC on this date, because a season boundary is an instant and a calendar day has to be reduced to one; on a day that carries a boundary, the half the midday falls in is the answer. Within about two months of either end of the supported span, a date whose season opens or closes outside that span answers 400.
      */
     date: string;
     /**
@@ -9704,7 +9704,7 @@ export type PostAstrologyPlanetsResponse = PostAstrologyPlanetsResponses[keyof P
 export type PostAstrologyPlanetsMonthlyData = {
     body?: {
         /**
-         * Year for the monthly ephemeris (1900-2100). Defaults to the current year (UTC).
+         * Year for the monthly ephemeris (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -10292,7 +10292,7 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthData = {
     body?: never;
     path: {
         /**
-         * Calendar year (1900-2100).
+         * Calendar year, 1551 to 2649.
          */
         year: number;
         /**
@@ -11294,7 +11294,7 @@ export type PostAstrologyAspectsResponse = PostAstrologyAspectsResponses[keyof P
 export type PostAstrologyAspectsMonthlyData = {
     body?: {
         /**
-         * Year for the aspect calendar (1900-2100). Defaults to the current year (UTC).
+         * Year for the aspect calendar (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -11832,7 +11832,7 @@ export type PostAstrologyTransitsResponse = PostAstrologyTransitsResponses[keyof
 export type PostAstrologyTransitsMonthlyData = {
     body?: {
         /**
-         * Year for the monthly transit table (1900-2100). Defaults to the current year (UTC).
+         * Year for the monthly transit table (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -12596,7 +12596,7 @@ export type PostAstrologyTransitAspectsResponse = PostAstrologyTransitAspectsRes
 export type PostAstrologyParallelsMonthlyData = {
     body?: {
         /**
-         * Year for the declination calendar (1900-2100). Defaults to the current year (UTC).
+         * Year for the declination calendar (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -12828,7 +12828,7 @@ export type PostAstrologyParallelsMonthlyResponse = PostAstrologyParallelsMonthl
 export type PostAstrologyEclipticCrossingsData = {
     body?: {
         /**
-         * Year to scan for node passages (1900-2100).
+         * Year to scan for node passages (1551 to 2649).
          */
         year: number;
         /**
@@ -13258,7 +13258,7 @@ export type PostAstrologySolarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith. Chiron is included for charts from 1600 to 2500 and omitted outside that range.
              */
             planets: Array<{
                 /**
@@ -13667,7 +13667,7 @@ export type PostAstrologyLunarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith. Chiron is included for charts from 1600 to 2500 and omitted outside that range.
              */
             planets: Array<{
                 /**
@@ -16027,7 +16027,7 @@ export type PostAstrologyPlanetaryReturnsData = {
          */
         planet: 'Mercury' | 'Venus' | 'Mars' | 'Jupiter' | 'Saturn';
         /**
-         * Approximate date near the expected planetary return (YYYY-MM-DD). Provide a date within the expected return window. The algorithm searches from this starting point.
+         * Approximate date near the expected planetary return (YYYY-MM-DD). The return nearest this date is returned, so a date off by months still lands on a genuine return; during a retrograde loop the planet crosses its natal degree up to three times and the crossing nearest the date is the one returned.
          */
         approximateDate: string;
         /**
@@ -16249,7 +16249,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith. Chiron is included for charts from 1600 to 2500 and omitted outside that range.
              */
             planets: Array<{
                 /**
@@ -18984,7 +18984,7 @@ export type PostVedicAstrologyPlanetaryPositionsResponse = PostVedicAstrologyPla
 export type PostVedicAstrologyPlanetaryPositionsMonthlyData = {
     body?: {
         /**
-         * Year for monthly ephemeris (1900-2100). Defaults to the current year (UTC).
+         * Year for monthly ephemeris (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -23146,7 +23146,7 @@ export type PostVedicAstrologyPanchangBasicResponse = PostVedicAstrologyPanchang
 export type PostVedicAstrologyPanchangDetailedData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected. Calculations that read planetary positions support 1550-01-02 to 2650-01-22; outside that span they answer 400 with code date_out_of_range, and a calculation that reads a window around the date (a sunrise search, a run of days) may answer the same 400 for a date within a few days of either end.
          */
         date: string;
         /**
@@ -23846,7 +23846,7 @@ export type PostVedicAstrologyPanchangDetailedResponse = PostVedicAstrologyPanch
 export type PostVedicAstrologyPanchangChoghadiyaData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected. Calculations that read planetary positions support 1550-01-02 to 2650-01-22; outside that span they answer 400 with code date_out_of_range, and a calculation that reads a window around the date (a sunrise search, a run of days) may answer the same 400 for a date within a few days of either end.
          */
         date: string;
         /**
@@ -24058,7 +24058,7 @@ export type PostVedicAstrologyPanchangChoghadiyaResponse = PostVedicAstrologyPan
 export type PostVedicAstrologyPanchangHoraData = {
     body?: {
         /**
-         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected.
+         * Date in YYYY-MM-DD format. A single-digit month or day is accepted and zero-padded (2026-3-5 becomes 2026-03-05). Impossible calendar dates are rejected. Calculations that read planetary positions support 1550-01-02 to 2650-01-22; outside that span they answer 400 with code date_out_of_range, and a calculation that reads a window around the date (a sunrise search, a run of days) may answer the same 400 for a date within a few days of either end.
          */
         date: string;
         /**
@@ -27078,7 +27078,7 @@ export type PostVedicAstrologyAspectsResponse = PostVedicAstrologyAspectsRespons
 export type PostVedicAstrologyAspectsMonthlyData = {
     body?: {
         /**
-         * Year for monthly analysis (1900-2100). Defaults to the current year (UTC).
+         * Year for monthly analysis (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -27306,7 +27306,7 @@ export type PostVedicAstrologyAspectsMonthlyResponse = PostVedicAstrologyAspects
 export type PostVedicAstrologyAspectsLunarData = {
     body?: {
         /**
-         * Year for monthly analysis (1900-2100). Defaults to the current year (UTC).
+         * Year for monthly analysis (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -27863,7 +27863,7 @@ export type PostVedicAstrologyTransitResponse = PostVedicAstrologyTransitRespons
 export type PostVedicAstrologyTransitMonthlyData = {
     body?: {
         /**
-         * Year for monthly transit analysis (1900-2100). Defaults to the current year (UTC).
+         * Year for monthly transit analysis (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -28116,11 +28116,11 @@ export type PostVedicAstrologyParallelsData = {
          */
         time: string;
         /**
-         * Observer latitude in decimal degrees. Used for topocentric declination corrections.
+         * Birth latitude in decimal degrees, part of the birth record. Declinations are geocentric, as every published ephemeris prints them, so it does not move them.
          */
         latitude: number;
         /**
-         * Observer longitude in decimal degrees. Affects local time context for declination calculations.
+         * Birth longitude in decimal degrees, part of the birth record. Declinations are geocentric, so it does not move them; the instant comes from date, time and timezone.
          */
         longitude: number;
         /**
@@ -28324,7 +28324,7 @@ export type PostVedicAstrologyParallelsResponse = PostVedicAstrologyParallelsRes
 export type PostVedicAstrologyParallelsMonthlyData = {
     body?: {
         /**
-         * Year for monthly parallel analysis (1900-2100). Defaults to the current year (UTC).
+         * Year for monthly parallel analysis (1551 to 2649). Defaults to the current year (UTC).
          */
         year?: number;
         /**
@@ -28540,7 +28540,7 @@ export type PostVedicAstrologyParallelsMonthlyResponse = PostVedicAstrologyParal
 export type PostVedicAstrologyEclipticCrossingsData = {
     body?: {
         /**
-         * Year to scan for ecliptic crossings (1900-2100).
+         * Year to scan for ecliptic crossings (1551 to 2649).
          */
         year: number;
         /**
@@ -32333,7 +32333,7 @@ export type PostForecastSolarReturnResponses = {
                 timezone: number;
             };
             /**
-             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith.
+             * All 14 celestial bodies in the tropical zodiac with house placements: the 10 classical planets (Sun through Pluto), the lunar nodes (North Node, South Node, in the requested `nodeType` convention), Chiron, and Black Moon Lilith. Chiron is included for charts from 1600 to 2500 and omitted outside that range.
              */
             planets: Array<{
                 /**
@@ -35711,7 +35711,7 @@ export type PostChineseAstrologyBaziChartData = {
          */
         yearBoundary?: 'li-chun' | 'lunar-new-year';
         /**
-         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         * Which clock the day boundary and the hour branch are read from, so a correction that carries a birth across midnight moves the day pillar with the hour. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
          */
         hourClock?: 'clock' | 'local-mean' | 'solar';
     };
@@ -35867,7 +35867,7 @@ export type PostChineseAstrologyBaziChartResponses = {
              */
             time: string;
             /**
-             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force at the birth, so this is the literal number applied and never the name. A local time that never happened (the skipped hour of a daylight-saving change) is moved forward past the gap, and date, time and timezone then echo the clock that was running, which the day and hour pillars are read from.
              */
             timezone: number;
             /**
@@ -36254,7 +36254,7 @@ export type PostChineseAstrologyBaziLuckPillarsData = {
          */
         yearBoundary?: 'li-chun' | 'lunar-new-year';
         /**
-         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         * Which clock the day boundary and the hour branch are read from, so a correction that carries a birth across midnight moves the day pillar with the hour. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
          */
         hourClock?: 'clock' | 'local-mean' | 'solar';
         /**
@@ -36426,7 +36426,7 @@ export type PostChineseAstrologyBaziLuckPillarsResponses = {
              */
             time: string;
             /**
-             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force at the birth, so this is the literal number applied and never the name. A local time that never happened (the skipped hour of a daylight-saving change) is moved forward past the gap, and date, time and timezone then echo the clock that was running, which the day and hour pillars are read from.
              */
             timezone: number;
             /**
@@ -36709,7 +36709,7 @@ export type PostChineseAstrologyBaziDayMasterData = {
          */
         yearBoundary?: 'li-chun' | 'lunar-new-year';
         /**
-         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         * Which clock the day boundary and the hour branch are read from, so a correction that carries a birth across midnight moves the day pillar with the hour. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
          */
         hourClock?: 'clock' | 'local-mean' | 'solar';
     };
@@ -36865,7 +36865,7 @@ export type PostChineseAstrologyBaziDayMasterResponses = {
              */
             time: string;
             /**
-             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force at the birth, so this is the literal number applied and never the name. A local time that never happened (the skipped hour of a daylight-saving change) is moved forward past the gap, and date, time and timezone then echo the clock that was running, which the day and hour pillars are read from.
              */
             timezone: number;
             /**
@@ -36956,7 +36956,7 @@ export type PostChineseAstrologyBaziDayMasterResponses = {
          */
         factors: Array<{
             /**
-             * Which classical factor this is. month-command is de ling, whether the birth month season backs the Day Master element. rooting is de di, whether any branch stores a stem of that element. party is de shi, whether the other three stems help or spend it. Always English, whatever the lang parameter says.
+             * Which classical factor this is. month-command is de ling, whether the birth month season backs the Day Master element. rooting is de di, whether any branch stores a stem of that element. party is de shi, whether the other three stems, and the principal stems of the three branches outside the month, help or spend it. Always English, whatever the lang parameter says.
              */
             id: string;
             /**
@@ -37057,7 +37057,7 @@ export type PostChineseAstrologyBaziCompatibilityData = {
              */
             yearBoundary?: 'li-chun' | 'lunar-new-year';
             /**
-             * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+             * Which clock the day boundary and the hour branch are read from, so a correction that carries a birth across midnight moves the day pillar with the hour. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
              */
             hourClock?: 'clock' | 'local-mean' | 'solar';
         };
@@ -37094,7 +37094,7 @@ export type PostChineseAstrologyBaziCompatibilityData = {
              */
             yearBoundary?: 'li-chun' | 'lunar-new-year';
             /**
-             * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+             * Which clock the day boundary and the hour branch are read from, so a correction that carries a birth across midnight moves the day pillar with the hour. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
              */
             hourClock?: 'clock' | 'local-mean' | 'solar';
         };
@@ -37867,7 +37867,7 @@ export type PostChineseAstrologyBaziAnnualForecastData = {
          */
         yearBoundary?: 'li-chun' | 'lunar-new-year';
         /**
-         * Which clock the HOUR branch is read from. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
+         * Which clock the day boundary and the hour branch are read from, so a correction that carries a birth across midnight moves the day pillar with the hour. "clock" is civil time exactly as a birth certificate records it, which is what most calculators use and the default here. "local-mean" shifts to the mean sun over the birth longitude, a correction of up to 59 minutes at the edge of a wide time zone. "solar" adds the equation of time on top of that, up to a further 16 minutes. Both non-civil options need "longitude" in the request and return 400 without it.
          */
         hourClock?: 'clock' | 'local-mean' | 'solar';
         /**
@@ -38027,7 +38027,7 @@ export type PostChineseAstrologyBaziAnnualForecastResponses = {
              */
             time: string;
             /**
-             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force on the birth date, so this is the literal number applied and never the name.
+             * Decimal UTC offset the chart was computed with, resolved from whatever the request sent. An IANA name is resolved to the offset in force at the birth, so this is the literal number applied and never the name. A local time that never happened (the skipped hour of a daylight-saving change) is moved forward past the gap, and date, time and timezone then echo the clock that was running, which the day and hour pillars are read from.
              */
             timezone: number;
             /**
@@ -39898,7 +39898,7 @@ export type PostChineseAstrologyCalendarLunarDateData = {
      */
     body?: {
         /**
-         * Gregorian date to convert to the lunisolar calendar. Send this OR the lunar fields, never both.
+         * Gregorian date to convert to the lunisolar calendar. Send this OR the lunar fields, never both. Converts from the first day of lunar year 1551 to the last day of lunar year 2648, a little inside the supported date span, because numbering a lunar month needs the winter solstice on each side of it and placing a leap month needs the year before; a date outside that answers 400 date_out_of_range.
          */
         date?: string;
         /**
@@ -44495,7 +44495,7 @@ export type GetFengShuiPeriodsData = {
          */
         lang?: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
-         * Date to resolve the current period for, in YYYY-MM-DD format. Defaults to today in UTC. Useful for asking which period a building was completed in.
+         * Date to resolve the current period for, in YYYY-MM-DD format. Defaults to today in UTC. Useful for asking which period a building was completed in. A date landing exactly on the Li Chun day a period opens is placed in the outgoing period.
          */
         date?: string;
     };
@@ -44648,7 +44648,7 @@ export type GetFengShuiPeriodsResponses = {
          */
         date: string;
         /**
-         * The period in force on that date. Resolved at Li Chun, so a date in January belongs to the previous solar year and can fall in the previous period.
+         * The period in force on that date. Resolved at Li Chun, so a date in January belongs to the previous solar year and can fall in the previous period. A date is read at the start of its day in the Chinese calendar frame (UTC+8) and Li Chun falls part-way through its own day, so the date a period opens on still reads as the previous period, the same reading the Kua route gives a birth date.
          */
         currentPeriod: number;
         /**
@@ -53975,7 +53975,7 @@ export type PostNumerologyKarmicDebtData = {
          */
         month?: number;
         /**
-         * Birth day (checks Life Path)
+         * Birth day (checks Birth Day on its own, and Life Path with year and month)
          */
         day?: number;
         /**
@@ -71419,7 +71419,7 @@ export type GetDreamsSymbolsByIdData = {
     body?: never;
     path: {
         /**
-         * Unique symbol identifier in kebab-case (e.g., "snake", "being-chased", "teeth-falling-out").
+         * Unique symbol identifier in kebab-case (e.g., "snake", "chase-dreams", "losing-teeth").
          */
         id: string;
     };
