@@ -12110,7 +12110,7 @@ export type PostAstrologyTransitAspectsData = {
          */
         transitDate?: string;
         /**
-         * Transit time in HH:MM:SS format. Defaults to 12:00:00 (noon) if omitted.
+         * Transit time in HH:MM:SS format, read on the clock of the natal chart timezone at the transit date (an IANA zone takes the offset in force on that date, daylight saving included). Defaults to 12:00:00 (noon) if omitted.
          */
         transitTime?: string;
         /**
@@ -31075,7 +31075,7 @@ export type PostForecastTimelineResponses = {
              */
             date: string;
             /**
-             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             * Exact instant of the event as an ISO-8601 UTC datetime, to the nearest second. Astronomical events are refined to this instant by search, not reported at a daily sample point; a dasha-change is the period boundary itself, counted from the birth instant.
              */
             datetime: string;
             /**
@@ -31087,7 +31087,7 @@ export type PostForecastTimelineResponses = {
              */
             type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, or the critical cycle for biorhythm days. For a dasha-change, the Vimshottari lords outermost first, joined by a hyphen, then one space and the level: Saturn Mahadasha, Saturn-Mercury Antardasha, Saturn-Mercury-Ketu Pratyantardasha. Lords are always one of Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury. Never localized.
              */
             body: string;
             /**
@@ -31099,7 +31099,7 @@ export type PostForecastTimelineResponses = {
              */
             aspect?: string;
             /**
-             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant, rounded to three decimals. The instant is the moment the aspect perfects, so this reads 0. Absent for other event types.
              */
             orb?: number;
             /**
@@ -31357,7 +31357,7 @@ export type PostForecastTransitsResponses = {
              */
             date: string;
             /**
-             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             * Exact instant of the event as an ISO-8601 UTC datetime, to the nearest second. Astronomical events are refined to this instant by search, not reported at a daily sample point; a dasha-change is the period boundary itself, counted from the birth instant.
              */
             datetime: string;
             /**
@@ -31369,7 +31369,7 @@ export type PostForecastTransitsResponses = {
              */
             type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, or the critical cycle for biorhythm days. For a dasha-change, the Vimshottari lords outermost first, joined by a hyphen, then one space and the level: Saturn Mahadasha, Saturn-Mercury Antardasha, Saturn-Mercury-Ketu Pratyantardasha. Lords are always one of Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury. Never localized.
              */
             body: string;
             /**
@@ -31381,7 +31381,7 @@ export type PostForecastTransitsResponses = {
              */
             aspect?: string;
             /**
-             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant, rounded to three decimals. The instant is the moment the aspect perfects, so this reads 0. Absent for other event types.
              */
             orb?: number;
             /**
@@ -31660,7 +31660,7 @@ export type PostForecastSignificantDatesResponses = {
              */
             date: string;
             /**
-             * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+             * Exact instant of the event as an ISO-8601 UTC datetime, to the nearest second. Astronomical events are refined to this instant by search, not reported at a daily sample point; a dasha-change is the period boundary itself, counted from the birth instant.
              */
             datetime: string;
             /**
@@ -31672,7 +31672,7 @@ export type PostForecastSignificantDatesResponses = {
              */
             type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
             /**
-             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+             * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, or the critical cycle for biorhythm days. For a dasha-change, the Vimshottari lords outermost first, joined by a hyphen, then one space and the level: Saturn Mahadasha, Saturn-Mercury Antardasha, Saturn-Mercury-Ketu Pratyantardasha. Lords are always one of Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury. Never localized.
              */
             body: string;
             /**
@@ -31684,7 +31684,7 @@ export type PostForecastSignificantDatesResponses = {
              */
             aspect?: string;
             /**
-             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+             * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant, rounded to three decimals. The instant is the moment the aspect perfects, so this reads 0. Absent for other event types.
              */
             orb?: number;
             /**
@@ -32029,7 +32029,7 @@ export type PostForecastDigestResponses = {
                  */
                 date: string;
                 /**
-                 * Exact instant of the event as an ISO-8601 UTC datetime. Astronomical events are refined to this instant by search, not reported at a daily sample point.
+                 * Exact instant of the event as an ISO-8601 UTC datetime, to the nearest second. Astronomical events are refined to this instant by search, not reported at a daily sample point; a dasha-change is the period boundary itself, counted from the birth instant.
                  */
                 datetime: string;
                 /**
@@ -32041,7 +32041,7 @@ export type PostForecastDigestResponses = {
                  */
                 type: 'transit-aspect' | 'sign-ingress' | 'retrograde-station' | 'eclipse' | 'lunar-phase' | 'dasha-change' | 'critical-day';
                 /**
-                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, a mahadasha, antardasha, or pratyantardasha label for dasha changes, or the critical cycle for biorhythm days.
+                 * Primary subject of the event. A transiting planet for western events, Sun for a solar eclipse, Moon for a lunar eclipse or a new or full moon, or the critical cycle for biorhythm days. For a dasha-change, the Vimshottari lords outermost first, joined by a hyphen, then one space and the level: Saturn Mahadasha, Saturn-Mercury Antardasha, Saturn-Mercury-Ketu Pratyantardasha. Lords are always one of Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury. Never localized.
                  */
                 body: string;
                 /**
@@ -32053,7 +32053,7 @@ export type PostForecastDigestResponses = {
                  */
                 aspect?: string;
                 /**
-                 * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant. Tighter orb means a more exact and significant aspect.
+                 * For a transit-aspect, the separation in degrees from the exact aspect at the reported instant, rounded to three decimals. The instant is the moment the aspect perfects, so this reads 0. Absent for other event types.
                  */
                 orb?: number;
                 /**
@@ -52322,7 +52322,7 @@ export type PostNumerologyLifePathResponses = {
          */
         number: number;
         /**
-         * Full step-by-step breakdown of the 3-Cycle Pythagorean reduction. Shows how month, day, and year each reduce independently before combining into the final Life Path number.
+         * Every step of the calculation: the birth month, day and year each reduced, then combined into the final Life Path number.
          */
         calculation: string;
         /**
@@ -52360,11 +52360,11 @@ export type PostNumerologyLifePathResponses = {
              */
             title: string;
             /**
-             * Ten defining personality traits and energetic themes associated with this number. Useful for quick personality snapshots, tag clouds, and compatibility matching.
+             * Defining personality traits and energetic themes of this number. Useful for quick personality snapshots, tag clouds and compatibility matching.
              */
             keywords: Array<string>;
             /**
-             * In-depth 300 to 500 word interpretation covering personality, purpose, and life themes. Written by numerology experts with decades of practice. Suitable for full-page readings and detailed reports.
+             * Core interpretation of the number covering personality, purpose and life themes. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full-page reading.
              */
             description: string;
             /**
@@ -52396,7 +52396,7 @@ export type PostNumerologyLifePathResponse = PostNumerologyLifePathResponses[key
 export type PostNumerologyExpressionData = {
     body?: {
         /**
-         * Full birth name (first, middle, last)
+         * Full birth name (first, middle, last). A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName: string;
     };
@@ -52540,11 +52540,11 @@ export type PostNumerologyExpressionResponses = {
      */
     200: {
         /**
-         * Expression number (also called Destiny number) derived from all letters in the full birth name. Reveals natural talents, abilities, and the goals you are meant to achieve. Values: 1 to 9, 11, 22, or 33.
+         * Expression number (also called Destiny number) from every letter of the full birth name. Reveals natural talents, abilities, and the goals you are meant to achieve. Values: 1 to 9, 11, 22, or 33.
          */
         number: number;
         /**
-         * Full Pythagorean letter-to-number conversion showing every letter value in the birth name, grouped by word, then summed and reduced to the final Expression number.
+         * Every letter value of the birth name, grouped by name: each name is summed and reduced, then the names are added and reduced to the final Expression number.
          */
         calculation: string;
         /**
@@ -52552,7 +52552,7 @@ export type PostNumerologyExpressionResponses = {
          */
         type: 'single' | 'master';
         /**
-         * Whether a Karmic Debt number (13, 14, 16, 19) appeared during the name reduction. Indicates inherited challenges embedded in your given name.
+         * Whether a Karmic Debt number (13, 14, 16, 19) appeared in the final reduction, the sum of the reduced names. Indicates inherited challenges embedded in your given name.
          */
         hasKarmicDebt: boolean;
         /**
@@ -52586,7 +52586,7 @@ export type PostNumerologyExpressionResponses = {
              */
             keywords: Array<string>;
             /**
-             * Expert-written 300 to 500 word interpretation of the natural abilities, life mission, and destiny encoded in your birth name. Covers how these talents manifest across life stages.
+             * Core interpretation of the natural abilities, life mission and destiny the birth name describes. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -52618,7 +52618,7 @@ export type PostNumerologyExpressionResponse = PostNumerologyExpressionResponses
 export type PostNumerologyBridgeData = {
     body?: {
         /**
-         * Full legal birth name as it appears on the birth certificate. Used to calculate Expression, Soul Urge, and Personality numbers. Include first, middle, and last names separated by spaces.
+         * Full birth name as it appears on the birth certificate, first, middle and last names separated by spaces. Used to calculate the Expression, Soul Urge and Personality numbers. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName: string;
         /**
@@ -52770,7 +52770,7 @@ export type PostNumerologyBridgeError = PostNumerologyBridgeErrors[keyof PostNum
 
 export type PostNumerologyBridgeResponses = {
     /**
-     * Successfully calculated three Bridge Numbers with actionable harmony guidance
+     * Successfully calculated four Bridge Numbers with actionable harmony guidance
      */
     200: {
         /**
@@ -52807,9 +52807,42 @@ export type PostNumerologyBridgeResponses = {
             meaning: string;
         };
         /**
-         * Bridge between Expression and Personality numbers. Reveals the gap between your true talents (all letters) and how others perceive you (consonants only). A high bridge means others may not see your real capabilities, requiring you to present yourself more authentically.
+         * Bridge between Expression and Personality numbers, a pairing this API adds beside the classical bridges. Reveals the gap between your true talents (all letters) and how others perceive you (consonants only). A high bridge means others may not see your real capabilities, requiring you to present yourself more authentically.
          */
         expressionPersonality: {
+            /**
+             * Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment.
+             */
+            bridge: number;
+            from: {
+                /**
+                 * Name of the first core number in this bridge pair. Identifies which aspect of personality or destiny is being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the first core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            to: {
+                /**
+                 * Name of the second core number in this bridge pair. Identifies the other aspect of personality or destiny being compared.
+                 */
+                name: string;
+                /**
+                 * The reduced single-digit value (1 to 9) of the second core number used in the bridge calculation.
+                 */
+                number: number;
+            };
+            /**
+             * Actionable guidance for bridging the gap between these two aspects of your numerology profile. Explains what adjustments to make to bring these energies into harmony.
+             */
+            meaning: string;
+        };
+        /**
+         * Bridge between Soul Urge and Personality numbers, one of the classical bridges. Reveals the gap between your inner self (vowels only) and the image others meet first (consonants only). A high bridge means what you want and how you come across pull apart, calling for a more transparent presentation of your real motives.
+         */
+        soulUrgePersonality: {
             /**
              * Bridge number (0 to 8). The absolute difference between two core numerology numbers after reducing master numbers to single digits. 0 means the two aspects are already in natural harmony. Higher values indicate greater tension requiring conscious adjustment.
              */
@@ -52880,7 +52913,7 @@ export type PostNumerologyBridgeResponse = PostNumerologyBridgeResponses[keyof P
 export type PostNumerologySoulUrgeData = {
     body?: {
         /**
-         * Full birth name (vowels will be extracted)
+         * Full birth name. Its vowels A, E, I, O and U give the Soul Urge, so a name with none is refused. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName: string;
     };
@@ -53028,7 +53061,7 @@ export type PostNumerologySoulUrgeResponses = {
          */
         number: number;
         /**
-         * Full step-by-step Pythagorean reduction using only the vowels (A, E, I, O, U) from the birth name. Shows each vowel mapped to its numeric value, grouped by word, then summed and reduced to the final Soul Urge number.
+         * Every vowel (A, E, I, O, U) of the birth name with its value, grouped by name: each name is summed and reduced, then the names are added and reduced to the final Soul Urge number.
          */
         calculation: string;
         /**
@@ -53070,7 +53103,7 @@ export type PostNumerologySoulUrgeResponses = {
              */
             keywords: Array<string>;
             /**
-             * Expert-written 300 to 500 word exploration of the inner self, hidden desires, and emotional landscape. Reveals what the heart truly craves beneath the surface persona.
+             * Core interpretation of the inner self, hidden desires and emotional landscape. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -53102,7 +53135,7 @@ export type PostNumerologySoulUrgeResponse = PostNumerologySoulUrgeResponses[key
 export type PostNumerologyPersonalityData = {
     body?: {
         /**
-         * Full birth name (consonants will be extracted)
+         * Full birth name. Its consonants give the Personality number, so a name with none is refused. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName: string;
     };
@@ -53250,7 +53283,7 @@ export type PostNumerologyPersonalityResponses = {
          */
         number: number;
         /**
-         * Full step-by-step Pythagorean reduction using only the consonants from the birth name. Shows each consonant mapped to its numeric value, grouped by word, then summed and reduced to the final Personality number.
+         * Every consonant of the birth name with its value, grouped by name: each name is summed and reduced, then the names are added and reduced to the final Personality number.
          */
         calculation: string;
         /**
@@ -53292,7 +53325,7 @@ export type PostNumerologyPersonalityResponses = {
              */
             keywords: Array<string>;
             /**
-             * Expert-written 300 to 500 word analysis of the outer personality, social presence, and the image you project to the world. Reveals the gap between how others see you and who you truly are.
+             * Core interpretation of the outer personality, social presence and the image projected to the world. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -53468,11 +53501,11 @@ export type PostNumerologyBirthDayResponses = {
      */
     200: {
         /**
-         * Your Birth Day number, revealing the special talents and innate abilities you carry from the day you were born. Values range from 1 to 9 for single digits, or 11, 22 for Master Numbers (days 11 and 22 are never reduced).
+         * Your Birth Day number, revealing the special talents and innate abilities you carry from the day you were born. Values range from 1 to 9 for single digits, or 11, 22 for Master Numbers (the 11th, 22nd and 29th).
          */
         number: number;
         /**
-         * Step-by-step digit reduction of the birth day. Single-digit days (1 to 9) remain as-is, Master Number days (11, 22) are preserved, and all other double-digit days are reduced by summing their digits.
+         * Step-by-step digit reduction of the birth day. Single-digit days (1 to 9) remain as they are, a day that is or reduces to 11 or 22 keeps it, and every other two-digit day is reduced to one digit.
          */
         calculation: string;
         /**
@@ -53514,7 +53547,7 @@ export type PostNumerologyBirthDayResponses = {
              */
             keywords: Array<string>;
             /**
-             * Expert-written 300 to 500 word reading of the special abilities your birth day bestows. Covers how these gifts complement your Life Path and Expression numbers.
+             * Core interpretation of the special abilities the birth day brings and how they complement the Life Path and Expression numbers. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -53554,7 +53587,7 @@ export type PostNumerologyMaturityData = {
          */
         expression?: number;
         /**
-         * Full birth name to calculate Expression number automatically. Use instead of passing expression directly.
+         * Full birth name to calculate the Expression number automatically. Use instead of passing expression directly. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName?: string;
         /**
@@ -53756,7 +53789,7 @@ export type PostNumerologyMaturityResponses = {
              */
             keywords: Array<string>;
             /**
-             * Expert-written 300 to 500 word guide to the person you are evolving into. The Maturity number is the sum of Life Path and Expression, representing the wisdom gained through lived experience.
+             * Core interpretation of the person being grown into in the second half of life, the wisdom gained through lived experience. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -53788,7 +53821,7 @@ export type PostNumerologyMaturityResponse = PostNumerologyMaturityResponses[key
 export type PostNumerologyKarmicLessonsData = {
     body?: {
         /**
-         * Full birth name to analyze for missing numbers
+         * Full birth name to analyze for missing numbers. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName: string;
     };
@@ -53979,7 +54012,7 @@ export type PostNumerologyKarmicDebtData = {
          */
         day?: number;
         /**
-         * Full birth name (checks Expression, Soul Urge, Personality)
+         * Full birth name (checks Expression, Soul Urge, Personality). A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName?: string;
     };
@@ -54127,7 +54160,7 @@ export type PostNumerologyKarmicDebtResponses = {
          */
         hasKarmicDebt: boolean;
         /**
-         * All karmic debt numbers found (13, 14, 16, 19)
+         * All karmic debt numbers found (13, 14, 16, 19), each listed once, in core-number order: Life Path, Expression, Soul Urge, Personality, Birth Day.
          */
         debtNumbers: Array<number>;
         meanings: Array<{
@@ -54168,7 +54201,7 @@ export type PostNumerologyPersonalDayData = {
          */
         day: number;
         /**
-         * Target date in YYYY-MM-DD format. Defaults to today (UTC).
+         * Target date in YYYY-MM-DD format, in the years 100 to 2100. Defaults to today (UTC).
          */
         targetDate?: string;
     };
@@ -54359,11 +54392,11 @@ export type PostNumerologyPersonalMonthData = {
          */
         day: number;
         /**
-         * Target year for calculation (defaults to current year)
+         * Target year. Defaults to the current UTC year.
          */
         year?: number;
         /**
-         * Target calendar month to forecast (1-12, defaults to current month)
+         * Target calendar month to forecast (1 to 12). Defaults to the current UTC month.
          */
         targetMonth?: number;
     };
@@ -54546,7 +54579,7 @@ export type PostNumerologyPersonalYearData = {
          */
         day: number;
         /**
-         * Year to calculate (defaults to current year)
+         * Year to forecast. Defaults to the current UTC year; the Personal Year turns over on 1 January.
          */
         year?: number;
     };
@@ -54925,11 +54958,11 @@ export type PostNumerologyCompatibilityResponses = {
      */
     200: {
         /**
-         * Overall compatibility score (0-100)
+         * Overall compatibility score: 50% Life Path, 30% Expression and 20% Soul Urge pair scores, rounded. Every pair score runs 50 to 100, so the overall score does too.
          */
         overallScore: number;
         /**
-         * Compatibility rating: Highly Compatible, Very Compatible, Compatible, Moderately Compatible, or Challenging.
+         * Compatibility rating from overallScore: Highly Compatible (90 and up), Very Compatible (75 to 89), Compatible (60 to 74) or Moderately Compatible (50 to 59). The scale also names Challenging below 45, which no pair of core numbers reaches.
          */
         rating: string;
         lifePath: {
@@ -54942,7 +54975,7 @@ export type PostNumerologyCompatibilityResponses = {
              */
             person2: number;
             /**
-             * Life Path compatibility score (0-100)
+             * Life Path compatibility score (50-100)
              */
             compatibility: number;
             /**
@@ -54960,7 +54993,7 @@ export type PostNumerologyCompatibilityResponses = {
              */
             person2: number;
             /**
-             * Expression compatibility score (0-100)
+             * Expression compatibility score (50-100)
              */
             compatibility: number;
             /**
@@ -54978,7 +55011,7 @@ export type PostNumerologyCompatibilityResponses = {
              */
             person2: number;
             /**
-             * Soul Urge compatibility score (0-100)
+             * Soul Urge compatibility score (50-100)
              */
             compatibility: number;
             /**
@@ -55006,7 +55039,7 @@ export type PostNumerologyCompatibilityResponse = PostNumerologyCompatibilityRes
 export type PostNumerologyChartData = {
     body?: {
         /**
-         * Full birth name as it appears on the birth certificate. Used for all letter-based Pythagorean numerology calculations including Expression, Soul Urge, Personality, and Karmic Lessons.
+         * Full birth name as it appears on the birth certificate. Used for every letter-based number in the chart: Expression, Soul Urge, Personality, Karmic Lessons, Hidden Passion, Subconscious Self and the special letters. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         fullName: string;
         /**
@@ -55022,7 +55055,7 @@ export type PostNumerologyChartData = {
          */
         day: number;
         /**
-         * Year for Personal Year calculation (defaults to current year)
+         * Calendar year for the Personal Year, defaults to the current UTC year. It moves the Personal Year only: the nested personalMonth and maturityStatus.currentAge always read the current UTC date.
          */
         currentYear?: number;
     };
@@ -55219,7 +55252,7 @@ export type PostNumerologyChartResponses = {
                      */
                     keywords: Array<string>;
                     /**
-                     * Authoritative 300 to 500 word interpretation covering personality, life purpose, and core themes. Written by numerology experts and suitable for full-page readings or PDF report generation.
+                     * Core interpretation of the Life Path covering personality, life purpose and core themes. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
                      */
                     description: string;
                     /**
@@ -55281,7 +55314,7 @@ export type PostNumerologyChartResponses = {
                      */
                     keywords: Array<string>;
                     /**
-                     * Expert-written 300 to 500 word analysis of natural abilities, life goals, and the talents your birth name reveals. Suitable for detailed readings and personality assessments.
+                     * Core interpretation of the natural abilities, life goals and talents the birth name describes. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
                      */
                     description: string;
                     /**
@@ -55343,7 +55376,7 @@ export type PostNumerologyChartResponses = {
                      */
                     keywords: Array<string>;
                     /**
-                     * Expert-written 300 to 500 word exploration of the inner self, hidden desires, and emotional landscape. Reveals what the heart truly craves beneath the surface persona.
+                     * Core interpretation of the inner self, hidden desires and emotional landscape. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
                      */
                     description: string;
                     /**
@@ -55405,7 +55438,7 @@ export type PostNumerologyChartResponses = {
                      */
                     keywords: Array<string>;
                     /**
-                     * Expert-written 300 to 500 word analysis of the outer personality, social presence, and the image you project to the world. Reveals the gap between perception and inner truth.
+                     * Core interpretation of the outer personality, social presence and the image projected to the world. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
                      */
                     description: string;
                     /**
@@ -55467,7 +55500,7 @@ export type PostNumerologyChartResponses = {
                      */
                     keywords: Array<string>;
                     /**
-                     * Expert-written 300 to 500 word reading of the special abilities your birth day bestows. Covers how these gifts complement your Life Path and Expression numbers.
+                     * Core interpretation of the special abilities the birth day brings and how they complement the Life Path and Expression numbers. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
                      */
                     description: string;
                     /**
@@ -55529,7 +55562,7 @@ export type PostNumerologyChartResponses = {
                      */
                     keywords: Array<string>;
                     /**
-                     * Expert-written 300 to 500 word guide to the person you are evolving into. The Maturity number represents the wisdom gained through lived experience and reveals your ultimate destination.
+                     * Core interpretation of the person being grown into in the second half of life, the wisdom gained through lived experience. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
                      */
                     description: string;
                     /**
@@ -55604,7 +55637,7 @@ export type PostNumerologyChartResponses = {
                  */
                 hasKarmicDebt: boolean;
                 /**
-                 * List of karmic debt numbers found (13=laziness, 14=abuse of freedom, 16=ego destruction, 19=selfishness).
+                 * List of karmic debt numbers found (13=laziness, 14=abuse of freedom, 16=ego destruction, 19=selfishness), each listed once, in core-number order: Life Path, Expression, Soul Urge, Personality, Birth Day.
                  */
                 debtNumbers: Array<number>;
                 /**
@@ -55662,11 +55695,11 @@ export type PostNumerologyChartResponses = {
                  */
                 advice: string;
                 /**
-                 * Personal Month forecast nested within the Personal Year cycle.
+                 * Personal Month forecast for the current UTC calendar month, applied to the Personal Year above. With a currentYear other than the current year, it pairs that Personal Year with the current month.
                  */
                 personalMonth: {
                     /**
-                     * Personal Month number (1-9).
+                     * Personal Month number (1-9): the Personal Year above plus the current UTC calendar month, reduced to one digit.
                      */
                     personalMonth: number;
                     /**
@@ -55680,7 +55713,7 @@ export type PostNumerologyChartResponses = {
                 };
             };
             /**
-             * Four Pinnacle numbers representing major life phases with age ranges and meanings.
+             * Four Pinnacle numbers representing major life phases, master numbers 11, 22 and 33 kept, with age ranges and meanings.
              */
             pinnacles: Array<{
                 /**
@@ -55696,7 +55729,7 @@ export type PostNumerologyChartResponses = {
                  */
                 startAge: number;
                 /**
-                 * Age when this phase ends. Null for the 4th Pinnacle (lasts rest of life).
+                 * Last whole age of this phase, inclusive. The First Pinnacle ends at 36 minus the Life Path reduced to one digit and each later phase starts the year after; null for the 4th Pinnacle (lasts rest of life).
                  */
                 endAge: number | null;
                 /**
@@ -55722,7 +55755,7 @@ export type PostNumerologyChartResponses = {
                 };
             }>;
             /**
-             * Four Challenge numbers representing life obstacles aligned with Pinnacle timing.
+             * Four Challenge numbers representing life obstacles. The 3rd (Main) Challenge lasts for life; the other three are timed approximately with the Pinnacle phases.
              */
             challenges: Array<{
                 /**
@@ -55734,11 +55767,11 @@ export type PostNumerologyChartResponses = {
                  */
                 number: number;
                 /**
-                 * Age when this Challenge period begins.
+                 * Age when this Challenge is most felt. The 3rd (Main) Challenge starts at 0 and lasts for life; the 1st, 2nd and 4th take the ages of their Pinnacle phase as an approximation, since Challenges have no fixed durations.
                  */
                 startAge: number;
                 /**
-                 * Age when this period ends. Null for the 4th Challenge.
+                 * Last whole age of the period, inclusive, approximate as startAge explains. Null for the 3rd (Main) Challenge and the 4th, which last for life.
                  */
                 endAge: number | null;
                 /**
@@ -55768,7 +55801,7 @@ export type PostNumerologyChartResponses = {
              */
             hiddenPassion: {
                 /**
-                 * Hidden Passion number (1-9). The most frequently occurring number in the birth name.
+                 * Hidden Passion number (1-9). The most frequently occurring number in the birth name; when several tie, the lowest of them.
                  */
                 number: number;
                 /**
@@ -55776,7 +55809,7 @@ export type PostNumerologyChartResponses = {
                  */
                 count: number;
                 /**
-                 * All numbers tied for highest frequency (usually one, sometimes multiple).
+                 * All numbers tied for highest frequency, in ascending order (usually one, sometimes multiple).
                  */
                 allPassions: Array<number>;
                 /**
@@ -55852,7 +55885,7 @@ export type PostNumerologyChartResponses = {
                  */
                 firstVowel: {
                     /**
-                     * First vowel in the full name (A, E, I, O, or U).
+                     * First vowel of the first name (A, E, I, O or U). A first name with none of them takes its Y, the vowel sound of names like Lynn; one with no Y either takes the first A, E, I, O or U of the rest of the name.
                      */
                     letter: string;
                     /**
@@ -55912,7 +55945,7 @@ export type PostNumerologyChartResponses = {
              */
             isActive: boolean;
             /**
-             * Current age calculated from the birth year.
+             * The current UTC calendar year minus the birth year. The birthday is not considered, so before the birthday it reads one more than the age in whole years, and currentYear does not move it.
              */
             currentAge: number;
             /**
@@ -56143,7 +56176,7 @@ export type GetNumerologyMeaningsByNumberResponses = {
              */
             keywords: Array<string>;
             /**
-             * Authoritative 300 to 500 word interpretation covering personality, life purpose, and core themes. Written by numerology experts and suitable for full-page readings.
+             * Core interpretation of the number covering personality, life purpose and core themes. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -56352,7 +56385,7 @@ export type PostNumerologyDailyResponses = {
              */
             keywords: Array<string>;
             /**
-             * Expert-written 300 to 500 word interpretation of the daily energy. Covers personality resonance, life themes, and how this number influences the day.
+             * Core interpretation of the number of the day: its personality resonance, life themes and how it colors the day. Together with the strengths, challenges, career, relationships and spirituality fields it makes a full reading.
              */
             description: string;
             /**
@@ -56384,7 +56417,7 @@ export type PostNumerologyDailyResponse = PostNumerologyDailyResponses[keyof Pos
 export type PostNumerologyChaldeanData = {
     body?: {
         /**
-         * The name to analyze. Chaldean tradition uses the name a person is most known by, not necessarily the full legal birth name.
+         * The name to analyze. Chaldean tradition uses the name a person is most known by, not necessarily the full legal birth name. It needs at least one vowel (A, E, I, O, U) and one consonant, since the Soul Urge is read from the vowels and the Personality from the consonants; Y counts as a consonant. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         name: string;
     };
@@ -56536,7 +56569,7 @@ export type PostNumerologyChaldeanResponses = {
          */
         destiny: {
             /**
-             * Raw sum of the Chaldean letter values before any reduction.
+             * The sum the compound is read from: for a one-word name, its Chaldean letter total; for a longer name, the sum of each word reduced to its single number, as Cheiro works John Smith (18 to 9, 17 to 8, total 17).
              */
             total: number;
             /**
@@ -56548,7 +56581,7 @@ export type PostNumerologyChaldeanResponses = {
              */
             root: number;
             /**
-             * Letter-by-letter Chaldean breakdown summed to the total, then to compound and root.
+             * Letter-by-letter Chaldean breakdown, name by name for a longer name, summed to the total, then to compound and root.
              */
             calculation: string;
             /**
@@ -56582,7 +56615,7 @@ export type PostNumerologyChaldeanResponses = {
          */
         soulUrge: {
             /**
-             * Raw sum of the Chaldean letter values before any reduction.
+             * The sum the compound is read from: for a one-word name, its Chaldean letter total; for a longer name, the sum of each word reduced to its single number, as Cheiro works John Smith (18 to 9, 17 to 8, total 17).
              */
             total: number;
             /**
@@ -56594,7 +56627,7 @@ export type PostNumerologyChaldeanResponses = {
              */
             root: number;
             /**
-             * Letter-by-letter Chaldean breakdown summed to the total, then to compound and root.
+             * Letter-by-letter Chaldean breakdown, name by name for a longer name, summed to the total, then to compound and root.
              */
             calculation: string;
             /**
@@ -56628,7 +56661,7 @@ export type PostNumerologyChaldeanResponses = {
          */
         personality: {
             /**
-             * Raw sum of the Chaldean letter values before any reduction.
+             * The sum the compound is read from: for a one-word name, its Chaldean letter total; for a longer name, the sum of each word reduced to its single number, as Cheiro works John Smith (18 to 9, 17 to 8, total 17).
              */
             total: number;
             /**
@@ -56640,7 +56673,7 @@ export type PostNumerologyChaldeanResponses = {
              */
             root: number;
             /**
-             * Letter-by-letter Chaldean breakdown summed to the total, then to compound and root.
+             * Letter-by-letter Chaldean breakdown, name by name for a longer name, summed to the total, then to compound and root.
              */
             calculation: string;
             /**
@@ -56886,7 +56919,7 @@ export type GetNumerologyCompoundNumberByNumberResponse = GetNumerologyCompoundN
 export type PostNumerologyDualData = {
     body?: {
         /**
-         * The name to analyze in both systems.
+         * The name to analyze in both systems. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         name: string;
     };
@@ -57065,7 +57098,7 @@ export type PostNumerologyDualResponses = {
              */
             root: number;
             /**
-             * Raw Chaldean letter total.
+             * The sum the compound is read from: for a one-word name, its Chaldean letter total; for a longer name, the sum of each word reduced to its single number, as Cheiro works John Smith (18 to 9, 17 to 8, total 17).
              */
             total: number;
             /**
@@ -57126,7 +57159,7 @@ export type PostNumerologyDualResponse = PostNumerologyDualResponses[keyof PostN
 export type PostNumerologyBusinessNameData = {
     body?: {
         /**
-         * The business or brand name to evaluate.
+         * The business or brand name to evaluate. A name in any script is converted to Latin letters before it is counted, Cyrillic and Greek as the passport spelling and accents folded to the base letter, and the calculation lists the letters counted. For a script that does not write its vowels, send the Latin spelling the person uses.
          */
         name: string;
     };
@@ -57274,7 +57307,7 @@ export type PostNumerologyBusinessNameResponses = {
          */
         name: string;
         /**
-         * Raw Chaldean letter total of the name.
+         * The sum the compound is read from: for a one-word name, its Chaldean letter total; for a longer name, the sum of each word reduced to its single number, as Cheiro works John Smith (18 to 9, 17 to 8, total 17).
          */
         total: number;
         /**
@@ -61584,13 +61617,21 @@ export type PostTarotYesNoResponses = {
          */
         seed?: string;
         /**
-         * Tarot-derived answer. Yes = upright card supports a positive outcome. No = reversed card suggests obstacles. Maybe = inherently ambiguous card drawn (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) signaling pause, reflection, or shifting circumstances.
+         * Tarot-derived answer. Yes = upright card supports a positive outcome. No = reversed card suggests obstacles. Maybe = inherently ambiguous card drawn (The Hanged Man, Wheel of Fortune, Temperance, Two of Swords, Four of Swords) signaling pause, reflection, or shifting circumstances. Always English, whatever the lang parameter says, so it stays safe to compare against in code. Use answerLocalized for anything a reader sees.
          */
         answer: 'Yes' | 'No' | 'Maybe';
         /**
-         * Confidence level of the answer. Strong = Major Arcana card drawn (powerful, definitive cosmic energy). Qualified = Minor Arcana card drawn (nuanced, situational guidance).
+         * Answer in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        answerLocalized?: string;
+        /**
+         * Confidence level of the answer. Strong = Major Arcana card drawn (powerful, definitive cosmic energy). Qualified = Minor Arcana card drawn (nuanced, situational guidance). Always English, whatever the lang parameter says. Use strengthLocalized for anything a reader sees.
          */
         strength: 'Strong' | 'Qualified';
+        /**
+         * Answer strength in the requested language, for display only. Present only when lang is set to a language other than English, since in English it would repeat its canonical partner field exactly. Never compare against this value, compare against the canonical field beside it.
+         */
+        strengthLocalized?: string;
         card: {
             /**
              * Unique card identifier in kebab-case (e.g. the-fool, ace-of-cups).

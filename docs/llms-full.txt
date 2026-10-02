@@ -1761,16 +1761,16 @@ const { data } = await roxy.vastu.getDevata({ path: { id: 'jayanta' } });
 
 ## Numerology: `roxy.numerology`
 
-Numerology API to calculate life path, expression, soul urge, personality, and maturity numbers, with Pinnacle and Ch...
+Numerology API for life path numbers, complete numerology charts and compatibility, in both Pythagorean and Chaldean...
 
 ```typescript
-// Calculate Life Path number - Most important numerology calculation
+// Calculate Life Path number - Calculator and meaning API
 const { data } = await roxy.numerology.calculateLifePath({ body: { year: 1990, month: 7, day: 15 } });
 
-// Calculate Expression number - Natural talents and life goals
+// Calculate Expression number - Destiny number calculator API
 const { data } = await roxy.numerology.calculateExpression({ body: { fullName: 'John William Smith' } });
 
-// Calculate Bridge Numbers - Harmonize different aspects of personality
+// Calculate Bridge Numbers - Numerology bridge numbers API
 const { data } = await roxy.numerology.calculateBridgeNumbers({
   body: {
     fullName: 'John William Smith',
@@ -1780,16 +1780,16 @@ const { data } = await roxy.numerology.calculateBridgeNumbers({
   },
 });
 
-// Calculate Soul Urge number - Inner motivations and desires
+// Calculate Soul Urge number - Heart Desire number calculator API
 const { data } = await roxy.numerology.calculateSoulUrge({ body: { fullName: 'John William Smith' } });
 
-// Calculate Personality number - How others perceive you
+// Calculate Personality number - Outer personality numerology API
 const { data } = await roxy.numerology.calculatePersonality({ body: { fullName: 'John William Smith' } });
 
-// Calculate Birth Day number - Special talents from day of birth
+// Calculate Birth Day number - Birthday numerology API
 const { data } = await roxy.numerology.calculateBirthDay({ body: { day: 23 } });
 
-// Calculate Maturity number - Who you become in later life
+// Calculate Maturity number - Realization number numerology API
 const { data } = await roxy.numerology.calculateMaturity({
   body: {
     lifePath: 5,
@@ -1801,10 +1801,10 @@ const { data } = await roxy.numerology.calculateMaturity({
   },
 });
 
-// Analyze Karmic Lessons - Life lessons from missing numbers
+// Analyze Karmic Lessons - Missing numbers numerology API
 const { data } = await roxy.numerology.analyzeKarmicLessons({ body: { fullName: 'John William Smith' } });
 
-// Detect Karmic Debt numbers - Past life challenges (13, 14, 16, 19)
+// Detect Karmic Debt numbers - Karmic debt 13, 14, 16, 19 API
 const { data } = await roxy.numerology.checkKarmicDebt({
   body: {
     year: 1990,
@@ -1814,16 +1814,16 @@ const { data } = await roxy.numerology.checkKarmicDebt({
   },
 });
 
-// Calculate Personal Day - Daily personalized numerology forecast
+// Calculate Personal Day - Daily numerology forecast API
 const { data } = await roxy.numerology.calculatePersonalDay({ body: { month: 7, day: 18, targetDate: '2026-04-04' } });
 
-// Calculate Personal Month - Monthly numerology forecast
+// Calculate Personal Month - Monthly numerology forecast API
 const { data } = await roxy.numerology.calculatePersonalMonth({ body: { month: 7, day: 18, year: 2026, targetMonth: 4 } });
 
-// Calculate Personal Year - Annual cycle and forecast for current year
+// Calculate Personal Year - Personal Year number forecast API
 const { data } = await roxy.numerology.calculatePersonalYear({ body: { month: 7, day: 15, year: 2025 } });
 
-// Calculate Compatibility - Relationship dynamics between two people
+// Calculate numerology compatibility - Love match scoring API
 const { data } = await roxy.numerology.calculateNumCompatibility({
   body: {
     person1: {
@@ -1847,7 +1847,7 @@ const { data } = await roxy.numerology.calculateNumCompatibility({
   },
 });
 
-// Generate Complete Numerology Chart - Full profile analysis
+// Generate numerology chart - Complete numerology reading API
 const { data } = await roxy.numerology.generateNumerologyChart({
   body: {
     fullName: 'John William Smith',
@@ -1858,22 +1858,22 @@ const { data } = await roxy.numerology.generateNumerologyChart({
   },
 });
 
-// Get Number Meaning - Interpretation for any number 1-9, 11, 22, 33
+// Get number meaning - Numerology number meanings API
 const { data } = await roxy.numerology.getNumberMeaning({ path: { number: '5' } });
 
-// Get daily numerology number - Number of the Day with interpretation
+// Get daily numerology number - Number of the Day API
 const { data } = await roxy.numerology.getDailyNumber({ body: { seed: 'user123', date: '2026-03-06' } });
 
-// Chaldean numerology name reading - Destiny, compound number, planetary ruler
+// Calculate Chaldean numerology - Chaldean name number calculator API
 const { data } = await roxy.numerology.calculateChaldean({ body: { name: 'Helen' } });
 
-// Compound number meaning - Cheiro Chaldean interpretation 10 to 52
+// Get compound number meaning - Chaldean compound numbers 10 to 52 API
 const { data } = await roxy.numerology.getCompoundNumber({ path: { number: '23' } });
 
-// Dual numerology - Pythagorean and Chaldean name numbers in one call
+// Calculate dual numerology - Pythagorean and Chaldean name number API
 const { data } = await roxy.numerology.calculateDual({ body: { name: 'David' } });
 
-// Business name numerology - Chaldean brand name analysis and lucky numbers
+// Calculate business name numerology - Brand name numerology API
 const { data } = await roxy.numerology.calculateBusinessName({ body: { name: 'Ford' } });
 ```
 
