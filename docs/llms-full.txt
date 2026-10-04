@@ -49,7 +49,7 @@ const { data } = await roxy.astrology.generateNatalChart({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     houseSystem: 'placidus',
   },
@@ -63,7 +63,7 @@ const { data } = await roxy.astrology.getPlanetaryPositions({
     nodeType: 'true',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
   },
 });
 
@@ -93,7 +93,7 @@ const { data } = await roxy.astrology.calculateSynastry({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
       name: 'Alex',
     },
@@ -102,7 +102,7 @@ const { data } = await roxy.astrology.calculateSynastry({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
       name: 'Alex',
     },
@@ -117,7 +117,7 @@ const { data } = await roxy.astrology.calculateHouses({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     houseSystem: 'placidus',
   },
 });
@@ -127,7 +127,7 @@ const { data } = await roxy.astrology.calculateAspects({
   body: {
     date: '1990-07-15',
     time: '14:30:00',
-    timezone: -5,
+    timezone: 'America/New_York',
     planets: ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'],
     aspectTypes: ['CONJUNCTION', 'OPPOSITION', 'TRINE', 'SQUARE'],
   },
@@ -135,7 +135,12 @@ const { data } = await roxy.astrology.calculateAspects({
 
 // Monthly Aspects - Tropical aspect calendar for an entire month
 const { data } = await roxy.astrology.getMonthlyTropicalAspects({
-  body: { year: 2026, month: 3, timezone: -5, nodeType: 'true' },
+  body: {
+    year: 2026,
+    month: 3,
+    timezone: 'America/New_York',
+    nodeType: 'true',
+  },
 });
 
 // Detect aspect patterns - Grand Trine, Kite, T-Square, Grand Cross, Yod, Mystic Rectangle, Stellium
@@ -162,7 +167,12 @@ const { data } = await roxy.astrology.calculateTransits({
 
 // Monthly Transits - Tropical sign ingresses for an entire month
 const { data } = await roxy.astrology.getMonthlyTropicalTransits({
-  body: { year: 2026, month: 3, timezone: -5, nodeType: 'true' },
+  body: {
+    year: 2026,
+    month: 3,
+    timezone: 'America/New_York',
+    nodeType: 'true',
+  },
 });
 
 // Transit Aspects - Detailed transit-to-natal aspect analysis with interpretations
@@ -173,7 +183,7 @@ const { data } = await roxy.astrology.calculateTransitAspects({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
     },
     transitDate: '2026-02-03',
@@ -190,14 +200,14 @@ const { data } = await roxy.astrology.getMonthlyDeclinationParallels({
   body: {
     year: 2026,
     month: 3,
-    timezone: -5,
+    timezone: 'America/New_York',
     orb: 1.5,
     nodeType: 'true',
   },
 });
 
 // Ecliptic Crossings - Node passages for a whole year
-const { data } = await roxy.astrology.getPlanetaryNodePassages({ body: { year: 2026, timezone: -5 } });
+const { data } = await roxy.astrology.getPlanetaryNodePassages({ body: { year: 2026, timezone: 'America/New_York' } });
 
 // Solar Return Chart - Annual birthday forecast with relocated chart
 const { data } = await roxy.astrology.generateSolarReturn({
@@ -207,7 +217,7 @@ const { data } = await roxy.astrology.generateSolarReturn({
     returnYear: 2026,
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     houseSystem: 'placidus',
   },
 });
@@ -220,7 +230,7 @@ const { data } = await roxy.astrology.generateLunarReturn({
     returnDate: '2026-02-12',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     houseSystem: 'placidus',
   },
 });
@@ -233,7 +243,7 @@ const { data } = await roxy.astrology.generateCompositeChart({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
     },
     person2: {
@@ -241,7 +251,7 @@ const { data } = await roxy.astrology.generateCompositeChart({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
     },
     houseSystem: 'placidus',
@@ -256,7 +266,7 @@ const { data } = await roxy.astrology.calculateCompatibility({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
     },
     person2: {
@@ -264,7 +274,7 @@ const { data } = await roxy.astrology.calculateCompatibility({
       time: '14:30:00',
       latitude: 40.7128,
       longitude: -74.006,
-      timezone: -5,
+      timezone: 'America/New_York',
       nodeType: 'true',
     },
   },
@@ -303,7 +313,7 @@ const { data } = await roxy.astrology.generatePlanetaryReturn({
     approximateDate: '2026-08-15',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     houseSystem: 'placidus',
   },
 });
@@ -316,7 +326,7 @@ const { data } = await roxy.astrology.generateAstrocartography({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
   },
 });
@@ -343,7 +353,7 @@ const { data } = await roxy.astrology.generateLocalSpace({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
   },
 });
 
@@ -355,7 +365,7 @@ const { data } = await roxy.astrology.generateFixedStars({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
   },
 });
@@ -367,7 +377,7 @@ const { data } = await roxy.astrology.calculateArabicLots({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     houseSystem: 'placidus',
   },
@@ -380,7 +390,7 @@ const { data } = await roxy.astrology.generateAsteroids({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     houseSystem: 'placidus',
   },
@@ -393,7 +403,7 @@ const { data } = await roxy.astrology.generateLilith({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     houseSystem: 'placidus',
   },
@@ -406,7 +416,7 @@ const { data } = await roxy.astrology.generateProgressions({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     targetDate: '2025-07-15',
   },
@@ -419,7 +429,7 @@ const { data } = await roxy.astrology.generateSolarArc({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     targetDate: '2025-07-15',
   },
@@ -432,7 +442,7 @@ const { data } = await roxy.astrology.generateProfections({
     time: '14:30:00',
     latitude: 40.7128,
     longitude: -74.006,
-    timezone: -5,
+    timezone: 'America/New_York',
     nodeType: 'true',
     targetDate: '2025-08-04',
     houseSystem: 'placidus',

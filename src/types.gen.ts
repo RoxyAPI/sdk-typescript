@@ -1057,7 +1057,7 @@ export type AstrocartographyResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -1570,7 +1570,7 @@ export type FixedStarsResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -1689,7 +1689,7 @@ export type ArabicLotsResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -1793,7 +1793,7 @@ export type AsteroidsResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -1905,7 +1905,7 @@ export type LilithResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -2021,7 +2021,7 @@ export type ProgressionsResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -2183,7 +2183,7 @@ export type SolarArcResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -2287,7 +2287,7 @@ export type ProfectionsResponse = {
          */
         longitude: number;
         /**
-         * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+         * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
          */
         timezone: number;
     };
@@ -13253,7 +13253,7 @@ export type PostAstrologySolarReturnResponses = {
                  */
                 longitude: number;
                 /**
-                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+                 * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
                  */
                 timezone: number;
             };
@@ -13662,7 +13662,7 @@ export type PostAstrologyLunarReturnResponses = {
                  */
                 longitude: number;
                 /**
-                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+                 * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
                  */
                 timezone: number;
             };
@@ -14076,7 +14076,7 @@ export type PostAstrologyCompositeChartResponses = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
              */
             timezone: number;
         };
@@ -14101,7 +14101,7 @@ export type PostAstrologyCompositeChartResponses = {
              */
             longitude: number;
             /**
-             * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+             * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
              */
             timezone: number;
         };
@@ -16244,7 +16244,7 @@ export type PostAstrologyPlanetaryReturnsResponses = {
                  */
                 longitude: number;
                 /**
-                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+                 * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
                  */
                 timezone: number;
             };
@@ -32328,7 +32328,7 @@ export type PostForecastSolarReturnResponses = {
                  */
                 longitude: number;
                 /**
-                 * Timezone offset from UTC in decimal hours. Examples: New York = -5, London = 0, India = 5.5, Tokyo = 9.
+                 * Timezone offset from UTC in decimal hours, resolved for the birth date. Examples: New York = -5 in winter and -4 in summer, London = 0, India = 5.5, Tokyo = 9.
                  */
                 timezone: number;
             };
