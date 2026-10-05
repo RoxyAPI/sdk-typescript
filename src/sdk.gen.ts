@@ -3997,7 +3997,7 @@ export class AngelNumbers extends HeyApiClient {
     /**
      * List all angel numbers - Angel number catalog API
      *
-     * Retrieve the complete database of angel numbers with summary information. Returns 75+ angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), the mirror families (X0X like 101-909, X1X, four-digit mirrors like 1212-2121), palindromes (1221, 1331), compound sequences (911, 1122), and sequential numbers (123, 1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
+     * Retrieve the angel number catalog with summary information. Returns 75+ angel numbers covering root digits (0-9), master numbers (11, 22, 33), double digits (44-99), triple repeating (111-999), quad repeating (1111-9999), the mirror families (X0X like 101-909, X1X, four-digit mirrors like 1212-2121), palindromes (1221, 1331), compound sequences (911, 1122), and sequential numbers (123, 1234). Supports optional type filtering. Perfect for building angel number explorer apps, reference guides, and spiritual databases.
      */
     public listAngelNumbers<ThrowOnError extends boolean = false>(options?: Options<GetAngelNumbersNumbersData, ThrowOnError>): RequestResult<GetAngelNumbersNumbersResponses, GetAngelNumbersNumbersErrors, ThrowOnError> {
         return (options?.client ?? this.client).get<GetAngelNumbersNumbersResponses, GetAngelNumbersNumbersErrors, ThrowOnError>({
@@ -4010,7 +4010,7 @@ export class AngelNumbers extends HeyApiClient {
     /**
      * Get angel number meaning - Angel number lookup API
      *
-     * Get the complete, authoritative meaning and interpretation for a specific angel number. Returns detailed spiritual, love, career, money, and twin flame interpretations, plus a biblical perspective and a shadow reading, along with keywords, affirmation, and actionable steps. Covers 75+ angel numbers including 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, 1212, 1234, and more. Authoritative interpretations covering all major angel number patterns.
+     * Get the full meaning and interpretation for a specific angel number. Returns detailed spiritual, love, career, money, and twin flame interpretations, plus a biblical perspective and a shadow reading, along with keywords, affirmation, and actionable steps. Covers 75+ angel numbers including 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, 1212, 1234, and more, across every major angel number pattern.
      */
     public getAngelNumber<ThrowOnError extends boolean = false>(options: Options<GetAngelNumbersNumbersByNumberData, ThrowOnError>): RequestResult<GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersByNumberErrors, ThrowOnError> {
         return (options.client ?? this.client).get<GetAngelNumbersNumbersByNumberResponses, GetAngelNumbersNumbersByNumberErrors, ThrowOnError>({
