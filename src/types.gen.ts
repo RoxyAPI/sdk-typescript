@@ -3454,7 +3454,7 @@ export type NavamsaResponse = {
                      */
                     pada: number;
                     /**
-                     * Nakshatra index in the zodiac sequence starting from Ashwini.
+                     * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
                      */
                     key: number;
                     /**
@@ -3652,7 +3652,7 @@ export type DivisionalChartResponse = {
                      */
                     pada: number;
                     /**
-                     * Nakshatra index in the zodiac sequence starting from Ashwini.
+                     * Nakshatra index (1-27) in the zodiac sequence starting from Ashwini.
                      */
                     key: number;
                     /**
@@ -10279,7 +10279,7 @@ export type GetAstrologyMoonPhaseUpcomingResponses = {
              */
             date: string;
             /**
-             * Lunar phase name (New Moon, First Quarter, Full Moon, Last Quarter).
+             * Lunar phase name (New Moon, First Quarter Moon, Full Moon, Third Quarter Moon).
              */
             phase: string;
         }>;
@@ -23769,7 +23769,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              */
             tithi: {
                 /**
-                 * ISO 8601 UTC time when the current tithi ends. Precise to ~1 minute via binary search.
+                 * Local time in the requested timezone (ISO 8601, no offset suffix) when the current tithi ends. Precise to ~1 minute via binary search.
                  */
                 endsAt: string;
                 /**
@@ -23782,7 +23782,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              */
             yoga: {
                 /**
-                 * ISO 8601 UTC time when the current yoga ends.
+                 * Local time in the requested timezone (ISO 8601, no offset suffix) when the current yoga ends.
                  */
                 endsAt: string;
                 /**
@@ -23795,7 +23795,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              */
             karana: {
                 /**
-                 * ISO 8601 UTC time when the current karana ends.
+                 * Local time in the requested timezone (ISO 8601, no offset suffix) when the current karana ends.
                  */
                 endsAt: string;
                 /**
@@ -23808,7 +23808,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
              */
             nakshatra: {
                 /**
-                 * ISO 8601 UTC time when the Moon leaves the current nakshatra.
+                 * Local time in the requested timezone (ISO 8601, no offset suffix) when the Moon leaves the current nakshatra.
                  */
                 endsAt: string;
                 /**
@@ -23829,7 +23829,7 @@ export type PostVedicAstrologyPanchangDetailedResponses = {
                  */
                 current: string;
                 /**
-                 * ISO 8601 UTC time when Moon enters the next rashi. Moon changes sign approximately every 2.25 days.
+                 * Local time in the requested timezone (ISO 8601, no offset suffix) when Moon enters the next rashi. Moon changes sign approximately every 2.25 days.
                  */
                 changesAt: string;
                 /**
