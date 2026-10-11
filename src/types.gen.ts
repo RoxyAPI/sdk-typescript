@@ -71150,7 +71150,7 @@ export type GetDreamsSymbolsResponses = {
          */
         offset: number;
         /**
-         * Dream symbols for the current page. Use /symbols/{id} to get full interpretation.
+         * Dream symbols for the current page, in alphabetical order by name. With q, symbols whose name starts with the query come first, then names containing it, then symbols whose meaning mentions it, each group alphabetical. Use /symbols/{id} to get full interpretation.
          */
         symbols: Array<BasicDreamSymbol>;
     };

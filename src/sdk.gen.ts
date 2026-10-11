@@ -3926,7 +3926,7 @@ export class Dreams extends HeyApiClient {
     /**
      * List and search dream symbols - Dream dictionary API
      *
-     * Browse and search our complete dream interpretation dictionary containing 2,000+ dream symbols with psychological meanings. Find dream meanings for animals (snake dreams, spider dreams, dog dreams), common scenarios (falling dreams, flying dreams, being chased, drowning), people (dreams about mother, father, baby, ex), objects (car, house, water, fire), emotions (fear, anxiety, love), body parts (teeth falling out, hair, eyes), colors, numbers, and abstract concepts. Filter by starting letter for A-Z navigation or search by keyword to find what your dreams mean.
+     * Browse and search our complete dream interpretation dictionary containing 2,200+ dream symbols with psychological meanings. Find dream meanings for animals (snake dreams, spider dreams, dog dreams), common scenarios (falling dreams, flying dreams, being chased, drowning), people (dreams about mother, father, baby, ex), objects (car, house, water, fire), emotions (fear, anxiety, love), body parts (teeth falling out, hair, eyes), colors, numbers, and abstract concepts. Filter by starting letter for A-Z navigation or search by keyword to find what your dreams mean.
      */
     public searchDreamSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsData, ThrowOnError>): RequestResult<GetDreamsSymbolsResponses, GetDreamsSymbolsErrors, ThrowOnError> {
         return (options?.client ?? this.client).get<GetDreamsSymbolsResponses, GetDreamsSymbolsErrors, ThrowOnError>({
@@ -3939,7 +3939,7 @@ export class Dreams extends HeyApiClient {
     /**
      * Random dream symbols - Dream symbol discovery API
      *
-     * Discover random dream symbols and their interpretations for daily dream insights and exploration. Each request returns different symbols from the 2,000+ dream meaning database, perfect for dream of the day features, dream journaling prompts, meditation on subconscious themes, or exploring what different dreams mean. Get one or multiple random dream interpretations with full psychological meanings.
+     * Discover random dream symbols and their interpretations for daily dream insights and exploration. Each request returns different symbols from the 2,200+ dream meaning database, perfect for dream of the day features, dream journaling prompts, meditation on subconscious themes, or exploring what different dreams mean. Get one or multiple random dream interpretations with full psychological meanings.
      */
     public getRandomSymbols<ThrowOnError extends boolean = false>(options?: Options<GetDreamsSymbolsRandomData, ThrowOnError>): RequestResult<GetDreamsSymbolsRandomResponses, GetDreamsSymbolsRandomErrors, ThrowOnError> {
         return (options?.client ?? this.client).get<GetDreamsSymbolsRandomResponses, GetDreamsSymbolsRandomErrors, ThrowOnError>({

@@ -2277,7 +2277,7 @@ const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
 
 ## Dreams: `roxy.dreams`
 
-Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,...
+Dream interpretation API with a 2,200+ symbol dream dictionary and psychological meanings covering animals, objects,...
 
 ```typescript
 // List and search dream symbols - Dream dictionary API

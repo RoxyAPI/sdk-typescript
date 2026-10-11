@@ -88,7 +88,7 @@ const { data: kundli } = await roxy.vedicAstrology.generateBirthChart({
 | `roxy.ayurveda` | Ayurveda API for dosha profiles, the dinacharya daily routine and the ritucharya seasonal regimen, with a verse cited... |
 | `roxy.iching` | I-Ching oracle API with all 64 hexagrams, 384 changing lines, 8 trigrams, and modern interpretations for love, career... |
 | `roxy.crystals` | Crystal healing API covering the most popular and widely-searched healing crystals and gemstones, from Amethyst and R... |
-| `roxy.dreams` | Dream interpretation API with a 2,000+ symbol dream dictionary and psychological meanings covering animals, objects,... |
+| `roxy.dreams` | Dream interpretation API with a 2,200+ symbol dream dictionary and psychological meanings covering animals, objects,... |
 | `roxy.angelNumbers` | Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve... |
 | `roxy.location` | Timezone and location API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude... |
 | `roxy.usage` | Monitor your API usage, check rate limits, and track request consumption |
