@@ -8430,13 +8430,13 @@ export type GetLanguagesFieldLabelsResponses = {
          */
         lang: 'en' | 'tr' | 'de' | 'es' | 'hi' | 'pt' | 'fr' | 'ru' | 'zh-Hans' | 'zh-Hant';
         /**
-         * Label per request field or parameter name. Keys are the wire names used in request bodies and query parameters, such as `birthDate`, `timezone` or `houseSystem`.
+         * Label per request field or parameter name. Keys are the wire names used in request bodies, query parameters and path parameters, such as `birthDate`, `timezone` or `houseSystem`.
          */
         fields: {
             [key: string]: string;
         };
         /**
-         * Label per selectable option, keyed `{fieldName}.{value}` so the same value can read differently under different fields. For example `nodeType.mean` and `houseSystem.whole-sign`. Split on the first dot: the field name is before it, and everything after it is the value you send back unchanged.
+         * Label per selectable option, keyed `{fieldName}.{value}` so the same value can read differently under different fields. For example `nodeType.mean`, `houseSystem.whole-sign` and `id.rat`. An id shared by collections with different display names is omitted. Split on the first dot: the field name is before it, and everything after it is the value you send back unchanged.
          */
         enums: {
             [key: string]: string;
