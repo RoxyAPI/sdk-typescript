@@ -298,6 +298,10 @@ function renderCall(
 	return `${comment}${call}`;
 }
 
+function referenceUrl(tag: string): string {
+	return `https://roxyapi.com/api-reference/${tag.toLowerCase().replace(/\s+/g, '-')}`;
+}
+
 function renderMethodSections(): string {
 	const sections = specTags.map((tag) => {
 		const ns = `roxy.${tagToNamespace(tag)}`;
@@ -305,7 +309,7 @@ function renderMethodSections(): string {
 		const calls = (opsByTag.get(tag) ?? [])
 			.map(({ path, verb, op }) => renderCall(ns, path, verb, op))
 			.join('\n\n');
-		return `## ${tag}: \`${ns}\`\n\n${summary}\n\n\`\`\`typescript\n${calls}\n\`\`\``;
+		return `## ${tag}: \`${ns}\`\n\n${summary}\n\n[API reference](${referenceUrl(tag)})\n\n\`\`\`typescript\n${calls}\n\`\`\``;
 	});
 	return `${METHODS_BEGIN}\n\n${sections.join('\n\n---\n\n')}\n\n${METHODS_END}`;
 }
@@ -340,7 +344,7 @@ function renderDomainsTable(): string {
 	const rows = specTags.map((tag) => {
 		const ns = `roxy.${tagToNamespace(tag)}`;
 		const summary = tagSummary(tagByName.get(tag) ?? { name: tag });
-		return `| \`${ns}\` | ${summary} |`;
+		return `| [\`${ns}\`](${referenceUrl(tag)}) | ${summary} |`;
 	});
 	return [
 		DOMAINS_BEGIN,

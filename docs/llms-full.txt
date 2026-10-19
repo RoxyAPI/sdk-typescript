@@ -29,6 +29,8 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 
 Western astrology API for natal birth charts, daily, weekly, monthly, and yearly horoscopes with unique content per s...
 
+[API reference](https://roxyapi.com/api-reference/western-astrology)
+
 ```typescript
 // Get all zodiac signs - Complete zodiac signs list with dates and elements
 const { data } = await roxy.astrology.listZodiacSigns();
@@ -455,6 +457,8 @@ const { data } = await roxy.astrology.generateProfections({
 ## Vedic Astrology: `roxy.vedicAstrology`
 
 Vedic astrology (Jyotish) and KP API for kundli generation with the sixteen Shodasavarga divisional charts (D1 to D60...
+
+[API reference](https://roxyapi.com/api-reference/vedic-astrology)
 
 ```typescript
 // Get birth chart (D1 Rashi chart) - Kundli Calculator API
@@ -1165,6 +1169,8 @@ const { data } = await roxy.vedicAstrology.getHeliacalVisibility({
 
 Astrology forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons,...
 
+[API reference](https://roxyapi.com/api-reference/forecast)
+
 ```typescript
 // Cross-domain forecast timeline - Transits, ingresses, stations, dasha changes, critical days
 const { data } = await roxy.forecast.generateTimeline({
@@ -1255,6 +1261,8 @@ const { data } = await roxy.forecast.forecastSolarReturn({
 ## Human Design: `roxy.humanDesign`
 
 Human Design API that generates the full bodygraph from a birth moment: type, strategy, inner authority, profile, def...
+
+[API reference](https://roxyapi.com/api-reference/human-design)
 
 ```typescript
 // Generate full Human Design bodygraph - Type, authority, profile, centers, channels, gates
@@ -1408,6 +1416,8 @@ const { data } = await roxy.humanDesign.calculateVariables({
 
 Chinese zodiac and BaZi astrology API: Four Pillars charts, Chinese zodiac signs and the Chinese lunisolar calendar f...
 
+[API reference](https://roxyapi.com/api-reference/chinese-astrology)
+
 ```typescript
 // Generate BaZi chart - Four Pillars of Destiny calculator API
 const { data } = await roxy.chineseAstrology.generateBaziChart({
@@ -1548,6 +1558,8 @@ const { data } = await roxy.chineseAstrology.listFiveElements({ query: { limit: 
 
 Compute classical feng shui from one API: Xuan Kong flying star natal charts for any of the nine periods and 24 mount...
 
+[API reference](https://roxyapi.com/api-reference/feng-shui)
+
 ```typescript
 // Calculate Kua number - Feng shui personal direction calculator API
 const { data } = await roxy.fengShui.calculateKuaNumber({
@@ -1602,6 +1614,8 @@ const { data } = await roxy.fengShui.listNinePeriods({ query: { date: '2026-08-2
 ## Mesoamerican Astrology: `roxy.mesoamericanAstrology`
 
 Calculate Mayan astrology day signs, the Tzolkin sacred round, the Haab year, the full Long Count and the Aztec tonal...
+
+[API reference](https://roxyapi.com/api-reference/mesoamerican-astrology)
 
 ```typescript
 // Mayan day sign for a date - Tzolkin calculator API
@@ -1684,6 +1698,8 @@ const { data } = await roxy.mesoamericanAstrology.getAztecTrecena({ path: { numb
 ## Vastu: `roxy.vastu`
 
 Vastu Shastra API for directional home and plot analysis: entrance padas with the classical effect of each of the 32...
+
+[API reference](https://roxyapi.com/api-reference/vastu)
 
 ```typescript
 // Calculate entrance pada - Vastu main door direction API
@@ -1772,6 +1788,8 @@ const { data } = await roxy.vastu.getDevata({ path: { id: 'jayanta' } });
 ## Numerology: `roxy.numerology`
 
 Numerology API for life path numbers, complete numerology charts and compatibility, in both Pythagorean and Chaldean...
+
+[API reference](https://roxyapi.com/api-reference/numerology)
 
 ```typescript
 // Calculate Life Path number - Calculator and meaning API
@@ -1893,6 +1911,8 @@ const { data } = await roxy.numerology.calculateBusinessName({ body: { name: 'Fo
 
 Kabbalah API for gematria, the 72 names, the Tree of Life and the Hebrew birthday
 
+[API reference](https://roxyapi.com/api-reference/kabbalah)
+
 ```typescript
 // Calculate gematria - Hebrew gematria calculator API with every spelling shown
 const { data } = await roxy.kabbalah.calculateGematria({
@@ -1972,6 +1992,8 @@ const { data } = await roxy.kabbalah.getDailySephirah({
 ## Tarot: `roxy.tarot`
 
 Tarot reading API with the complete 78-card Rider-Waite-Smith deck and card meanings for love, career, health, and sp...
+
+[API reference](https://roxyapi.com/api-reference/tarot)
 
 ```typescript
 // List all 78 tarot cards - Tarot deck catalog API
@@ -2068,6 +2090,8 @@ const { data } = await roxy.tarot.castCustomSpread({
 
 Biorhythm API for entertainment and reflection, with 10 model cycle types across 3 primary (physical, emotional, inte...
 
+[API reference](https://roxyapi.com/api-reference/biorhythm)
+
 ```typescript
 // Get biorhythm reading - Complete cycle analysis for any date
 const { data } = await roxy.biorhythm.getReading({
@@ -2115,6 +2139,8 @@ const { data } = await roxy.biorhythm.getDailyBiorhythm({ body: { seed: 'user123
 ## Ayurveda: `roxy.ayurveda`
 
 Ayurveda API for dosha profiles, the dinacharya daily routine and the ritucharya seasonal regimen, with a verse cited...
+
+[API reference](https://roxyapi.com/api-reference/ayurveda)
 
 ```typescript
 // Ayurvedic constitution from a birth chart - Dosha profile API
@@ -2181,6 +2207,8 @@ const { data } = await roxy.ayurveda.listGunas({ query: { limit: 10, offset: 0 }
 
 I-Ching oracle API with all 64 hexagrams, 384 changing lines, 8 trigrams, and modern interpretations for love, career...
 
+[API reference](https://roxyapi.com/api-reference/i-ching)
+
 ```typescript
 // Daily hexagram - Daily I-Ching oracle API
 const { data } = await roxy.iching.getDailyHexagram({ body: { seed: 'user123', date: '2026-03-06' } });
@@ -2215,6 +2243,8 @@ const { data } = await roxy.iching.getTrigram({ path: { id: 'Heaven' } });
 ## Crystals and Healing Stones: `roxy.crystals`
 
 Crystal healing API covering the most popular and widely-searched healing crystals and gemstones, from Amethyst and R...
+
+[API reference](https://roxyapi.com/api-reference/crystals-and-healing-stones)
 
 ```typescript
 // Crystals by zodiac sign - Zodiac birthstone API
@@ -2279,6 +2309,8 @@ const { data } = await roxy.crystals.getCrystal({ path: { id: 'amethyst' } });
 
 Dream interpretation API with a 2,200+ symbol dream dictionary and psychological meanings covering animals, objects,...
 
+[API reference](https://roxyapi.com/api-reference/dreams)
+
 ```typescript
 // List and search dream symbols - Dream dictionary API
 const { data } = await roxy.dreams.searchDreamSymbols({ query: { q: 'water', letter: 'a', limit: 20, offset: 0 } });
@@ -2302,6 +2334,8 @@ const { data } = await roxy.dreams.getDailyDreamSymbol({ body: { seed: 'user123'
 
 Angel numbers API with meanings for 111, 222, 333, 444, 555, 666, 777, 888, 999, 1111, and 75+ sequences covering eve...
 
+[API reference](https://roxyapi.com/api-reference/angel-numbers)
+
 ```typescript
 // List all angel numbers - Angel number catalog API
 const { data } = await roxy.angelNumbers.listAngelNumbers({ query: { limit: 20, offset: 0, type: 'repeating' } });
@@ -2322,6 +2356,8 @@ const { data } = await roxy.angelNumbers.getDailyAngelNumber({ body: { seed: 'us
 
 Timezone and location API with city search and geocoding across 235,000+ cities in 240+ countries, returning latitude...
 
+[API reference](https://roxyapi.com/api-reference/location-and-timezone)
+
 ```typescript
 // Search cities worldwide - Geocoding autocomplete with coordinates and timezone
 const { data } = await roxy.location.searchCities({ query: { q: 'berlin', limit: 10, offset: 0 } });
@@ -2339,6 +2375,8 @@ const { data } = await roxy.location.getCitiesByCountry({ path: { iso2: 'DE' }, 
 
 Monitor your API usage, check rate limits, and track request consumption
 
+[API reference](https://roxyapi.com/api-reference/usage)
+
 ```typescript
 // Get API usage statistics
 const { data } = await roxy.usage.getUsageStats();
@@ -2349,6 +2387,8 @@ const { data } = await roxy.usage.getUsageStats();
 ## Languages: `roxy.languages`
 
 List the response languages accepted by the `lang` query parameter on every i18n-aware endpoint
+
+[API reference](https://roxyapi.com/api-reference/languages)
 
 ```typescript
 // Get field labels for a language
