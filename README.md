@@ -550,6 +550,7 @@ Every request and response is fully typed. IDE autocomplete shows available meth
 - [MCP setup for AI agents](https://roxyapi.com/docs/mcp)
 - [Templates](https://roxyapi.com/templates)
 - [Python SDK](https://pypi.org/project/roxy-sdk/)
+- [Rust SDK](https://crates.io/crates/roxyapi)
 - [Issues](https://github.com/RoxyAPI/sdk-typescript/issues)
 
 ## License
