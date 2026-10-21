@@ -46,6 +46,8 @@ Then expand into charts, compatibility, numerology, tarot, and more.
 ```typescript
 import { createRoxy } from '@roxyapi/sdk';
 
+// Retries 429, 500, 502, 503 and 504 by default. Optional settings, shown with their defaults:
+// createRoxy(key, { maxRetries: 2, initialDelayMs: 500, maxDelayMs: 30000 })
 const roxy = createRoxy(process.env.ROXY_API_KEY!);
 
 // Step 1: geocode the birth city once. Every chart endpoint takes these three values.
@@ -56,17 +58,23 @@ const { latitude, longitude, timezone } = place.cities[0];
 // Step 2: a Western natal chart. `timezone` is the IANA string from the lookup
 // ("Europe/London"); the server resolves it to the DST-correct offset for the
 // date of the chart.
-const { data: chart } = await roxy.astrology.generateNatalChart({
+const { data: chart, error: chartError } = await roxy.astrology.generateNatalChart({
   body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
+if (chartError) throw chartError;
+// `planets` is a list: find a body by its `name`.
+console.log(chart.planets.find((p) => p.name === 'Moon')?.sign);
 
 // Step 3: the same birth as a Vedic kundli. Same inputs, sidereal zodiac.
-const { data: kundli } = await roxy.vedicAstrology.generateBirthChart({
+const { data: kundli, error: kundliError } = await roxy.vedicAstrology.generateBirthChart({
   body: { date: '1990-01-15', time: '14:30:00', latitude, longitude, timezone },
 });
+if (kundliError) throw kundliError;
+// `meta.Moon.rashi` is a string; `meta.Moon.nakshatra` is an object, so read `.name`.
+console.log(kundli.meta.Moon?.rashi, kundli.meta.Moon?.nakshatra.name);
 ```
 
-`createRoxy` sets the base URL (`https://roxyapi.com/api/v2`) and injects the auth header and SDK identification header on every request. Every method returns `{ data, error, response }`; check `error` first, or pass `throwOnError: true` in the call options to have failures throw and `data` typed as always present (see Error handling).
+`createRoxy` sets the base URL (`https://roxyapi.com/api/v2`) and injects the auth header and SDK identification header on every request. Every method returns `{ data, error, response }`; check `error` first, or pass `throwOnError: true` in the call options to have failures throw and `data` typed as always present (see Error handling). A network failure (DNS, timeout, connection reset) is not an API error: the call throws, so wrap calls in `try`/`catch` where that matters.
 
 ## Domains
 
@@ -339,7 +347,9 @@ const { data: kabbalah } = await roxy.kabbalah.generateBirthProfile({
 The complete 78-card deck with meanings for love, career, health and spirit. Pass a `seed` per user for deterministic once-per-day draws.
 
 ```typescript
-// Daily card. Deterministic per (seed, date), so one user sees one card per day.
+// Daily card. The body takes two optional fields: `seed` (a stable id per user; the same
+// seed and date always return the same card, omit it for an anonymous card) and `date`
+// (YYYY-MM-DD, defaults to today in UTC).
 const { data: card } = await roxy.tarot.getDailyCard({ body: { seed: 'user-42' } });
 // card.card.name, card.card.reversed, card.card.imageUrl, card.dailyMessage
 
@@ -477,7 +487,7 @@ import { createRoxy } from '@roxyapi/sdk';
 const roxy = createRoxy(process.env.ROXY_API_KEY!);
 ```
 
-Never expose your API key client-side. Call Roxy from your server or API routes only.
+Never expose your API key client-side. Call Roxy from server code only.
 
 For advanced use (custom fetch, interceptors, per-request auth), build the client manually:
 
@@ -509,7 +519,7 @@ Supported: `astrology`, `vedicAstrology`, `forecast`, `humanDesign`, `chineseAst
 
 ## Error handling
 
-Every method returns `{ data, error, response }`. On 4xx / 5xx the error shape is `{ error: string, code: string }`. Switch on `code` for programmatic handling.
+Every method returns `{ data, error, response }`. On a 4xx or 5xx, `error` carries the body described below, and the HTTP status and `Retry-After` header are on `response`.
 
 `data` and `error` are a discriminated pair, so `data` is typed as possibly undefined until `error` is checked; a `strict` project narrows with `if (error)` first. Pass `throwOnError: true` in any call to have failures throw instead, which makes `data` non-optional on that call.
 
@@ -525,18 +535,64 @@ if (error) {
 }
 ```
 
-| Status | Code | When |
-|--------|------|------|
-| 400 | `validation_error` | Missing or invalid parameters |
-| 401 | `api_key_required` | No API key provided |
-| 401 | `invalid_api_key` | Key format invalid or tampered |
-| 401 | `subscription_not_found` | Key references non-existent subscription |
-| 401 | `subscription_inactive` | Subscription cancelled, expired, or suspended |
-| 401 | `api_key_revoked` | Key was deleted from the account |
-| 404 | `not_found` | Resource not found |
-| 4xx | `bad_request` and other status-derived codes | A client error the endpoint itself detected, such as a date window whose `endDate` precedes `startDate` |
-| 429 | `rate_limit_exceeded` | Monthly quota reached |
-| 500 | `internal_error` | Server error |
+<!-- BEGIN:ERRORS -->
+Every error returns `{ error, code, doc_url }`. Switch on `code`; `error` is readable text and may change. Each meaning below says whether and when to retry, and `Retry-After` carries the wait when the response sends it. Every code is documented at https://roxyapi.com/docs/errors.
+
+| Status | Code | Meaning |
+|--------|------|---------|
+| 400 | `validation_error` | A field is missing or invalid. The body lists every failing field at once in issues, each with its path and the expected shape. |
+| 400 | `bad_request` | The request was rejected as a whole, for example a body that is not valid JSON or a date range that ends before it starts. |
+| 400 | `date_out_of_range` | A date lies outside the span the planetary positions are served for. The error names the supported dates. |
+| 401 | `api_key_required` | No API key was sent. |
+| 401 | `invalid_api_key` | The key sent is malformed or cannot be verified. |
+| 401 | `api_key_revoked` | The key was valid once and has since been revoked from the account page. |
+| 401 | `subscription_not_found` | The key verifies, but the subscription behind it no longer exists. |
+| 401 | `subscription_inactive` | The subscription behind the key is cancelled, expired or suspended, or a trial is past its end date. |
+| 401 | `publishable_key_not_allowed_on_mcp` | A publishable key was used on a Remote MCP server, which takes a secret key. |
+| 401 | `invalid_client_ip` | A keyless request could not be attributed to a caller. |
+| 401 | `unauthorized` | Authentication failed with no more specific reason to give. |
+| 403 | `forbidden` | The key is valid, but this request is not permitted. |
+| 403 | `origin_required` | A publishable key with an origin allowlist was used with no Origin header, as from a server or a native app. |
+| 403 | `origin_not_allowed` | The calling site is not on the origin allowlist of this publishable key. |
+| 404 | `not_found` | Nothing is served at this path, or the identifier in it does not exist. A path miss adds suggestions, the closest real endpoints. |
+| 405 | `method_not_allowed` | The path exists for a different HTTP method. The body lists the accepted methods in allow, as does the Allow header. |
+| 409 | `conflict` | The request cannot be applied in the current state. |
+| 410 | `gone` | The path was removed permanently. |
+| 413 | `payload_too_large` | The request body is larger than the API accepts. A body far over the cap is refused before it reaches the API and returns a bare 413 with no JSON body. |
+| 415 | `unsupported_media_type` | A request with a body was sent without Content-Type: application/json. |
+| 422 | `unprocessable_entity` | Every field is valid, but the combination cannot be computed. |
+| 429 | `rate_limit_exceeded` | The monthly request allowance is used up. Retry-After gives the seconds to the reset. |
+| 429 | `rate_limit_per_minute` | The per-minute limit of the plan was reached. Retry-After gives the seconds to the next minute, and the monthly allowance is not charged. |
+| 429 | `rate_limited` | A rate limit was reached, reported without the plan detail. |
+| 429 | `free_tier_exhausted` | A keyless request has used up its trial allowance. |
+| 500 | `internal_error` | The request failed inside our service. Retry with exponential backoff. |
+| 503 | `compute_saturated` | Heavy calculations are briefly at capacity. Send the same request again after Retry-After seconds. |
+| Any | `error` | A fallback for a status with no more specific code. The status and the error field carry the signal. |
+<!-- END:ERRORS -->
+
+### Retries
+
+Retries are on by default: a request is resent up to twice after a 429, 500, 502, 503 or 504, or after a connection that was never made (refused or unresolvable host). Pass `maxRetries` to change the count, or `maxRetries: 0` to turn retries off. A read timeout is never retried. The wait follows `Retry-After` when the response sends it, and a full-jitter backoff otherwise (`initialDelayMs` 500, `maxDelayMs` 30000 by default). A `Retry-After` longer than `maxDelayMs`, such as the wait for a monthly allowance, is not waited for: the error comes back at once. An abort signal on the call stops any wait. On a persistent failure the total is 1 + `maxRetries` requests, so 3 by default and exactly 1 with `maxRetries: 0`.
+
+```typescript
+import { createRoxy, ErrorCodes, retryAfterSeconds } from '@roxyapi/sdk';
+
+const roxy = createRoxy(process.env.ROXY_API_KEY!, { maxRetries: 4 });
+
+const { data, error, response } = await roxy.astrology.getDailyHoroscope({
+  path: { sign: 'aries' },
+});
+
+if (error) {
+  if (error.code === ErrorCodes.RateLimitPerMinute || error.code === ErrorCodes.ComputeSaturated) {
+    console.warn('retry in', retryAfterSeconds(response), 'seconds');
+  } else {
+    console.error(response?.status, error.code, error.doc_url);
+  }
+}
+```
+
+`ErrorCodes` holds every code as a typed constant (`ErrorCodes.RateLimitPerMinute` is `'rate_limit_per_minute'`), and the `ErrorCode` type accepts codes added later. `retryAfterSeconds(response)` returns the `Retry-After` wait in seconds, or `undefined` when the response has none.
 
 ## TypeScript
 
@@ -549,9 +605,8 @@ Every request and response is fully typed. IDE autocomplete shows available meth
 - [Pricing](https://roxyapi.com/pricing)
 - [MCP setup for AI agents](https://roxyapi.com/docs/mcp)
 - [Templates](https://roxyapi.com/templates)
-- [Python SDK](https://pypi.org/project/roxy-sdk/)
-- [Rust SDK](https://crates.io/crates/roxyapi)
 - [Issues](https://github.com/RoxyAPI/sdk-typescript/issues)
+- Other SDKs: [Python](https://pypi.org/project/roxy-sdk/), [PHP](https://packagist.org/packages/roxyapi/sdk), [.NET](https://www.nuget.org/packages/RoxyApi.Sdk), [Go](https://pkg.go.dev/github.com/RoxyAPI/sdk-go), [Rust](https://crates.io/crates/roxyapi)
 
 ## License
 

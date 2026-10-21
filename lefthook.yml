@@ -22,7 +22,7 @@ pre-push:
       run: bun run check
       priority: 2
     docs-drift:
-      run: bun run docs:sync && git diff --exit-code -- README.md AGENTS.md docs/llms-full.txt || { echo "✗ README.md/AGENTS.md/llms-full.txt drifted from spec — commit the sync output"; exit 1; }
+      run: bun run docs:sync && git diff --exit-code -- src/error-codes.gen.ts README.md AGENTS.md docs/llms-full.txt || { echo "✗ README.md/AGENTS.md/llms-full.txt drifted from spec — commit the sync output"; exit 1; }
       priority: 3
     test:
       run: bun run test

@@ -73518,7 +73518,7 @@ export type GetUsageResponses = {
          */
         plan: string;
         /**
-         * Billable requests counted against the current calendar month. The quota window is the UTC calendar month and resets on the 1st at 12:00 AM UTC, never on your renewal date, so an annual plan refills every month and a plan bought mid month still refills on the 1st. Read from the durable request ledger, which can trail the live limiter by up to 5 minutes; for the exact live position read the X-RateLimit-Used header on any response, including this one. Cached responses still count.
+         * Billable requests counted against the current calendar month. The quota window is the UTC calendar month and resets on the 1st at 12:00 AM UTC, never on your renewal date, so an annual plan refills every month and a plan bought mid month still refills on the 1st. Read from the durable request ledger, which can trail the live limiter by up to 5 minutes; for the exact live position read the X-RateLimit-Used header on any response, including this one. Cached responses still count; a request that failed on our side with a 5xx never does.
          */
         usedThisMonth: number;
         /**
