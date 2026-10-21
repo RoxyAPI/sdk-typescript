@@ -33135,6 +33135,14 @@ export type PostHumanDesignConnectionResponses = {
      */
     200: {
         /**
+         * All unique active Human Design gate numbers for person A, in ascending order, including hanging gates that do not complete a channel. Use with personBGates to draw every activation on the combined bodygraph. Gate numbers are machine identifiers and do not change with lang.
+         */
+        personAGates?: Array<number>;
+        /**
+         * All unique active Human Design gate numbers for person B, in ascending order, including hanging gates that do not complete a channel. Use with personAGates to draw every activation on the combined bodygraph. Gate numbers are machine identifiers and do not change with lang.
+         */
+        personBGates?: Array<number>;
+        /**
          * Total number of connected channels between the two people. Equals the length of channels and the sum of the summary counts.
          */
         totalChannels: number;
