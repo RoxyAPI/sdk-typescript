@@ -3294,7 +3294,7 @@ export class Tarot extends HeyApiClient {
     /**
      * Daily tarot card - Card of the day API
      *
-     * Receive a single tarot card for daily guidance and reflection. This endpoint uses seeded randomness to ensure the same seed gets the same card on the same day, perfect for "Card of the Day" features. Provide a seed (userId, email hash, session token) for reproducible consistency, or omit for anonymous daily draws. Returns card with keywords, full meaning, and a daily message summary. Great for tarot apps, wellness platforms, morning ritual apps, and journaling tools.
+     * Receive a single tarot card for daily guidance and reflection. This endpoint uses seeded randomness to ensure the same seed gets the same card on the same day, perfect for "Card of the Day" features. Pass a seed (userId, email hash, session token) to give each user their own card for the day; without a seed every caller receives the same shared card of the day, which changes at midnight UTC. Returns card with keywords, full meaning, and a daily message summary. Great for tarot apps, wellness platforms, morning ritual apps, and journaling tools.
      */
     public getDailyCard<ThrowOnError extends boolean = false>(options?: Options<PostTarotDailyData, ThrowOnError>): RequestResult<PostTarotDailyResponses, PostTarotDailyErrors, ThrowOnError> {
         return (options?.client ?? this.client).post<PostTarotDailyResponses, PostTarotDailyErrors, ThrowOnError>({

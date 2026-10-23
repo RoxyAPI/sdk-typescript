@@ -56216,7 +56216,7 @@ export type GetNumerologyMeaningsByNumberResponse = GetNumerologyMeaningsByNumbe
 export type PostNumerologyDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same number every time. Pass any unique identifier (userId, email hash, session token) to give each user their own number for the day. Without a seed every caller receives the same shared number of the day.
          */
         seed?: string;
         /**
@@ -61301,7 +61301,7 @@ export type PostTarotDrawResponse = PostTarotDrawResponses[keyof PostTarotDrawRe
 export type PostTarotDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same card every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same card every time. Pass any unique identifier (userId, email hash, session token) to give each user their own card for the day. Without a seed every caller receives the same shared card of the day.
          */
         seed?: string;
         /**
@@ -63787,7 +63787,7 @@ export type PostBiorhythmPhasesResponse = PostBiorhythmPhasesResponses[keyof Pos
 export type PostBiorhythmDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same reading every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same reading every time. Pass any unique identifier (userId, email hash, session token) to give each user their own reading for the day. Without a seed every caller receives the same shared reading of the day.
          */
         seed?: string;
         /**
@@ -66998,7 +66998,7 @@ export type GetAyurvedaQualitiesResponse = GetAyurvedaQualitiesResponses[keyof G
 export type PostIchingDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token) to give each user their own hexagram for the day. Without a seed every caller receives the same shared hexagram of the day.
          */
         seed?: string;
         /**
@@ -67228,7 +67228,7 @@ export type PostIchingDailyResponse = PostIchingDailyResponses[keyof PostIchingD
 export type PostIchingDailyCastData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same hexagram every time. Pass any unique identifier (userId, email hash, session token) to give each user their own hexagram for the day. Without a seed every caller receives the same shared hexagram of the day.
          */
         seed?: string;
         /**
@@ -69866,7 +69866,7 @@ export type GetCrystalsPairingsByIdResponse = GetCrystalsPairingsByIdResponses[k
 export type PostCrystalsDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same crystal every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same crystal every time. Pass any unique identifier (userId, email hash, session token) to give each user their own crystal for the day. Without a seed every caller receives the same shared crystal of the day.
          */
         seed?: string;
         /**
@@ -71629,7 +71629,7 @@ export type GetDreamsSymbolsByIdResponse = GetDreamsSymbolsByIdResponses[keyof G
 export type PostDreamsDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same symbol every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same symbol every time. Pass any unique identifier (userId, email hash, session token) to give each user their own symbol for the day. Without a seed every caller receives the same shared symbol of the day.
          */
         seed?: string;
         /**
@@ -72544,7 +72544,7 @@ export type GetAngelNumbersLookupResponse = GetAngelNumbersLookupResponses[keyof
 export type PostAngelNumbersDailyData = {
     body?: {
         /**
-         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token). Omit for anonymous daily readings.
+         * Optional seed for reproducible readings. Same seed + same date = same angel number every time. Pass any unique identifier (userId, email hash, session token) to give each user their own angel number for the day. Without a seed every caller receives the same shared angel number of the day.
          */
         seed?: string;
         /**
