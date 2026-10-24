@@ -5612,7 +5612,7 @@ export type KpSublordChangesResponse = {
          */
         date: string;
         /**
-         * Sublord transition time (HH:MM, 24-hour): the instant is found to the second and shown to the minute it falls in. Adjusted to requested timezone.
+         * Sublord transition time (HH:MM, 24-hour): the instant is found to the second and shown rounded to the nearest minute. Adjusted to requested timezone.
          */
         time: string;
         /**
@@ -5699,7 +5699,7 @@ export type KpRasiChangesResponse = {
          */
         date: string;
         /**
-         * Ingress time (HH:MM, 24-hour): the instant is found to the second and shown to the minute it falls in. Adjusted to requested timezone.
+         * Ingress time (HH:MM, 24-hour): the instant is found to the second and shown rounded to the nearest minute. Adjusted to requested timezone.
          */
         time: string;
         /**
