@@ -1001,7 +1001,7 @@ export type TransitsRequest = {
      */
     time?: string;
     /**
-     * Transit timezone: decimal hours from UTC OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the transit date. Defaults to 0 (UTC).
+     * Transit timezone: decimal hours from UTC OR IANA name (e.g. "America/New_York"). IANA resolved to the DST-correct offset for the transit date. When `date` or `time` is omitted, the current moment is read in this zone, so `transitDate` and `transitTime` come back as its local clock. Defaults to 0 (UTC).
      */
     timezone?: number | string;
     /**
@@ -9923,7 +9923,7 @@ export type GetAstrologyMoonPhaseCurrentData = {
          */
         time?: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00"). IANA resolved to the DST-correct offset for the given date. Defaults to 0 (UTC).
+         * IANA name (e.g. "America/New_York", "Europe/London"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00"). IANA resolved to the DST-correct offset for the given date. With `date` omitted, today is the date in this zone. Defaults to 0 (UTC).
          */
         timezone?: string;
     };
@@ -72971,7 +72971,7 @@ export type GetLocationSearchResponses = {
              */
             utcOffset: number;
             /**
-             * Population estimate for the place. Breaks ties between results of equal match quality, so among several places matching equally well the largest leads. It never outranks a better match, which is why a small town still wins when its name is typed exactly. May be 0 for a hamlet or administrative seat that carries no published figure.
+             * Population estimate for the place. Weighs the ranking, so among places matching a query alike the larger leads, while a full name typed still outranks a namesake many times its size. 0 for a place with no published figure, as most villages are.
              */
             population: number;
         }>;
@@ -73154,7 +73154,7 @@ export type GetLocationCountriesResponses = {
              */
             iso3: string;
             /**
-             * Number of searchable places in this country, including small towns and administrative seats. Useful for showing coverage in a UI or sizing a dependent city dropdown.
+             * Number of searchable places in this country, every town and village included. Useful for showing coverage in a UI or sizing a dependent city dropdown.
              */
             cityCount: number;
         }>;
@@ -73362,7 +73362,7 @@ export type GetLocationCountriesByIso2Responses = {
              */
             utcOffset: number;
             /**
-             * Population estimate for the place. Breaks ties between results of equal match quality, so among several places matching equally well the largest leads. It never outranks a better match, which is why a small town still wins when its name is typed exactly. May be 0 for a hamlet or administrative seat that carries no published figure.
+             * Population estimate for the place. Weighs the ranking, so among places matching a query alike the larger leads, while a full name typed still outranks a namesake many times its size. 0 for a place with no published figure, as most villages are.
              */
             population: number;
         }>;
