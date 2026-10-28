@@ -4,13 +4,13 @@ on:
   repository_dispatch:
     types: [openapi-updated]
   schedule:
-    - cron: '0 6 * * *'
+    - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       version_bump:
-        description: 'patch | minor | major'
+        description: "patch | minor | major"
         required: false
-        default: 'patch'
+        default: "patch"
 
 jobs:
   release:
@@ -29,8 +29,8 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
 
       - uses: oven-sh/setup-bun@v2
 
@@ -116,4 +116,4 @@ jobs:
         with:
           tag_name: v${{ steps.bump.outputs.version }}
           generate_release_notes: true
-          make_latest: 'true'
+          make_latest: "true"
