@@ -421,6 +421,7 @@ const { data } = await roxy.astrology.generateProgressions({
     timezone: 'America/New_York',
     nodeType: 'true',
     targetDate: '2025-07-15',
+    houseSystem: 'placidus',
   },
 });
 
@@ -1883,6 +1884,7 @@ const { data } = await roxy.numerology.generateNumerologyChart({
     month: 7,
     day: 15,
     currentYear: 2025,
+    targetDate: '2026-10-28',
   },
 });
 
@@ -1938,6 +1940,7 @@ const { data } = await roxy.kabbalah.generateBirthProfile({
     yearStart: 'march-21',
     leapDayPolicy: 'extend-previous',
     afterSunset: false,
+    targetDate: '2026-10-28',
   },
 });
 
