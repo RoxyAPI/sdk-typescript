@@ -8,6 +8,12 @@ export const ErrorCodes = {
 	BadRequest: 'bad_request',
 	/** 400: A date lies outside the span the planetary positions are served for. The error names the supported dates. */
 	DateOutOfRange: 'date_out_of_range',
+	/** 400: The report branding cannot be used, for example a logo that is not a PNG, JPEG, WebP or SVG image. */
+	InvalidBranding: 'invalid_branding',
+	/** 400: The report logo could not be fetched: it must be an HTTPS URL on a public host that answers within the size limit. */
+	LogoFetchFailed: 'logo_fetch_failed',
+	/** 400: The report text holds a character no report font draws. The error names it: remove or replace it. */
+	UnsupportedCharacter: 'unsupported_character',
 	/** 401: No API key was sent. */
 	ApiKeyRequired: 'api_key_required',
 	/** 401: The key sent is malformed or cannot be verified. */
@@ -52,10 +58,16 @@ export const ErrorCodes = {
 	RateLimited: 'rate_limited',
 	/** 429: A keyless request has used up its trial allowance. */
 	FreeTierExhausted: 'free_tier_exhausted',
+	/** 429: Too many reports were requested this minute. Retry-After gives the seconds to the next minute. */
+	ReportsRateLimited: 'reports_rate_limited',
 	/** 500: The request failed inside our service. Retry with exponential backoff. */
 	InternalError: 'internal_error',
 	/** 503: Heavy calculations are briefly at capacity. Send the same request again after Retry-After seconds. */
 	ComputeSaturated: 'compute_saturated',
+	/** 503: Report rendering is briefly at capacity. Send the same request again after Retry-After seconds. */
+	ReportsBusy: 'reports_busy',
+	/** 503: The report took too long to render. Send the same request again. */
+	ReportRenderTimeout: 'report_render_timeout',
 	/** Any: A fallback for a status with no more specific code. The status and the error field carry the signal. */
 	Error: 'error',
 } as const;
