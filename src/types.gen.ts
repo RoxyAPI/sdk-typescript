@@ -11370,6 +11370,10 @@ export type GetAstrologyMoonPhaseCalendarByYearByMonthResponses = {
              * Moon illumination percentage (0-100) at noon on this date.
              */
             illumination: number;
+            /**
+             * Tropical zodiac sign the Moon occupies at noon UTC on this date, canonical English. Use it to key a sign glyph or a moon-in-sign planting and ritual guide.
+             */
+            sign: string;
         }>;
     };
 };
