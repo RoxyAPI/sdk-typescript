@@ -124,9 +124,9 @@ export class Astrology extends HeyApiClient {
     }
     
     /**
-     * Generate natal chart - Birth chart calculator API with houses and aspects
+     * Generate natal chart - Birth chart API with houses, aspects and a written reading
      *
-     * Calculate complete Western astrology natal chart (birth chart) with tropical zodiac. Returns all 14 celestial bodies (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith), 12 house cusps with customizable house systems (Placidus, Whole Sign, Equal, Koch), major and minor aspects, Ascendant, Midheaven, dominant elements and modalities. Perfect for astrology apps, birth chart generators, horoscope websites, and astrological consultation tools. Verified against NASA JPL Horizons.
+     * Calculate a Western astrology natal chart (birth chart) with planets, houses, aspects and a written reading for that birth. It returns all 14 celestial bodies in the tropical zodiac (the 10 classical planets Sun through Pluto, the lunar nodes, Chiron and Black Moon Lilith) with sign, house and dignity, 12 house cusps in Placidus, Whole Sign, Equal or Koch, major and minor aspects, Ascendant, Midheaven, and the dominant elements and modalities. Every chart carries an editorial reading written for that birth: an opening synthesis, love, career and home chapters, a closing, and a reading for each planet, aspect, the Ascendant and the Midheaven, in English, German, Spanish, French, Hindi, Portuguese, Russian, Turkish. Verified against NASA JPL Horizons.
      */
     public generateNatalChart<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyNatalChartData, ThrowOnError>): RequestResult<PostAstrologyNatalChartResponses, PostAstrologyNatalChartErrors, ThrowOnError> {
         return (options?.client ?? this.client).post<PostAstrologyNatalChartResponses, PostAstrologyNatalChartErrors, ThrowOnError>({
@@ -143,7 +143,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Get planetary positions - Ephemeris calculator for all planets
      *
-     * Calculate accurate tropical zodiac positions for all 14 celestial bodies for any date, time, and location. The bodies are the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, and retrograde status. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. Verified against NASA JPL Horizons.
+     * Calculate accurate tropical zodiac positions for all 14 celestial bodies for any date, time, and location. The bodies are the 10 classical planets Sun through Pluto, the lunar nodes, Chiron, and Black Moon Lilith. Returns longitude, latitude, zodiac sign, degree within sign, daily motion speed, retrograde status, and a reading of each body in its sign. Perfect for transit tracking, ephemeris tables, astrology apps, and planetary position widgets. Verified against NASA JPL Horizons.
      */
     public getPlanetaryPositions<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyPlanetsData, ThrowOnError>): RequestResult<PostAstrologyPlanetsResponses, PostAstrologyPlanetsErrors, ThrowOnError> {
         return (options?.client ?? this.client).post<PostAstrologyPlanetsResponses, PostAstrologyPlanetsErrors, ThrowOnError>({
@@ -540,7 +540,7 @@ export class Astrology extends HeyApiClient {
     /**
      * Generate relocation chart - Relocated birth chart calculator with shifted houses and angles
      *
-     * Calculate a relocation chart (relocated birth chart) for a new place on Earth. The birth moment stays the same, so every planet keeps its natal sign and degree, while the Ascendant, Midheaven, Vertex, and all twelve house cusps are recomputed for the new latitude and longitude. Returns the relocated houses and angles, the planets that change house, the angular planets activated at the new place, and the distance and compass direction from the birthplace. Built for relocation astrology readings, astrocartography style move planning, and travel charts. Verified against NASA JPL Horizons.
+     * Calculate a relocation chart (relocated birth chart) for a new place on Earth. The birth moment stays the same, so every planet keeps its natal sign and degree, while the Ascendant, Midheaven, Vertex, and all twelve house cusps are recomputed for the new latitude and longitude. Returns the relocated houses and angles, the planets that change house with a reading of each planet in its relocated house, the angular planets activated at the new place, and the distance and compass direction from the birthplace. Built for relocation astrology readings, astrocartography style move planning, and travel charts. Verified against NASA JPL Horizons.
      */
     public generateRelocationChart<ThrowOnError extends boolean = false>(options?: Options<PostAstrologyRelocationChartData, ThrowOnError>): RequestResult<PostAstrologyRelocationChartResponses, PostAstrologyRelocationChartErrors, ThrowOnError> {
         return (options?.client ?? this.client).post<PostAstrologyRelocationChartResponses, PostAstrologyRelocationChartErrors, ThrowOnError>({

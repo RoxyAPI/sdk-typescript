@@ -27,7 +27,7 @@ const { data } = await roxy.astrology.getDailyHoroscope({
 
 ## Western Astrology: `roxy.astrology`
 
-Western astrology API for natal birth charts, daily, weekly, monthly, and yearly horoscopes with unique content per s...
+Western astrology API for natal birth charts with an editorial reading of the whole chart, daily, weekly, monthly, an...
 
 [API reference](https://roxyapi.com/api-reference/western-astrology)
 
@@ -44,7 +44,7 @@ const { data } = await roxy.astrology.listPlanetMeanings();
 // Get planet meaning details - Complete astrology planet interpretation
 const { data } = await roxy.astrology.getPlanetMeaning({ path: { id: 'sun' } });
 
-// Generate natal chart - Birth chart calculator API with houses and aspects
+// Generate natal chart - Birth chart API with houses, aspects and a written reading
 const { data } = await roxy.astrology.generateNatalChart({
   body: {
     date: '1990-07-15',
