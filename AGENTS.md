@@ -43,7 +43,7 @@ Type `roxy.` to see all available namespaces. Type `roxy.{domain}.` to see every
 | Namespace | What it covers |
 |-----------|----------------|
 | [`roxy.astrology`](https://roxyapi.com/api-reference/western-astrology) | Western astrology API for natal birth charts with an editorial reading of the whole chart, daily, weekly, monthly, an... |
-| [`roxy.vedicAstrology`](https://roxyapi.com/api-reference/vedic-astrology) | Vedic astrology (Jyotish) and KP API for kundli generation with the sixteen Shodasavarga divisional charts (D1 to D60... |
+| [`roxy.vedicAstrology`](https://roxyapi.com/api-reference/vedic-astrology) | Vedic astrology (Jyotish) and KP API for kundli generation with an editorial reading of the whole chart, the sixteen... |
 | [`roxy.forecast`](https://roxyapi.com/api-reference/forecast) | Astrology forecast API that merges upcoming transit aspects, sign ingresses, retrograde stations, new and full moons,... |
 | [`roxy.humanDesign`](https://roxyapi.com/api-reference/human-design) | Human Design API that generates the full bodygraph from a birth moment: type, strategy, inner authority, profile, def... |
 | [`roxy.chineseAstrology`](https://roxyapi.com/api-reference/chinese-astrology) | Chinese zodiac and BaZi astrology API: Four Pillars charts, Chinese zodiac signs and the Chinese lunisolar calendar f... |

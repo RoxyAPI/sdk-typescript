@@ -457,12 +457,12 @@ const { data } = await roxy.astrology.generateProfections({
 
 ## Vedic Astrology: `roxy.vedicAstrology`
 
-Vedic astrology (Jyotish) and KP API for kundli generation with the sixteen Shodasavarga divisional charts (D1 to D60...
+Vedic astrology (Jyotish) and KP API for kundli generation with an editorial reading of the whole chart, the sixteen...
 
 [API reference](https://roxyapi.com/api-reference/vedic-astrology)
 
 ```typescript
-// Get birth chart (D1 Rashi chart) - Kundli Calculator API
+// Get birth chart (D1 Rashi chart) - Kundli API with a written chart reading
 const { data } = await roxy.vedicAstrology.generateBirthChart({
   query: { focus: 'general' },
   body: {
