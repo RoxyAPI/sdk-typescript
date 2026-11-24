@@ -8816,7 +8816,7 @@ export type YearlyForecastReportRequest = {
      */
     longitude: number;
     /**
-     * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+     * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
      */
     timezone: number | string;
     /**
@@ -8898,7 +8898,7 @@ export type HumanDesignReportRequest = {
      */
     time: string;
     /**
-     * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+     * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
      */
     timezone: number | string;
     /**
@@ -8988,7 +8988,7 @@ export type BaziReportRequest = {
      */
     time: string;
     /**
-     * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+     * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
      */
     timezone: number | string;
     /**
@@ -32141,7 +32141,7 @@ export type PostForecastTimelineData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -32444,7 +32444,7 @@ export type PostForecastTransitsData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -32726,7 +32726,7 @@ export type PostForecastSignificantDatesData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -33029,7 +33029,7 @@ export type PostForecastDigestData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -33407,7 +33407,7 @@ export type PostForecastSolarReturnData = {
          */
         longitude: number;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -33791,7 +33791,7 @@ export type PostHumanDesignBodygraphData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -34267,7 +34267,7 @@ export type PostHumanDesignConnectionData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -34296,7 +34296,7 @@ export type PostHumanDesignConnectionData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -34587,7 +34587,7 @@ export type PostHumanDesignPentaData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -34862,7 +34862,7 @@ export type PostHumanDesignTransitData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -35174,7 +35174,7 @@ export type PostHumanDesignTypeData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -35405,7 +35405,7 @@ export type PostHumanDesignGatesData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -35905,7 +35905,7 @@ export type PostHumanDesignChannelsData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -36125,7 +36125,7 @@ export type PostHumanDesignCentersData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -36524,7 +36524,7 @@ export type PostHumanDesignProfileData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -36715,7 +36715,7 @@ export type PostHumanDesignVariablesData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -37029,7 +37029,7 @@ export type PostChineseAstrologyBaziChartData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -37572,7 +37572,7 @@ export type PostChineseAstrologyBaziLuckPillarsData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -38027,7 +38027,7 @@ export type PostChineseAstrologyBaziDayMasterData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -38375,7 +38375,7 @@ export type PostChineseAstrologyBaziCompatibilityData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -38412,7 +38412,7 @@ export type PostChineseAstrologyBaziCompatibilityData = {
              */
             time: string;
             /**
-             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+             * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
              */
             timezone: number | string;
             /**
@@ -39185,7 +39185,7 @@ export type PostChineseAstrologyBaziAnnualForecastData = {
          */
         time: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -52132,7 +52132,7 @@ export type PostVastuTimingGrihaPraveshData = {
          */
         longitude: number;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
@@ -59768,7 +59768,7 @@ export type PostKabbalahBirthProfileData = {
          */
         time?: string;
         /**
-         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Invalid timezones return 400 with a validation error.
+         * IANA name (e.g. "America/New_York", "Europe/London", "UTC"), decimal hours (e.g. -5 for EST, 1 for CET), or a fixed UTC offset (e.g. "-05:00", "+01:00", "-06:20:19"). Prefer the IANA name: it is resolved to the offset in force at the birth date and time, historical daylight-saving rules included, while a fixed offset or decimal is taken literally and will be wrong if it does not match the daylight-saving state at that moment. On a transition day a time in the repeated hour is read as its first occurrence and a time in the skipped hour is moved forward past the gap. Before standard time an IANA name reads the local mean time of its reference city, so a birth recorded in local mean time at the birthplace sends that offset: decimal hours equal to the longitude divided by 15 (-6.33876 at 95.0814 W) or the same to the second as "-06:20:19". Invalid timezones return 400 with a validation error.
          */
         timezone: number | string;
         /**
