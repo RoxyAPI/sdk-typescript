@@ -946,7 +946,7 @@ export type TransitsResponse = {
         isRetrograde: boolean;
     }>;
     /**
-     * Transit-to-natal aspects (only included when natalChart is provided in the request). Shows which transiting planets are aspecting natal planets.
+     * Transit-to-natal aspects with a written reading each (only included when natalChart is provided in the request). Aspects under 15 percent strength are left out of the list, not out of the readings.
      */
     transitAspects?: Array<{
         /**
@@ -994,31 +994,44 @@ export type TransitsResponse = {
          */
         nature: string;
         /**
-         * Rich interpretation of the transit aspect including narrative summary, timing, impact assessment, practical guidance, and keywords.
+         * The reading of this transit aspect: summary, dated timing, impact, guidance and keywords, written for this chart.
          */
         interpretation: {
             /**
-             * Narrative interpretation of what this transit aspect means and how it manifests.
+             * The transit in brief: what the transiting body is doing to the natal body in this aspect, in plain words for this chart.
              */
             summary: string;
             /**
-             * How long this transit influence lasts, localized. The bucket follows the speed of the transiting body: a few hours for the Moon, a few days for the Sun, Mercury, Venus and Mars, one to two weeks for Jupiter, several weeks for Saturn, and an extended period for Uranus, Neptune and Pluto.
+             * The dated window of this transit on the transit clock: when it enters orb, every exact pass and when it leaves. A fast body such as the Moon reads in hours of the day.
              */
             timing: string;
             /**
-             * Strength and nature of the transit impact on your natal chart.
+             * What the transit stirs in the natal body and the life area where it plays out, from the natal house the transiting body passes through.
              */
             impact: string;
             /**
-             * Practical advice for working with or navigating this transit energy.
+             * Ways to work with this transit, offered as options and drawn from both bodies in the aspect.
              */
             guidance: string;
             /**
-             * Key themes activated by this transit aspect.
+             * Themes of this transit, drawn from both bodies and the aspect.
              */
             keywords: Array<string>;
         };
     }>;
+    /**
+     * The reading of the whole transit sky against the natal chart (only included when natalChart is provided in the request).
+     */
+    interpretation?: {
+        /**
+         * The leading transit of the moment in one or two sentences.
+         */
+        summary: string;
+        /**
+         * The whole sky read as one piece in short paragraphs: the long season set by the slow bodies, the transits easing the way, the nearer ones and the Moon of the day, drawn from every aspect found.
+         */
+        detailed: string;
+    };
     /**
      * Transit aspect summary counts (only included when natalChart is provided). Quick overview of the current transit weather.
      */
@@ -13386,7 +13399,7 @@ export type PostAstrologyTransitAspectsResponses = {
             signLocalized?: string;
         }>;
         /**
-         * Transit-to-natal aspects with interpretations, strength ratings, and guidance. Each aspect represents a transiting planet forming a geometric angle to a natal planet.
+         * Transit-to-natal aspects, each with a written reading, strength and orb. Each aspect is a transiting body forming a geometric angle to a natal body.
          */
         aspects: Array<{
             /**
@@ -13434,31 +13447,44 @@ export type PostAstrologyTransitAspectsResponses = {
              */
             typeLocalized?: string;
             /**
-             * Rich interpretation of the transit aspect: narrative summary, timing, impact assessment, practical guidance, and keywords.
+             * The reading of this transit aspect: summary, dated timing, impact, guidance and keywords, written for this chart.
              */
             transitInterpretation: {
                 /**
-                 * Narrative interpretation of this transit aspect and its life impact.
+                 * The transit in brief: what the transiting body is doing to the natal body in this aspect, in plain words for this chart.
                  */
                 summary: string;
                 /**
-                 * When this transit is most active and how long its influence lasts, localized. The bucket follows the speed of the transiting body: a few hours for the Moon, a few days for the Sun, Mercury, Venus and Mars, one to two weeks for Jupiter, several weeks for Saturn, and an extended period for Uranus, Neptune and Pluto.
+                 * The dated window of this transit on the transit clock: when it enters orb, every exact pass and when it leaves. A fast body such as the Moon reads in hours of the day.
                  */
                 timing: string;
                 /**
-                 * Strength and nature of this transit effect: constructive, challenging, or neutral.
+                 * What the transit stirs in the natal body and the life area where it plays out, from the natal house the transiting body passes through.
                  */
                 impact: string;
                 /**
-                 * Practical advice for working with this transit energy.
+                 * Ways to work with this transit, offered as options and drawn from both bodies in the aspect.
                  */
                 guidance: string;
                 /**
-                 * Key themes activated by this transit aspect.
+                 * Themes of this transit, drawn from both bodies and the aspect.
                  */
                 keywords: Array<string>;
             };
         }>;
+        /**
+         * The reading of the whole transit sky against this chart, from every aspect found, so planets, aspectTypes and minStrength never change it.
+         */
+        interpretation: {
+            /**
+             * The leading transit of the moment in one or two sentences.
+             */
+            summary: string;
+            /**
+             * The whole sky read as one piece in short paragraphs: the long season set by the slow bodies, the transits easing the way, the nearer ones and the Moon of the day, drawn from every aspect before any filter applies.
+             */
+            detailed: string;
+        };
         /**
          * Statistical summary of all transit aspects. The harmonious-to-challenging ratio reveals the overall transit weather, meaning whether the current period favors ease or demands effort.
          */
@@ -13528,27 +13554,27 @@ export type PostAstrologyTransitAspectsResponses = {
                  */
                 typeLocalized?: string;
                 /**
-                 * Rich interpretation of the transit aspect: narrative summary, timing, impact assessment, practical guidance, and keywords.
+                 * The reading of this transit aspect: summary, dated timing, impact, guidance and keywords, written for this chart.
                  */
                 transitInterpretation: {
                     /**
-                     * Narrative interpretation of this transit aspect and its life impact.
+                     * The transit in brief: what the transiting body is doing to the natal body in this aspect, in plain words for this chart.
                      */
                     summary: string;
                     /**
-                     * When this transit is most active and how long its influence lasts, localized. The bucket follows the speed of the transiting body: a few hours for the Moon, a few days for the Sun, Mercury, Venus and Mars, one to two weeks for Jupiter, several weeks for Saturn, and an extended period for Uranus, Neptune and Pluto.
+                     * The dated window of this transit on the transit clock: when it enters orb, every exact pass and when it leaves. A fast body such as the Moon reads in hours of the day.
                      */
                     timing: string;
                     /**
-                     * Strength and nature of this transit effect: constructive, challenging, or neutral.
+                     * What the transit stirs in the natal body and the life area where it plays out, from the natal house the transiting body passes through.
                      */
                     impact: string;
                     /**
-                     * Practical advice for working with this transit energy.
+                     * Ways to work with this transit, offered as options and drawn from both bodies in the aspect.
                      */
                     guidance: string;
                     /**
-                     * Key themes activated by this transit aspect.
+                     * Themes of this transit, drawn from both bodies and the aspect.
                      */
                     keywords: Array<string>;
                 };
@@ -32416,7 +32442,7 @@ export type PostForecastTimelineResponses = {
              */
             phase?: 'new-moon' | 'full-moon';
             /**
-             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             * Plain-language reading of the event, suitable for direct display. A transit aspect, sign ingress or retrograde or direct station names the event and says what it stirs for this birth subject, in one or two sentences. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
             description: string;
             /**
@@ -32698,7 +32724,7 @@ export type PostForecastTransitsResponses = {
              */
             phase?: 'new-moon' | 'full-moon';
             /**
-             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             * Plain-language reading of the event, suitable for direct display. A transit aspect, sign ingress or retrograde or direct station names the event and says what it stirs for this birth subject, in one or two sentences. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
             description: string;
             /**
@@ -33001,7 +33027,7 @@ export type PostForecastSignificantDatesResponses = {
              */
             phase?: 'new-moon' | 'full-moon';
             /**
-             * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+             * Plain-language reading of the event, suitable for direct display. A transit aspect, sign ingress or retrograde or direct station names the event and says what it stirs for this birth subject, in one or two sentences. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
              */
             description: string;
             /**
@@ -33370,7 +33396,7 @@ export type PostForecastDigestResponses = {
                  */
                 phase?: 'new-moon' | 'full-moon';
                 /**
-                 * Plain-language summary of the event, suitable for direct display. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
+                 * Plain-language reading of the event, suitable for direct display. A transit aspect, sign ingress or retrograde or direct station names the event and says what it stirs for this birth subject, in one or two sentences. The only localized field: when lang is set this sentence, and the body, target, and aspect names within it, render in the requested language while the structured fields stay English.
                  */
                 description: string;
                 /**
